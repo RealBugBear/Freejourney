@@ -24,8 +24,19 @@ WHERE schemaname = 'public'
     'enrollments','progress_entries','training_sessions',
     'mood_checkins','intake_assessments','completion_questionnaires',
     'journal_entries','profiles','trainer_client_relationships',
-    'device_tokens'
+    'device_tokens','vorrunde_phases'
   )
+ORDER BY tablename;
+
+-- 1b. Show every app-owned public table that still has RLS disabled.
+--     Expected result after hardening: zero rows.
+--     `spatial_ref_sys` is a PostGIS extension table managed by Supabase.
+SELECT
+  tablename
+FROM pg_tables
+WHERE schemaname = 'public'
+  AND rowsecurity = false
+  AND tablename <> 'spatial_ref_sys'
 ORDER BY tablename;
 
 
