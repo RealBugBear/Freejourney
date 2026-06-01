@@ -26,15 +26,21 @@ Im Graustufen-Modus werden diese Farben zu unterscheidbar hellen Grautönen:
 - **Success** → Hell-mittleres Grau
 - **Warning** → Helles Grau
 
-### 2. WCAG AAA Konformität
+### 2. WCAG-Konformität
 
-Alle Text-Hintergrund-Kombinationen erfüllen den **WCAG AAA Standard** mit mindestens 7:1 Kontrast-Verhältnis.
+Die Standard-Textfarben erfüllen mindestens **WCAG AA**. Kritische Fließtext-Kombinationen sollten, wo gestalterisch möglich, **WCAG AAA** erreichen.
+
+Wichtig: Die Markenfarbe `#009E6B` ist hell genug, dass weißer Text darauf nur ca. `3.44:1` erreicht. Für normalen Button-Text auf `AppColors.primary` wird deshalb `AppColors.textPrimary` verwendet.
 
 ```dart
 // Beispiel: Kontrast-sichere Text-Farben
 AppColors.textPrimary      // Luminanz ~10% auf
 AppColors.white            // Luminanz ~100%
 // = Kontrast: 18.5:1 ✅
+
+AppColors.textPrimary      // auf
+AppColors.primary          // #009E6B
+// = Kontrast: ~4.99:1 ✅ WCAG AA
 ```
 
 ### 3. Zusätzliche visuelle Hinweise
@@ -215,18 +221,37 @@ flutter run -t lib/main_development.dart
 
 | Farbe | Hex | Luminanz | Grayscale |
 |-------|-----|----------|-----------|
-| **Primary** | `#6B4CE6` | ~45% | Mittleres Grau |
-| **Success** | `#34C759` | ~55% | Hell-mittel |
-| **Warning** | `#FF9500` | ~65% | Helles Grau |
-| **Error** | `#FF3B30` | ~40% | Dunkles Grau |
-| **Info** | `#007AFF` | ~50% | Mittleres Grau |
+| **Primary** | `#009E6B` | ~26% | Mittleres Grau |
+| **Primary Dark** | `#007A52` | ~15% | Dunkles Mittelgrau |
+| **Primary On Dark** | `#00C882` | ~43% | Helles Mittelgrau |
+| **Text Primary** | `#0D1F15` | ~1% | Fast Schwarz |
+| **Text Secondary** | `#3D6B4F` | ~12% | Dunkles Grau |
+| **Background Light** | `#F4FAF6` | ~94% | Fast Weiß |
+| **Background Dark** | `#121212` | ~1% | Fast Schwarz |
+| **Success** | `#34C759` | ~42% | Helles Mittelgrau |
+| **Warning** | `#FF9500` | ~43% | Helles Mittelgrau |
+| **Error** | `#FF3B30` | ~25% | Mittleres Grau |
+| **Info** | `#007AFF` | ~21% | Mittleres Grau |
+
+## Geprüfte Kontrastpaare
+
+| Kombination | Kontrast | Bewertung |
+|-------------|----------|-----------|
+| `textPrimary` auf `backgroundLight` | ~16.22:1 | AAA |
+| `textSecondary` auf `backgroundLight` | ~5.81:1 | AA |
+| `textPrimaryDark` auf `backgroundDark` | ~16.29:1 | AAA |
+| `textSecondaryDark` auf `backgroundDark` | ~8.93:1 | AAA |
+| `textPrimary` auf `primary` | ~4.99:1 | AA |
+| `white` auf `primary` | ~3.44:1 | Nicht für normalen Text verwenden |
+| `primary` auf `surfaceDark` | ~4.84:1 | AA |
+| `primaryOnDark` auf `backgroundDark` | ~8.55:1 | AAA |
 
 ## Kontrast-Anforderungen
 
 | Element | Mindest-Kontrast | Standard |
 |---------|------------------|----------|
-| Normal Text | 7:1 | WCAG AAA |
-| Großer Text | 4.5:1 | WCAG AAA |
+| Normal Text | 4.5:1 | WCAG AA |
+| Großer Text | 3:1 | WCAG AA |
 | UI-Komponenten | 3:1 | WCAG AA |
 | Fokus-Indikatoren | 3:1 | WCAG AA |
 

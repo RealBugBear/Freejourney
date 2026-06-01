@@ -1,4 +1,57 @@
-# CoreJourney — Claude Pflichtregeln
+# CoreJourney — Claude Rules
+
+## Workflow Orchestration
+
+### 1. Plan Mode Default
+- Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
+- If something goes sideways, STOP and re-plan immediately
+- Use plan mode for verification steps, not just building
+- Write detailed specs upfront to reduce ambiguity
+
+### 2. Subagent Strategy
+- Use subagents liberally to keep main context window clean
+- Offload research, exploration, and parallel analysis to subagents
+- For complex problems, throw more compute at it via subagents
+- One task per subagent for focused execution
+
+### 3. Self-Improvement Loop
+- After ANY correction from the user: update tasks/lessons.md with the pattern
+- Write rules for yourself that prevent the same mistake
+- Ruthlessly iterate on these lessons until mistake rate drops
+- Review lessons at session start for relevant project
+
+### 4. Verification Before Done
+- Never mark a task complete without proving it works
+- Diff behavior between main and your changes when relevant
+- Ask yourself: "Would a staff engineer approve this?"
+- Run tests, check logs, demonstrate correctness
+
+### 5. Demand Elegance (Balanced)
+- For non-trivial changes: pause and ask "is there a more elegant way?"
+- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
+- Skip this for simple, obvious fixes -- don't over-engineer
+- Challenge your own work before presenting it
+
+### 6. Autonomous Bug Fixing
+- When given a bug report: just fix it. Don't ask for hand-holding
+- Point at logs, errors, failing tests -- then resolve them
+- Zero context switching required from the user
+- Go fix failing CI tests without being told how
+
+## Task Management
+1. **Plan First**: Write plan to tasks/todo.md with checkable items
+2. **Verify Plan**: Check in before starting implementation
+3. **Track Progress**: Mark items complete as you go
+4. **Explain Changes**: High-level summary at each step
+5. **Document Results**: Add review section to tasks/todo.md
+6. **Capture Lessons**: Update tasks/lessons.md after corrections
+
+## Core Principles
+- **Simplicity First**: Make every change as simple as possible. Impact minimal code.
+- **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
+- **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
+
+---
 
 ## Richtiges Projektverzeichnis
 
@@ -8,45 +61,13 @@ Nicht in `/Users/alexandermessinger/dev/corejourney` — das ist ein veraltetes 
 
 ---
 
-## Dev/Prod Trennung — Eiserne Regeln
+## Entwicklungs-Befehle (MVP)
 
-### DEV (tägliche Arbeit)
 ```bash
-make run
-# = flutter run --profile -d <DEVICE_ID> -t lib/main_development.dart
+make run          # iPhone (physisch)   → lib/main_development.dart
+make run-sim      # iOS Simulator       → lib/main_development.dart
+make run-android  # Samsung Android     → lib/main_development.dart + --flavor development
 ```
-- Bundle ID: `com.alexandermessinger.corejourney` (kein .dev-Suffix in diesem Projekt)
-- Lädt `.env.dev` → Dev-Supabase-Projekt
-
-### PROD (TestFlight / App Store)
-```bash
-make release
-# = flutter build ipa -t lib/main_production.dart --release
-# Danach: Xcode → Window → Organizer → Distribute App → App Store Connect → Upload
-```
-- Bundle ID: `com.alexandermessinger.corejourney`
-- Signing: Release Config, Team 5X6VFP7F58, Automatic
-
----
-
-## Verbote — niemals ohne explizite Aufforderung
-
-- **NIEMALS** `flutter build` oder `make release` ohne explizites „bau jetzt für Prod"
-- **NIEMALS** `.env.dev` oder `.env.prod` committen
-- **NIEMALS** Prod-Build manuell — nur über `make release`
-- **NIEMALS** Entry Points (`lib/main_development.dart` / `lib/main_production.dart`) verwechseln
-- **NIEMALS** im falschen Verzeichnis (`/dev/corejourney`) arbeiten
-
----
-
-## Entry Points
-
-| Zweck | Entry Point | Makefile-Befehl |
-|---|---|---|
-| Dev-Arbeit (iPhone physisch) | `lib/main_development.dart` | `make run` |
-| Dev-Arbeit (iOS Simulator) | `lib/main_development.dart` | `make run-sim` |
-| Dev-Arbeit (Samsung Android) | `lib/main_development.dart` | `make run-android` |
-| TestFlight/Prod | `lib/main_production.dart` | `make release` |
 
 ---
 
@@ -54,16 +75,21 @@ make release
 
 **NIEMALS** `flutter run` auf Android ohne `--flavor development`.
 
-Ohne diesen Flag installiert Flutter den gecachten `app-debug.apk` (altes Build vom falschen Projekt) statt dem aktuellen Development-Build. Das führt zu falschem Logo, falschen Farben, falschem Code — ohne Fehlermeldung.
+Ohne diesen Flag installiert Flutter den gecachten `app-debug.apk` (altes Build vom falschen Projekt) statt dem aktuellen Development-Build — falsches Logo, falsche Farben, falscher Code, keine Fehlermeldung.
 
 **Immer:** `make run-android` — nie manuell `flutter run -d <android-id>`.
 
-Das Projekt hat Android-Flavors: `development`, `staging`, `production`. Jeder flutter-Befehl für Android braucht `--flavor <flavor>`.
+---
+
+## Verbote — niemals ohne explizite Aufforderung
+
+- **NIEMALS** `.env.dev` oder `.env.prod` committen
+- **NIEMALS** Entry Points (`lib/main_development.dart` / `lib/main_production.dart`) verwechseln
+- **NIEMALS** im falschen Verzeichnis (`/dev/corejourney`) arbeiten
+- **NIEMALS** `xcrun simctl launch` direkt — immer `make run-sim`
 
 ---
 
 ## Wichtige Dateien
 
 - `.env.dev` / `.env.prod` → Supabase Credentials (nicht committen)
-- `ios/ExportOptions.plist` → method: app-store, signingStyle: automatic, teamID: 5X6VFP7F58
-- Nach `make release`: Xcode Organizer öffnen → `build/ios/archive/Runner.xcarchive`
