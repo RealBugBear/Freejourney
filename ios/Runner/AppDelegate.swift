@@ -12,7 +12,28 @@ import UIKit
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
     registerCalendarChannel()
+    registerTimezoneChannel()
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  private func registerTimezoneChannel() {
+    guard let controller = window?.rootViewController as? FlutterViewController else {
+      return
+    }
+
+    let channel = FlutterMethodChannel(
+      name: "corejourney/timezone",
+      binaryMessenger: controller.binaryMessenger
+    )
+
+    channel.setMethodCallHandler { call, result in
+      guard call.method == "getIanaTimezone" else {
+        result(FlutterMethodNotImplemented)
+        return
+      }
+
+      result(TimeZone.current.identifier)
+    }
   }
 
   private func registerCalendarChannel() {

@@ -13,6 +13,7 @@ import java.util.TimeZone
 
 class MainActivity : FlutterActivity() {
     private val calendarChannel = "corejourney/calendar"
+    private val timezoneChannel = "corejourney/timezone"
     private val calendarPermissionRequest = 4242
     private var pendingCalendarArgs: Map<String, Any?>? = null
     private var pendingCalendarResult: MethodChannel.Result? = null
@@ -53,6 +54,17 @@ class MainActivity : FlutterActivity() {
                     ),
                     calendarPermissionRequest
                 )
+            }
+        }
+
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            timezoneChannel
+        ).setMethodCallHandler { call, result ->
+            if (call.method == "getIanaTimezone") {
+                result.success(TimeZone.getDefault().id)
+            } else {
+                result.notImplemented()
             }
         }
     }

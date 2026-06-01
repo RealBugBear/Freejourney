@@ -1,8 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../config/app_config.dart';
 import '../core/database/app_database.dart';
 import '../core/notifications/notification_service.dart';
 import '../core/push/push_notification_service.dart';
+import '../core/reminders/device_timezone_provider.dart';
+import '../core/reminders/reminder_preferences_repository.dart';
 import '../core/settings/settings_provider.dart';
 import '../core/sync/exercises_sync_service.dart';
 import '../core/sync/sync_service.dart';
@@ -45,6 +48,19 @@ final pushNotificationServiceProvider =
 
 final pushNotificationOpenProvider = StreamProvider<Map<String, String>>((ref) {
   return ref.watch(pushNotificationServiceProvider).openedPayloads;
+});
+
+final deviceTimezoneProvider = Provider<DeviceTimezoneProvider>((ref) {
+  return DeviceTimezoneProvider(prefs: ref.watch(sharedPreferencesProvider));
+});
+
+final reminderPreferencesRepositoryProvider =
+    Provider<ReminderPreferencesRepository>((ref) {
+  return ReminderPreferencesRepository(
+    supabase: Supabase.instance.client,
+    prefs: ref.watch(sharedPreferencesProvider),
+    timezoneProvider: ref.watch(deviceTimezoneProvider),
+  );
 });
 
 final localNotificationTapProvider = StreamProvider<String>((ref) {

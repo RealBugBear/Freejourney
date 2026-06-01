@@ -224,7 +224,9 @@ class PushNotificationService {
                     ? 'Neue Terminvorschläge'
                     : type == 'appointment_confirmed'
                         ? 'Termin bestätigt'
-                        : 'CoreJourney');
+                        : type == 'training_reminder'
+                            ? 'Training-Erinnerung'
+                            : 'CoreJourney');
     final body = message.notification?.body ??
         (type == 'video_call'
             ? 'Tippe, um den Anruf zu öffnen.'
@@ -234,7 +236,9 @@ class PushNotificationService {
                     ? 'Wähle einen passenden Termin aus.'
                     : type == 'appointment_confirmed'
                         ? 'Tippe, um den Termin in deinen Kalender einzutragen.'
-                        : '');
+                        : type == 'training_reminder'
+                            ? 'Tippe, um dein Training zu öffnen.'
+                            : '');
 
     await NotificationService.instance.showInstantNotification(
       id: DateTime.now().millisecondsSinceEpoch.remainder(100000),

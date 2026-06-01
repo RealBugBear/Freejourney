@@ -10,6 +10,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'bootstrap/providers.dart';
 import 'core/navigation/app_router.dart';
+import 'core/logging/app_logger.dart';
 import 'core/settings/settings_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
@@ -37,6 +38,9 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _initDeepLinks(); // NEU
+    // Fire once per cold start. forceSync() is offline-safe (ConnectivityService
+    // no-ops it when unreachable), so this is the correct one-shot location.
+    unawaited(ref.read(exercisesSyncServiceProvider).forceSync());
   }
 
   @override
@@ -87,6 +91,8 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
       unawaited(ref.read(syncServiceProvider).drain());
+    } else if (state == AppLifecycleState.resumed) {
+      unawaited(_syncReminderState(ref));
     }
   }
 
@@ -106,10 +112,6 @@ class _CoreJourneyAppView extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final currentUser = ref.watch(currentUserProvider);
 
-    // Sync static exercise content from Supabase into the local cache.
-    // Runs once per cold start; no-ops if the cache is already populated.
-    ref.read(exercisesSyncServiceProvider).syncIfNeeded();
-
     // Existing sessions do not always emit a fresh signedIn event after the
     // first build. Register remote push once a persisted user is available.
     if (currentUser != null) {
@@ -119,6 +121,7 @@ class _CoreJourneyAppView extends ConsumerWidget {
                 environment: ref.read(appConfigProvider).environment,
               ),
         );
+        unawaited(_syncReminderState(ref));
       });
     }
 
@@ -137,6 +140,7 @@ class _CoreJourneyAppView extends ConsumerWidget {
                   environment: ref.read(appConfigProvider).environment,
                 ),
           );
+          unawaited(_syncReminderState(ref));
         }
       }
       // On sign-out: settingsProvider re-creates with userId=null,
@@ -237,6 +241,14 @@ Future<void> _handleNotificationPayload(
 
   if (type == 'appointment_confirmed') {
     await _addConfirmedAppointmentToCalendar(payload);
+    return;
+  }
+
+  if (type == 'training_reminder') {
+    final context = rootNavigatorKey.currentContext;
+    if (context != null && context.mounted) {
+      context.go(Routes.trainingStart);
+    }
   }
 }
 
@@ -304,23 +316,46 @@ Future<void> _syncNotifications(
   AppSettings? prev,
   AppSettings next,
 ) async {
-  final ns = ref.read(notificationServiceProvider);
-
   final prevEnabled = prev?.remindersEnabled ?? false;
   final prevStart = prev?.reminderStartMinutes;
   final prevEnd = prev?.reminderEndMinutes;
+  final prevWeeklyGoal = prev?.weeklyGoal;
 
   final changed = prevEnabled != next.remindersEnabled ||
       prevStart != next.reminderStartMinutes ||
-      prevEnd != next.reminderEndMinutes;
+      prevEnd != next.reminderEndMinutes ||
+      prevWeeklyGoal != next.weeklyGoal;
 
   if (!changed) return;
+
+  await _syncReminderState(ref, settings: next, previous: prev);
+}
+
+Future<void> _syncReminderState(
+  WidgetRef ref, {
+  AppSettings? settings,
+  AppSettings? previous,
+}) async {
+  final AppSettings next = settings ?? ref.read(settingsProvider);
+  final ns = ref.read(notificationServiceProvider);
+  final repository = ref.read(reminderPreferencesRepositoryProvider);
+
+  await repository.syncFromSettings(next);
+  await repository.refreshTimezoneIfChanged(next);
 
   if (!next.remindersEnabled) {
     await ns.cancelReminder();
     return;
   }
 
+  final serverEnabled = await repository.serverRemindersEnabled();
+  if (serverEnabled) {
+    await ns.cancelReminder();
+    appLogger.i('Local training reminder suppressed for server cohort');
+    return;
+  }
+
+  final prevEnabled = previous?.remindersEnabled ?? false;
   if (!prevEnabled && next.remindersEnabled) {
     final granted = await ns.requestPermission();
     if (!granted) return;
