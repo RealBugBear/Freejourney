@@ -36,7 +36,7 @@ class AccompanimentScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Fuege den Einladungslink oder den 6-stelligen Code ein, den du von deinem Trainer erhalten hast.',
+                'Füge den Einladungslink oder den 6-stelligen Code ein, den du von deinem Trainer erhalten hast.',
               ),
               const SizedBox(height: 14),
               TextField(
@@ -66,7 +66,7 @@ class AccompanimentScreen extends ConsumerWidget {
                       if (code == null) {
                         setDialogState(() {
                           errorText =
-                              'Bitte gib einen gueltigen 6-stelligen Code oder Einladungslink ein.';
+                              'Bitte gib einen gültigen 6-stelligen Code oder Einladungslink ein.';
                         });
                         return;
                       }
@@ -119,7 +119,7 @@ class AccompanimentScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Nach dem Wechsel erscheint dein Verlauf beim neuen Trainer. Dein bisheriger Trainer sieht dich danach nicht mehr in seiner Klientenuebersicht.',
+              'Nach dem Wechsel erscheint dein Verlauf beim neuen Trainer. Dein bisheriger Trainer sieht dich danach nicht mehr in seiner Klientenübersicht.',
             ),
             const SizedBox(height: 14),
             TextField(
@@ -140,7 +140,7 @@ class AccompanimentScreen extends ConsumerWidget {
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-            child: const Text('Wechsel bestaetigen'),
+            child: const Text('Wechsel bestätigen'),
           ),
         ],
       ),
@@ -152,7 +152,7 @@ class AccompanimentScreen extends ConsumerWidget {
       final inviteCode = _extractTrainerInviteCode(code);
       if (inviteCode == null) {
         throw Exception(
-            'Bitte gib einen gueltigen Einladungslink oder Code ein.');
+            'Bitte gib einen gültigen Einladungslink oder Code ein.');
       }
       await switchTrainer(inviteCode);
       _invalidateTrainerConnectionState(ref);
@@ -299,7 +299,7 @@ class AccompanimentScreen extends ConsumerWidget {
               title: 'Geteilte Erfahrungen',
               subtitle:
                   'Moderierte Beobachtungen aus laufenden Paketen ansehen.',
-              actionLabel: 'Erfahrungen oeffnen',
+              actionLabel: 'Erfahrungen öffnen',
               onTap: () => context.push(Routes.community),
             ),
           ],
@@ -332,7 +332,7 @@ class _IsometricExplanationCard extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              'Manche Uebungen werden mit einer zweiten Person durchgefuehrt. Dabei geht es nicht um Krafttraining, sondern um klares Spueren von Richtung, Bewegung und Widerstand. Ein geschulter Trainer kann dich dabei sicher anleiten.',
+              'Manche Übungen werden mit einer zweiten Person durchgeführt. Dabei geht es nicht um Krafttraining, sondern um klares Spüren von Richtung, Bewegung und Widerstand. Ein geschulter Trainer kann dich dabei sicher anleiten.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: cs.onSurfaceVariant,
                     height: 1.35,
@@ -459,7 +459,7 @@ class _ReflexProfileSharingCard extends ConsumerWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Du kannst festlegen, ob ${connection.displayName} '
+                            'Du kannst festlegen, ob der verbundene Trainer '
                             'die abgeschlossenen Reflexprofile sehen darf. '
                             'Das gilt nur, solange diese Begleitung aktiv ist.',
                             style:
@@ -527,8 +527,8 @@ class _ReflexProfileShareTile extends ConsumerWidget {
         title: Text(profile.displayName),
         subtitle: Text(
           isShared
-              ? 'Trainer darf dieses Reflexprofil sehen.'
-              : 'Nicht fuer Trainer freigegeben.',
+              ? 'Der verbundene Trainer darf dieses Reflexprofil sehen.'
+              : 'Nicht für den verbundenen Trainer freigegeben.',
         ),
         onChanged: (enabled) async {
           try {
@@ -821,7 +821,7 @@ class _ConnectedTrainerCard extends ConsumerWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              'Beim Wechsel sieht dein neuer Trainer deinen Verlauf. Dein bisheriger Trainer verliert den Zugriff auf deine Klientenuebersicht.',
+              'Beim Wechsel sieht dein neuer Trainer deinen Verlauf. Dein bisheriger Trainer verliert den Zugriff auf deine Klientenübersicht.',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: cs.onSurfaceVariant,
                     height: 1.35,
@@ -862,6 +862,7 @@ class _AppointmentRow extends StatelessWidget {
     final dt = appointment.scheduledFor!;
     final dateLabel = DateFormat('EEE, d. MMM · HH:mm', 'de_DE').format(dt);
     final isGespraech = appointment.title.toLowerCase().contains('gespräch') ||
+        appointment.title.toLowerCase().contains('gespräch') ||
         appointment.title.toLowerCase().contains('gespraech');
     final profileLabel = appointment.profileLabel;
 

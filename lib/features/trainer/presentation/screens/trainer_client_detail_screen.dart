@@ -362,7 +362,7 @@ class _ReflexProfileNotesCardState
             ),
             const SizedBox(height: 6),
             Text(
-              'Diese Notizen haften am Profil und sind bei bestehender Freigabe auch fuer spaetere Trainer als Uebergabe sichtbar.',
+              'Diese Notizen haften am Profil und sind bei bestehender Freigabe auch für spätere Trainer als Übergabe sichtbar.',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     height: 1.35,
@@ -374,7 +374,7 @@ class _ReflexProfileNotesCardState
               minLines: 2,
               maxLines: 5,
               decoration: InputDecoration(
-                hintText: 'Notiz zur Begleitung oder Uebergabe',
+                hintText: 'Notiz zur Begleitung oder Übergabe',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -761,10 +761,9 @@ class _TappableProfileRow extends StatelessWidget {
                   children: [
                     Text(
                       profile.displayName,
-                      style:
-                          Theme.of(context).textTheme.titleSmall?.copyWith(
-                                fontWeight: FontWeight.w700,
-                              ),
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
                     ),
                     const SizedBox(height: 2),
                     Row(
@@ -778,7 +777,9 @@ class _TappableProfileRow extends StatelessWidget {
                                 ?.copyWith(color: cs.onSurfaceVariant),
                           ),
                         ),
-                        if (bandLabel != null && bandLabel.isNotEmpty && bandColor != null) ...[
+                        if (bandLabel != null &&
+                            bandLabel.isNotEmpty &&
+                            bandColor != null) ...[
                           const SizedBox(width: 6),
                           Container(
                             padding: const EdgeInsets.symmetric(

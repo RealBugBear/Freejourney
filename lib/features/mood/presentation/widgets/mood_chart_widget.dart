@@ -221,7 +221,7 @@ class _RangeChips extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  color: isSelected ? Colors.white : AppColors.primary,
+                  color: isSelected ? AppColors.textPrimary : AppColors.primary,
                 ),
               ),
             ),
@@ -327,7 +327,9 @@ class _NotesList extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
                                   ),
                         ),
                       ),

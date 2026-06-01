@@ -448,14 +448,6 @@ class _ReflexAnalyticsTab extends ConsumerWidget {
               emptyText: 'Keine Sicherheitsangaben vorhanden.',
             ),
             const SizedBox(height: 12),
-            _MetricListCard(
-              title: 'Schwangerschaft',
-              icon: Icons.medical_information_outlined,
-              metrics: summary.pregnancyMetrics,
-              valueSuffix: 'x',
-              emptyText: 'Noch keine auswertbaren Angaben.',
-            ),
-            const SizedBox(height: 12),
             _DevelopmentMonthsCard(summary: summary),
           ],
         );
@@ -470,7 +462,7 @@ Future<void> _copyReflexAnalyticsCsv(
 ) async {
   final lines = <List<String>>[
     ['bereich', 'label', 'wert', 'detail'],
-    ['gesamt', 'frageboegen', summary.totalAssessments.toString(), ''],
+    ['gesamt', 'fragebögen', summary.totalAssessments.toString(), ''],
     for (final metric in summary.ageGroups)
       [
         'altersgruppe',
@@ -495,13 +487,6 @@ Future<void> _copyReflexAnalyticsCsv(
     for (final metric in summary.safetyFlags)
       [
         'sicherheit',
-        metric.label,
-        metric.value.toStringAsFixed(metric.decimals),
-        metric.detail ?? '',
-      ],
-    for (final metric in summary.pregnancyMetrics)
-      [
-        'schwangerschaft',
         metric.label,
         metric.value.toStringAsFixed(metric.decimals),
         metric.detail ?? '',
@@ -745,7 +730,6 @@ class _ReflexAnalyticsSummary {
     required this.topReflexes,
     required this.topQuestions,
     required this.safetyFlags,
-    required this.pregnancyMetrics,
     required this.crawlingMonths,
     required this.walkingMonths,
   });
@@ -755,7 +739,6 @@ class _ReflexAnalyticsSummary {
   final List<_AdminMetric> topReflexes;
   final List<_AdminMetric> topQuestions;
   final List<_AdminMetric> safetyFlags;
-  final List<_AdminMetric> pregnancyMetrics;
   final _MonthStats crawlingMonths;
   final _MonthStats walkingMonths;
 
@@ -786,12 +769,6 @@ class _ReflexAnalyticsSummary {
     final reflexSums = <String, double>{};
     final reflexCounts = <String, int>{};
     final yesCounts = <String, int>{};
-    final pregnancyCounts = <String, int>{
-      'preeclampsia': 0,
-      'bleeding': 0,
-      'hypertension': 0,
-      'other_text': 0,
-    };
     final crawling = _MonthStatsBuilder();
     final walking = _MonthStatsBuilder();
 
@@ -820,26 +797,11 @@ class _ReflexAnalyticsSummary {
             yesCounts.update(entry.key, (current) => current + 1,
                 ifAbsent: () => 1);
           }
-          if (entry.key == 'q002_pregnancy_health_problem_details') {
-            final options = value['selected_options'];
-            if (options is List) {
-              for (final option in options.whereType<String>()) {
-                if (pregnancyCounts.containsKey(option)) {
-                  pregnancyCounts[option] = pregnancyCounts[option]! + 1;
-                }
-              }
-            }
-            final text = value['text'];
-            if (text is String && text.trim().isNotEmpty) {
-              pregnancyCounts['other_text'] =
-                  pregnancyCounts['other_text']! + 1;
-            }
-          }
           final months = value['months'];
-          if (months is num && entry.key == 'q036') {
+          if (months is num && entry.key == 'q032') {
             crawling.add(months.toDouble());
           }
-          if (months is num && entry.key == 'q037') {
+          if (months is num && entry.key == 'q033') {
             walking.add(months.toDouble());
           }
         }
@@ -875,36 +837,12 @@ class _ReflexAnalyticsSummary {
         .toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
-    final pregnancyMetrics = [
-      _AdminMetric(
-        label: 'Schwangerschaftsvergiftung',
-        value: pregnancyCounts['preeclampsia']!.toDouble(),
-        decimals: 0,
-      ),
-      _AdminMetric(
-        label: 'Schwangerschaftsblutung',
-        value: pregnancyCounts['bleeding']!.toDouble(),
-        decimals: 0,
-      ),
-      _AdminMetric(
-        label: 'Bluthochdruck',
-        value: pregnancyCounts['hypertension']!.toDouble(),
-        decimals: 0,
-      ),
-      _AdminMetric(
-        label: 'Freitext vorhanden',
-        value: pregnancyCounts['other_text']!.toDouble(),
-        decimals: 0,
-      ),
-    ]..removeWhere((metric) => metric.value == 0);
-
     return _ReflexAnalyticsSummary(
       totalAssessments: totalAssessments,
       ageGroups: ageGroups,
       topReflexes: topReflexes.take(8).toList(),
       topQuestions: topQuestions.take(12).toList(),
       safetyFlags: safetyFlags,
-      pregnancyMetrics: pregnancyMetrics,
       crawlingMonths: crawling.build(),
       walkingMonths: walking.build(),
     );

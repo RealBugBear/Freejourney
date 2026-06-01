@@ -43,7 +43,7 @@ class ReflexProfilePdfService {
               borderRadius: pw.BorderRadius.circular(6),
             ),
             child: pw.Text(
-              'Diese Auswertung zeigt Antwortmuster und Hinweisstaerken. '
+              'Diese Auswertung zeigt Antwortmuster und Hinweisstärken. '
               'Sie ersetzt keine medizinische oder therapeutische Diagnose.',
               style: const pw.TextStyle(fontSize: 10),
             ),
@@ -58,8 +58,8 @@ class ReflexProfilePdfService {
                 border: pw.Border.all(color: PdfColors.orange400),
               ),
               child: pw.Text(
-                '${assessment.warningConfirmations.length} Sicherheits-/Ruecksprache-Hinweise wurden bestaetigt. '
-                'Training sollte nur nach ausdruecklicher Ruecksprache mit Arzt, Therapeut oder Psychologe erfolgen.',
+                '${assessment.warningConfirmations.length} Sicherheits-/Rücksprache-Hinweise wurden bestätigt. '
+                'Training sollte nur nach ausdrücklicher Rücksprache mit Arzt, Therapeut oder Psychologe erfolgen.',
                 style: pw.TextStyle(
                   fontSize: 10,
                   fontWeight: pw.FontWeight.bold,
@@ -69,7 +69,7 @@ class ReflexProfilePdfService {
           ],
           pw.SizedBox(height: 18),
           pw.Text(
-            'Uebersicht Reflexbereiche',
+            'Übersicht Reflexbereiche',
             style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold),
           ),
           pw.SizedBox(height: 8),
@@ -100,7 +100,7 @@ class ReflexProfilePdfService {
           ),
           pw.SizedBox(height: 18),
           pw.Text(
-            'Antwortuebersicht',
+            'Antwortübersicht',
             style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold),
           ),
           pw.SizedBox(height: 8),
@@ -207,10 +207,10 @@ ReflexScoreBand _scoreBandFromName(String name) {
 }
 
 String _bandLabel(ReflexScoreBand band) => switch (band) {
-      ReflexScoreBand.strong => 'stark ausgepraegt',
-      ReflexScoreBand.elevated => 'auffaellig',
+      ReflexScoreBand.strong => 'stark ausgeprägt',
+      ReflexScoreBand.elevated => 'auffällig',
       ReflexScoreBand.indication => 'Anzeichen',
-      ReflexScoreBand.inconspicuous => 'unauffaellig',
+      ReflexScoreBand.inconspicuous => 'unauffällig',
       ReflexScoreBand.insufficientData => 'zu wenig Daten',
     };
 
@@ -220,7 +220,7 @@ String _formatAnswer(dynamic value) {
   final answer = value['answer'];
   if (answer == 'yes') parts.add('Ja');
   if (answer == 'no') parts.add('Nein');
-  if (answer == 'unknown') parts.add('Weiss ich nicht');
+  if (answer == 'unknown') parts.add('Weiß ich nicht');
   if (value['months'] != null) parts.add('${value['months']} Monate');
   final selected = value['selected_options'];
   if (selected is List && selected.isNotEmpty) parts.add(selected.join(', '));
@@ -230,7 +230,7 @@ String _formatAnswer(dynamic value) {
 }
 
 String _reflexLabel(String key) => switch (key) {
-      'delay' => 'Entwicklungsverzoegerung',
+      'delay' => 'Entwicklungsverzögerung',
       'flr' => 'FLR',
       'moro' => 'Moro',
       'spinalGalant' => 'Spinaler Galant',

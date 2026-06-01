@@ -101,7 +101,7 @@ class _CompletionQuestionnaireScreenState
 
     if (freePackageIds.contains(next)) {
       // Free — go straight to intake for next package
-      context.go(Routes.intakeAssessment, extra: next);
+      context.go(Routes.trainingStart, extra: next);
     } else {
       // Paid — go to packages screen (paywall coming later)
       context.go(Routes.packages);

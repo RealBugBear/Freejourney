@@ -240,14 +240,14 @@ class _TrainerPriorityOverview extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Arbeitsuebersicht',
+              'Arbeitsübersicht',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
             ),
             const SizedBox(height: 4),
             Text(
-              'Priorisiert nach Paketuebergaengen, Anfragen, Terminen und Beobachtungen.',
+              'Priorisiert nach Paketübergängen, Anfragen, Terminen und Beobachtungen.',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: cs.onSurfaceVariant,
                     height: 1.35,
@@ -260,7 +260,7 @@ class _TrainerPriorityOverview extends StatelessWidget {
               children: [
                 _PriorityTile(
                   icon: Icons.flag_outlined,
-                  label: 'Paketuebergaenge',
+                  label: 'Paketübergänge',
                   value: _transitionCount,
                   highlighted: _transitionCount > 0,
                 ),
@@ -517,9 +517,9 @@ class _SharedExperienceReviewCard extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       child: ListTile(
         leading: const Icon(Icons.rate_review_outlined),
-        title: const Text('Geteilte Erfahrungen pruefen'),
+        title: const Text('Geteilte Erfahrungen prüfen'),
         subtitle: const Text(
-          'Moderierte Erfahrungsbeitraege aus laufenden Paketen im Blick behalten.',
+          'Moderierte Erfahrungsbeiträge aus laufenden Paketen im Blick behalten.',
         ),
         trailing: const Icon(Icons.chevron_right),
         onTap: () => context.push(Routes.community),
@@ -655,7 +655,9 @@ class _InviteBannerState extends State<_InviteBanner> {
             Center(
               child: Text(
                 'Einmaliger Code — teile ihn mit deinem Klienten',
-                style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 11),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontSize: 11),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -683,7 +685,8 @@ class _InviteBannerState extends State<_InviteBanner> {
                   label: const Text('Neu'),
                   onPressed: _loading ? null : () => _generate(context),
                   style: OutlinedButton.styleFrom(
-                      foregroundColor: Theme.of(context).colorScheme.onSurfaceVariant),
+                      foregroundColor:
+                          Theme.of(context).colorScheme.onSurfaceVariant),
                 ),
               ],
             ),
@@ -705,7 +708,7 @@ class _InviteBannerState extends State<_InviteBanner> {
                 onPressed: _loading ? null : () => _generate(context),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.textPrimary,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -812,7 +815,8 @@ class _DiscoveryVisibilityCardState
                         Text(
                           'Dein Trainerprofil ist aktiv, erscheint aber erst in der Trainersuche, wenn ein Standort gesetzt ist. Öffentlich wird nur ein ungefährer Pin angezeigt.',
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                             fontSize: 13,
                           ),
                         ),
@@ -1006,7 +1010,9 @@ class _ClientCard extends ConsumerWidget {
                       Text(
                         l10n.currentDay(client.currentDay, 28),
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 13),
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 13),
                       ),
                     ],
                   ),
@@ -1053,7 +1059,7 @@ class _ClientCard extends ConsumerWidget {
               children: [
                 IconButton(
                   icon: const Icon(Icons.insights_outlined, size: 20),
-                  tooltip: 'Detail oeffnen',
+                  tooltip: 'Detail öffnen',
                   onPressed: () => context.push(
                     Routes.trainerClientDetail.replaceFirst(
                       ':clientId',
@@ -1140,7 +1146,8 @@ class _AppointmentsTab extends ConsumerWidget {
                   const SizedBox(height: 16),
                   Text(
                     l10n.trainerNoAppointments,
-                    style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -1218,7 +1225,8 @@ class _AppointmentTile extends StatelessWidget {
         children: [
           Text(date,
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 13)),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 13)),
           const SizedBox(height: 2),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),

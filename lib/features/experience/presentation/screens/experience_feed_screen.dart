@@ -34,7 +34,7 @@ class ExperienceFeedScreen extends ConsumerWidget {
           ? FloatingActionButton(
               onPressed: () => _showModeratorPostSheet(context, ref),
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: AppColors.textPrimary,
               child: const Icon(Icons.add),
             )
           : null,
@@ -48,7 +48,8 @@ class ExperienceFeedScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               Text('Fehler: $e'),
               TextButton(
-                onPressed: () => ref.invalidate(experienceSharesProvider(_packageId)),
+                onPressed: () =>
+                    ref.invalidate(experienceSharesProvider(_packageId)),
                 child: const Text('Erneut versuchen'),
               ),
             ],
@@ -88,8 +89,7 @@ class ExperienceFeedScreen extends ConsumerWidget {
               itemCount: shares.length,
               itemBuilder: (ctx, i) {
                 final share = shares[i];
-                final canDelete =
-                    isModerator || share.userId == currentUserId;
+                final canDelete = isModerator || share.userId == currentUserId;
                 return ExperienceCard(
                   share: share,
                   isModerator: isModerator,
@@ -195,8 +195,7 @@ class ExperienceFeedScreen extends ConsumerWidget {
                       .createShare(ExperienceShareInsert(
                         packageId: _packageId,
                         userId: userId,
-                        displayName:
-                            profile?.effectiveDisplayName ?? 'Trainer',
+                        displayName: profile?.effectiveDisplayName ?? 'Trainer',
                         isAnonymous: false,
                         content: text,
                       ));

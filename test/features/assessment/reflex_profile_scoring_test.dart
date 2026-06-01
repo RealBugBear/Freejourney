@@ -11,9 +11,9 @@ void main() {
     final result = scoring.score(
       definition: childParentQuestionnaireV1,
       answers: const {
-        'q048': ReflexAnswerValue(yesNoUnknown: true),
-        'q049': ReflexAnswerValue(yesNoUnknown: false),
-        'q050': ReflexAnswerValue(),
+        'q044': ReflexAnswerValue(yesNoUnknown: true),
+        'q045': ReflexAnswerValue(yesNoUnknown: false),
+        'q046': ReflexAnswerValue(),
       },
     );
 
@@ -32,12 +32,8 @@ void main() {
     final result = scoring.score(
       definition: childParentQuestionnaireV1,
       answers: const {
-        'q002_pregnancy_health_problem_details': ReflexAnswerValue(
-          selectedOptionIds: ['hypertension'],
-          text: 'weiterer Hinweis',
-        ),
-        'q036': ReflexAnswerValue(months: 9),
-        'q037': ReflexAnswerValue(months: 14),
+        'q032': ReflexAnswerValue(months: 9),
+        'q033': ReflexAnswerValue(months: 14),
       },
     );
 
@@ -52,13 +48,13 @@ void main() {
     final result = scoring.score(
       definition: childParentQuestionnaireV1,
       answers: const {
-        'q109': ReflexAnswerValue(yesNoUnknown: true),
-        'q110': ReflexAnswerValue(yesNoUnknown: true),
-        'q111': ReflexAnswerValue(yesNoUnknown: false),
-        'q112': ReflexAnswerValue(),
+        'q106': ReflexAnswerValue(yesNoUnknown: true),
+        'q107': ReflexAnswerValue(yesNoUnknown: true),
+        'q108': ReflexAnswerValue(yesNoUnknown: false),
+        'q109': ReflexAnswerValue(),
       },
     );
 
-    expect(result.warningQuestionIds, ['q109', 'q110']);
+    expect(result.warningQuestionIds, ['q106', 'q107']);
   });
 }

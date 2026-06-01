@@ -20,16 +20,13 @@ void main() {
         // GoogleFonts raises async exceptions when fonts aren't found and
         // allowRuntimeFetching is false. We suppress them since we're testing
         // theme structure, not font loading.
-        var error;
         await runZonedGuarded(
           () async {
             theme = AppTheme.light;
             // Yield to allow async errors to surface
             await Future.delayed(Duration.zero);
           },
-          (Object e, StackTrace st) {
-            error = e;
-          },
+          (Object e, StackTrace st) {},
         );
         // If there was an error, we still have the theme, so we ignore it.
       });
@@ -46,6 +43,22 @@ void main() {
         final style = theme.elevatedButtonTheme.style!;
         final bg = style.backgroundColor?.resolve({});
         expect(bg, AppColors.primary);
+      });
+
+      test('elevated button foreground is contrast-safe on primary green', () {
+        final style = theme.elevatedButtonTheme.style!;
+        final fg = style.foregroundColor?.resolve({});
+        expect(fg, AppColors.textPrimary);
+      });
+
+      test('filled button foreground is contrast-safe on primary green', () {
+        final style = theme.filledButtonTheme.style!;
+        final fg = style.foregroundColor?.resolve({});
+        expect(fg, AppColors.textPrimary);
+      });
+
+      test('color scheme onPrimary is contrast-safe on primary green', () {
+        expect(theme.colorScheme.onPrimary, AppColors.textPrimary);
       });
 
       test('elevated button radius is 14', () {
@@ -71,16 +84,13 @@ void main() {
         // GoogleFonts raises async exceptions when fonts aren't found and
         // allowRuntimeFetching is false. We suppress them since we're testing
         // theme structure, not font loading.
-        var error;
         await runZonedGuarded(
           () async {
             theme = AppTheme.dark;
             // Yield to allow async errors to surface
             await Future.delayed(Duration.zero);
           },
-          (Object e, StackTrace st) {
-            error = e;
-          },
+          (Object e, StackTrace st) {},
         );
         // If there was an error, we still have the theme, so we ignore it.
       });
@@ -93,6 +103,22 @@ void main() {
         final style = theme.elevatedButtonTheme.style!;
         final bg = style.backgroundColor?.resolve({});
         expect(bg, AppColors.primary);
+      });
+
+      test('elevated button foreground is contrast-safe on primary green', () {
+        final style = theme.elevatedButtonTheme.style!;
+        final fg = style.foregroundColor?.resolve({});
+        expect(fg, AppColors.textPrimary);
+      });
+
+      test('filled button foreground is contrast-safe on primary green', () {
+        final style = theme.filledButtonTheme.style!;
+        final fg = style.foregroundColor?.resolve({});
+        expect(fg, AppColors.textPrimary);
+      });
+
+      test('color scheme onPrimary is contrast-safe on primary green', () {
+        expect(theme.colorScheme.onPrimary, AppColors.textPrimary);
       });
 
       test('elevated button radius is 14', () {

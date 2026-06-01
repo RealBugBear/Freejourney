@@ -59,7 +59,9 @@ class TrainerClientsScreen extends ConsumerWidget {
                         l10n.trainerNoClients,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
                             ),
                       ),
                       const SizedBox(height: 8),
@@ -67,7 +69,9 @@ class TrainerClientsScreen extends ConsumerWidget {
                         l10n.trainerNoClientsHint,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
                             ),
                       ),
                       if (kDebugMode) ...[
@@ -308,10 +312,11 @@ class _ClientTile extends ConsumerWidget {
           const SizedBox(height: 2),
           Text(
             client.packageId != null
-                ? '$packageName · ${l10n.dayNumber(client.currentDay)} · ${client.dailyStreak} Tage regelmaessig'
+                ? '$packageName · ${l10n.dayNumber(client.currentDay)} · ${client.dailyStreak} Tage regelmäßig'
                 : l10n.packageLocked,
-            style:
-                TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 13),
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 13),
           ),
           if (daysSince != null)
             Text(

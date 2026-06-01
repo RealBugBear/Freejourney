@@ -185,6 +185,12 @@ class Exercise {
     return list.isEmpty ? null : list;
   }
 
+  static String? _normalizeUrl(dynamic v) {
+    if (v == null) return null;
+    final s = (v as String).trim();
+    return s.isEmpty ? null : s;
+  }
+
   static List<ExercisePhase> _decodePhases(dynamic value) {
     if (value == null) return [];
     final List<dynamic> raw =
@@ -233,9 +239,9 @@ class Exercise {
       duoImagePath: row['duo_image_path'] as String?,
       videoPath: row['video_path'] as String?,
       audioCuePath: row['audio_cue_path'] as String?,
-      imageUrl: row['image_url'] as String?,
-      duoImageUrl: row['duo_image_url'] as String?,
-      videoUrl: row['video_url'] as String?,
+      imageUrl: _normalizeUrl(row['image_url']),
+      duoImageUrl: _normalizeUrl(row['duo_image_url']),
+      videoUrl: _normalizeUrl(row['video_url']),
       rhythmType: rhythm,
       phases: _decodePhases(row['phases_json']),
       hasRepSwitch: row['has_rep_switch'] as bool? ?? false,

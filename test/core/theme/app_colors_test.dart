@@ -35,5 +35,45 @@ void main() {
     test('divider is light green-tinted border', () {
       expect(AppColors.divider, const Color(0xFFD8EEE2));
     });
+
+    test('primary button text passes WCAG AA contrast', () {
+      expect(
+        _contrastRatio(AppColors.textPrimary, AppColors.primary),
+        greaterThanOrEqualTo(4.5),
+      );
+    });
+
+    test('secondary text passes WCAG AA contrast on light background', () {
+      expect(
+        _contrastRatio(AppColors.textSecondary, AppColors.backgroundLight),
+        greaterThanOrEqualTo(4.5),
+      );
+    });
+
+    test('primary accent passes WCAG AA contrast on dark surfaces', () {
+      expect(
+        _contrastRatio(AppColors.primary, AppColors.surfaceDark),
+        greaterThanOrEqualTo(4.5),
+      );
+    });
+
+    test('primaryOnDark passes WCAG AAA contrast on dark background', () {
+      expect(
+        _contrastRatio(AppColors.primaryOnDark, AppColors.backgroundDark),
+        greaterThanOrEqualTo(7),
+      );
+    });
   });
+}
+
+double _contrastRatio(Color foreground, Color background) {
+  final foregroundLuminance = foreground.computeLuminance();
+  final backgroundLuminance = background.computeLuminance();
+  final lighter = foregroundLuminance > backgroundLuminance
+      ? foregroundLuminance
+      : backgroundLuminance;
+  final darker = foregroundLuminance > backgroundLuminance
+      ? backgroundLuminance
+      : foregroundLuminance;
+  return (lighter + 0.05) / (darker + 0.05);
 }

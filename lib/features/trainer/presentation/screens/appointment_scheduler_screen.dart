@@ -415,7 +415,7 @@ class _AppointmentSchedulerScreenState
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.white,
+                foregroundColor: AppColors.textPrimary,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
@@ -576,7 +576,9 @@ class _SlotGrid extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: selected ? Colors.white : AppColors.primary,
+                          color: selected
+                              ? AppColors.textPrimary
+                              : AppColors.primary,
                         ),
                       ),
                     ),

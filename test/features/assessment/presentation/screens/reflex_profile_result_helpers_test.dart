@@ -7,7 +7,7 @@ ReflexProfileAssessment _assessment(Map<String, dynamic> answers) =>
     ReflexProfileAssessment(
       id: 'test',
       questionnaireType: 'child_parent_report',
-      questionnaireVersion: 'child_parent_v1_2026_05',
+      questionnaireVersion: 'child_parent_v2_2026_05',
       scoringVersion: 'score_equal_weight_v1',
       status: 'completed',
       answers: answers,
@@ -61,9 +61,9 @@ void main() {
     });
 
     test('months value is included', () {
-      // q037 = "Wann ist dein Kind das erste Mal gelaufen?", monthsNumber, motorSkills
+      // q033 = "Wann ist dein Kind das erste Mal gelaufen?", monthsNumber, motorSkills
       final result = buildRelevanteAngaben(_assessment({
-        'q037': {'months': 18},
+        'q033': {'months': 18},
       }));
       expect(result.length, 1);
       final (module, items) = result.first;
@@ -73,24 +73,30 @@ void main() {
 
     test('unknown question ID is silently skipped', () {
       final result = buildRelevanteAngaben(_assessment({
-        'q_nonexistent': {'selected_options': ['foo']},
+        'q_nonexistent': {
+          'selected_options': ['foo']
+        },
       }));
       expect(result, isEmpty);
     });
 
     test('selected_options only with unknown option ID is excluded', () {
       final result = buildRelevanteAngaben(_assessment({
-        'q006': {'selected_options': ['unknown_option_xyz']},
+        'q006': {
+          'selected_options': ['unknown_option_xyz']
+        },
       }));
       expect(result, isEmpty);
     });
 
-    test('groups are ordered by module enum order regardless of answer insertion order', () {
-      // q037 = motorSkills (enum index 2), q009 = pregnancyBirth (enum index 0)
+    test(
+        'groups are ordered by module enum order regardless of answer insertion order',
+        () {
+      // q033 = motorSkills (enum index 2), q009 = pregnancyBirth (enum index 0)
       // Insert in reverse order to verify enum-order output
       final result = buildRelevanteAngaben(_assessment({
-        'q037': {'months': 18},        // motorSkills
-        'q009': {'text': 'Sturzgeburt'},  // pregnancyBirth
+        'q033': {'months': 18}, // motorSkills
+        'q009': {'text': 'Sturzgeburt'}, // pregnancyBirth
       }));
       expect(result.length, 2);
       expect(result[0].$1, ReflexQuestionModule.pregnancyBirth);
@@ -111,8 +117,8 @@ void main() {
       // q009 (number 9) and q006 (number 6) are both pregnancyBirth
       // Insert q009 first — output should still be q006 first (lower number)
       final result = buildRelevanteAngaben(_assessment({
-        'q009': {'text': 'Sturzgeburt'},      // question number 9
-        'q006': {'text': 'Zange verwendet'},  // question number 6
+        'q009': {'text': 'Sturzgeburt'}, // question number 9
+        'q006': {'text': 'Zange verwendet'}, // question number 6
       }));
       expect(result.length, 1);
       final items = result.first.$2;

@@ -32,7 +32,8 @@ class AppointmentProposalScreen extends ConsumerWidget {
                   const SizedBox(height: 16),
                   Text(
                     'Keine offenen Terminvorschläge.',
-                    style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant),
                   ),
                 ],
               ),
@@ -181,7 +182,8 @@ class _ProposalCardState extends State<_ProposalCard> {
                     Text(
                       proposal.title,
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 12),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: 12),
                     ),
                   ],
                 ),
@@ -226,7 +228,9 @@ class _ProposalCardState extends State<_ProposalCard> {
                             ? Icons.radio_button_checked
                             : Icons.radio_button_off,
                         size: 18,
-                        color: isSelected ? Colors.white : AppColors.primary,
+                        color: isSelected
+                            ? AppColors.textPrimary
+                            : AppColors.primary,
                       ),
                       const SizedBox(width: 10),
                       Text(
@@ -249,7 +253,7 @@ class _ProposalCardState extends State<_ProposalCard> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.textPrimary,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),

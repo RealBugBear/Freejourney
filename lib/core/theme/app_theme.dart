@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
@@ -7,31 +5,22 @@ import 'app_colors.dart';
 class AppTheme {
   AppTheme._();
 
-  static bool get _useGoogleFonts => !Platform.isIOS;
-
   static ThemeData get light {
     final base = ThemeData.light(useMaterial3: true);
-    final textTheme = _useGoogleFonts
-        ? GoogleFonts.poppinsTextTheme(base.textTheme)
-        : base.textTheme;
-    final titleTextStyle = _useGoogleFonts
-        ? GoogleFonts.poppins(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          )
-        : const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          );
-    final buttonTextStyle = _useGoogleFonts
-        ? GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600)
-        : const TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
+    final textTheme = GoogleFonts.poppinsTextTheme(base.textTheme);
+    final titleTextStyle = GoogleFonts.poppins(
+      fontSize: 17,
+      fontWeight: FontWeight.w600,
+      color: AppColors.textPrimary,
+    );
+    final buttonTextStyle =
+        GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600);
     return base.copyWith(
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         brightness: Brightness.light,
+      ).copyWith(
+        onPrimary: AppColors.textPrimary,
       ),
       scaffoldBackgroundColor: AppColors.backgroundLight,
       textTheme: textTheme.apply(
@@ -47,10 +36,17 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.white,
+          foregroundColor: AppColors.textPrimary,
           minimumSize: const Size.fromHeight(52),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          textStyle: buttonTextStyle,
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.textPrimary,
           textStyle: buttonTextStyle,
         ),
       ),
@@ -59,7 +55,7 @@ class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: AppColors.divider),
+          side: const BorderSide(color: AppColors.divider),
         ),
       ),
       dividerTheme: const DividerThemeData(color: AppColors.divider),
@@ -68,28 +64,20 @@ class AppTheme {
 
   static ThemeData get dark {
     final base = ThemeData.dark(useMaterial3: true);
-    final textTheme = _useGoogleFonts
-        ? GoogleFonts.poppinsTextTheme(base.textTheme)
-        : base.textTheme;
-    final titleTextStyle = _useGoogleFonts
-        ? GoogleFonts.poppins(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryDark,
-          )
-        : const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryDark,
-          );
-    final buttonTextStyle = _useGoogleFonts
-        ? GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600)
-        : const TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
+    final textTheme = GoogleFonts.poppinsTextTheme(base.textTheme);
+    final titleTextStyle = GoogleFonts.poppins(
+      fontSize: 17,
+      fontWeight: FontWeight.w600,
+      color: AppColors.textPrimaryDark,
+    );
+    final buttonTextStyle =
+        GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600);
     return base.copyWith(
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         brightness: Brightness.dark,
       ).copyWith(
+        onPrimary: AppColors.textPrimary,
         onSurfaceVariant: const Color(0xFFC0C0C0),
       ),
       scaffoldBackgroundColor: AppColors.backgroundDark,
@@ -106,10 +94,17 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.white,
+          foregroundColor: AppColors.textPrimary,
           minimumSize: const Size.fromHeight(52),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          textStyle: buttonTextStyle,
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.textPrimary,
           textStyle: buttonTextStyle,
         ),
       ),
@@ -118,7 +113,7 @@ class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: AppColors.surfaceDarkElevated),
+          side: const BorderSide(color: AppColors.surfaceDarkElevated),
         ),
       ),
     );

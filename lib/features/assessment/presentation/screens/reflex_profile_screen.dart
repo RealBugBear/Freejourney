@@ -530,17 +530,8 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
 
   List<ReflexQuestion> get _visibleQuestions {
     return _definition.questions.where((question) {
-      if (question.id == 'q002_pregnancy_health_problem_details') {
-        return _answers['q001']?.isAffirmative == true;
-      }
-      if (question.followUpOf == 'q005') {
-        return _answers['q005']?.isAffirmative == true;
-      }
-      if (question.id == 'q036') {
-        return _answers['q035']?.yesNoUnknown == false;
-      }
-      if (question.followUpOf == 'q011') {
-        return _answers['q011']?.isAffirmative == true;
+      if (question.followUpOf == 'q031') {
+        return _answers['q031']?.yesNoUnknown == false;
       }
       return true;
     }).toList();
@@ -1072,7 +1063,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
             label: 'Nein',
             selected: value?.yesNoUnknown == false,
             onTap: () => _setYesNoAnswer(question, false),
-            accentColor: const Color(0xFF5B8AF0),
+            accentColor: AppColors.error,
             icon: Icons.close,
           ),
         ),
@@ -1083,7 +1074,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
             label: 'Weiß ich nicht',
             selected: value?.isUnknown == true,
             onTap: () => _setYesNoAnswer(question, null),
-            accentColor: const Color(0xFFE97356),
+            accentColor: const Color(0xFF5B8AF0),
             icon: Icons.help_outline,
           ),
         ),

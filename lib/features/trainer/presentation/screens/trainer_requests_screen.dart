@@ -61,7 +61,7 @@ class _RequestCardState extends ConsumerState<_RequestCard> {
           SnackBar(
             content: Text(
               accept
-                  ? 'Anfrage angenommen. Der Klient erscheint jetzt in deiner Uebersicht.'
+                  ? 'Anfrage angenommen. Der Klient erscheint jetzt in deiner Übersicht.'
                   : 'Anfrage abgelehnt.',
             ),
           ),
