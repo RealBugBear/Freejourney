@@ -23,6 +23,7 @@ import '../../../mood/presentation/widgets/training_experience_sheet.dart';
 import '../../../training/domain/models/exercise.dart';
 import '../../../training/domain/models/training_session.dart';
 import '../../../training/domain/services/experience_prompt_service.dart';
+import '../../../training/domain/services/vorrunde_phase_service.dart';
 import '../../../training/presentation/providers/training_flow_provider.dart';
 import '../../../training/presentation/screens/training_session_screen.dart';
 import '../../../consent/presentation/providers/consent_provider.dart';
@@ -93,6 +94,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             FilledButton(
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.textPrimary,
               ),
               onPressed: () => Navigator.pop(context),
               child: const Text('Verstanden'),
@@ -380,13 +382,22 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final progress = ref.watch(activeProgressProvider).valueOrNull;
     final enrollment = ref.watch(activeEnrollmentProvider).valueOrNull;
     final profilesAsync = ref.watch(allReflexSubjectProfilesProvider);
-    final hasProfile = profilesAsync.valueOrNull?.isNotEmpty; // null while loading
+    final hasProfile =
+        profilesAsync.valueOrNull?.isNotEmpty; // null while loading
     final now = ref.watch(appClockProvider).now();
     final completedToday = _isCompletedToday(progress, now);
     final packageId = ref.watch(selectedPackageIdProvider);
+    final subjectProfileId = ref.watch(selectedSubjectProfileProvider)?.id;
+    final vorrundePhase =
+        ref.watch(vorrundePhaseProvider(subjectProfileId)).valueOrNull;
+    final vorrundeReadyForMoro = vorrundePhase?.isReadyForMoro(now) ?? false;
+    final showVorrundePrimary = enrollment == null &&
+        vorrundePhase?.status == VorrundePhaseStatus.started;
     final flowState = ref.watch(trainingFlowProvider(packageId));
     final sessionsThisWeek = ref.watch(thisWeekSessionsProvider).valueOrNull ??
         const <TrainingSessionsTableData>[];
+    final didVorrundeToday =
+        ref.watch(todayVorrundeSessionProvider).valueOrNull ?? false;
     final proposals =
         ref.watch(traineeProposalsProvider).valueOrNull ?? const [];
     final unreadDm = ref.watch(unreadDmCountProvider);
@@ -446,6 +457,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   sessionsThisWeek: sessionsThisWeek,
                   completedToday: completedToday,
                   hasActivePackage: enrollment != null,
+                  showVorrundePrimary: showVorrundePrimary,
+                  vorrundeReadyForMoro: vorrundeReadyForMoro,
+                  didVorrundeToday: didVorrundeToday,
                   hasProfile: hasProfile,
                   onBeginGuided: () => _beginUnit(TrainingSessionMode.tutorial),
                   onBeginRoutine: () => _beginUnit(TrainingSessionMode.routine),
@@ -457,9 +471,19 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                 enrollment: enrollment,
                                 progress: progress,
                               ),
-                  onStartPackage: () => context.push(Routes.intakeAssessment),
-                  onCreateProfile: () =>
-                      context.push(Routes.onboardingForWhom),
+                  onStartPackage: () => context.push(
+                    Routes.trainingStart,
+                    extra: packageId,
+                  ),
+                  onStartTrainingFlow: () => context.push(
+                    Routes.trainingStart,
+                    extra: packageId,
+                  ),
+                  onBeginVorrunde: () => context.push(
+                    Routes.trainingSession,
+                    extra: 'vorrunde',
+                  ),
+                  onCreateProfile: () => context.push(Routes.onboardingForWhom),
                 ),
                 const SizedBox(height: 16),
                 _DailyImpulseCard(weekday: now.weekday),
@@ -528,12 +552,17 @@ class _DailyUnitCard extends StatelessWidget {
     required this.sessionsThisWeek,
     required this.completedToday,
     required this.hasActivePackage,
+    required this.showVorrundePrimary,
+    required this.vorrundeReadyForMoro,
+    required this.didVorrundeToday,
     required this.hasProfile,
     required this.onBeginGuided,
     required this.onBeginRoutine,
     required this.onObservation,
     required this.onManualComplete,
     required this.onStartPackage,
+    required this.onStartTrainingFlow,
+    required this.onBeginVorrunde,
     required this.onCreateProfile,
   });
 
@@ -546,12 +575,17 @@ class _DailyUnitCard extends StatelessWidget {
   final List<TrainingSessionsTableData> sessionsThisWeek;
   final bool completedToday;
   final bool hasActivePackage;
+  final bool showVorrundePrimary;
+  final bool vorrundeReadyForMoro;
+  final bool didVorrundeToday;
   final bool? hasProfile;
   final VoidCallback onBeginGuided;
   final VoidCallback onBeginRoutine;
   final VoidCallback onObservation;
   final VoidCallback? onManualComplete;
   final VoidCallback onStartPackage;
+  final VoidCallback onStartTrainingFlow;
+  final VoidCallback onBeginVorrunde;
   final VoidCallback onCreateProfile;
 
   @override
@@ -581,9 +615,11 @@ class _DailyUnitCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        hasActivePackage
-                            ? '$packageName Paket'
-                            : 'Noch kein aktives Paket',
+                        showVorrundePrimary
+                            ? 'Vorrunde'
+                            : hasActivePackage
+                                ? '$packageName Paket'
+                                : 'Noch kein aktives Paket',
                         style: theme.textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
@@ -599,7 +635,38 @@ class _DailyUnitCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            if (hasActivePackage) ...[
+            if (showVorrundePrimary) ...[
+              Text(
+                vorrundeReadyForMoro
+                    ? 'Die vier Wochen Vorrunde sind erreicht. Du kannst jetzt Moro starten.'
+                    : 'Die Vorrunde bereitet dich rhythmisch auf Moro vor. Du kannst sie fortsetzen oder jederzeit mit Moro starten.',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  height: 1.35,
+                ),
+              ),
+              const SizedBox(height: 14),
+              FilledButton.icon(
+                onPressed: vorrundeReadyForMoro
+                    ? onStartTrainingFlow
+                    : onBeginVorrunde,
+                icon: Icon(vorrundeReadyForMoro
+                    ? Icons.playlist_add_check_outlined
+                    : Icons.play_arrow_rounded),
+                label: Text(
+                  vorrundeReadyForMoro
+                      ? 'Jetzt Moro starten'
+                      : 'Vorrunde fortsetzen',
+                ),
+              ),
+              if (!vorrundeReadyForMoro) ...[
+                const SizedBox(height: 10),
+                TextButton(
+                  onPressed: onStartTrainingFlow,
+                  child: const Text('Trotzdem Moro starten'),
+                ),
+              ],
+            ] else if (hasActivePackage) ...[
               ClipRRect(
                 borderRadius: BorderRadius.circular(999),
                 child: LinearProgressIndicator(
@@ -680,6 +747,23 @@ class _DailyUnitCard extends StatelessWidget {
                 icon: const Icon(Icons.timer_outlined),
                 label: const Text('Routine-Modus'),
               ),
+              const SizedBox(height: 10),
+              OutlinedButton.icon(
+                onPressed: onBeginVorrunde,
+                icon: const Icon(Icons.self_improvement_outlined),
+                label: const Text('Vorrunde zur Beruhigung'),
+              ),
+              if (didVorrundeToday) ...[
+                const SizedBox(height: 8),
+                Text(
+                  completedToday
+                      ? 'Heute Pakettraining und Vorrunde gemacht'
+                      : 'Heute Vorrunde gemacht',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
             ] else if (hasProfile == null) ...[
               const SizedBox(height: 16),
               const LinearProgressIndicator(),

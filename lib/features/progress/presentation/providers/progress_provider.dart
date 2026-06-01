@@ -160,8 +160,27 @@ final thisWeekSessionsProvider =
         ..where((t) =>
             t.enrollmentId.equals(enrollment.id) &
             t.sessionDate.isBiggerOrEqualValue(weekStart) &
+            t.dayNumber.isBiggerThanValue(0) &
             t.isCompleted.equals(true)))
       .watch();
+});
+
+final todayVorrundeSessionProvider = StreamProvider<bool>((ref) {
+  final db = ref.watch(databaseProvider);
+  final enrollment = ref.watch(activeEnrollmentProvider).valueOrNull;
+  if (enrollment == null) return Stream.value(false);
+  final now = ref.watch(appClockProvider).now();
+  final today = DateTime(now.year, now.month, now.day);
+
+  return (db.select(db.trainingSessionsTable)
+        ..where((t) =>
+            t.enrollmentId.equals(enrollment.id) &
+            t.sessionDate.equals(today) &
+            t.dayNumber.equals(0) &
+            t.isCompleted.equals(true))
+        ..limit(1))
+      .watch()
+      .map((rows) => rows.isNotEmpty);
 });
 
 // ── Create enrollment after intake assessment ─────────────────────────────────
@@ -273,9 +292,8 @@ Future<void> createIntakeAssessment({
 }) async {
   final id = _uuid.v4();
   final now = DateTime.now();
-  final additionalAnswers = entryPoints.isEmpty
-      ? null
-      : jsonEncode({'entry_points': entryPoints});
+  final additionalAnswers =
+      entryPoints.isEmpty ? null : jsonEncode({'entry_points': entryPoints});
 
   await db.into(db.intakeAssessmentsTable).insert(
         IntakeAssessmentsTableCompanion.insert(
@@ -804,6 +822,101 @@ Future<void> saveCompletedSession({
       'daily_streak': newDailyStreak,
       'weekly_streak': newWeeklyStreak,
       'trainings_this_week': newTrainingsThisWeek,
+    },
+  );
+}
+
+Future<void> saveVorrundeRegulationSession({
+  required AppDatabase db,
+  required SyncService syncService,
+  required EnrollmentsTableData enrollment,
+  required ProgressEntriesTableData progress,
+  required List<String> completedExerciseIds,
+}) async {
+  final userId = Supabase.instance.client.auth.currentUser?.id;
+  if (userId == null) return;
+
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final sessionId = _uuid.v4();
+
+  await db.into(db.trainingSessionsTable).insert(
+        TrainingSessionsTableCompanion.insert(
+          id: sessionId,
+          userId: userId,
+          subjectProfileId: drift.Value(enrollment.subjectProfileId),
+          enrollmentId: enrollment.id,
+          sessionDate: today,
+          dayNumber: 0,
+          completedExerciseIds: jsonEncode(completedExerciseIds),
+          isCompleted: const drift.Value(true),
+          completedAt: drift.Value(now),
+        ),
+      );
+
+  final lastActivity = progress.lastActivityDate;
+  final isToday = lastActivity != null &&
+      lastActivity.year == today.year &&
+      lastActivity.month == today.month &&
+      lastActivity.day == today.day;
+  if (!isToday) {
+    final yesterday = today.subtract(const Duration(days: 1));
+    final newDailyStreak = lastActivity == null ||
+            (lastActivity.year == yesterday.year &&
+                lastActivity.month == yesterday.month &&
+                lastActivity.day == yesterday.day)
+        ? progress.dailyStreak + 1
+        : 1;
+    final thisWeekStart = _weekStart(today);
+    final lastWeekStart = progress.lastTrainingWeekStart;
+    final isNewWeek =
+        lastWeekStart == null || lastWeekStart.isBefore(thisWeekStart);
+    final newTrainingsThisWeek = isNewWeek ? 1 : progress.trainingsThisWeek + 1;
+
+    await (db.update(db.progressEntriesTable)
+          ..where((t) => t.id.equals(progress.id)))
+        .write(ProgressEntriesTableCompanion(
+      lastActivityDate: drift.Value(today),
+      consecutiveInactiveDays: const drift.Value(0),
+      dailyStreak: drift.Value(newDailyStreak),
+      trainingsThisWeek: drift.Value(newTrainingsThisWeek),
+      lastTrainingWeekStart: drift.Value(thisWeekStart),
+      totalSessionsSinceDisclaimer:
+          drift.Value(progress.totalSessionsSinceDisclaimer + 1),
+      needsSync: const drift.Value(true),
+      updatedAt: drift.Value(now),
+    ));
+
+    await syncService.enqueueUpsert(
+      tableName: 'progress_entries',
+      recordId: progress.id,
+      payload: {
+        'id': progress.id,
+        'user_id': userId,
+        if (progress.subjectProfileId != null)
+          'subject_profile_id': progress.subjectProfileId,
+        'enrollment_id': enrollment.id,
+        'last_activity_date': today.toIso8601String().substring(0, 10),
+        'daily_streak': newDailyStreak,
+        'trainings_this_week': newTrainingsThisWeek,
+      },
+    );
+  }
+
+  await syncService.enqueueUpsert(
+    tableName: 'training_sessions',
+    recordId: sessionId,
+    payload: {
+      'id': sessionId,
+      'user_id': userId,
+      if (enrollment.subjectProfileId != null)
+        'subject_profile_id': enrollment.subjectProfileId,
+      'enrollment_id': enrollment.id,
+      'session_date': today.toIso8601String().substring(0, 10),
+      'day_number': 0,
+      'completed_exercise_ids': completedExerciseIds,
+      'is_completed': true,
+      'completed_at': now.toIso8601String(),
     },
   );
 }

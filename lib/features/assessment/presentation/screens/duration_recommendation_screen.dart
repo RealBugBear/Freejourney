@@ -8,15 +8,11 @@ import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/error_retry_widget.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../domain/reflex_questionnaire.dart';
+import '../../domain/services/training_duration_recommendation_service.dart';
 import '../providers/reflex_profile_provider.dart';
 import '../../../onboarding/presentation/providers/entry_points_provider.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
-
-int _computeRecommendedWeeks({required bool hadIsometricWithTrainer}) {
-  // Until the expert Reflexprofil questionnaire and scoring are available,
-  // skipped profiles intentionally use the default rule from the product plan.
-  return hadIsometricWithTrainer ? 4 : 8;
-}
 
 class DurationRecommendationScreen extends ConsumerStatefulWidget {
   const DurationRecommendationScreen({super.key});
@@ -32,6 +28,7 @@ class _DurationRecommendationScreenState
   late String _packageId;
   bool _hadTrainer = false;
   bool _reflexProfileSkipped = false;
+  bool _showManualAdjust = false;
   bool _saving = false;
 
   @override
@@ -41,8 +38,13 @@ class _DurationRecommendationScreenState
     _packageId = extra?['packageId'] as String? ?? 'moro';
     _hadTrainer = extra?['hadIsometricWithTrainer'] as bool? ?? false;
     _reflexProfileSkipped = extra?['reflexProfileStatus'] == 'skipped';
-    _selectedWeeks =
-        _computeRecommendedWeeks(hadIsometricWithTrainer: _hadTrainer);
+    final assessment =
+        ref.read(latestReflexProfileForSelectedSubjectProvider).valueOrNull;
+    _selectedWeeks = recommendTrainingDuration(
+      packageId: _packageId,
+      hadIsometricWithTrainer: _hadTrainer,
+      assessment: _reflexProfileSkipped ? null : assessment,
+    ).weeks;
   }
 
   Future<void> _confirm() async {
@@ -59,16 +61,21 @@ class _DurationRecommendationScreenState
         packageId: _packageId,
         durationWeeks: _selectedWeeks,
       );
+      final assessment =
+          ref.read(latestReflexProfileForSelectedSubjectProvider).valueOrNull;
+      final recommendation = recommendTrainingDuration(
+        packageId: _packageId,
+        hadIsometricWithTrainer: _hadTrainer,
+        assessment: _reflexProfileSkipped ? null : assessment,
+      );
 
       await createIntakeAssessment(
         db: ref.read(databaseProvider),
         syncService: ref.read(syncServiceProvider),
         enrollmentId: enrollmentId,
         hadIsometricWithTrainer: _hadTrainer,
-        recommendedDurationWeeks:
-            _computeRecommendedWeeks(hadIsometricWithTrainer: _hadTrainer),
-        userAcceptedRecommendation: _selectedWeeks ==
-            _computeRecommendedWeeks(hadIsometricWithTrainer: _hadTrainer),
+        recommendedDurationWeeks: recommendation.weeks,
+        userAcceptedRecommendation: _selectedWeeks == recommendation.weeks,
         finalDurationWeeks: _selectedWeeks,
         entryPoints: ref.read(entryPointsProvider),
       );
@@ -89,6 +96,13 @@ class _DurationRecommendationScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final assessment =
+        ref.watch(latestReflexProfileForSelectedSubjectProvider).valueOrNull;
+    final recommendation = recommendTrainingDuration(
+      packageId: _packageId,
+      hadIsometricWithTrainer: _hadTrainer,
+      assessment: _reflexProfileSkipped ? null : assessment,
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.adjustDuration)),
@@ -114,30 +128,39 @@ class _DurationRecommendationScreenState
               ),
               const SizedBox(height: 20),
               _RecommendationInfo(
-                text: _reflexProfileSkipped
-                    ? 'Du hast das Reflexprofil übersprungen. Die Empfehlung nutzt deshalb die Standard-Dauerlogik und deine Angabe zur isometrischen Begleitung.'
-                    : (_hadTrainer
-                        ? l10n.durationTrainerMinimumInfo
-                        : l10n.durationWithoutTrainerInfo),
+                text: _recommendationText(recommendation),
               ),
+              if (recommendation.usedAssessment &&
+                  recommendation.consideredPercents.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                _ReflexTendencyList(recommendation: recommendation),
+              ],
               const SizedBox(height: 28),
-              Slider(
-                value: _selectedWeeks.toDouble(),
-                min: 4,
-                max: 8,
-                divisions: 4,
-                label: l10n.weeksCount(_selectedWeeks),
-                onChanged: (v) => setState(() => _selectedWeeks = v.round()),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(l10n.weeksCount(4),
-                      style: Theme.of(context).textTheme.bodySmall),
-                  Text(l10n.weeksCount(8),
-                      style: Theme.of(context).textTheme.bodySmall),
-                ],
-              ),
+              if (_showManualAdjust) ...[
+                Slider(
+                  value: _selectedWeeks.toDouble(),
+                  min: 4,
+                  max: 8,
+                  divisions: 4,
+                  label: l10n.weeksCount(_selectedWeeks),
+                  onChanged: (v) => setState(() => _selectedWeeks = v.round()),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(l10n.weeksCount(4),
+                        style: Theme.of(context).textTheme.bodySmall),
+                    Text(l10n.weeksCount(8),
+                        style: Theme.of(context).textTheme.bodySmall),
+                  ],
+                ),
+              ] else ...[
+                OutlinedButton.icon(
+                  onPressed: () => setState(() => _showManualAdjust = true),
+                  icon: const Icon(Icons.tune_outlined),
+                  label: const Text('Dauer anpassen'),
+                ),
+              ],
               const Spacer(),
               ElevatedButton(
                 onPressed: _saving ? null : _confirm,
@@ -150,7 +173,9 @@ class _DurationRecommendationScreenState
                           color: Colors.white,
                         ),
                       )
-                    : Text(l10n.confirm),
+                    : Text(_showManualAdjust
+                        ? l10n.confirm
+                        : 'Empfehlung übernehmen'),
               ),
             ],
           ),
@@ -158,7 +183,82 @@ class _DurationRecommendationScreenState
       ),
     );
   }
+
+  String _recommendationText(TrainingDurationRecommendation recommendation) {
+    if (!recommendation.usedAssessment) {
+      return 'Du hast das Reflexprofil übersprungen oder es liegt für dieses Profil noch keine Auswertung vor. Die Empfehlung nutzt deshalb die Standardlogik anhand deiner Angabe zum isometrischen Partnertraining.';
+    }
+    final range =
+        recommendation.hadIsometricWithTrainer ? '4 bis 6' : '6 bis 8';
+    if (_packageId == 'moro') {
+      return 'Diese Empfehlung basiert auf deiner persönlichen Reflexprofil-Auswertung.\n\nFür das Moro-Paket betrachten wir sowohl Moro als auch FLR, weil beide in dieser Auswertung relevant sind. Der stärkere Hinweis liegt bei ${_formatPercent(recommendation.strongestPercent)} und bestimmt die Dauerstufe.\n\nDa du ${recommendation.hadIsometricWithTrainer ? 'bereits' : 'noch nicht'} isometrisches Partnertraining mit einer Fachperson gemacht hast, verwenden wir den Empfehlungsbereich $range Wochen. Du kannst die Empfehlung übernehmen oder die Dauer manuell anpassen.';
+    }
+    return 'Diese Empfehlung basiert auf deiner persönlichen Reflexprofil-Auswertung. Aufgrund deiner ermittelten Reflex-Tendenz empfehlen wir für dieses Paket eine Dauer von ${recommendation.weeks} Wochen.\n\nDa du ${recommendation.hadIsometricWithTrainer ? 'bereits' : 'noch nicht'} isometrisches Partnertraining mit einer Fachperson gemacht hast, verwenden wir den Empfehlungsbereich $range Wochen.';
+  }
 }
+
+class _ReflexTendencyList extends StatelessWidget {
+  const _ReflexTendencyList({required this.recommendation});
+
+  final TrainingDurationRecommendation recommendation;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (final reflex in recommendation.consideredReflexes)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Text(
+                  '${_reflexLabel(reflex)}-Tendenz: ${_formatPercent(recommendation.consideredPercents[reflex])}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+            if (recommendation.consideredReflexes.length > 1)
+              Text(
+                'Für die Dauer zählt der stärkere Hinweis.',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+String _formatPercent(double? percent) {
+  if (percent == null) return 'keine ausreichenden Daten';
+  final rounded = percent.roundToDouble() == percent
+      ? percent.toStringAsFixed(0)
+      : percent.toStringAsFixed(1);
+  return '$rounded%';
+}
+
+String _reflexLabel(PrimitiveReflex reflex) => switch (reflex) {
+      PrimitiveReflex.moro => 'Moro',
+      PrimitiveReflex.flr => 'FLR',
+      PrimitiveReflex.spinalGalant => 'Spinaler Galant',
+      PrimitiveReflex.tlr => 'TLR',
+      PrimitiveReflex.atnr => 'ATNR',
+      PrimitiveReflex.stnr => 'STNR',
+      PrimitiveReflex.babkin => 'Babkin',
+      PrimitiveReflex.palmar => 'Palmar',
+      PrimitiveReflex.plantar => 'Plantar',
+      PrimitiveReflex.rootingSucking => 'Such-Saug',
+      PrimitiveReflex.babinski => 'Babinski',
+      PrimitiveReflex.landau => 'Landau',
+      _ => reflex.name,
+    };
 
 class _RecommendationInfo extends StatelessWidget {
   const _RecommendationInfo({required this.text});

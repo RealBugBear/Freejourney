@@ -19,6 +19,7 @@ import '../../features/assessment/presentation/screens/duration_recommendation_s
 import '../../features/assessment/presentation/screens/trainer_onboarding_prompt_screen.dart';
 import '../../features/assessment/presentation/screens/completion_questionnaire_screen.dart';
 import '../../features/training/presentation/screens/training_session_screen.dart';
+import '../../features/training/presentation/screens/training_start_flow_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/settings/presentation/screens/language_selection_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
@@ -69,6 +70,7 @@ class Routes {
   static const progress = '/verlauf';
   static const accompaniment = '/begleitung';
   static const intakeAssessment = '/intake-assessment';
+  static const trainingStart = '/training/start';
   static const trainerOnboardingPrompt = '/intake-assessment/trainer';
   static const durationRecommendation = '/intake-assessment/duration';
   static const completionQuestionnaire = '/completion-questionnaire';
@@ -236,6 +238,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: Routes.reflexProfileResult,
         name: 'reflex-profile-result',
         builder: (context, state) => const ReflexProfileResultScreen(),
+      ),
+      GoRoute(
+        path: Routes.trainingStart,
+        name: 'training-start',
+        builder: (context, state) => const TrainingStartFlowScreen(),
       ),
       GoRoute(
         path: Routes.intakeAssessment,

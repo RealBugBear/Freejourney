@@ -227,7 +227,8 @@ class _WellbeingSectionState extends ConsumerState<_WellbeingSection> {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          color: sel ? Colors.white : AppColors.primary,
+                          color:
+                              sel ? AppColors.textPrimary : AppColors.primary,
                         ),
                       ),
                     ),
@@ -531,7 +532,7 @@ class _RangeChips extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
-                      color: sel ? Colors.white : AppColors.primary)),
+                      color: sel ? AppColors.textPrimary : AppColors.primary)),
             ),
           ),
         );
