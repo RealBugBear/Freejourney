@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 
 import '../../config/app_config.dart';
 
-/// Custom log levels matching AppConfig.logLevel
+/// Custom log levels used by LoggerService.
 enum AppLogLevel {
   debug,
   info,
@@ -60,9 +60,10 @@ class LoggerService {
   LoggerService({
     required AppConfig config,
   })  : _config = config,
-        _minLevel = AppLogLevel.fromString(config.logLevel),
+        _minLevel =
+            config.isDevelopment ? AppLogLevel.debug : AppLogLevel.error,
         _logger = Logger(
-          printer: config.environment.isDevelopment
+          printer: config.isDevelopment
               ? PrettyPrinter(
                   methodCount: 2,
                   errorMethodCount: 8,
@@ -74,7 +75,8 @@ class LoggerService {
               : SimplePrinter(
                   colors: false,
                 ),
-          level: AppLogLevel.fromString(config.logLevel).toLoggerLevel(),
+          level: (config.isDevelopment ? AppLogLevel.debug : AppLogLevel.error)
+              .toLoggerLevel(),
         );
 
   /// Check if a log level should be logged
@@ -146,7 +148,7 @@ class LoggerService {
     );
 
     // In production, errors should be sent to crash reporting
-    if (_config.enableCrashReporting && error != null) {
+    if (_config.isProduction && error != null) {
       _reportError(error, stackTrace, message, data);
     }
   }
@@ -165,7 +167,7 @@ class LoggerService {
     );
 
     // Fatal errors are always reported
-    if (_config.enableCrashReporting && error != null) {
+    if (_config.isProduction && error != null) {
       _reportError(error, stackTrace, message, data, fatal: true);
     }
   }

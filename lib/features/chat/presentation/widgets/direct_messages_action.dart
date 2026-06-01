@@ -11,7 +11,8 @@ class DirectMessagesAction extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (Supabase.instance.client.auth.currentUser == null) {
+    final isSignedIn = _isSignedIn();
+    if (!isSignedIn) {
       return const SizedBox.shrink();
     }
 
@@ -26,5 +27,13 @@ class DirectMessagesAction extends ConsumerWidget {
         child: const Icon(Icons.chat_bubble_outline),
       ),
     );
+  }
+
+  bool _isSignedIn() {
+    try {
+      return Supabase.instance.client.auth.currentUser != null;
+    } on AssertionError {
+      return false;
+    }
   }
 }

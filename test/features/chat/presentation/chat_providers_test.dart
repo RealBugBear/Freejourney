@@ -31,6 +31,11 @@ class _StubChatRepository implements ChatRepository {
   }
 
   @override
+  Stream<List<ChatMessage>> watchCallRequests() {
+    return const Stream.empty();
+  }
+
+  @override
   Future<List<ChatMessage>> fetchOlderMessages(
     String channelId, {
     required DateTime before,

@@ -19,6 +19,8 @@ class _FakeChatRepository implements ChatRepository {
   Stream<List<ChatMessage>> watchMessages(String c, {int pageSize = 30}) =>
       const Stream.empty();
   @override
+  Stream<List<ChatMessage>> watchCallRequests() => const Stream.empty();
+  @override
   Future<List<ChatMessage>> fetchOlderMessages(String c,
           {required DateTime before, int limit = 30}) async =>
       [];

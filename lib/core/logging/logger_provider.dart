@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../config/app_config.dart';
+import '../../bootstrap/providers.dart';
 import 'logger_service.dart';
 
 /// Provider for the logger service
 final loggerServiceProvider = Provider<LoggerService>((ref) {
-  return LoggerService(config: AppConfig.current);
+  return LoggerService(config: ref.watch(appConfigProvider));
 });
 
 /// Provider for scoped loggers

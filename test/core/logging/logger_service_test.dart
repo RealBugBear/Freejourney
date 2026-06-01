@@ -10,17 +10,30 @@ class TestException implements Exception {
   String toString() => message;
 }
 
+AppConfig _devConfig() => const AppConfig(
+      environment: AppEnvironment.development,
+      supabaseUrl: 'https://test.supabase.co',
+      supabaseAnonKey: 'test_anon_key',
+      revenueCatApiKey: 'test_rc_key',
+    );
+
+AppConfig _prodConfig() => const AppConfig(
+      environment: AppEnvironment.production,
+      supabaseUrl: 'https://test.supabase.co',
+      supabaseAnonKey: 'test_anon_key',
+      revenueCatApiKey: 'test_rc_key',
+    );
+
 void main() {
   group('LoggerService', () {
     late LoggerService logger;
 
     group('Development Environment', () {
       setUp(() {
-        logger = LoggerService(config: AppConfig.development);
+        logger = LoggerService(config: _devConfig());
       });
 
       test('logs debug messages in development', () {
-        // This test verifies the logger works without throwing
         expect(
           () => logger.debug('Test debug message', data: {'key': 'value'}),
           returnsNormally,
@@ -66,11 +79,10 @@ void main() {
 
     group('Production Environment', () {
       setUp(() {
-        logger = LoggerService(config: AppConfig.production);
+        logger = LoggerService(config: _prodConfig());
       });
 
       test('should not log debug in production', () {
-        // In production with logLevel='error', debug should be filtered
         expect(
           () => logger.debug('Should not appear'),
           returnsNormally,
@@ -101,12 +113,11 @@ void main() {
 
     group('Scoped Logger', () {
       setUp(() {
-        logger = LoggerService(config: AppConfig.development);
+        logger = LoggerService(config: _devConfig());
       });
 
       test('creates scoped logger with tag', () {
         final scopedLogger = logger.scope('TestScope');
-
         expect(
           () => scopedLogger.info('Test message'),
           returnsNormally,
@@ -115,11 +126,8 @@ void main() {
 
       test('scoped logger includes tag in messages', () {
         final scopedLogger = logger.scope('Authentication');
-
         expect(
-          () => scopedLogger.debug('Login attempted', data: {
-            'userId': '123',
-          }),
+          () => scopedLogger.debug('Login attempted', data: {'userId': '123'}),
           returnsNormally,
         );
       });
@@ -127,7 +135,7 @@ void main() {
 
     group('Convenience Methods', () {
       setUp(() {
-        logger = LoggerService(config: AppConfig.development);
+        logger = LoggerService(config: _devConfig());
       });
 
       test('logAction formats user actions correctly', () {
@@ -152,7 +160,7 @@ void main() {
 
     group('Error Handling', () {
       setUp(() {
-        logger = LoggerService(config: AppConfig.development);
+        logger = LoggerService(config: _devConfig());
       });
 
       test('handles null error gracefully', () {
