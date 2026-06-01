@@ -8,6 +8,7 @@ import '../../../../core/training/adaptive_tempo_settings.dart';
 import '../../../../core/training/in_app_music_settings.dart';
 import '../../../../core/training/training_feedback_settings.dart';
 import '../../domain/models/exercise.dart';
+import '../../domain/services/audio_announcement_service.dart';
 import '../../domain/services/metronome_service.dart';
 import '../services/in_app_music_service.dart';
 import '../widgets/music_picker_sheet.dart';
@@ -41,6 +42,7 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
 
   int _currentBeat = 0;
   int _currentRepIndex = 0;
+  int _phaseCueIndex = 0;
   bool _isResting = false;
   bool _halfwayAnnounce = false;
   bool _isPaused = false;
@@ -106,7 +108,12 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
     }));
 
     _subs.add(svc.repIndexStream.listen((idx) {
-      if (mounted) setState(() => _currentRepIndex = idx);
+      if (mounted) {
+        setState(() {
+          _currentRepIndex = idx;
+          _phaseCueIndex = 0;
+        });
+      }
     }));
 
     _subs.add(svc.repComplete.listen((_) {
@@ -123,6 +130,28 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
       if (_feedbackMode != TrainingFeedbackMode.silent) {
         HapticFeedback.mediumImpact();
       }
+      if (widget.isRoutineMode &&
+          _feedbackMode == TrainingFeedbackMode.voiceAndCues &&
+          (widget.exercise.hasRepSwitch || isHalfway)) {
+        unawaited(AudioAnnouncementService.instance
+            .play('sounds/announcements/de/wechsel.mp3'));
+      }
+    }));
+
+    _subs.add(svc.phaseTransition.listen((_) {
+      if (!mounted ||
+          !widget.isRoutineMode ||
+          _feedbackMode != TrainingFeedbackMode.voiceAndCues ||
+          widget.exercise.phases.isEmpty) {
+        return;
+      }
+      final nextPhaseCueIndex = _phaseCueIndex + 1;
+      _phaseCueIndex = nextPhaseCueIndex >= widget.exercise.phases.length
+          ? widget.exercise.phases.length - 1
+          : nextPhaseCueIndex;
+      unawaited(AudioAnnouncementService.instance.play(
+        'sounds/announcements/de/exercises/${widget.exercise.id}_phase_${_phaseCueIndex + 1}.mp3',
+      ));
     }));
 
     _subs.add(svc.allRepsComplete.listen((_) async {
@@ -153,9 +182,19 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
 
   Future<void> _togglePause() async {
     if (_isPaused) {
+      if (widget.isRoutineMode &&
+          _feedbackMode == TrainingFeedbackMode.voiceAndCues) {
+        await AudioAnnouncementService.instance
+            .play('sounds/announcements/de/weiter.mp3');
+      }
       await _metronome?.resume();
     } else {
       await _metronome?.pause();
+      if (widget.isRoutineMode &&
+          _feedbackMode == TrainingFeedbackMode.voiceAndCues) {
+        await AudioAnnouncementService.instance
+            .play('sounds/announcements/de/pause.mp3');
+      }
     }
     if (mounted) setState(() => _isPaused = !_isPaused);
     HapticFeedback.selectionClick();

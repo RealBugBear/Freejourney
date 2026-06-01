@@ -19,6 +19,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../mood/presentation/widgets/training_experience_sheet.dart';
 import '../../domain/services/experience_prompt_service.dart';
+import '../../domain/services/vorrunde_phase_service.dart';
 import '../../domain/models/training_session.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
@@ -72,6 +73,11 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
   }
 
   Future<void> _handleOutroContinue(TrainingFlowState state) async {
+    if (widget.packageId == 'vorrunde') {
+      await _handleVorrundeOutroContinue(state);
+      return;
+    }
+
     // Save session + update progress in background.
     //
     // IMPORTANT: Do NOT use activeEnrollmentProvider here — it is keyed to
@@ -172,6 +178,49 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
 
     if (!mounted) return;
     context.pop();
+  }
+
+  Future<void> _handleVorrundeOutroContinue(TrainingFlowState state) async {
+    final userId = ref.read(authStateProvider).valueOrNull?.session?.user.id ??
+        Supabase.instance.client.auth.currentUser?.id;
+    final subjectProfileId = ref.read(selectedSubjectProfileProvider)?.id;
+    if (userId != null) {
+      final repo = ref.read(vorrundePhaseRepositoryProvider);
+      final phase = await repo.fetch(
+        userId: userId,
+        subjectProfileId: subjectProfileId,
+      );
+      if (phase == null) {
+        await repo.start(userId: userId, subjectProfileId: subjectProfileId);
+      } else if (phase.status == VorrundePhaseStatus.started &&
+          phase.isReadyForMoro(DateTime.now())) {
+        await repo.complete(userId: userId, subjectProfileId: subjectProfileId);
+      }
+      ref.invalidate(vorrundePhaseProvider(subjectProfileId));
+    }
+
+    final enrollment = ref.read(activeEnrollmentProvider).valueOrNull;
+    final progress = ref.read(activeProgressProvider).valueOrNull;
+    if (enrollment != null && progress != null) {
+      await saveVorrundeRegulationSession(
+        db: ref.read(databaseProvider),
+        syncService: ref.read(syncServiceProvider),
+        enrollment: enrollment,
+        progress: progress,
+        completedExerciseIds: state.completedExerciseIds,
+      );
+      final shouldShow = await ExperiencePromptService.shouldShow();
+      if (shouldShow && mounted) {
+        await showTrainingExperienceSheet(
+          context,
+          enrollmentId: enrollment.id,
+          packageId: 'vorrunde',
+        );
+      }
+    }
+
+    if (!mounted) return;
+    context.go(Routes.trainingStart, extra: 'moro');
   }
 
   Future<void> _saveCompanionSessions({
@@ -329,10 +378,13 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
           exerciseIndex: state.currentExerciseIndex,
           totalExercises: state.totalExercises,
           mode: state.mode,
+          isDuo: widget.companionSubjectProfileIds.isNotEmpty,
           onStart: () => setState(() => _phase = _TrainingPhase.session),
           onModeChanged: (newMode) {
             // Update the flow state so the toggle visually switches immediately.
-            ref.read(trainingFlowProvider(widget.packageId).notifier).setMode(newMode);
+            ref
+                .read(trainingFlowProvider(widget.packageId).notifier)
+                .setMode(newMode);
             // Also persist to settings so the next session starts in the chosen mode.
             ref.read(settingsProvider.notifier).setTrainingMode(newMode);
           },

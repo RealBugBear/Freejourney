@@ -40,20 +40,27 @@ class _ImmersiveSessionScreenState extends State<ImmersiveSessionScreen> {
   final List<String> _completedIds = [];
   int _transitionDuration = 10;
   bool _isFirstRun = false;
+  late bool _announcementReady;
 
   @override
   void initState() {
     super.initState();
+    _announcementReady = !widget.isRoutineMode;
     _loadTransitionDuration();
     _loadFirstRun();
     if (widget.isRoutineMode && widget.exercises.isNotEmpty) {
-      final first = widget.exercises.first;
-      final isDuo = widget.companionSubjectProfileIds.isNotEmpty;
-      unawaited(AudioAnnouncementService.instance.queue([
-        'sounds/announcements/de/exercises/${first.id}_name.mp3',
-        'sounds/announcements/de/exercises/${first.id}_position${isDuo ? '_duo' : ''}.mp3',
-      ]));
+      unawaited(_announceExercise(widget.exercises.first));
     }
+  }
+
+  Future<void> _announceExercise(Exercise exercise) async {
+    final isDuo = widget.companionSubjectProfileIds.isNotEmpty;
+    await AudioAnnouncementService.instance.queue([
+      'sounds/announcements/de/exercises/${exercise.id}_name.mp3',
+      'sounds/announcements/de/exercises/${exercise.id}_position${isDuo ? '_duo' : ''}.mp3',
+    ]);
+    if (!mounted) return;
+    setState(() => _announcementReady = true);
   }
 
   Future<void> _loadTransitionDuration() async {
@@ -113,18 +120,16 @@ class _ImmersiveSessionScreenState extends State<ImmersiveSessionScreen> {
     }
 
     if (!mounted) return;
-    if (widget.isRoutineMode) {
-      final nextExercise = widget.exercises[_exerciseIndex + 1];
-      final isDuo = widget.companionSubjectProfileIds.isNotEmpty;
-      unawaited(AudioAnnouncementService.instance.queue([
-        'sounds/announcements/de/exercises/${nextExercise.id}_name.mp3',
-        'sounds/announcements/de/exercises/${nextExercise.id}_position${isDuo ? '_duo' : ''}.mp3',
-      ]));
-    }
+    final nextExercise = widget.exercises[_exerciseIndex + 1];
     setState(() {
       _exerciseIndex++;
       _phase = _Phase.transition;
+      _announcementReady = !widget.isRoutineMode;
     });
+
+    if (widget.isRoutineMode) {
+      await _announceExercise(nextExercise);
+    }
   }
 
   @override
@@ -138,15 +143,18 @@ class _ImmersiveSessionScreenState extends State<ImmersiveSessionScreen> {
 
     return switch (_phase) {
       _Phase.transition => ExerciseTransitionWidget(
-          key: ValueKey('transition_$_exerciseIndex'),
+          key: ValueKey('transition_${_exerciseIndex}_$_announcementReady'),
           exercise: exercise,
           exerciseIndex: _exerciseIndex,
           totalExercises: widget.exercises.length,
           isRoutineMode: widget.isRoutineMode,
-          transitionDurationSeconds: widget.isRoutineMode ? 5 : _transitionDuration,
+          transitionDurationSeconds:
+              widget.isRoutineMode ? 5 : _transitionDuration,
           packageId: widget.packageId,
           isFirstRun: _isFirstRun,
           locale: locale,
+          isDuo: widget.companionSubjectProfileIds.isNotEmpty,
+          enableCountdown: _announcementReady,
           onStart: _onTransitionComplete,
         ),
       _Phase.exercise => ImmersiveExerciseScreen(

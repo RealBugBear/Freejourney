@@ -175,6 +175,10 @@ final _dbExercisesProvider = FutureProvider.autoDispose
             'duration_seconds': row.durationSeconds,
             'repetitions': row.repetitions,
             'image_path': row.imagePath,
+            'duo_image_path': row.duoImagePath,
+            'image_url': row.imageUrl,
+            'duo_image_url': row.duoImageUrl,
+            'video_url': row.videoUrl,
             'video_path': row.videoPath,
             'audio_cue_path': row.audioCuePath,
             'rhythm_type': row.rhythmType,
@@ -196,6 +200,8 @@ List<Exercise> _hardcodedFallback(String packageId) {
       return spinalGalantExercises;
     case 'tlr':
       return tlrExercises;
+    case 'vorrunde':
+      return vorrundeExercises;
     case 'moro':
     default:
       return moroExercises;

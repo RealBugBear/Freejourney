@@ -103,6 +103,7 @@ class ExercisePreparationWidget extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 18),
               backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.textPrimary,
             ),
             child: Text(l10n.next,
                 style:

@@ -33,7 +33,7 @@ class _ExerciseVideoWidgetState extends State<ExerciseVideoWidget> {
   }
 
   Future<void> _initVideo() async {
-    final videoUrl = widget.exercise.videoUrl;
+    final videoUrl = widget.exercise.videoUrl; // already normalized by model
     final videoPath = widget.exercise.videoPath;
 
     if (videoUrl == null && videoPath == null) {
@@ -41,28 +41,49 @@ class _ExerciseVideoWidgetState extends State<ExerciseVideoWidget> {
       return;
     }
 
-    try {
-      final controller = videoUrl != null
-          ? VideoPlayerController.networkUrl(Uri.parse(videoUrl))
-          : VideoPlayerController.asset(videoPath!);
-      await controller.initialize();
-      controller.setLooping(true);
+    VideoPlayerController? controller;
 
-      if (!mounted) {
-        controller.dispose();
-        return;
+    // 1. Try remote URL first.
+    if (videoUrl != null) {
+      final c = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+      try {
+        await c.initialize();
+        controller = c;
+      } catch (_) {
+        await c.dispose();
       }
-
-      setState(() {
-        _controller = controller;
-        _initialized = true;
-      });
-
-      controller.play();
-      setState(() => _isPlaying = true);
-    } catch (e) {
-      if (mounted) setState(() => _videoFailed = true);
     }
+
+    // 2. Fall back to bundled asset if network failed or no URL.
+    if (controller == null && videoPath != null) {
+      final c = VideoPlayerController.asset(videoPath);
+      try {
+        await c.initialize();
+        controller = c;
+      } catch (_) {
+        await c.dispose();
+      }
+    }
+
+    if (controller == null) {
+      if (mounted) setState(() => _videoFailed = true);
+      return;
+    }
+
+    controller.setLooping(true);
+
+    if (!mounted) {
+      controller.dispose();
+      return;
+    }
+
+    setState(() {
+      _controller = controller;
+      _initialized = true;
+    });
+
+    controller.play();
+    setState(() => _isPlaying = true);
   }
 
   void _togglePlay() {
