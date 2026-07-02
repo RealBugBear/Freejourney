@@ -5,6 +5,7 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import 'backup_exclusion.dart';
 import 'tables/enrollments_table.dart';
 import 'tables/exercises_table.dart';
 import 'tables/training_sessions_table.dart';
@@ -34,13 +35,21 @@ class AppDatabase extends _$AppDatabase {
   /// Opens the database at the correct persistent path.
   ///
   /// Uses [getApplicationSupportDirectory] — the correct location for app data
-  /// on all platforms (not user-visible, backed up on iOS, persists across
-  /// launches). Falls back to an in-memory database ONLY if the directory
-  /// cannot be obtained, and logs a warning in that case.
+  /// on all platforms (not user-visible, persists across launches). The DB
+  /// lives in a `local_store` subdirectory that is flagged as excluded from
+  /// device backups: it holds health-adjacent data and must not leave the
+  /// device in an iCloud/Finder backup (Android backups are disabled app-wide
+  /// via android:allowBackup="false"). Falls back to an in-memory database
+  /// ONLY if the directory cannot be obtained, and logs a warning in that case.
   static Future<AppDatabase> open() async {
     try {
       final dir = await getApplicationSupportDirectory();
-      final file = File(p.join(dir.path, 'corejourney_db.sqlite'));
+      final storeDir = Directory(p.join(dir.path, 'local_store'));
+      await storeDir.create(recursive: true);
+      await _moveLegacyDatabaseFiles(from: dir.path, to: storeDir.path);
+      // Best-effort: a failure to flag the directory must not block startup.
+      await BackupExclusion().excludeFromBackup(storeDir.path);
+      final file = File(p.join(storeDir.path, 'corejourney_db.sqlite'));
       return AppDatabase._internal(
         NativeDatabase.createInBackground(file),
       );
@@ -49,6 +58,22 @@ class AppDatabase extends _$AppDatabase {
       // Data will not persist across launches in this state.
       assert(false, 'AppDatabase.open() fell back to in-memory: $e');
       return AppDatabase._internal(NativeDatabase.memory());
+    }
+  }
+
+  /// Installs older than the backup-exclusion change kept the DB directly in
+  /// Application Support. Move the SQLite file (and its WAL/SHM companions)
+  /// into the excluded subdirectory exactly once.
+  static Future<void> _moveLegacyDatabaseFiles({
+    required String from,
+    required String to,
+  }) async {
+    for (final suffix in const ['', '-wal', '-shm']) {
+      final legacy = File(p.join(from, 'corejourney_db.sqlite$suffix'));
+      final target = File(p.join(to, 'corejourney_db.sqlite$suffix'));
+      if (await legacy.exists() && !await target.exists()) {
+        await legacy.rename(target.path);
+      }
     }
   }
 

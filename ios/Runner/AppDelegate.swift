@@ -13,7 +13,50 @@ import UIKit
     GeneratedPluginRegistrant.register(with: self)
     registerCalendarChannel()
     registerTimezoneChannel()
+    registerBackupExclusionChannel()
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  // Flags a path with NSURLIsExcludedFromBackupKey so the local health data
+  // store never leaves the device in iCloud/Finder backups.
+  private func registerBackupExclusionChannel() {
+    guard let controller = window?.rootViewController as? FlutterViewController else {
+      return
+    }
+
+    let channel = FlutterMethodChannel(
+      name: "corejourney/backup_exclusion",
+      binaryMessenger: controller.binaryMessenger
+    )
+
+    channel.setMethodCallHandler { call, result in
+      guard call.method == "excludeFromBackup" else {
+        result(FlutterMethodNotImplemented)
+        return
+      }
+
+      guard
+        let args = call.arguments as? [String: Any],
+        let path = args["path"] as? String
+      else {
+        result(FlutterError(code: "bad_args", message: "path is required", details: nil))
+        return
+      }
+
+      var url = URL(fileURLWithPath: path)
+      do {
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = true
+        try url.setResourceValues(values)
+        result(true)
+      } catch {
+        result(FlutterError(
+          code: "exclusion_failed",
+          message: error.localizedDescription,
+          details: nil
+        ))
+      }
+    }
   }
 
   private func registerTimezoneChannel() {
