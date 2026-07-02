@@ -13,8 +13,8 @@ Sources consolidated here:
 
 ## Next up (update at the end of every session)
 
-1. Deploy the P0.2 chat-triage-bot fix once the founder grants go — verify/set the `BOT_USER_ID` secret in the same step. Optionally in the same SQL-Editor sitting: run `supabase/migrations/20260702_rls_baseline_core_tables.sql` on live (gated; only live effect is dropping the redundant legacy policy "Users manage own journal").
-2. Meanwhile: P0.5 local data protection on device (backup exclusion, consent-screen wording, account-deletion local wipe).
+1. Founder-gated batch (everything actionable in P0 now waits on this): deploy `chat-triage-bot` (P0.2, incl. `BOT_USER_ID` secret check), deploy the two hardened reminder functions (P0.3), and run `supabase/migrations/20260702_rls_baseline_core_tables.sql` in the SQL Editor (P0.1 follow-up; only live effect is dropping the redundant legacy policy "Users manage own journal").
+2. Meanwhile: P1.1 — review and commit the in-flight rebrand working tree (~36 files, now rebrand-only after this session's hunk-level commits).
 
 ---
 
@@ -37,16 +37,18 @@ Confirmed vulnerability: unauthenticated privileged write — anyone with the fu
 ### P0.3 Cron secret hardening
 Both reminder functions read `Deno.env.get('CRON_SECRET') ?? ''` — if the secret is unset, an empty header passes.
 - [x] Confirm `CRON_SECRET` is set: ✅ 2026-07-02 — `supabase secrets list` shows `CRON_SECRET` present (value/strength not printable; if in doubt, rotate to a fresh 32+ char random value — gated action).
-- [ ] Optional hardening: fail closed in code when the env var is missing.
+- [x] Optional hardening: fail closed in code when the env var is missing. ✅ 2026-07-02 — committed `9a0f565`; both reminder functions now reject when `CRON_SECRET` is unset (deno test 13/13, deno check error count unchanged vs HEAD).
+- [ ] Deploy the hardened reminder functions (`schedule-training-reminders`, `send-notification-jobs`). ⛔ blocked: founder go (deploys are gated) — batch with the P0.2 deploy.
 
 ### P0.4 Supabase region (one-way door)
 - [x] Confirm the Supabase project region is in the EU. ✅ 2026-07-02 — `supabase projects list` → West EU (Ireland).
 
 ### P0.5 Local data protection on device
-- [ ] Exclude the Drift SQLite DB and auth-session file from device backups (iOS `NSURLIsExcludedFromBackupKey`, Android `allowBackup`/`fullBackupContent`).
-- [ ] Fix the consent screen's false claim of an "encrypted SQLite database" (`consent_screen.dart` ~line 574) — either make the wording accurate or ship SQLCipher.
-- [ ] Account deletion must also wipe the local DB/session (reuse the sign-out wipe routine in `app_database.dart`).
-- [ ] Roadmap (post-launch acceptable): SQLCipher at-rest encryption, key in Keychain/Keystore.
+- [x] Exclude the Drift SQLite DB and auth-session file from device backups (iOS `NSURLIsExcludedFromBackupKey`, Android `allowBackup`/`fullBackupContent`). ✅ 2026-07-02 — committed `c654998`: iOS moves the DB into a backup-excluded `local_store/` dir via new platform channel (legacy files migrated on first launch); Android `allowBackup="false"` (covers DB + shared-prefs session). Verified: analyze clean, channel tests 3/3, core suite 83/83, iOS sim build OK, Android build OK with `allowBackup="false"` in the merged manifest. On-device spot-check of the flag rides with the P3 manual QA pass.
+- [ ] iOS auth session: supabase session sits in NSUserDefaults, whose plist cannot be reliably backup-excluded (system rewrites it). Mitigation is the existing roadmap item below (move session to Keychain). Post-launch acceptable.
+- [x] Fix the consent screen's false claim of an "encrypted SQLite database" (`consent_screen.dart` ~line 574) — either make the wording accurate or ship SQLCipher. ✅ 2026-07-02 — committed `f68d476`; DE+EN copy now claims only what is true (app-private DB, OS device encryption, excluded from backups). No therapy/medical language touched.
+- [x] Account deletion must also wipe the local DB/session (reuse the sign-out wipe routine in `app_database.dart`). ✅ 2026-07-02 — verified already implemented, no code needed: `profile_screen.dart` `_confirmDeleteAccount` → `rpc('delete_user')` then `signOut()`; `AuthNotifier.signOut()` (auth_provider.dart:66) calls `clearUserData()` first, which deletes all 8 user tables (only shared `exercises` content kept), then Supabase sign-out clears the session.
+- [ ] Roadmap (post-launch acceptable): SQLCipher at-rest encryption, key + auth session in Keychain/Keystore.
 
 ### P0.6 Legal/compliance paperwork (lawyer, not code) ⛔ blocked: lawyer
 - [ ] Privacy policy finalized under the Reflex Journey brand; consent text matches actual processing (analytics/Crashlytics are currently disabled — don't claim them).
