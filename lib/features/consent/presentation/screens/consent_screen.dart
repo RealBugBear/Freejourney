@@ -492,8 +492,10 @@ class _PrivacyTab extends StatelessWidget {
           body:
               'Deine Daten werden verschlüsselt auf Servern von Supabase (EU-Region) gespeichert. '
               'Supabase ist ein zertifizierter Cloud-Anbieter und verarbeitet Daten gemäß DSGVO. '
-              'Lokal auf deinem Gerät werden Daten in einer verschlüsselten SQLite-Datenbank '
-              'für die Offline-Funktionalität gehalten.',
+              'Lokal auf deinem Gerät werden Daten für die Offline-Funktionalität in einer '
+              'app-eigenen Datenbank gehalten, die nur diese App lesen kann, durch die '
+              'Geräteverschlüsselung deines Betriebssystems geschützt ist und von '
+              'Geräte-Backups ausgeschlossen wird.',
         ),
         _ConsentPoint(
           icon: Icons.share_outlined,
@@ -571,8 +573,9 @@ class _PrivacyTab extends StatelessWidget {
           body:
               'Your data is stored encrypted on Supabase servers (EU region). '
               'Supabase is a certified GDPR-compliant cloud provider. '
-              'Locally on your device, data is held in an encrypted SQLite database '
-              'for offline functionality.',
+              'Locally on your device, data is held for offline functionality in an '
+              'app-private database that only this app can read, is protected by your '
+              'operating system\'s device encryption, and is excluded from device backups.',
         ),
         _ConsentPoint(
           icon: Icons.share_outlined,
