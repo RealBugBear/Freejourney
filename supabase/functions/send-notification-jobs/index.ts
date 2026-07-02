@@ -57,7 +57,8 @@ serve(async (req: Request) => {
     return cors();
   }
 
-  if (req.headers.get('x-cron-secret') !== CRON_SECRET) {
+  // Fail closed: without a configured CRON_SECRET an empty header would match ''.
+  if (!CRON_SECRET || req.headers.get('x-cron-secret') !== CRON_SECRET) {
     return json({ error: 'unauthorized' }, 401);
   }
 
