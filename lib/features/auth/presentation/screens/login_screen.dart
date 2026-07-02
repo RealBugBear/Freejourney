@@ -104,7 +104,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final email = _emailController.text.trim();
     await ref.read(authNotifierProvider.notifier).sendPasswordReset(
           email: email,
-          redirectTo: 'https://corejourney.care/auth/reset-password',
+          redirectTo: 'https://reflexjourney.app/auth/reset-password',
         );
 
     if (!mounted) return;

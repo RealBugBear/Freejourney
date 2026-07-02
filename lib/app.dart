@@ -65,10 +65,10 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
 
   Future<void> _handleDeepLink(Uri uri) async {
     // Match both URL shapes:
-    //   https://corejourney.care/auth/reset-password  → path == '/auth/reset-password'
-    //   corejourney://auth/reset-password             → host == 'auth', path == '/reset-password'
+    //   https://reflexjourney.app/auth/reset-password → path == '/auth/reset-password'
+    //   reflexjourney://auth/reset-password           → host == 'auth', path == '/reset-password'
     final isResetPassword = uri.path == '/auth/reset-password' ||
-        (uri.scheme == 'corejourney' &&
+        (uri.scheme == 'reflexjourney' &&
             uri.host == 'auth' &&
             uri.path == '/reset-password');
 
@@ -186,7 +186,7 @@ class _CoreJourneyAppView extends ConsumerWidget {
     );
 
     return MaterialApp.router(
-      title: 'CoreJourney',
+      title: 'Reflex Journey',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: themeMode,

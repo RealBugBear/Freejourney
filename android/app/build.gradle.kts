@@ -63,17 +63,17 @@ android {
             dimension = "environment"
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
-            resValue("string", "app_name", "CoreJourney DEV")
+            resValue("string", "app_name", "Reflex Journey DEV")
         }
         create("staging") {
             dimension = "environment"
             applicationIdSuffix = ".staging"
             versionNameSuffix = "-staging"
-            resValue("string", "app_name", "CoreJourney STAGING")
+            resValue("string", "app_name", "Reflex Journey STAGING")
         }
         create("production") {
             dimension = "environment"
-            resValue("string", "app_name", "CoreJourney")
+            resValue("string", "app_name", "Reflex Journey")
         }
     }
 }

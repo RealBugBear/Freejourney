@@ -16,6 +16,15 @@
 	<string>Reflex Journey</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>reflexjourney</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
@@ -42,9 +51,9 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSCalendarsUsageDescription</key>
-	<string>CoreJourney braucht Kalender-Zugriff, um Termine mit deinen Trainees zu verwalten.</string>
+	<string>Reflex Journey braucht Kalender-Zugriff, um Termine mit deinen Trainees zu verwalten.</string>
 	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
-	<string>CoreJourney schreibt Termine in deinen Kalender.</string>
+	<string>Reflex Journey schreibt Termine in deinen Kalender.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -54,12 +63,12 @@
 		<string>remote-notification</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>CoreJourney benötigt Kamera-Zugriff für Video-Calls mit deinem Trainer.</string>
+	<string>Reflex Journey benötigt Kamera-Zugriff für Video-Calls mit deinem Trainer.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>CoreJourney benötigt Mikrofon-Zugriff für Video-Calls mit deinem Trainer.</string>
+	<string>Reflex Journey benötigt Mikrofon-Zugriff für Video-Calls mit deinem Trainer.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>CoreJourney benötigt deinen Standort, um Trainer in deiner Nähe anzuzeigen.</string>
+	<string>Reflex Journey benötigt deinen Standort, um Trainer in deiner Nähe anzuzeigen.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>CoreJourney benötigt deinen Standort, um Trainer in deiner Nähe anzuzeigen.</string>
+	<string>Reflex Journey benötigt deinen Standort, um Trainer in deiner Nähe anzuzeigen.</string>
 </dict>
 </plist>
