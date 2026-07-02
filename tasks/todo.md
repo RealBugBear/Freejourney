@@ -1,3 +1,74 @@
+# P1.2 Category-C identity work
+
+Session 2026-07-02. Scope: finish the local parts of the `de.reflexjourney.app`
+identity change, and separate anything that depends on external Firebase,
+Vercel, App Store Connect, or device QA state.
+
+## Context
+
+- P0 remaining work is gated or blocked; P1.2 is the next actionable backlog
+  item.
+- Current mobile IDs are still `com.alexandermessinger.corejourney`; Android
+  adds `.dev` / `.staging` suffixes.
+- iOS flavor schemes exist but reference missing build configurations
+  (`Debug-development`, `Release-staging`, `Release-production`, etc.).
+- Firebase currently has no app records for `de.reflexjourney.app`,
+  `de.reflexjourney.app.dev`, or `de.reflexjourney.app.staging`; those remote
+  app records are required before the Firebase config files can be honestly
+  regenerated.
+
+## Steps
+
+- [x] 1. Inventory current app IDs, Firebase app records, deep-link config, and
+      the `reflexjourney-app-site/` static site.
+- [x] 2. Update Android local identity: namespace/application ID to
+      `de.reflexjourney.app`, preserve `.dev`/`.staging` suffixes, move the
+      Kotlin package, and update package-name references/docs.
+- [x] 3. Repair iOS flavor config and set bundle IDs to
+      `de.reflexjourney.app.dev`, `de.reflexjourney.app.staging`, and
+      `de.reflexjourney.app`.
+- [x] 4. Add `.well-known/apple-app-site-association` and
+      `.well-known/assetlinks.json` to the outer static site, using Team ID
+      `5X6VFP7F58` and the release SHA-256 certificate fingerprint.
+- [x] 5. Verify local builds/config: lint JSON/plists, run targeted greps,
+      `flutter analyze`, Android dev build, and iOS simulator/prod build checks
+      as far as signing/Firebase state permits.
+- [x] 6. Update the backlog with observed evidence, splitting blocked Firebase
+      and end-to-end device verification into their own unchecked follow-ups.
+
+## Expected External Blockers
+
+- Firebase: create/register the new Android and iOS app records, then regenerate
+  `android/app/google-services.json`, `ios/Runner/GoogleService-Info.plist`,
+  and `lib/firebase_options.dart` with the real app IDs.
+- Vercel: deploy the static-site `.well-known` files.
+- App Store Connect / Apple Developer: ensure bundle IDs and associated domains
+  exist for the final app IDs.
+- Fresh-install deep-link verification must happen after the app IDs, site
+  files, Firebase config, and deployed site are all in place.
+
+## Review
+
+- Android: base `applicationId`/namespace is now `de.reflexjourney.app`; dev
+  and staging keep `.dev` / `.staging`. `flutter build apk --flavor
+  development -t lib/main_development.dart --debug` passed, and the merged
+  manifest reports package `de.reflexjourney.app.dev` with activity
+  `de.reflexjourney.app.MainActivity`.
+- iOS: added real Debug/Release/Profile build configurations for development,
+  staging, and production; schemes now point at those configs; `pod install`
+  runs without warnings. Verified dev simulator build bundle ID
+  `de.reflexjourney.app.dev` and production no-codesign device build bundle ID
+  `de.reflexjourney.app`.
+- Static site: added local `.well-known/apple-app-site-association`,
+  `.well-known/assetlinks.json`, and `vercel.json`; JSON validation passed.
+- Not complete externally: Firebase apps/config are still old because Firebase
+  has no `de.reflexjourney.app*` app records yet; Vercel still needs deployment;
+  Apple Developer/App Store Connect records and fresh-install deep-link QA still
+  need to happen after those external pieces.
+- Verification caveat: `flutter analyze` still exits non-zero with 107
+  pre-existing issues in assessment/training files; none are from the files
+  changed for this item.
+
 # P0.1 (3rd checkbox): Convert hand-run RLS scripts into versioned migrations
 
 Session 2026-07-02. Rule applied: "the live DB is the fact; the repo gets

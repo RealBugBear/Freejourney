@@ -13,8 +13,8 @@ Sources consolidated here:
 
 ## Next up (update at the end of every session)
 
-1. Founder-gated batch (everything actionable in P0 now waits on this): deploy `chat-triage-bot` (P0.2, incl. `BOT_USER_ID` secret check), deploy the two hardened reminder functions (P0.3), and run `supabase/migrations/20260702_rls_baseline_core_tables.sql` in the SQL Editor (P0.1 follow-up; only live effect is dropping the redundant legacy policy "Users manage own journal").
-2. Next work item: P1.2 Category-C identity (bundle IDs → `de.reflexjourney.app`, AASA/assetlinks hosting on the Vercel site in the outer repo, Firebase config alignment, then end-to-end deep-link verification on a fresh install). Plan it as one block — the pieces depend on each other.
+1. Founder-gated batch (everything actionable in P0 now waits on this): deploy `chat-triage-bot` (P0.2, incl. adding `BOT_USER_ID`), deploy the two hardened reminder functions (P0.3), and run `supabase/migrations/20260702_rls_baseline_core_tables.sql` in the SQL Editor (P0.1 follow-up; only live effect is dropping the redundant legacy policy "Users manage own journal").
+2. Finish P1.2 external identity work: create Firebase app records/config for `de.reflexjourney.app*`, deploy `reflexjourney-app-site/` to Vercel with the new `.well-known` files, ensure Apple Developer/App Store bundle IDs exist, then fresh-install deep-link/password-reset/confirm-signup QA.
 
 ---
 
@@ -31,7 +31,8 @@ The 10 oldest core tables (`profiles`, `enrollments`, `intake_assessments`, `com
 Confirmed vulnerability: unauthenticated privileged write — anyone with the function URL can inject bot messages into any private chat. **The fix (JWT check + channel-membership check) is already written but uncommitted** in `supabase/functions/chat-triage-bot/index.ts`.
 - [x] Review + commit the fixed function. ✅ 2026-07-02 — committed as `1d453ca` (401 without JWT, 403 without channel membership via `chat_channel_members`).
 - [ ] Deploy the fixed function. ⛔ blocked: founder go (deploys are gated).
-- [ ] Verify/set the correct secret names before or with the deploy (secret changes = gated): the function reads `BOT_USER_ID` (underscores) but `supabase secrets list` shows `BOT-USER-ID` (hyphens) — if the underscore variant is missing, bot inserts fail at runtime. Also `AGARO-APP-ID` looks like a typo'd duplicate of `AGORA_APP_ID`. (⚠️ Found 2026-07-02.)
+- [x] Verify the chat bot secret names before deploy. ✅ 2026-07-02 — `supabase secrets list` shows `BOT_USER_ID` is absent while `BOT-USER-ID` is present, so the deployed fixed function would fail bot inserts until the underscore secret is set; `AGARO-APP-ID` is present and has the same digest as `AGORA_APP_ID`, so it is a typo'd duplicate.
+- [ ] Set/fix the chat bot secret names before or with the deploy (secret changes = gated): add `BOT_USER_ID` with the existing bot user id value; optionally remove the typo'd duplicate `AGARO-APP-ID` after confirming nothing reads it.
 - [ ] Smoke-test after deploy: request without auth → 401; non-member → 403; member → works.
 
 ### P0.3 Cron secret hardening
@@ -63,11 +64,12 @@ Both reminder functions read `Deno.env.get('CRON_SECRET') ?? ''` — if the secr
 - [x] Review the full diff, split into sensible commits (rebrand vs. security fix), commit. ✅ 2026-07-02 — reviewed all 82 changed lines; committed as `88186dd` (identity + deep links), `cfa96ff` (copy/l10n/export artifacts; generated l10n verified identical to fresh `flutter gen-l10n`), `1077e02` (behavioral: internal tester gate now requires `@reflexjourney.de` emails — old `@corejourney.dev` accounts lose dev-tools access), `d54056c` (web/scripts/CI), `9f02462` (CLI version marker, tracked by convention). Stale-domain grep for `corejourney.care`/`corejourney.dev` over lib/ios/android/web/public/scripts/CI → zero hits. Working tree is clean. Build evidence: iOS sim + Android dev builds and 83/83 core tests ran green with these changes in tree earlier the same session.
 
 ### P1.2 "Category C" identity work (consciously deferred in June)
-- [ ] Bundle/application ID → `de.reflexjourney.app` (iOS + Android, all flavors).
-- [ ] Host `.well-known/apple-app-site-association` and `.well-known/assetlinks.json` on `reflexjourney.app` (the static site lives in the outer repo at `reflexjourney-app-site/`, deployed on Vercel).
-- [ ] Align Firebase project IDs / FCM config with the new bundle IDs.
+- [x] Bundle/application ID → `de.reflexjourney.app` (iOS + Android, all flavors). ✅ 2026-07-02 — Android base `applicationId`/namespace is `de.reflexjourney.app` with `.dev`/`.staging` suffixes; `flutter build apk --flavor development -t lib/main_development.dart --debug` built `app-development-debug.apk`, and the merged manifest reports package `de.reflexjourney.app.dev` + activity `de.reflexjourney.app.MainActivity`. iOS now has real dev/staging/prod build configs; `pod install` runs warning-free; `flutter build ios --flavor development -t lib/main_development.dart --debug --simulator` built with `CFBundleIdentifier = de.reflexjourney.app.dev`; `flutter build ios --flavor production -t lib/main_production.dart --release --no-codesign` built with `CFBundleIdentifier = de.reflexjourney.app`.
+- [x] Add local `.well-known/apple-app-site-association` and `.well-known/assetlinks.json` to `reflexjourney-app-site/`. ✅ 2026-07-02 — added AASA entries for Team ID `5X6VFP7F58` + `de.reflexjourney.app`/`.staging`/`.dev`, Android asset links for all three package IDs using the release signing SHA-256 fingerprint, and `vercel.json` JSON content-type headers; `jq empty` validates all three files.
+- [ ] Deploy `reflexjourney-app-site/` to Vercel and verify `https://reflexjourney.app/.well-known/apple-app-site-association` + `https://reflexjourney.app/.well-known/assetlinks.json` return 200 with JSON content type. ⛔ blocked: Vercel deploy/verification.
+- [ ] Align Firebase project IDs / FCM config with the new bundle IDs. ⛔ blocked: `firebase apps:list` shows no app records yet for `de.reflexjourney.app`, `de.reflexjourney.app.staging`, or `de.reflexjourney.app.dev`; after creating those records, regenerate `android/app/google-services.json`, `ios/Runner/GoogleService-Info.plist`, and `lib/firebase_options.dart`.
 - [ ] Optional, low priority: Dart package rename `corejourney` → app-neutral name.
-- [ ] Verify deep links + password reset + confirm-signup end-to-end on a fresh install after the ID change.
+- [ ] Verify deep links + password reset + confirm-signup end-to-end on a fresh install after the ID change. ⛔ blocked: requires deployed `.well-known` files, Apple/Firebase records/config alignment, and a fresh installed build.
 
 ### P1.3 Repo hygiene (moved from P0 2026-07-02 — not a launch security blocker, just cheap cleanup)
 - [x] Remove `.env.staging` from git tracking (contains only client-public keys, but poor hygiene). ✅ 2026-07-02 — `a4036c9`: `git rm --cached` + `.gitignore` entry; file stays on disk. (Old values remain in git history — acceptable for client-public keys per the audit.)
