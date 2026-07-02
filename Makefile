@@ -29,11 +29,11 @@ GIT_SHA := $(shell git rev-parse --short HEAD 2>/dev/null || echo local)
 run:
 	@osascript -e 'tell application "Xcode" to quit' 2>/dev/null || true
 	@sleep 1
-	flutter run --profile --device-timeout $(IOS_DEVICE_TIMEOUT) -d $(DEVICE_ID) -t $(ENTRY) $(IOS_RUN_ARGS)
+	flutter run --profile --flavor development --device-timeout $(IOS_DEVICE_TIMEOUT) -d $(DEVICE_ID) -t $(ENTRY) $(IOS_RUN_ARGS)
 
 ## Run on iOS 26 simulator in debug mode
 run-sim:
-	flutter run -d $(SIM_ID) -t $(ENTRY)
+	flutter run -d $(SIM_ID) --flavor development -t $(ENTRY)
 
 ## Run on Samsung Android in debug mode (flavor=development required — ohne das wird der alte app-debug.apk installiert!)
 run-android:
@@ -44,7 +44,7 @@ run-android:
 release:
 	@osascript -e 'tell application "Xcode" to quit' 2>/dev/null || true
 	@sleep 1
-	flutter build ipa -t $(ENTRY_PROD) --release
+	flutter build ipa --flavor production -t $(ENTRY_PROD) --release
 	@echo ""
 	@echo "✅ Build complete."
 	@echo "   Open Xcode Organizer to upload:"
@@ -55,7 +55,7 @@ release:
 testflight:
 	@osascript -e 'tell application "Xcode" to quit' 2>/dev/null || true
 	@sleep 1
-	flutter build ipa -t $(ENTRY_PROD) --release --build-name=$(APP_VERSION) --build-number=$(BUILD_NUMBER) --export-options-plist=ios/ExportOptions.plist
+	flutter build ipa --flavor production -t $(ENTRY_PROD) --release --build-name=$(APP_VERSION) --build-number=$(BUILD_NUMBER) --export-options-plist=ios/ExportOptions.plist
 	@echo ""
 	@echo "Build complete."
 	@echo "Version: $(APP_VERSION) ($(BUILD_NUMBER))"

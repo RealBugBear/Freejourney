@@ -58,7 +58,7 @@ class _TrainerLocationPickerWidgetState
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.alexandermessinger.corejourney',
+              userAgentPackageName: 'de.reflexjourney.app',
             ),
             if (_pickedLocation != null)
               MarkerLayer(
@@ -82,7 +82,8 @@ class _TrainerLocationPickerWidgetState
             child: IgnorePointer(
               child: Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.black54,
                     borderRadius: BorderRadius.circular(8),

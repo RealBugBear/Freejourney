@@ -391,7 +391,7 @@ class _MapView extends StatelessWidget {
       children: [
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.alexandermessinger.corejourney',
+          userAgentPackageName: 'de.reflexjourney.app',
         ),
         MarkerLayer(
           markers: [

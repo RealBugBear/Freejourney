@@ -80,13 +80,13 @@ flutter run --flavor production -t lib/main_production.dart
 ```
 
 ### Check which flavor is running
-- Dev: Shows "CoreJourney DEV" as app name, debug banner visible
-- Staging: Shows "CoreJourney STAGING" as app name, no debug banner
-- Prod: Shows "CoreJourney" as app name, no debug banner
+- Dev: Shows "Reflex Journey DEV" as app name, debug banner visible
+- Staging: Shows "Reflex Journey STAGING" as app name, no debug banner
+- Prod: Shows "Reflex Journey" as app name, no debug banner
 
 ### Different Bundle IDs
-- Dev: `com.alexandermessinger.corejourney.dev`
-- Staging: `com.alexandermessinger.corejourney.staging`
-- Prod: `com.alexandermessinger.corejourney`
+- Dev: `de.reflexjourney.app.dev`
+- Staging: `de.reflexjourney.app.staging`
+- Prod: `de.reflexjourney.app`
 
 This allows installing all 3 versions side-by-side on the same device!

@@ -1,4 +1,4 @@
-package com.alexandermessinger.corejourney
+package de.reflexjourney.app
 
 import android.Manifest
 import android.content.ContentValues
