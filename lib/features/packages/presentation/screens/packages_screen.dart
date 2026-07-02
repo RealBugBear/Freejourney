@@ -77,7 +77,7 @@ class _PackagesScreenState extends ConsumerState<PackagesScreen> {
     final l10n = AppLocalizations.of(context);
     final selectedPackageId = ref.watch(selectedPackageIdProvider);
     final currentEmail = Supabase.instance.client.auth.currentUser?.email ?? '';
-    final allowDevPackageSwitch = currentEmail.endsWith('@corejourney.dev');
+    final allowDevPackageSwitch = currentEmail.endsWith('@reflexjourney.de');
 
     // Read all user enrollments to derive real per-package status.
     // Do NOT use static frontend logic to determine completion.

@@ -403,8 +403,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final unreadDm = ref.watch(unreadDmCountProvider);
 
     final currentEmail = Supabase.instance.client.auth.currentUser?.email ?? '';
-    // Dev tools are reserved for internal @corejourney.dev accounts.
-    final showDevTools = currentEmail.endsWith('@corejourney.dev');
+    // Dev tools are reserved for internal @reflexjourney.de accounts.
+    final showDevTools = currentEmail.endsWith('@reflexjourney.de');
 
     return Scaffold(
       appBar: AppBar(

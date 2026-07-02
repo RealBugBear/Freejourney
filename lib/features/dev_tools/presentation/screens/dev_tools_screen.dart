@@ -17,7 +17,7 @@ class DevToolsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentEmail = Supabase.instance.client.auth.currentUser?.email ?? '';
-    final isInternalTester = currentEmail.endsWith('@corejourney.dev');
+    final isInternalTester = currentEmail.endsWith('@reflexjourney.de');
     if (!isInternalTester) {
       return const Scaffold(body: Center(child: Text('Not available')));
     }
