@@ -32,6 +32,14 @@ serve(async (req: Request) => {
   }
 
   try {
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Missing Authorization header' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     const payload: RequestPayload = await req.json();
     const { channel_id, content, locale } = payload;
 
@@ -42,8 +50,31 @@ serve(async (req: Request) => {
       });
     }
 
-    // Use service role key — bypasses RLS so bot can insert into any channel.
+    // Use service role key to verify caller identity and let the bot post as BOT_USER_ID.
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const jwt = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: userError } = await supabase.auth.getUser(jwt);
+    if (userError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Verify user is a member of this channel before any bot write or trainer notification.
+    const { data: membership } = await supabase
+      .from('chat_channel_members')
+      .select('user_id')
+      .eq('channel_id', channel_id)
+      .eq('user_id', user.id)
+      .single();
+
+    if (!membership) {
+      return new Response(JSON.stringify({ error: 'Not a channel member' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
     const { data: faqs, error: faqError } = await supabase
       .from('bot_faqs')
