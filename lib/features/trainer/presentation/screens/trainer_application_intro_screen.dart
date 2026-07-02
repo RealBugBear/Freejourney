@@ -26,7 +26,7 @@ class TrainerApplicationIntroScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           const Text(
-            'CoreJourney-Trainer arbeiten in einem sensiblen Umfeld. Deshalb '
+            'Reflex Journey-Trainer arbeiten in einem sensiblen Umfeld. Deshalb '
             'prüfen wir jede Bewerbung manuell, bevor ein Trainerprofil '
             'freigeschaltet wird.',
           ),

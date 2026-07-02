@@ -307,7 +307,7 @@ class _TermsTab extends StatelessWidget {
     return const _ConsentContent(
       title: 'Nutzungsbedingungen (vorläufig)',
       intro:
-          'Diese vorläufigen Nutzungsbedingungen gelten für die Nutzung der CoreJourney-App '
+          'Diese vorläufigen Nutzungsbedingungen gelten für die Nutzung der Reflex Journey-App '
           'in der aktuellen Testphase. Sie werden vor einem öffentlichen Launch durch rechtsverbindliche '
           'Bedingungen ersetzt.',
       points: [
@@ -316,7 +316,7 @@ class _TermsTab extends StatelessWidget {
           title: '§ 1 Geltungsbereich',
           body:
               'Diese Bedingungen gelten zwischen dem Nutzer und dem Anbieter Alexander Messinger '
-              '(nachfolgend „Anbieter") für die Nutzung der mobilen Anwendung CoreJourney in der '
+              '(nachfolgend „Anbieter") für die Nutzung der mobilen Anwendung Reflex Journey in der '
               'aktuellen Testphase. Mit der Registrierung akzeptierst du diese Bedingungen.',
         ),
         _ConsentPoint(
@@ -376,7 +376,7 @@ class _TermsTab extends StatelessWidget {
     return const _ConsentContent(
       title: 'Terms of Use (Provisional)',
       intro:
-          'These provisional Terms of Use apply to the use of the CoreJourney app during '
+          'These provisional Terms of Use apply to the use of the Reflex Journey app during '
           'the current test phase. They will be replaced by legally binding terms before '
           'a public launch.',
       points: [
@@ -385,7 +385,7 @@ class _TermsTab extends StatelessWidget {
           title: '§ 1 Scope',
           body:
               'These terms apply between the user and the provider Alexander Messinger '
-              '(hereinafter "Provider") for use of the CoreJourney mobile application during '
+              '(hereinafter "Provider") for use of the Reflex Journey mobile application during '
               'the test phase. By registering, you accept these terms.',
         ),
         _ConsentPoint(
@@ -459,7 +459,7 @@ class _PrivacyTab extends StatelessWidget {
       title: 'Datenschutzerklärung (vorläufig)',
       intro:
           'Diese vorläufige Datenschutzerklärung informiert dich über die Verarbeitung '
-          'personenbezogener Daten in der CoreJourney-Testphase gemäß DSGVO.',
+          'personenbezogener Daten in der Reflex Journey-Testphase gemäß DSGVO.',
       points: [
         _ConsentPoint(
           icon: Icons.person_pin_outlined,
@@ -541,7 +541,7 @@ class _PrivacyTab extends StatelessWidget {
       title: 'Privacy Policy (Provisional)',
       intro:
           'This provisional Privacy Policy informs you about the processing of personal data '
-          'in the CoreJourney test phase in accordance with GDPR.',
+          'in the Reflex Journey test phase in accordance with GDPR.',
       points: [
         _ConsentPoint(
           icon: Icons.person_pin_outlined,

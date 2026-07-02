@@ -53,7 +53,7 @@ class _StartupErrorApp extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(32),
             child: Text(
-              'CoreJourney could not start. Please restart the app or reinstall.',
+              'Reflex Journey could not start. Please restart the app or reinstall.',
               textAlign: TextAlign.center,
             ),
           ),

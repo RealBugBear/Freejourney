@@ -52,7 +52,7 @@ class CalendarService {
 
       final tempDir = await getTemporaryDirectory();
       final fileName =
-          'corejourney_${start.millisecondsSinceEpoch}_${_sanitizeFileSegment(title)}.ics';
+          'reflexjourney_${start.millisecondsSinceEpoch}_${_sanitizeFileSegment(title)}.ics';
       final calendarFile = File('${tempDir.path}/$fileName');
       final end = start.add(duration);
 
@@ -114,12 +114,12 @@ class CalendarService {
     final startUtc = start.toUtc();
     final endUtc = end.toUtc();
     final uid =
-        'corejourney-${startUtc.millisecondsSinceEpoch}-${title.hashCode.abs()}@corejourney.app';
+        'reflexjourney-${startUtc.millisecondsSinceEpoch}-${title.hashCode.abs()}@reflexjourney.app';
 
     final fields = <String>[
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
-      'PRODID:-//CoreJourney//Appointments//DE',
+      'PRODID:-//Reflex Journey//Appointments//DE',
       'CALSCALE:GREGORIAN',
       'METHOD:PUBLISH',
       'BEGIN:VEVENT',

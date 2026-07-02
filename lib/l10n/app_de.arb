@@ -1,7 +1,7 @@
 {
   "@@locale": "de",
 
-  "appTitle": "CoreJourney",
+  "appTitle": "Reflex Journey",
   "@appTitle": { "description": "App title" },
 
   "signIn": "Anmelden",
@@ -71,7 +71,7 @@
 
   "intakeAssessmentTitle": "Programmstart",
   "intakeWelcomeTitle": "Willkommen in deinem Reflexintegrations-Programm",
-  "intakeWelcomeBody": "CoreJourney begleitet dich bei der Integration pränataler Reflexe — ein Prozess, der dabei helfen kann, tief verwurzelte körperliche und emotionale Muster zu transformieren.",
+  "intakeWelcomeBody": "Reflex Journey begleitet dich bei der Integration pränataler Reflexe — ein Prozess, der dabei helfen kann, tief verwurzelte körperliche und emotionale Muster zu transformieren.",
   "intakeTrainerTitle": "Empfehlung: Mit Trainer starten",
   "intakeTrainerBody": "Wir empfehlen, das Programm mit einem zertifizierten Trainer zu beginnen und begleiten zu lassen. Ein Trainer führt isometrische Partnerübungen durch, die klares Spüren von Richtung, Bewegung und Widerstand unterstützen. Ohne diese Begleitung braucht der Körper in der Regel mehr ruhige Wiederholung.",
   "intakeQuestionLabel": "Eine Frage zu deinem Start",
@@ -297,7 +297,7 @@
   "appointmentNoFreeSlots": "Keine freien Zeitfenster gefunden.",
   "appointmentNoCalendars": "Keine Kalender gefunden.",
   "appointmentSelectCalendarTitle": "Arbeitskalender wählen",
-  "appointmentSelectCalendarSubtitle": "Wähle den Kalender für CoreJourney-Termine.",
+  "appointmentSelectCalendarSubtitle": "Wähle den Kalender für Reflex Journey-Termine.",
   "appointmentStatusPlanned": "Geplant",
   "appointmentStatusConfirmed": "Bestätigt",
   "appointmentStatusCancelled": "Abgesagt",

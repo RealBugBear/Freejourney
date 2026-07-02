@@ -78,8 +78,8 @@ class AnalysisPlaceholderScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               Text(
                 isDE
-                    ? 'Vor dem ersten Training wird hier ein kurzer Fragebogen stehen. Damit kann CoreJourney deinen aktuellen Stand besser einordnen und die Empfehlung sauberer machen.'
-                    : 'Before your first training, this will become a short questionnaire. It will help CoreJourney understand your current baseline and improve the recommendation.',
+                    ? 'Vor dem ersten Training wird hier ein kurzer Fragebogen stehen. Damit kann Reflex Journey deinen aktuellen Stand besser einordnen und die Empfehlung sauberer machen.'
+                    : 'Before your first training, this will become a short questionnaire. It will help Reflex Journey understand your current baseline and improve the recommendation.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       height: 1.45,

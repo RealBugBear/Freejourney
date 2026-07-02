@@ -15,7 +15,7 @@ class ReflexProfilePdfService {
   Future<File> createSummaryPdf(ReflexProfileAssessment assessment) async {
     final document = pw.Document(
       title: 'Reflexprofil Zusammenfassung',
-      author: 'CoreJourney',
+      author: 'Reflex Journey',
     );
     final scores = _scoreRows(assessment);
     final answers = _answerRows(assessment);
@@ -132,7 +132,7 @@ class ReflexProfilePdfService {
 
     final directory = await getTemporaryDirectory();
     final fileName =
-        'corejourney_reflexprofil_${DateFormat('yyyyMMdd_HHmm').format(DateTime.now())}.pdf';
+        'reflexjourney_reflexprofil_${DateFormat('yyyyMMdd_HHmm').format(DateTime.now())}.pdf';
     final file = File('${directory.path}/$fileName');
     await file.writeAsBytes(await document.save(), flush: true);
     return file;

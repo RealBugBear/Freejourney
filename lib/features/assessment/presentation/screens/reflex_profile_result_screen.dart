@@ -230,8 +230,8 @@ class _ResultContent extends ConsumerWidget {
             );
       await Share.shareXFiles(
         [XFile(file.path, mimeType: 'application/pdf')],
-        subject: 'CoreJourney Reflexprofil',
-        text: 'CoreJourney Reflexprofil-Zusammenfassung',
+        subject: 'Reflex Journey Reflexprofil',
+        text: 'Reflex Journey Reflexprofil-Zusammenfassung',
         sharePositionOrigin: origin,
       );
     } catch (error) {
@@ -661,4 +661,3 @@ Color _bandColor(ReflexScoreBand band, {required Color secondaryColor}) =>
       ReflexScoreBand.inconspicuous => AppColors.success,
       ReflexScoreBand.insufficientData => secondaryColor,
     };
-

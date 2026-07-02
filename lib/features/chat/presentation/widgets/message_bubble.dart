@@ -250,7 +250,7 @@ class _BotBubble extends StatelessWidget {
                   size: 13, color: theme.colorScheme.onSecondaryContainer),
               const SizedBox(width: 4),
               Text(
-                'CoreJourney Assistent',
+                'Reflex Journey Assistent',
                 style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.onSecondaryContainer,

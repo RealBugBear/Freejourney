@@ -14,7 +14,7 @@ class _SmokeApp extends StatelessWidget {
         backgroundColor: Color(0xFF0D47A1),
         body: Center(
           child: Text(
-            'CoreJourney smoke test',
+            'Reflex Journey smoke test',
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,

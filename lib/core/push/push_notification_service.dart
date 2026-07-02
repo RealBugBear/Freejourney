@@ -226,7 +226,7 @@ class PushNotificationService {
                         ? 'Termin bestätigt'
                         : type == 'training_reminder'
                             ? 'Training-Erinnerung'
-                            : 'CoreJourney');
+                            : 'Reflex Journey');
     final body = message.notification?.body ??
         (type == 'video_call'
             ? 'Tippe, um den Anruf zu öffnen.'

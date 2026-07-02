@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'CoreJourney';
+  String get appTitle => 'Reflex Journey';
 
   @override
   String get signIn => 'Sign In';
@@ -138,7 +138,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get intakeWelcomeBody =>
-      'CoreJourney guides you through the integration of prenatal reflexes — a process that can help transform deeply rooted physical and emotional patterns.';
+      'Reflex Journey guides you through the integration of prenatal reflexes — a process that can help transform deeply rooted physical and emotional patterns.';
 
   @override
   String get intakeTrainerTitle => 'Recommendation: Start with a Trainer';
@@ -711,7 +711,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appointmentSelectCalendarSubtitle =>
-      'Select the calendar for CoreJourney appointments.';
+      'Select the calendar for Reflex Journey appointments.';
 
   @override
   String get appointmentStatusPlanned => 'Planned';

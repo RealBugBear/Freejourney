@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// App title
   ///
   /// In de, this message translates to:
-  /// **'CoreJourney'**
+  /// **'Reflex Journey'**
   String get appTitle;
 
   /// No description provided for @signIn.
@@ -341,7 +341,7 @@ abstract class AppLocalizations {
   /// No description provided for @intakeWelcomeBody.
   ///
   /// In de, this message translates to:
-  /// **'CoreJourney begleitet dich bei der Integration pränataler Reflexe — ein Prozess, der dabei helfen kann, tief verwurzelte körperliche und emotionale Muster zu transformieren.'**
+  /// **'Reflex Journey begleitet dich bei der Integration pränataler Reflexe — ein Prozess, der dabei helfen kann, tief verwurzelte körperliche und emotionale Muster zu transformieren.'**
   String get intakeWelcomeBody;
 
   /// No description provided for @intakeTrainerTitle.
@@ -1385,7 +1385,7 @@ abstract class AppLocalizations {
   /// No description provided for @appointmentSelectCalendarSubtitle.
   ///
   /// In de, this message translates to:
-  /// **'Wähle den Kalender für CoreJourney-Termine.'**
+  /// **'Wähle den Kalender für Reflex Journey-Termine.'**
   String get appointmentSelectCalendarSubtitle;
 
   /// No description provided for @appointmentStatusPlanned.
