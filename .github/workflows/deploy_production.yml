@@ -85,7 +85,7 @@ jobs:
             build/app/outputs/flutter-apk/app-production-release.apk
             build/app/outputs/bundle/productionRelease/app-production-release.aab
           body: |
-            ## CoreJourney v${{ steps.version.outputs.VERSION }}
+            ## Reflex Journey v${{ steps.version.outputs.VERSION }}
             
             ### Changes
             ${{ github.event.head_commit.message }}

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "== CoreJourney Long Test Ready =="
+echo "== Reflex Journey Long Test Ready =="
 echo ""
 echo "1) Automated quality gate"
 ./scripts/release_readiness.sh

@@ -67,7 +67,7 @@ testflight:
 ## make android-testers ANDROID_DIST_GROUPS=testers ANDROID_DIST_APP_ID=... ANDROID_DIST_FLAVOR=staging
 android-testers:
 	flutter build apk --flavor $(ANDROID_DIST_FLAVOR) -t $(ANDROID_DIST_ENTRY) --release --build-name=$(APP_VERSION) --build-number=$(ANDROID_BUILD_NUMBER)
-	firebase appdistribution:distribute $(ANDROID_DIST_APK) --app $(ANDROID_DIST_APP_ID) --groups "$(ANDROID_DIST_GROUPS)" --release-notes "CoreJourney Android $(ANDROID_DIST_FLAVOR) $(APP_VERSION) ($(ANDROID_BUILD_NUMBER)) | Branch: $(GIT_BRANCH) | Commit: $(GIT_SHA)"
+	firebase appdistribution:distribute $(ANDROID_DIST_APK) --app $(ANDROID_DIST_APP_ID) --groups "$(ANDROID_DIST_GROUPS)" --release-notes "Reflex Journey Android $(ANDROID_DIST_FLAVOR) $(APP_VERSION) ($(ANDROID_BUILD_NUMBER)) | Branch: $(GIT_BRANCH) | Commit: $(GIT_SHA)"
 	@echo ""
 	@echo "Android build sent to Firebase App Distribution."
 	@echo "Flavor: $(ANDROID_DIST_FLAVOR)"

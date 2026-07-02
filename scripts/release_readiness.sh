@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "== CoreJourney Release Readiness =="
+echo "== Reflex Journey Release Readiness =="
 
 echo ""
 echo "1) Static analysis (critical modules)"

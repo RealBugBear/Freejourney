@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "== CoreJourney Phase 0 Smoke =="
+echo "== Reflex Journey Phase 0 Smoke =="
 echo ""
 echo "Automated gate:"
 ./scripts/release_readiness.sh
