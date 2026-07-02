@@ -14,7 +14,7 @@ Sources consolidated here:
 ## Next up (update at the end of every session)
 
 1. Founder-gated batch (everything actionable in P0 now waits on this): deploy `chat-triage-bot` (P0.2, incl. `BOT_USER_ID` secret check), deploy the two hardened reminder functions (P0.3), and run `supabase/migrations/20260702_rls_baseline_core_tables.sql` in the SQL Editor (P0.1 follow-up; only live effect is dropping the redundant legacy policy "Users manage own journal").
-2. Meanwhile: P1.1 — review and commit the in-flight rebrand working tree (~36 files, now rebrand-only after this session's hunk-level commits).
+2. Next work item: P1.2 Category-C identity (bundle IDs → `de.reflexjourney.app`, AASA/assetlinks hosting on the Vercel site in the outer repo, Firebase config alignment, then end-to-end deep-link verification on a fresh install). Plan it as one block — the pieces depend on each other.
 
 ---
 
@@ -60,7 +60,7 @@ Both reminder functions read `Deno.env.get('CRON_SECRET') ?? ''` — if the secr
 
 ### P1.1 Commit the in-flight rebrand working tree
 ~38 modified files, uncommitted since ~2026-06-22: display name, `applinks:reflexjourney.app` entitlement, `reflexjourney` URL scheme, l10n strings, privacy.html, permission-usage strings, plus the chat-triage-bot fix (P0.2).
-- [ ] Review the full diff, split into sensible commits (rebrand vs. security fix), commit.
+- [x] Review the full diff, split into sensible commits (rebrand vs. security fix), commit. ✅ 2026-07-02 — reviewed all 82 changed lines; committed as `88186dd` (identity + deep links), `cfa96ff` (copy/l10n/export artifacts; generated l10n verified identical to fresh `flutter gen-l10n`), `1077e02` (behavioral: internal tester gate now requires `@reflexjourney.de` emails — old `@corejourney.dev` accounts lose dev-tools access), `d54056c` (web/scripts/CI), `9f02462` (CLI version marker, tracked by convention). Stale-domain grep for `corejourney.care`/`corejourney.dev` over lib/ios/android/web/public/scripts/CI → zero hits. Working tree is clean. Build evidence: iOS sim + Android dev builds and 83/83 core tests ran green with these changes in tree earlier the same session.
 
 ### P1.2 "Category C" identity work (consciously deferred in June)
 - [ ] Bundle/application ID → `de.reflexjourney.app` (iOS + Android, all flavors).
@@ -70,8 +70,8 @@ Both reminder functions read `Deno.env.get('CRON_SECRET') ?? ''` — if the secr
 - [ ] Verify deep links + password reset + confirm-signup end-to-end on a fresh install after the ID change.
 
 ### P1.3 Repo hygiene (moved from P0 2026-07-02 — not a launch security blocker, just cheap cleanup)
-- [ ] Remove `.env.staging` from git tracking (contains only client-public keys, but poor hygiene).
-- [ ] Delete vestigial Firestore/Firebase Hosting config (`firebase.json` hosting parts, `firestore.rules`, `firestore.indexes.json`) — app uses FCM only.
+- [x] Remove `.env.staging` from git tracking (contains only client-public keys, but poor hygiene). ✅ 2026-07-02 — `a4036c9`: `git rm --cached` + `.gitignore` entry; file stays on disk. (Old values remain in git history — acceptable for client-public keys per the audit.)
+- [x] Delete vestigial Firestore/Firebase Hosting config (`firebase.json` hosting parts, `firestore.rules`, `firestore.indexes.json`) — app uses FCM only. ✅ 2026-07-02 — `f0d88ef`: verified no `cloud_firestore` dependency and zero Firestore usage in lib/; removed both firestore files and the `firestore`/`hosting` sections; FlutterFire config kept; JSON validity checked.
 
 ### P1.4 Infra already DONE (do not redo)
 - Resend sending domain `send.reflexjourney.de` verified; Supabase custom SMTP live.
