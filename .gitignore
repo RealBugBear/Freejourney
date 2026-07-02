@@ -63,3 +63,4 @@ supabase/.temp/*
 assets/VIdeos/1 Moro/*.MOV
 assets/VIdeos/moro/*.mov
 .worktrees/
+.env.staging
