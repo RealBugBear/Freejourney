@@ -13,10 +13,10 @@ Sources consolidated here:
 
 ## Next up (update at the end of every session)
 
-1. Two founder console steps close out P1.2: upload the APNs `.p8` key to the three new iOS app records in the Firebase console, and register the `de.reflexjourney.app` bundle IDs in Apple Developer/App Store Connect (with Associated Domains). Then fresh-install deep-link/password-reset/confirm-signup QA on a device.
+1. Both founder console steps for P1.2 are done (APNs key uploaded to Firebase, App IDs registered in Apple Developer). Next: fresh-install deep-link/password-reset/confirm-signup QA on a device.
 2. Content requests to Sina are in flight (founder, 2026-07-03): adult questionnaire + videos (P2.A/B) and the top-20–30 forum Q&As for the new FAQ area (P2.C). When any of it lands, P2 jumps the queue.
 
-*(2026-07-03: P0 gated batch done — bot neutralized live, reminder functions hardened live, RLS baseline applied. P1.2 code/infra done — Firebase records + env-aware options, `.well-known` files live on reflexjourney.app. Remaining P0: only lawyer items in P0.6.)*
+*(2026-07-03: P0 gated batch done — bot neutralized live, reminder functions hardened live, RLS baseline applied. P1.2 fully done — Firebase records + env-aware options, `.well-known` files live on reflexjourney.app, APNs key uploaded to all 3 iOS apps, App IDs registered in Apple Developer with Associated Domains + Push Notifications. Remaining P0: only lawyer items in P0.6. Next: device QA (P1.2 last line).)*
 
 ---
 
@@ -73,8 +73,8 @@ Both reminder functions read `Deno.env.get('CRON_SECRET') ?? ''` — if the secr
 - [x] Add local `.well-known/apple-app-site-association` and `.well-known/assetlinks.json` to `reflexjourney-app-site/`. ✅ 2026-07-02 — added AASA entries for Team ID `5X6VFP7F58` + `de.reflexjourney.app`/`.staging`/`.dev`, Android asset links for all three package IDs using the release signing SHA-256 fingerprint, and `vercel.json` JSON content-type headers; `jq empty` validates all three files.
 - [x] Deploy `reflexjourney-app-site/` to Vercel and verify the `.well-known` URLs. ✅ 2026-07-03 — deployed via Vercel CLI (founder go, "lets go" session); live checks: AASA and `assetlinks.json` both return 200 with JSON content type and the expected app/package IDs (`5X6VFP7F58.de.reflexjourney.app[.dev/.staging]` / `de.reflexjourney.app[.dev/.staging]`); auth pages `/auth/reset-password` and `/auth/confirm` still return 200.
 - [x] Align Firebase project IDs / FCM config with the new bundle IDs. ✅ 2026-07-03 — created 6 app records in `corejourney-prod` via Firebase CLI (Android + iOS for base/.dev/.staging); committed `eeeb8ed`: `firebase_options.dart` is now environment-aware (dev builds → DEV records, staging/prod → production records; staging boots as production env, own records exist for later); deleted dead `google-services.json` + `GoogleService-Info.plist` (no gradle plugin, no Xcode reference — Firebase initializes from Dart options only). Android dev APK + iOS dev simulator builds green after deletion.
-- [ ] Upload the APNs auth key to the three new iOS app records in the Firebase console (Project settings → Cloud Messaging → each iOS app). ⛔ blocked: founder — console-only step, needs the existing `.p8` APNs key (same one the old app record uses). Without it, iOS push on the new bundle IDs will not deliver.
-- [ ] Apple Developer / App Store Connect: register bundle ID `de.reflexjourney.app` (+ `.dev`/`.staging` App IDs with Associated Domains capability) and create the ASC app record under the new ID. ⛔ blocked: founder — click-by-click when ready.
+- [x] Upload the APNs auth key to the three new iOS app records in the Firebase console (Project settings → Cloud Messaging → each iOS app). ✅ 2026-07-03 — founder located the existing `AuthKey_3UF24376W3.p8` (Key ID `3UF24376W3`, Team ID `5X6VFP7F58`, confirmed still enabled for APNs, team-scoped/all-topics, Sandbox & Production) and uploaded it to all three iOS app records (prod/dev/staging) in `corejourney-prod`.
+- [x] Apple Developer / App Store Connect: register bundle ID `de.reflexjourney.app` (+ `.dev`/`.staging` App IDs with Associated Domains capability) and create the ASC app record under the new ID. ✅ 2026-07-03 — registered all three App IDs (`de.reflexjourney.app`, `.dev`, `.staging`) in Apple Developer, each with Associated Domains + Push Notifications capabilities enabled. ASC app record (TestFlight) intentionally deferred — not requested yet.
 - [ ] Optional, low priority: Dart package rename `corejourney` → app-neutral name.
 - [ ] Verify deep links + password reset + confirm-signup end-to-end on a fresh install after the ID change. ⛔ blocked: needs the APNs/Apple steps above plus a fresh installed build on a device.
 
