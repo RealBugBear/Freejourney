@@ -51,7 +51,7 @@ class PushNotificationService {
         firebaseMessagingBackgroundHandler,
       );
       await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
+        options: DefaultFirebaseOptions.currentPlatformFor(environment),
       );
       _messaging = FirebaseMessaging.instance;
 
