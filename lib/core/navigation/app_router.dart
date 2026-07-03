@@ -169,8 +169,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isPasswordRecovery = ref.read(passwordRecoveryActiveProvider);
       final hasSelectedLanguage = ref.read(hasSelectedLanguageProvider);
       final loc = state.matchedLocation;
+      // languageSelection is public: a fresh install is logged-out AND has no
+      // saved language, so it must be reachable without a session — otherwise
+      // the "user == null -> /login" rule below bounces it back to /login, which
+      // re-redirects to /language (no language yet): an infinite loop (P1.2).
       final isPublicRoute = loc == Routes.login ||
           loc == Routes.resetPassword ||
+          loc == Routes.languageSelection ||
           loc == Routes.reflexProfileDemo;
 
       // Password-Recovery Deep Link: Vorrang vor allem anderen
