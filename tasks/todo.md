@@ -32,8 +32,8 @@
   `uri_allow_list` += `https://reflexjourney.app/auth/confirm`;
   confirmation template button/fallback link →
   `https://reflexjourney.app/auth/confirm?token_hash={{ .TokenHash }}&type=signup`.
-  Payload: scratchpad `auth-config-patch-2026-07-03.json`; rollback snapshot:
-  `auth-config-rollback-2026-07-03.json` (same directory).
+  Payload: `tasks/auth-config-patch-2026-07-03.json`; rollback snapshot:
+  `tasks/auth-config-rollback-2026-07-03.json`.
 - [x] Build release dev-flavor iOS app (`de.reflexjourney.app.dev`, release mode
   so it runs standalone from email taps). → built green 2026-07-03.
 - [ ] Install on the iPhone. ⛔ device locked (`kAMDMobileImageMounterDeviceLocked`);
