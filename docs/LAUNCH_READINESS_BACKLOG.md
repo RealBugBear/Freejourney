@@ -13,7 +13,7 @@ Sources consolidated here:
 
 ## Next up (update at the end of every session)
 
-1. Founder-gated batch (everything actionable in P0 now waits on this): deploy `chat-triage-bot` (P0.2, incl. adding `BOT_USER_ID`), deploy the two hardened reminder functions (P0.3), and run `supabase/migrations/20260702_rls_baseline_core_tables.sql` in the SQL Editor (P0.1 follow-up; only live effect is dropping the redundant legacy policy "Users manage own journal").
+1. Founder-gated batch (everything actionable in P0 now waits on this): deploy the **stubbed** `chat-triage-bot` (P0.2 — neutralization, no `BOT_USER_ID` needed anymore), deploy the two hardened reminder functions (P0.3), and run `supabase/migrations/20260702_rls_baseline_core_tables.sql` in the SQL Editor (P0.1 follow-up; only live effect is dropping the redundant legacy policy "Users manage own journal").
 2. Finish P1.2 external identity work: create Firebase app records/config for `de.reflexjourney.app*`, deploy `reflexjourney-app-site/` to Vercel with the new `.well-known` files, ensure Apple Developer/App Store bundle IDs exist, then fresh-install deep-link/password-reset/confirm-signup QA.
 
 ---
@@ -27,13 +27,16 @@ The 10 oldest core tables (`profiles`, `enrollments`, `intake_assessments`, `com
 - [x] Convert the hand-run RLS scripts into proper timestamped migrations so repo and DB can never silently diverge again. ✅ 2026-07-02 — added `supabase/migrations/20260702_rls_baseline_core_tables.sql` encoding the live pg_policies state (dumped via Management API) for all 13 core tables incl. journal trigger; `supabase db reset --local` replays green from the baseline; diff of replayed-local vs. live policy dump → identical except the redundant legacy policy "Users manage own journal", which the migration intentionally drops. Replay had two pre-existing blockers, both fixed: `20260513_enable_rls_postgis_spatial_ref_sys.sql` failed (not owner of extension table + duplicate version 20260513) → now permission-safe and renamed `2026051301_…`; `20260601_admin_audit_events.sql` sorted after its dependent `2026060102_…` → renamed `2026060100_…`.
 - [ ] Apply `20260702_rls_baseline_core_tables.sql` to the live DB via SQL Editor (gated: mutating SQL — only effective change is dropping the redundant "Users manage own journal" policy; everything else verified already live). Note: the remote has **no** `supabase_migrations.schema_migrations` table at all — all past migrations were hand-applied; `db push` has never run (and is known to hang against the pooler). Seeding remote migration history is an optional later cleanup.
 
-### P0.2 Deploy the chat-triage-bot authorization fix
-Confirmed vulnerability: unauthenticated privileged write — anyone with the function URL can inject bot messages into any private chat. **The fix (JWT check + channel-membership check) is already written but uncommitted** in `supabase/functions/chat-triage-bot/index.ts`.
-- [x] Review + commit the fixed function. ✅ 2026-07-02 — committed as `1d453ca` (401 without JWT, 403 without channel membership via `chat_channel_members`).
-- [ ] Deploy the fixed function. ⛔ blocked: founder go (deploys are gated).
-- [x] Verify the chat bot secret names before deploy. ✅ 2026-07-02 — `supabase secrets list` shows `BOT_USER_ID` is absent while `BOT-USER-ID` is present, so the deployed fixed function would fail bot inserts until the underscore secret is set; `AGARO-APP-ID` is present and has the same digest as `AGORA_APP_ID`, so it is a typo'd duplicate.
-- [ ] Set/fix the chat bot secret names before or with the deploy (secret changes = gated): add `BOT_USER_ID` with the existing bot user id value; optionally remove the typo'd duplicate `AGARO-APP-ID` after confirming nothing reads it.
-- [ ] Smoke-test after deploy: request without auth → 401; non-member → 403; member → works.
+### P0.2 Neutralize the exposed chat-triage-bot endpoint (scope changed 2026-07-03)
+Confirmed vulnerability: unauthenticated privileged write — anyone with the function URL can inject bot messages into any private chat (live function predates the auth fix).
+**Decision 2026-07-03 (founder + analysis):** the bot is not launched. It was never a reviewed product feature — live DB shows 0 bot messages ever; its no-match path auto-replies "Ich habe deine Frage an deinen Trainer weitergeleitet" backed by the FCM *legacy* HTTP API, which Google shut down in 2024, so the promise would be false; seeded FAQ copy needs product/legal review. P0.2 therefore means: remove the privileged endpoint, don't fix-and-ship the bot.
+- [x] Review + commit the fixed function. ✅ 2026-07-02 — committed as `1d453ca` (401 without JWT, 403 without channel membership via `chat_channel_members`). Superseded by the neutralization below but kept in history.
+- [x] Verify the chat bot secret names. ✅ 2026-07-02 — `supabase secrets list`: `BOT_USER_ID` absent, `BOT-USER-ID` present; `AGARO-APP-ID` has the same digest as `AGORA_APP_ID` (typo'd duplicate).
+- [x] Neutralize in code. ✅ 2026-07-03 — committed `2849cc7`: app no longer invokes `chat-triage-bot` on sendMessage (direct trainer chat unchanged); function replaced by a stub with no service-role client, no DB access, no secrets, answering 410 to fire-and-forget calls from app builds ≤ v1.0.5. flutter analyze clean on touched file, deno check passes, chat tests 19/19. `BOT_USER_ID` no longer needs to be created.
+- [ ] Deploy the stubbed function. ⛔ blocked: founder go (deploys are gated).
+- [ ] Smoke-test after deploy: request without auth and with a valid user JWT both → 410; aggregate `chat_messages` count with `is_bot_response = true` stays 0.
+- [ ] Optional gated cleanup (batch with any secret change): remove the typo'd duplicate `AGARO-APP-ID` after confirming nothing reads it; `BOT-USER-ID` can also be removed once the stub is deployed (nothing reads it anymore).
+- [ ] Post-launch (parked): if a chatbot becomes a product goal, plan it properly — reviewed copy, working notification path (FCM HTTP v1), and content gating. The 4 seeded `bot_faqs` rows are unused once the stub is live; deleting them is optional gated SQL.
 
 ### P0.3 Cron secret hardening
 Both reminder functions read `Deno.env.get('CRON_SECRET') ?? ''` — if the secret is unset, an empty header passes.
@@ -126,6 +129,6 @@ The 2026-06-18 architecture audit's verdict: the codebase is substantially bette
 
 ## Open questions / parked
 
-- Chatbot feature (planned in the 2026-06-18 session as safe, content-gated triage bot): current bot is keyword/FAQ-based; the uncommitted auth fix touches it. Any further chatbot expansion is post-launch.
+- Chatbot feature: neutralized for launch 2026-07-03 (see P0.2) — app no longer calls it, endpoint stubbed. Any future chatbot is a fresh post-launch product decision: reviewed copy, FCM HTTP v1 notifications, content gating. The 4 seeded `bot_faqs` rows sit unused in the DB.
 - Old repos: `/Users/alexandermessinger/dev/corejourney` (obsolete) and `_ARCHIVED_corejourney_old` — consider archiving/removing to reduce confusion.
 - Outer repo (`claudvibes/corejourney`) has its own uncommitted admin-web changes + untracked specs — needs a housekeeping commit.
