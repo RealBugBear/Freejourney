@@ -20,6 +20,25 @@ import 'features/video/presentation/providers/video_providers.dart';
 import 'features/video/presentation/widgets/incoming_call_listener.dart';
 import 'l10n/app_localizations.dart';
 
+/// Auth deep links the app responds to.
+enum AuthDeepLink { resetPassword, confirmSignup, none }
+
+/// Classifies an incoming link. Top-level so the URL-shape matching can be
+/// unit-tested without the Supabase singleton. Matches both shapes:
+///   https://reflexjourney.app/auth/reset-password → path == '/auth/reset-password'
+///   reflexjourney://auth/reset-password           → host == 'auth', path == '/reset-password'
+AuthDeepLink classifyAuthDeepLink(Uri uri) {
+  bool matches(String page) =>
+      uri.path == '/auth/$page' ||
+      (uri.scheme == 'reflexjourney' &&
+          uri.host == 'auth' &&
+          uri.path == '/$page');
+
+  if (matches('reset-password')) return AuthDeepLink.resetPassword;
+  if (matches('confirm')) return AuthDeepLink.confirmSignup;
+  return AuthDeepLink.none;
+}
+
 /// Root widget. Handles app lifecycle events (sync drain on background) and
 /// delegates actual UI construction to [_CoreJourneyAppView].
 class CoreJourneyApp extends ConsumerStatefulWidget {
@@ -64,22 +83,41 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
   }
 
   Future<void> _handleDeepLink(Uri uri) async {
-    // Match both URL shapes:
-    //   https://reflexjourney.app/auth/reset-password → path == '/auth/reset-password'
-    //   reflexjourney://auth/reset-password           → host == 'auth', path == '/reset-password'
-    final isResetPassword = uri.path == '/auth/reset-password' ||
-        (uri.scheme == 'reflexjourney' &&
-            uri.host == 'auth' &&
-            uri.path == '/reset-password');
+    final auth = Supabase.instance.client.auth;
+    // Email links carry a token_hash (the same link the web fallback pages on
+    // reflexjourney.app use); getSessionFromUrl cannot process those.
+    final tokenHash = uri.queryParameters['token_hash'];
 
-    if (isResetPassword) {
-      try {
-        ref.read(passwordRecoveryActiveProvider.notifier).state = true;
-        await Supabase.instance.client.auth.getSessionFromUrl(uri);
-      } catch (_) {
-        // Reset flag if session retrieval fails (e.g. expired or malformed link)
-        ref.read(passwordRecoveryActiveProvider.notifier).state = false;
-      }
+    switch (classifyAuthDeepLink(uri)) {
+      case AuthDeepLink.resetPassword:
+        try {
+          ref.read(passwordRecoveryActiveProvider.notifier).state = true;
+          if (tokenHash != null) {
+            await auth.verifyOTP(type: OtpType.recovery, tokenHash: tokenHash);
+          } else {
+            await auth.getSessionFromUrl(uri);
+          }
+        } catch (_) {
+          // Reset flag if session retrieval fails (e.g. expired or malformed link)
+          ref.read(passwordRecoveryActiveProvider.notifier).state = false;
+        }
+      case AuthDeepLink.confirmSignup:
+        // Confirmation link tapped on the device that has the app installed:
+        // verify here and the user ends up signed in. If a session already
+        // exists the account is in use — leave it alone; expired/invalid
+        // links leave the user on the login screen to request a new one.
+        if (tokenHash == null || auth.currentSession != null) return;
+        try {
+          await auth.verifyOTP(type: OtpType.signup, tokenHash: tokenHash);
+        } on AuthException {
+          // Some confirmations verify only under the generic "email" type —
+          // same fallback the /auth/confirm web page uses.
+          try {
+            await auth.verifyOTP(type: OtpType.email, tokenHash: tokenHash);
+          } catch (_) {}
+        } catch (_) {}
+      case AuthDeepLink.none:
+        break;
     }
   }
 
