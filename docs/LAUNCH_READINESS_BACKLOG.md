@@ -13,10 +13,10 @@ Sources consolidated here:
 
 ## Next up (update at the end of every session)
 
-1. Both founder console steps for P1.2 are done (APNs key uploaded to Firebase, App IDs registered in Apple Developer). Next: fresh-install deep-link/password-reset/confirm-signup QA on a device.
+1. P1.2 endgame, three founder touchpoints: (a) give the go for the gated auth-config PATCH (site_url/allowlist/confirmation template — payload + rollback prepared), (b) unlock the iPhone so the already-built release dev build can be installed, (c) run the on-device QA script in `tasks/todo.md`.
 2. Content requests to Sina are in flight (founder, 2026-07-03): adult questionnaire + videos (P2.A/B) and the top-20–30 forum Q&As for the new FAQ area (P2.C). When any of it lands, P2 jumps the queue.
 
-*(2026-07-03: P0 gated batch done — bot neutralized live, reminder functions hardened live, RLS baseline applied. P1.2 fully done — Firebase records + env-aware options, `.well-known` files live on reflexjourney.app, APNs key uploaded to all 3 iOS apps, App IDs registered in Apple Developer with Associated Domains + Push Notifications. Remaining P0: only lawyer items in P0.6. Next: device QA (P1.2 last line).)*
+*(2026-07-03 evening: pre-QA audit found the password-reset deep link was broken app-side (token_hash not handled — fixed, `58827aa`) and the live `site_url` still points at malformed old-brand `https:corejourney.care` (gated fix prepared). Release dev build for the new bundle ID is built; install pending device unlock.)*
 
 ---
 
@@ -76,7 +76,10 @@ Both reminder functions read `Deno.env.get('CRON_SECRET') ?? ''` — if the secr
 - [x] Upload the APNs auth key to the three new iOS app records in the Firebase console (Project settings → Cloud Messaging → each iOS app). ✅ 2026-07-03 — founder located the existing `AuthKey_3UF24376W3.p8` (Key ID `3UF24376W3`, Team ID `5X6VFP7F58`, confirmed still enabled for APNs, team-scoped/all-topics, Sandbox & Production) and uploaded it to all three iOS app records (prod/dev/staging) in `corejourney-prod`.
 - [x] Apple Developer / App Store Connect: register bundle ID `de.reflexjourney.app` (+ `.dev`/`.staging` App IDs with Associated Domains capability) and create the ASC app record under the new ID. ✅ 2026-07-03 — registered all three App IDs (`de.reflexjourney.app`, `.dev`, `.staging`) in Apple Developer, each with Associated Domains + Push Notifications capabilities enabled. ASC app record (TestFlight) intentionally deferred — not requested yet.
 - [ ] Optional, low priority: Dart package rename `corejourney` → app-neutral name.
-- [ ] Verify deep links + password reset + confirm-signup end-to-end on a fresh install after the ID change. ⛔ blocked: needs the APNs/Apple steps above plus a fresh installed build on a device.
+- [x] Pre-QA audit of the auth link flows (found + fixed the app-side blocker). ✅ 2026-07-03 — read live auth config via Management API + traced app deep-link code: (a) recovery emails link to `reflexjourney.app/auth/reset-password?token_hash=…`, which the new app intercepts via universal links (AASA + Android intent filter both claim `/auth/*`) but could not process — `getSessionFromUrl` doesn't understand `token_hash` → silent failure. Fixed in commit `58827aa`: `verifyOTP` for recovery and `/auth/confirm` links, legacy `getSessionFromUrl` kept as fallback; 6 new unit tests, full suite 200/200, analyze clean. (b) live `site_url` is still `https:corejourney.care` — old brand AND malformed — so signup-confirmation emails verify server-side but strand the user on a dead URL. (c) redirect allowlist lacks `/auth/confirm`.
+- [ ] Apply the auth-config fix: `site_url` → `https://reflexjourney.app`, allowlist += `https://reflexjourney.app/auth/confirm`, confirmation email template → `https://reflexjourney.app/auth/confirm?token_hash={{ .TokenHash }}&type=signup`. ⛔ blocked: founder go (gated: auth settings). Exact PATCH payload + rollback snapshot prepared 2026-07-03 (session scratchpad `auth-config-patch-2026-07-03.json` / `auth-config-rollback-2026-07-03.json`).
+- [ ] Install the fresh release dev build on the iPhone. ⛔ blocked: founder — release build `de.reflexjourney.app.dev` built green 2026-07-03; install failed only because the device is locked (`kAMDMobileImageMounterDeviceLocked`). Unlock the phone, then it's one command.
+- [ ] Verify deep links + password reset + confirm-signup end-to-end on the fresh install (QA script in `tasks/todo.md`). ⛔ blocked: the two items above + founder on device.
 
 ### P1.3 Repo hygiene (moved from P0 2026-07-02 — not a launch security blocker, just cheap cleanup)
 - [x] Remove `.env.staging` from git tracking (contains only client-public keys, but poor hygiene). ✅ 2026-07-02 — `a4036c9`: `git rm --cached` + `.gitignore` entry; file stays on disk. (Old values remain in git history — acceptable for client-public keys per the audit.)
@@ -85,7 +88,7 @@ Both reminder functions read `Deno.env.get('CRON_SECRET') ?? ''` — if the secr
 ### P1.4 Infra already DONE (do not redo)
 - Resend sending domain `send.reflexjourney.de` verified; Supabase custom SMTP live.
 - `reflexjourney.app` static auth site on Vercel; password-reset (`/auth/reset-password`) and confirm-signup (`/auth/confirm`) pages using token_hash, verified working 2026-06-22.
-- Supabase Site URL + redirect allowlist updated; old corejourney entries removed.
+- Supabase Site URL + redirect allowlist updated; old corejourney entries removed. *(Correction 2026-07-03: live config still had `site_url = https:corejourney.care` — malformed, old brand — and no `/auth/confirm` allowlist entry. Fix is tracked as a gated P1.2 item; this line was wrong.)*
 
 ---
 
