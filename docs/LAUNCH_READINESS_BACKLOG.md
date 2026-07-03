@@ -13,8 +13,10 @@ Sources consolidated here:
 
 ## Next up (update at the end of every session)
 
-1. Founder-gated batch (everything actionable in P0 now waits on this): deploy the **stubbed** `chat-triage-bot` (P0.2 — neutralization, no `BOT_USER_ID` needed anymore), deploy the two hardened reminder functions (P0.3), and run `supabase/migrations/20260702_rls_baseline_core_tables.sql` in the SQL Editor (P0.1 follow-up; only live effect is dropping the redundant legacy policy "Users manage own journal").
-2. Finish P1.2 external identity work: create Firebase app records/config for `de.reflexjourney.app*`, deploy `reflexjourney-app-site/` to Vercel with the new `.well-known` files, ensure Apple Developer/App Store bundle IDs exist, then fresh-install deep-link/password-reset/confirm-signup QA.
+1. Finish P1.2 external identity work: create Firebase app records/config for `de.reflexjourney.app*`, deploy `reflexjourney-app-site/` to Vercel with the new `.well-known` files, ensure Apple Developer/App Store bundle IDs exist, then fresh-install deep-link/password-reset/confirm-signup QA.
+2. Content requests to Sina are in flight (founder, 2026-07-03): adult questionnaire + videos (P2.A/B) and the top-20–30 forum Q&As for the new FAQ area (P2.C). When any of it lands, P2 jumps the queue.
+
+*(2026-07-03: the P0 gated batch is done — chat-triage-bot neutralized live, reminder functions hardened live, RLS baseline applied. Remaining P0: only the lawyer items in P0.6 and post-launch-acceptable notes.)*
 
 ---
 
@@ -25,7 +27,7 @@ The 10 oldest core tables (`profiles`, `enrollments`, `intake_assessments`, `com
 - [x] Run the read-only RLS verification script from the 2026-06-18 security audit (project `sxvpiggednbftfqeokyd`). ✅ 2026-07-02 — ran `rls_verify.sql` queries via Management API → all 37 public tables `rls_enabled = true` except `spatial_ref_sys` (PostGIS extension table, no user data, expected). All 10 sensitive tables have the expected owner/trainer policies. `access_codes` has RLS on with zero policies = deny-all for clients (service-role-only access, locked down).
 - [x] Fix any table showing `rls_enabled = false` immediately. ✅ 2026-07-02 — none found; nothing to fix.
 - [x] Convert the hand-run RLS scripts into proper timestamped migrations so repo and DB can never silently diverge again. ✅ 2026-07-02 — added `supabase/migrations/20260702_rls_baseline_core_tables.sql` encoding the live pg_policies state (dumped via Management API) for all 13 core tables incl. journal trigger; `supabase db reset --local` replays green from the baseline; diff of replayed-local vs. live policy dump → identical except the redundant legacy policy "Users manage own journal", which the migration intentionally drops. Replay had two pre-existing blockers, both fixed: `20260513_enable_rls_postgis_spatial_ref_sys.sql` failed (not owner of extension table + duplicate version 20260513) → now permission-safe and renamed `2026051301_…`; `20260601_admin_audit_events.sql` sorted after its dependent `2026060102_…` → renamed `2026060100_…`.
-- [ ] Apply `20260702_rls_baseline_core_tables.sql` to the live DB via SQL Editor (gated: mutating SQL — only effective change is dropping the redundant "Users manage own journal" policy; everything else verified already live). Note: the remote has **no** `supabase_migrations.schema_migrations` table at all — all past migrations were hand-applied; `db push` has never run (and is known to hang against the pooler). Seeding remote migration history is an optional later cleanup.
+- [x] Apply `20260702_rls_baseline_core_tables.sql` to the live DB. ✅ 2026-07-03 — applied via Management API on founder go; post-apply policy dump diffed against the migration-replayed local state → **identical** (only change: redundant "Users manage own journal" policy dropped). Note: the remote has **no** `supabase_migrations.schema_migrations` table at all — all past migrations were hand-applied; `db push` has never run (and is known to hang against the pooler). Seeding remote migration history is an optional later cleanup.
 
 ### P0.2 Neutralize the exposed chat-triage-bot endpoint (scope changed 2026-07-03)
 Confirmed vulnerability: unauthenticated privileged write — anyone with the function URL can inject bot messages into any private chat (live function predates the auth fix).
@@ -33,8 +35,8 @@ Confirmed vulnerability: unauthenticated privileged write — anyone with the fu
 - [x] Review + commit the fixed function. ✅ 2026-07-02 — committed as `1d453ca` (401 without JWT, 403 without channel membership via `chat_channel_members`). Superseded by the neutralization below but kept in history.
 - [x] Verify the chat bot secret names. ✅ 2026-07-02 — `supabase secrets list`: `BOT_USER_ID` absent, `BOT-USER-ID` present; `AGARO-APP-ID` has the same digest as `AGORA_APP_ID` (typo'd duplicate).
 - [x] Neutralize in code. ✅ 2026-07-03 — committed `2849cc7`: app no longer invokes `chat-triage-bot` on sendMessage (direct trainer chat unchanged); function replaced by a stub with no service-role client, no DB access, no secrets, answering 410 to fire-and-forget calls from app builds ≤ v1.0.5. flutter analyze clean on touched file, deno check passes, chat tests 19/19. `BOT_USER_ID` no longer needs to be created.
-- [ ] Deploy the stubbed function. ⛔ blocked: founder go (deploys are gated).
-- [ ] Smoke-test after deploy: request without auth and with a valid user JWT both → 410; aggregate `chat_messages` count with `is_bot_response = true` stays 0.
+- [x] Deploy the stubbed function. ✅ 2026-07-03 — deployed on founder go with default JWT verification (stricter than the old `--no-verify-jwt` deployment).
+- [x] Smoke-test after deploy. ✅ 2026-07-03 — unauth POST → 401 (gateway); POST with valid anon JWT → 410 `{"error":"chat-triage-bot is disabled"}`; `chat_messages` count with `is_bot_response = true` → 0. The vulnerable privileged endpoint no longer exists.
 - [ ] Optional gated cleanup (batch with any secret change): remove the typo'd duplicate `AGARO-APP-ID` after confirming nothing reads it; `BOT-USER-ID` can also be removed once the stub is deployed (nothing reads it anymore).
 - [ ] Post-launch (parked): if a chatbot becomes a product goal, plan it properly — reviewed copy, working notification path (FCM HTTP v1), and content gating. The 4 seeded `bot_faqs` rows are unused once the stub is live; deleting them is optional gated SQL.
 
@@ -42,7 +44,7 @@ Confirmed vulnerability: unauthenticated privileged write — anyone with the fu
 Both reminder functions read `Deno.env.get('CRON_SECRET') ?? ''` — if the secret is unset, an empty header passes.
 - [x] Confirm `CRON_SECRET` is set: ✅ 2026-07-02 — `supabase secrets list` shows `CRON_SECRET` present (value/strength not printable; if in doubt, rotate to a fresh 32+ char random value — gated action).
 - [x] Optional hardening: fail closed in code when the env var is missing. ✅ 2026-07-02 — committed `9a0f565`; both reminder functions now reject when `CRON_SECRET` is unset (deno test 13/13, deno check error count unchanged vs HEAD).
-- [ ] Deploy the hardened reminder functions (`schedule-training-reminders`, `send-notification-jobs`). ⛔ blocked: founder go (deploys are gated) — batch with the P0.2 deploy.
+- [x] Deploy the hardened reminder functions (`schedule-training-reminders`, `send-notification-jobs`). ✅ 2026-07-03 — deployed on founder go with `--no-verify-jwt` (cron calls authenticate via `x-cron-secret`). Smoke: POST without secret → 401 `{"error":"unauthorized"}` on both; first post-deploy cron tick (15:30 UTC) ran `succeeded` with HTTP 200 responses recorded in `net._http_response`.
 
 ### P0.4 Supabase region (one-way door)
 - [x] Confirm the Supabase project region is in the EU. ✅ 2026-07-02 — `supabase projects list` → West EU (Ireland).
@@ -90,10 +92,12 @@ Both reminder functions read `Deno.env.get('CRON_SECRET') ?? ''` — if the secr
 Expected deliverables (per CONTENT-STATUS and 2026-06-24 session):
 **A) Adult questionnaire** — revised `erw` questions + question→reflex mapping (mapping currently missing entirely).
 **B) Final training videos** — selected/cut from the filmed footage, plus final exercise pictures.
+**C) FAQ/orientation content** (added 2026-07-03, founder decision) — the 20–30 most common questions + answers from Sina's forum, as the content base for an in-app help area.
 
 - [ ] A: Validate content (scoring rules per `specs/reflexprofil_planung.md`), seed into the questionnaire system following the child-questionnaire pattern (`reflex_profile_questionnaire_v1` migration as reference).
 - [ ] B: Upload media to Supabase Storage, populate the remote media URL columns (pipeline built 2026-05-30: `ExerciseImageWidget`/`ExerciseVideoWidget` URL-or-asset resolution, Drift cache sync).
 - [ ] Verify on-device: media loads remotely, falls back to assets offline.
+- [ ] C (Stufe 1): Build a curated, searchable FAQ/orientation section in the app from Sina's reviewed forum Q&As. **Not launch-blocking** — ships with or shortly after launch once content arrives. Every answer gets a copy review for therapy/medical-claim language before seeding. No bot, no free-text generation — static reviewed content only. ⛔ blocked: content (founder requested forum access / top-20–30 Q&As from Sina, 2026-07-03).
 - [ ] Note for scale (from architecture audit): video egress is the first real cost line; CDN in front of Storage is the planned move at ~1k users — not now.
 
 ---
@@ -129,6 +133,6 @@ The 2026-06-18 architecture audit's verdict: the codebase is substantially bette
 
 ## Open questions / parked
 
-- Chatbot feature: neutralized for launch 2026-07-03 (see P0.2) — app no longer calls it, endpoint stubbed. Any future chatbot is a fresh post-launch product decision: reviewed copy, FCM HTTP v1 notifications, content gating. The 4 seeded `bot_faqs` rows sit unused in the DB.
+- Chatbot feature: neutralized for launch 2026-07-03 (see P0.2) — app no longer calls it, endpoint stubbed. The user-facing need it hinted at is now properly scoped: **Stufe 1** = curated FAQ section (P2.C, content from Sina's forum). Post-launch roadmap: **Stufe 2** = guided question flow (free-text input matched against reviewed FAQs only, with real trainer forwarding rebuilt on FCM HTTP v1); **Stufe 3** = content-gated chatbot (own project, product + legal review). The 4 seeded `bot_faqs` rows sit unused in the DB; reuse or delete when P2.C is built.
 - Old repos: `/Users/alexandermessinger/dev/corejourney` (obsolete) and `_ARCHIVED_corejourney_old` — consider archiving/removing to reduce confusion.
 - Outer repo (`claudvibes/corejourney`) has its own uncommitted admin-web changes + untracked specs — needs a housekeeping commit.
