@@ -226,8 +226,6 @@ class SupabaseChatRepository implements ChatRepository {
       'is_bot_response': false,
       'is_call_request': false,
     });
-
-    unawaited(_triggerTriageBot(channelId: channelId, content: content));
   }
 
   @override
@@ -302,22 +300,6 @@ class SupabaseChatRepository implements ChatRepository {
   }
 
   // ── Private helpers ───────────────────────────────────────────────────────
-
-  Future<void> _triggerTriageBot({
-    required String channelId,
-    required String content,
-  }) async {
-    try {
-      final locale =
-          _client.auth.currentUser?.userMetadata?['locale'] as String? ?? 'de';
-      await _client.functions.invoke(
-        'chat-triage-bot',
-        body: {'channel_id': channelId, 'content': content, 'locale': locale},
-      );
-    } catch (e) {
-      debugPrint('Triage bot invocation failed: $e');
-    }
-  }
 
   Future<void> _notifyCallRequest({required String channelId}) async {
     try {
