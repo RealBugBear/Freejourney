@@ -11,7 +11,6 @@ import '../../domain/reflex_profile_scoring.dart';
 import '../../domain/reflex_questionnaire.dart';
 import '../../domain/reflex_questionnaire_definitions.dart';
 import '../providers/reflex_profile_provider.dart';
-import '../../../trainer/presentation/providers/trainer_provider.dart';
 
 class ReflexProfileScreen extends ConsumerStatefulWidget {
   const ReflexProfileScreen({super.key});
@@ -249,57 +248,6 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       _showError('Reflexprofil konnte nicht abgeschlossen werden: $e');
     } finally {
       if (mounted) setState(() => _saving = false);
-    }
-  }
-
-  Future<void> _promptTrainerShareAfterCompletion(
-      String subjectProfileId) async {
-    final connections = await ref.read(clientTrainerConnectionsProvider.future);
-    if (!mounted) return;
-    final activeConnection =
-        connections.where((connection) => connection.isActive).firstOrNull;
-    if (activeConnection == null) return;
-
-    final share = await ref.read(
-      reflexProfileTrainerShareProvider(
-        ReflexTrainerShareLookup(
-          subjectProfileId: subjectProfileId,
-          trainerId: activeConnection.trainerId,
-        ),
-      ).future,
-    );
-    if (!mounted || share) return;
-
-    final shouldShare = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Reflexprofil mit Trainer teilen?'),
-        content: Text(
-          '${activeConnection.displayName} kann dich besser begleiten, wenn '
-          'dein Reflexprofil sichtbar ist. Du kannst diese Freigabe später im '
-          'Begleitung-Tab jederzeit widerrufen.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Nicht teilen'),
-          ),
-          FilledButton.icon(
-            onPressed: () => Navigator.pop(ctx, true),
-            icon: const Icon(Icons.visibility_outlined),
-            label: const Text('Für Trainer freigeben'),
-          ),
-        ],
-      ),
-    );
-
-    if (shouldShare == true) {
-      await grantReflexProfileTrainerShare(
-        ref,
-        subjectProfileId: subjectProfileId,
-        trainerId: activeConnection.trainerId,
-        relationshipId: activeConnection.relationshipId,
-      );
     }
   }
 

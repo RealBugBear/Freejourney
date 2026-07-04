@@ -31,7 +31,7 @@ class ExerciseMovementWidget extends ConsumerStatefulWidget {
 
 // ── State machine phases ───────────────────────────────────────────────────────
 
-enum _TickPhase { holding, resting, switching }
+enum _TickPhase { holding, resting }
 
 class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
     with SingleTickerProviderStateMixin {
@@ -52,8 +52,6 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
 
   // phased state
   int _phaseIndex = 0;
-
-  bool _done = false;
 
   @override
   void initState() {
@@ -100,7 +98,6 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
   void _startPhasedPhase({bool isFirst = false}) {
     if (!mounted) return;
     final phase = widget.exercise.phases[_phaseIndex];
-    final locale = ref.read(settingsProvider).languageCode;
     setState(() => _secondsLeft = phase.durationSeconds);
     if (!isFirst || _phaseIndex > 0) {
       // Always announce each phase label
@@ -159,7 +156,6 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
     if (_currentRep >= ex.repetitions) {
       // All done
       _feedback.hapticHeavy();
-      _done = true;
       Future.microtask(() {
         if (mounted) widget.onComplete();
       });
