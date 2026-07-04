@@ -37,11 +37,16 @@ class AuthNotifier extends StateNotifier<AsyncValue<void>> {
     );
   }
 
-  Future<void> signUp({required String email, required String password}) async {
+  /// Returns true when email confirmation is still pending (no session yet).
+  /// Check `state.hasError` first — on failure the return value is meaningless.
+  Future<bool> signUp({required String email, required String password}) async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(
-      () => _repo.signUpWithEmail(email: email, password: password),
-    );
+    var needsEmailConfirmation = false;
+    state = await AsyncValue.guard(() async {
+      needsEmailConfirmation =
+          await _repo.signUpWithEmail(email: email, password: password);
+    });
+    return needsEmailConfirmation;
   }
 
   Future<void> sendPasswordReset({

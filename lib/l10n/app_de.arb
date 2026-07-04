@@ -12,6 +12,7 @@
   "forgotPassword": "Passwort vergessen?",
   "resetPassword": "Passwort zurücksetzen",
   "passwordResetSent": "Wir haben dir eine E-Mail zum Zurücksetzen des Passworts gesendet.",
+  "signUpConfirmEmailSent": "Fast geschafft! Wir haben dir eine E-Mail zur Bestätigung deines Kontos gesendet. Bitte tippe auf den Link darin, dann kannst du dich anmelden.",
 
   "authErrorInvalidCredentials": "E-Mail oder Passwort ist falsch.",
   "authErrorEmailInUse": "Diese E-Mail-Adresse ist bereits registriert.",

@@ -82,18 +82,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final notifier = ref.read(authNotifierProvider.notifier);
 
     if (_isSignUp) {
-      await notifier.signUp(email: email, password: password);
+      final needsEmailConfirmation =
+          await notifier.signUp(email: email, password: password);
+      if (!mounted) return;
+      if (ref.read(authNotifierProvider).hasError) return;
+
+      // Email confirmation enabled: no session yet, so don't try to enter the
+      // app. Switch back to the sign-in view and tell the user to check inbox.
+      if (needsEmailConfirmation) {
+        setState(() {
+          _isSignUp = false;
+          _passwordConfirmController.clear();
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text(AppLocalizations.of(context).signUpConfirmEmailSent),
+          ),
+        );
+        return;
+      }
     } else {
       await notifier.signIn(email: email, password: password);
+      if (!mounted) return;
     }
 
-    if (mounted) {
-      final authState = ref.read(authNotifierProvider);
-      if (!authState.hasError) {
-        // Invalidate consent cache so the new user's consent state is checked fresh.
-        ref.invalidate(hasConsentedProvider);
-        context.go(Routes.dashboard);
-      }
+    if (!ref.read(authNotifierProvider).hasError) {
+      // Invalidate consent cache so the new user's consent state is checked fresh.
+      ref.invalidate(hasConsentedProvider);
+      context.go(Routes.dashboard);
     }
   }
 

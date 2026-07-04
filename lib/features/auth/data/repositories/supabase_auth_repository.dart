@@ -22,11 +22,14 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> signUpWithEmail({
+  Future<bool> signUpWithEmail({
     required String email,
     required String password,
   }) async {
-    await _client.auth.signUp(email: email, password: password);
+    final response = await _client.auth.signUp(email: email, password: password);
+    // With email confirmation enabled, sign-up returns no session until the
+    // user clicks the confirmation link. A null session means "confirm pending".
+    return response.session == null;
   }
 
   @override

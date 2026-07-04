@@ -36,6 +36,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordResetSent => 'We\'ve sent you a password reset email.';
 
   @override
+  String get signUpConfirmEmailSent =>
+      'Almost there! We\'ve sent you an email to confirm your account. Please tap the link inside, then you can sign in.';
+
+  @override
   String get authErrorInvalidCredentials => 'Email or password is incorrect.';
 
   @override

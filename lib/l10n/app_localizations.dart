@@ -152,6 +152,12 @@ abstract class AppLocalizations {
   /// **'Wir haben dir eine E-Mail zum Zurücksetzen des Passworts gesendet.'**
   String get passwordResetSent;
 
+  /// No description provided for @signUpConfirmEmailSent.
+  ///
+  /// In de, this message translates to:
+  /// **'Fast geschafft! Wir haben dir eine E-Mail zur Bestätigung deines Kontos gesendet. Bitte tippe auf den Link darin, dann kannst du dich anmelden.'**
+  String get signUpConfirmEmailSent;
+
   /// No description provided for @authErrorInvalidCredentials.
   ///
   /// In de, this message translates to:

@@ -37,6 +37,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Wir haben dir eine E-Mail zum Zurücksetzen des Passworts gesendet.';
 
   @override
+  String get signUpConfirmEmailSent =>
+      'Fast geschafft! Wir haben dir eine E-Mail zur Bestätigung deines Kontos gesendet. Bitte tippe auf den Link darin, dann kannst du dich anmelden.';
+
+  @override
   String get authErrorInvalidCredentials => 'E-Mail oder Passwort ist falsch.';
 
   @override

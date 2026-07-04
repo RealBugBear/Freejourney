@@ -12,6 +12,7 @@
   "forgotPassword": "Forgot Password?",
   "resetPassword": "Reset Password",
   "passwordResetSent": "We've sent you a password reset email.",
+  "signUpConfirmEmailSent": "Almost there! We've sent you an email to confirm your account. Please tap the link inside, then you can sign in.",
 
   "authErrorInvalidCredentials": "Email or password is incorrect.",
   "authErrorEmailInUse": "This email address is already registered.",
