@@ -12,6 +12,14 @@ soft-reset and recommit). Rule: immediately before any commit, run
 `git diff --cached --name-status` and confirm the staged list contains exactly
 the files named in the commit plan — nothing inherited from earlier commands.
 
+## 2026-07-04 — Never write an evidence reference before the evidence exists
+
+While drafting a plan in todo.md, a commit hash was written into a ticked
+checkbox before the commit was made (caught and reverted in-session). Rule:
+evidence notes (hashes, test counts, "verified" claims) are written only
+AFTER the referenced action ran — draft plans use unchecked boxes and
+placeholders, never invented identifiers.
+
 ## 2026-07-02 — Don't chain mutating git commands with long-running ones
 
 A combined `git mv … && supabase db reset` was rejected by the founder; run

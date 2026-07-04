@@ -14,8 +14,9 @@ Sources consolidated here:
 ## Next up (update at the end of every session)
 
 1. P1.2 is ~done. ONE small on-device check remains: register a throwaway account and **tap the confirmation link on the iPhone** to prove the `/auth/confirm` universal link opens the app (everything else in the QA script passed 2026-07-04; the confirm link was only exercised via a browser temp-email so far). Note: Supabase "Confirm email" is now ON (founder enabled it 2026-07-04) — every new signup now requires a real email click, so this path matters at launch.
-2. Founder go pending (asked 2026-07-04): delete the two orphaned secrets `AGARO-APP-ID` (typo'd duplicate of `AGORA_APP_ID`, identical digest) and `BOT-USER-ID` (bot neutralized) — repo-wide grep confirms nothing reads either name (P0.2 optional cleanup).
-3. Content requests to Sina are in flight (founder, 2026-07-03): adult questionnaire + videos (P2.A/B) and the top-20–30 forum Q&As for the new FAQ area (P2.C). When any of it lands, P2 jumps the queue.
+2. Founder: review the store-listing draft (`docs/STORE_LISTING_DRAFT.md`) — approve/edit the copy and answer the 6 open decisions at the bottom.
+3. Founder go pending (asked 2026-07-04): delete the two orphaned secrets `AGARO-APP-ID` (typo'd duplicate of `AGORA_APP_ID`, identical digest) and `BOT-USER-ID` (bot neutralized) — repo-wide grep confirms nothing reads either name (P0.2 optional cleanup).
+4. Content requests to Sina are in flight (founder, 2026-07-03): adult questionnaire + videos (P2.A/B) and the top-20–30 forum Q&As for the new FAQ area (P2.C). When any of it lands, P2 jumps the queue.
 
 *(2026-07-04: on-device QA on the fresh release dev build. Fixed two launch blockers found live: a fresh-install startup crash from a router redirect loop (`66958f0`) and a signup "something went wrong" error that appeared once email confirmation was enabled (`264e2f0`). Auth-config PATCH from the prior session corroborated in the field (emails link to reflexjourney.app, no dead corejourney.care page). Password reset — in-app and browser — both verified working on device.)*
 
