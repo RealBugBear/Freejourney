@@ -14,7 +14,8 @@ Sources consolidated here:
 ## Next up (update at the end of every session)
 
 1. P1.2 is ~done. ONE small on-device check remains: register a throwaway account and **tap the confirmation link on the iPhone** to prove the `/auth/confirm` universal link opens the app (everything else in the QA script passed 2026-07-04; the confirm link was only exercised via a browser temp-email so far). Note: Supabase "Confirm email" is now ON (founder enabled it 2026-07-04) — every new signup now requires a real email click, so this path matters at launch.
-2. Content requests to Sina are in flight (founder, 2026-07-03): adult questionnaire + videos (P2.A/B) and the top-20–30 forum Q&As for the new FAQ area (P2.C). When any of it lands, P2 jumps the queue.
+2. Founder go pending (asked 2026-07-04): delete the two orphaned secrets `AGARO-APP-ID` (typo'd duplicate of `AGORA_APP_ID`, identical digest) and `BOT-USER-ID` (bot neutralized) — repo-wide grep confirms nothing reads either name (P0.2 optional cleanup).
+3. Content requests to Sina are in flight (founder, 2026-07-03): adult questionnaire + videos (P2.A/B) and the top-20–30 forum Q&As for the new FAQ area (P2.C). When any of it lands, P2 jumps the queue.
 
 *(2026-07-04: on-device QA on the fresh release dev build. Fixed two launch blockers found live: a fresh-install startup crash from a router redirect loop (`66958f0`) and a signup "something went wrong" error that appeared once email confirmation was enabled (`264e2f0`). Auth-config PATCH from the prior session corroborated in the field (emails link to reflexjourney.app, no dead corejourney.care page). Password reset — in-app and browser — both verified working on device.)*
 
@@ -112,9 +113,9 @@ Expected deliverables (per CONTENT-STATUS and 2026-06-24 session):
 ## P3 — Launch operations
 
 - [ ] Supabase Free → Pro before real users (removes 7-day-pause risk + egress headroom). Trigger per audit: at latest with first real/paying user.
-- [ ] Run `make release-readiness-mobile` + fix everything.
+- [x] Run `make release-readiness-mobile` + fix everything. ✅ 2026-07-04 — target existed only in docs, never in the Makefile (git log -S over full history); implemented it (`6991e44`: flutter analyze --no-fatal-infos + full test suite). Run found 0 errors / 4 warnings / 103 deprecation infos; the 4 warnings were dead code, removed in `b4b2be7` (incl. a never-called trainer-share prompt superseded by the result screen). Re-run → exit 0, analyze error/warning-free, 200/200 tests passed. The 103 infos are non-blocking deprecation cleanups (mostly `withOpacity`→`withValues`), left for post-launch.
 - [ ] Full manual device QA per `docs/RELEASE_READINESS_CHECKLIST.md` (hands-free, reminders v2, offline sync, dashboard) on iOS + Android.
-- [ ] Ensure `APP_ENVIRONMENT` Edge Function secret is set to the intended production value (was flipped during reminder testing).
+- [x] Ensure `APP_ENVIRONMENT` Edge Function secret is set to the intended production value (was flipped during reminder testing). ✅ 2026-07-04 — `supabase secrets list` digest for `APP_ENVIRONMENT` equals sha256("production") (verified by hashing candidate values locally; secret value itself never printed). Code expects exactly `production` (both reminder functions).
 - [ ] Store metadata under Reflex Journey brand: name, screenshots, age rating, description — **no therapy/medical-claim language**.
 - [ ] TestFlight (see `docs/TESTFLIGHT_QUICKSTART.md`) → staged rollout.
 - [ ] Crash reporting decision: Sentry (or re-enable Crashlytics) so bugs surface before users report them.
