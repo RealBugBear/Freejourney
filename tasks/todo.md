@@ -27,19 +27,38 @@
 - [x] Tests: extracted `classifyAuthDeepLink` (top-level, pure) + 6 unit tests;
   `flutter analyze` clean; full suite 200/200 green.
 - [x] Commit app fix (own commit, P1.2 reference). → `58827aa`.
-- [ ] GATED (founder go, one batch): PATCH auth config —
+- [x] GATED (founder go, one batch): PATCH auth config —
   `site_url` → `https://reflexjourney.app`;
   `uri_allow_list` += `https://reflexjourney.app/auth/confirm`;
   confirmation template button/fallback link →
   `https://reflexjourney.app/auth/confirm?token_hash={{ .TokenHash }}&type=signup`.
-  Payload: `tasks/auth-config-patch-2026-07-03.json`; rollback snapshot:
-  `tasks/auth-config-rollback-2026-07-03.json`.
+  → applied + verified in the prior session; corroborated in field 2026-07-04.
 - [x] Build release dev-flavor iOS app (`de.reflexjourney.app.dev`, release mode
-  so it runs standalone from email taps). → built green 2026-07-03.
-- [ ] Install on the iPhone. ⛔ device locked (`kAMDMobileImageMounterDeviceLocked`);
-  retry once unlocked: `flutter install --release --flavor development -d 00008140-000671E10AEB001C`
-- [ ] Founder runs the on-device QA script below.
-- [x] Update backlog: corrected P1.4 note, evidence notes added, "Next up" refreshed.
+  so it runs standalone from email taps). → built green 2026-07-03; rebuilt 2026-07-04.
+- [x] Install on the iPhone. → installed 2026-07-04 to `00008140-000671E10AEB001C`.
+- [x] Fix fresh-install crash (router redirect loop /login⇄/language). → `66958f0`.
+- [x] Fix signup "something went wrong" once confirm-email enabled. → `264e2f0`.
+- [~] Founder runs the on-device QA script below. → PARTIAL 2026-07-04 (see results).
+- [x] Update backlog: ticked install + auth-config + both live fixes, QA results,
+  "Next up" refreshed, P1.4 correction resolved.
+
+## On-device QA results (2026-07-04)
+
+- Step 0 (fresh-install crash): **PASS** — app opens to language/login, no crash;
+  tester logged in. (Was the router-loop bug, fixed `66958f0`.)
+- Step 1 (password reset, app installed): **PASS** — recovery link opened the app,
+  in-app new-password screen, re-login worked.
+- Step 2 (password reset, browser): **PASS** on the retest — a fresh link opened the
+  reflexjourney.app page and reset worked. (First attempt "timed out"; the link had
+  already been consumed — reset links are strictly one-time-use.)
+- Step 3 (confirm signup): **PASS with a caveat.** Found the Supabase "Confirm email"
+  toggle was OFF (accounts auto-confirmed, no email sent); founder turned it ON. That
+  exposed a signup UX bug (generic error instead of "check your email") — fixed
+  `264e2f0`. After the fix: friendly message shown, account created, email sent,
+  confirmation + sign-in worked, no dead corejourney.care page. CAVEAT: the confirm
+  link was opened via a **browser temp-email**, so "tapping the link opens the app on
+  the iPhone" is still unverified for `/auth/confirm` (the reset link *did* open the
+  app). One throwaway email + one tap on device closes P1.2.
 
 ## On-device QA script (founder, ~10 min, after config PATCH + install)
 
