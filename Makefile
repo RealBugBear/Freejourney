@@ -16,7 +16,7 @@ ANDROID_DIST_APK := build/app/outputs/flutter-apk/app-$(ANDROID_DIST_FLAVOR)-rel
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null || echo local)
 GIT_SHA := $(shell git rev-parse --short HEAD 2>/dev/null || echo local)
 
-.PHONY: run run-sim run-android release testflight android-testers clean
+.PHONY: run run-sim run-android release release-readiness-mobile testflight android-testers clean
 
 # NOTE: Profile mode is the ONLY stable mode on physical iPhone with iOS 26.2.1 beta.
 # Debug mode fails to establish the Xcode debug proxy.
@@ -38,6 +38,17 @@ run-sim:
 ## Run on Samsung Android in debug mode (flavor=development required — ohne das wird der alte app-debug.apk installiert!)
 run-android:
 	flutter run -d $(ANDROID_ID) --flavor development -t $(ENTRY)
+
+## Automated release-readiness checks (docs/RELEASE_READINESS_CHECKLIST.md):
+## static analysis must be free of errors and warnings (infos = pending
+## deprecation cleanups, tracked but not release-blocking) and the full test
+## suite must pass (includes the streak-logic test the checklist names).
+release-readiness-mobile:
+	flutter analyze --no-fatal-infos
+	flutter test
+	@echo ""
+	@echo "✅ Automated release-readiness checks passed."
+	@echo "   Continue with the manual smoke section in docs/RELEASE_READINESS_CHECKLIST.md"
 
 ## Build release IPA for TestFlight / App Store
 ## After this completes, open Xcode → Window → Organizer → distribute the archive.
