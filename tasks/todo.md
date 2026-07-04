@@ -1,3 +1,21 @@
+# P3 — Store-Metadaten-Entwurf (2026-07-04)
+
+Goal: a review-ready draft of all App Store / Play Store text fields under the
+Reflex Journey brand, strictly free of therapy/medical-claim language, plus a
+list of the decisions only the founder can make. Screenshots + age-rating
+questionnaire stay with the founder (device + ASC access).
+
+- [x] Collect product facts from l10n copy, docs, and app structure (done inline).
+- [x] Write `docs/STORE_LISTING_DRAFT.md`: DE store fields within Apple/Google
+  char limits (name, subtitle, description, keywords, promo text), Play Store
+  variants, URLs, category/age-rating recommendation, founder-decision list.
+- [x] Self-review every sentence against the no-therapy/medical-claims rule —
+  activity descriptions only, explicit non-medical note, no diagnosis keywords.
+- [x] Update backlog (split checkbox: draft done, review/screenshots remain),
+  commit; hash recorded in the backlog evidence note.
+
+---
+
 # P1.2 final item — deep-link auth flows end-to-end + device QA (2026-07-03)
 
 ## Findings (live config + code, verified this session)
