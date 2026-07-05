@@ -183,14 +183,43 @@ Bereits erfüllt, nur festhalten: In-App-Account-Löschung (Guideline 5.1.1(v)) 
 3. **Rechtliche Restrisiken** liegen fast alle beim Anwalts-Paket (Blocker 1) — deshalb gehört die Trainer-Akquise und die Waitlist explizit in den Anwaltsauftrag (Phase 1.1), sonst zahlt man zweimal.
 4. **„Dauerhaft kostenlos für Gründungs-Trainer"** ist ein unbefristetes Versprechen — bewusst eingehen (Entscheidung 8.7). Formulierung auf der Seite so wählen, dass sie sich auf den Eintrag/die Sichtbarkeit bezieht, nicht auf künftige, noch nicht existierende Funktionen.
 
-**Vor dem App-Launch:** W1–W4 (sowieso Launch-Blocker), Anwaltsauftrag inkl. Akquise-Abdeckung, App-Änderung „Selbst-Freischaltung sperren" (Phase 3.8), Sichtprüfungs-Ablauf definieren (Entscheidung 8.8).
+**Vor dem App-Launch:** W1–W4 (sowieso Launch-Blocker), Anwaltsauftrag inkl. Akquise-Abdeckung, App-Änderung „Selbst-Freischaltung sperren" (Phase 3.8), Sichtprüfungs-Ablauf definieren (Entscheidung 8.8 — siehe 7a).
 **Danach (oder parallel, wenn Zeit übrig):** `/trainer` + Pilotstart, Auswertung nach 20 Kontakten, FAQ-Bereich (P2.C, wenn Sinas Content kommt), Waitlist nur bei Launch-Verzögerung.
+
+### 7a. Empfohlener Sichtprüfungs-Ablauf (Trainer-Vetting, seriös und DSGVO-konform)
+
+Beschlossen 2026-07-05: einfaches Bewerbungsformular (nur Daten, kein Datei-Upload) + Einzelprüfung. Empfohlener Ablauf pro Bewerbung — der Kern ist immer: **ansehen, nie speichern** (Führungszeugnis = Vorstrafendaten, Art. 10 DSGVO):
+
+1. **Eingang:** Bewerbung kommt über `/trainer` mit Selbstauskunft „erweitertes Führungszeugnis vorhanden, ausgestellt am …". Eingangsbestätigung per Mail mit den nächsten Schritten (Vorlage einmal schreiben, dann wiederverwenden).
+2. **Plausibilitätsprüfung am Schreibtisch (10–15 Min.):** Website/Profil ansehen; Zertifizierung gegen öffentliche Trainer-Verzeichnisse des genannten Instituts (RIT, INPP, MNRI, PaePKi, KinFlex …) gegenprüfen, wenn ein Verzeichnis existiert. Wirkt etwas unklar → im Sichttermin nachfragen, nicht vorab ablehnen.
+3. **Sichttermin per Video (Standard) oder vor Ort:** Drei Dinge im Original zeigen lassen, in dieser Reihenfolge:
+   - **Lichtbildausweis** — Name stimmt mit Bewerbung überein.
+   - **Zertifikat** der Ausbildung — Institut, Name, Datum.
+   - **Erweitertes Führungszeugnis** — Name korrekt, Ausstellungsdatum **nicht älter als 3 Monate**, keine relevanten Einträge („Keine Eintragung" bzw. Sichtung der Einträge auf Relevanz).
+   Dabei gilt: **kein Screenshot, keine Aufzeichnung des Termins, keine Kopie, kein Foto** — auch nicht „zur Sicherheit". Wenn das Dokument älter als 3 Monate ist: Termin freundlich vertagen, neues Führungszeugnis beantragen lassen (dauert ca. 2–4 Wochen, ~13 €).
+4. **Prüfvermerk anlegen (das Einzige, was gespeichert wird):** Name, „Identität geprüft: ja", „Zertifikat [Institut] gesichtet: ja", „erweitertes Führungszeugnis vorgelegt am [Datum], ausgestellt am [Datum], ohne relevante Einträge: ja", „nächste Prüfung fällig am [Datum + 24 Monate]", Prüfer: Alexander. Keine Dokumenten-Details, keine Kopien, nichts aus dem Inhalt des Zeugnisses außer dem Ja/Nein-Ergebnis.
+5. **Freischaltung:** als Gründungs-Trainer freischalten + Bestätigungsmail (Gründungs-Status, wie der Eintrag bearbeitet/gelöscht werden kann).
+6. **Wiedervorlage:** alle **24 Monate** erneut ein aktuelles erweitertes Führungszeugnis im Sichttermin zeigen lassen (Kalendereintrag aus dem Prüfvermerk). Ein Führungszeugnis ist eine Momentaufnahme — die Wiedervorlage ist das, was den Prozess dauerhaft seriös macht.
+7. **Ablehnung/Zweifel:** Im Zweifel nicht freischalten. Bei Ablehnung nur das Minimum speichern (Name, Datum, „nicht freigeschaltet"), keine Begründungsdetails zu Zeugnisinhalten — auch das sind Vorstrafendaten.
+
+Orientierung, keine Rechtsberatung; die 3-Monats-Grenze und der 24-Monats-Rhythmus sind gängige Praxis (z. B. bei Trägern der Kinder- und Jugendhilfe üblich), im Anwaltsauftrag (Phase 1.1) kurz bestätigen lassen.
 
 ---
 
 ## 8. Entscheidungsliste für Alexander
 
 Punkte 1–4 übernehmen die 6 offenen Entscheidungen aus `docs/STORE_LISTING_DRAFT.md` (dort im Detail nachlesbar), 5–9 sind neu aus dieser Analyse.
+
+> **Update 2026-07-05 — Founder-Antworten:**
+> - **8.1:** EN-Listing soll **zum Launch fertig** sein (neue Aufgabe: Übersetzung nach DE-Freigabe). Noch offen: Untertitel-Wahl + Satz-für-Satz-Copy-Freigabe.
+> - **8.2:** Eigene Support-Adresse wird angelegt (Aufgabe: Empfangs-Postfach einrichten, Resend sendet bisher nur).
+> - **8.3:** `reflexjourney.app/datenschutz` bestätigt.
+> - **8.4:** Launch kostenlos, Paket 1 bleibt kostenlos. Für später gewünscht: **Freischalt-Codes** für bestimmte Nutzer („Gründungsnutzer"), die allen Content ganz oder teilweise kostenlos geben — wird beim Paywall-Design eingeplant (im Backlog unter „Open questions / parked" festgehalten).
+> - **8.5:** In Klärung; Alexander besorgt voraussichtlich eine eigene Telefonnummer. Gehört mit in den Anwaltsauftrag (Impressum + Trader-Status, eine Lösung für beides).
+> - **8.6:** Sentry — ja.
+> - **8.7:** Gründungs-Trainer-Angebot — freigegeben.
+> - **8.8:** Einfaches Formular (nur Daten, kein Upload) + Einzelprüfung mit Führungszeugnis. Empfohlener Ablauf siehe Abschnitt 7a.
+> - **8.9:** Mit aktuellem Content einreichen — bestätigt.
 
 | # | Frage | Optionen | Empfehlung | Bis wann |
 |---|-------|----------|------------|----------|
