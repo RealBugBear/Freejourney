@@ -13,10 +13,11 @@ Sources consolidated here:
 
 ## Next up (update at the end of every session)
 
-1. P1.2 is ~done. ONE small on-device check remains: register a throwaway account and **tap the confirmation link on the iPhone** to prove the `/auth/confirm` universal link opens the app (everything else in the QA script passed 2026-07-04; the confirm link was only exercised via a browser temp-email so far). Note: Supabase "Confirm email" is now ON (founder enabled it 2026-07-04) — every new signup now requires a real email click, so this path matters at launch.
-2. Founder: review the store-listing draft (`docs/STORE_LISTING_DRAFT.md`) — approve/edit the copy and answer the 6 open decisions at the bottom.
-3. Founder go pending (asked 2026-07-04): delete the two orphaned secrets `AGARO-APP-ID` (typo'd duplicate of `AGORA_APP_ID`, identical digest) and `BOT-USER-ID` (bot neutralized) — repo-wide grep confirms nothing reads either name (P0.2 optional cleanup).
-4. Content requests to Sina are in flight (founder, 2026-07-03): adult questionnaire + videos (P2.A/B) and the top-20–30 forum Q&As for the new FAQ area (P2.C). When any of it lands, P2 jumps the queue.
+1. **Anwalt beauftragen (P0.6 — kritischer Pfad, blockiert Store-Einreichung UND Marketing-Pilot):** ein gebündelter Auftrag — Datenschutzerklärung (App + Website + Trainer-Akquise, ggf. Waitlist), Impressumspflichten, DPAs, plus die Frage, welche Adresse/Telefonnummer öffentlich in Impressum + App-Store-Trader-Status (DSA) stehen darf. Founder 2026-07-05: besorgt dafür voraussichtlich eine eigene Telefonnummer. Siehe `docs/APPSTORE_LAUNCH_ROADMAP.md` Phase 1.1.
+2. P1.2 is ~done. ONE small on-device check remains: register a throwaway account and **tap the confirmation link on the iPhone** to prove the `/auth/confirm` universal link opens the app (everything else in the QA script passed 2026-07-04; the confirm link was only exercised via a browser temp-email so far). Note: Supabase "Confirm email" is now ON (founder enabled it 2026-07-04) — every new signup now requires a real email click, so this path matters at launch.
+3. Founder: store-listing draft (`docs/STORE_LISTING_DRAFT.md`) — Restfragen: Untertitel-Wahl + Satz-für-Satz-Copy-Freigabe. Bereits entschieden 2026-07-05 (Roadmap-Session): EN-Listing zum Launch, eigene Support-Adresse, Datenschutz-URL `/datenschutz`, Launch kostenlos, Launch mit aktuellem Content.
+4. Founder go pending (asked 2026-07-04): delete the two orphaned secrets `AGARO-APP-ID` (typo'd duplicate of `AGORA_APP_ID`, identical digest) and `BOT-USER-ID` (bot neutralized) — repo-wide grep confirms nothing reads either name (P0.2 optional cleanup).
+5. Content requests to Sina are in flight (founder, 2026-07-03): adult questionnaire + videos (P2.A/B) and the top-20–30 forum Q&As for the new FAQ area (P2.C). When any of it lands, P2 jumps the queue.
 
 *(2026-07-04: on-device QA on the fresh release dev build. Fixed two launch blockers found live: a fresh-install startup crash from a router redirect loop (`66958f0`) and a signup "something went wrong" error that appeared once email confirmation was enabled (`264e2f0`). Auth-config PATCH from the prior session corroborated in the field (emails link to reflexjourney.app, no dead corejourney.care page). Password reset — in-app and browser — both verified working on device.)*
 
@@ -59,8 +60,9 @@ Both reminder functions read `Deno.env.get('CRON_SECRET') ?? ''` — if the secr
 - [ ] Roadmap (post-launch acceptable): SQLCipher at-rest encryption, key + auth session in Keychain/Keystore.
 
 ### P0.6 Legal/compliance paperwork (lawyer, not code) ⛔ blocked: lawyer
-- [ ] Privacy policy finalized under the Reflex Journey brand; consent text matches actual processing (analytics/Crashlytics are currently disabled — don't claim them).
+- [ ] Privacy policy finalized under the Reflex Journey brand; consent text matches actual processing (analytics/Crashlytics are currently disabled — don't claim them; Sentry kommt dazu, siehe P3 crash-reporting decision 2026-07-05).
 - [ ] DPAs with Supabase, Agora, Google (FCM); records of processing.
+- [ ] Auftrags-Bündelung: der Anwaltsauftrag deckt AUCH ab — Website (Impressum, Datenschutzseite), Trainer-Akquise (UWG § 7 / DSGVO Art. 14) und, falls gebaut, die Waitlist; dazu die öffentliche Adress-/Telefonnummer-Frage (Impressum + DSA-Trader-Status). Ein Auftrag statt drei. (Roadmap 2026-07-05, Phase 1.1)
 
 ---
 
@@ -118,11 +120,33 @@ Expected deliverables (per CONTENT-STATUS and 2026-06-24 session):
 - [ ] Full manual device QA per `docs/RELEASE_READINESS_CHECKLIST.md` (hands-free, reminders v2, offline sync, dashboard) on iOS + Android.
 - [x] Ensure `APP_ENVIRONMENT` Edge Function secret is set to the intended production value (was flipped during reminder testing). ✅ 2026-07-04 — `supabase secrets list` digest for `APP_ENVIRONMENT` equals sha256("production") (verified by hashing candidate values locally; secret value itself never printed). Code expects exactly `production` (both reminder functions).
 - [x] Store metadata — draft all text fields under the Reflex Journey brand. ✅ 2026-07-04 — wrote `docs/STORE_LISTING_DRAFT.md`: DE name/subtitle/promo/description/keywords within Apple char limits, Play short+full description, category + age-rating recommendation (Gesundheit & Fitness, 4+, NOT Kids category), URLs, and a 6-point founder-decision list; every sentence self-reviewed against the no-therapy/medical-claims rule (activity descriptions only, explicit "kein Medizinprodukt" note, no diagnosis terms in keywords).
-- [ ] Store metadata — founder reviews/approves the draft copy + the 6 open decisions in `docs/STORE_LISTING_DRAFT.md`. ⛔ blocked: founder review. Privacy URL additionally blocked on P0.6 (lawyer).
-- [ ] Store metadata — screenshots per `docs/screenshot_guide.md` + fill the ASC/IARC age-rating questionnaires (needs device + store console access).
+- [ ] Store metadata — founder approves the DE copy sentence-by-sentence + picks the subtitle (`docs/STORE_LISTING_DRAFT.md`). ⛔ blocked: founder review. Privacy URL additionally blocked on P0.6 (lawyer). *(Entschieden 2026-07-05: EN-Listing zum Launch; eigene Support-Adresse; Datenschutz-URL `reflexjourney.app/datenschutz`; Launch kostenlos; Launch mit aktuellem Content.)*
+- [ ] Store metadata — EN listing erstellen (Übersetzung der freigegebenen DE-Texte; App selbst ist bereits zweisprachig). Founder-Entscheidung 2026-07-05: EN zum Launch fertig. Abhängig von der DE-Copy-Freigabe.
+- [ ] Support-Postfach einrichten (z. B. `support@reflexjourney.de` — **Empfang**, nicht nur Versand; die Resend-Domain sendet bisher nur) und als offizielle Support-Adresse in ASC + Website verwenden. Founder-Entscheidung 2026-07-05.
+- [ ] Store metadata — screenshots (aktuelle Pflichtgröße 6,9" / 1320×2868 als Master; Apple skaliert kleinere Größen daraus) + fill the ASC/IARC age-rating questionnaires (needs device + store console access).
+- [ ] `docs/screenshot_guide.md` auf aktuelle Pflichtgrößen aktualisieren (6,9" als Master; alte 6,7"/5,5"-Angaben streichen). (Lückenanalyse 2026-07-05; Quellen in `docs/APPSTORE_LAUNCH_ROADMAP.md` §3.)
+- [ ] ASC: App-Record unter `de.reflexjourney.app` anlegen (Bundle-ID registriert 2026-07-03; Record fehlt noch).
+- [ ] ASC: NEUES Altersfreigabe-Fragenset beantworten (4+/9+/13+/16+/18+, inkl. Medizin/Wellness-Fragen; Pflicht seit 31.01.2026 — Ergebnis kann über dem alten 4+-Entwurf liegen; ehrlich beantworten und akzeptieren).
+- [ ] ASC: Privacy Nutrition Labels ausfüllen (E-Mail, Health & Fitness, User Content/Journal, Nutzungsdaten; kein Tracking; Sentry-Diagnostics ergänzen sobald eingebaut) — konsistent mit finaler Datenschutzerklärung (P0.6).
+- [ ] ASC: EU-Trader-Status (DSA) verifizieren — verifizierte Adresse + Telefonnummer + E-Mail werden öffentlich auf der Produktseite angezeigt. ⛔ blocked: founder/Anwalt (Adress-/Nummern-Frage; founder besorgt ggf. eigene Nummer, 2026-07-05).
+- [ ] ASC: Export-Compliance klären; `ITSAppUsesNonExemptEncryption` in Info.plist prüfen/setzen (Standard-HTTPS ist ausgenommen).
+- [ ] Review-Demo-Account NEU aufsetzen — `docs/demo_account_setup.md` ist veraltet (Firebase-Anleitung; App nutzt Supabase-Auth). Frisches Konto mit Beispiel-Fortschritt; Zugangsdaten nur in ASC eintragen, nie im Repo.
+- [ ] Review-Notizen für den Gesundheits-/Kinder-Kontext schreiben (Zielgruppe Erwachsene, kein Medizinprodukt, Kinderprofile nur unter Eltern-Account, Demo-Hinweise, Offline-Hinweis).
+- [ ] Trainer-Selbst-Freischaltung in der App für die Pilotphase sperren (Marketing-Spec Blocker 2) — kleine App-Änderung, vor dem ersten Trainer-Onboarding.
 - [ ] TestFlight (see `docs/TESTFLIGHT_QUICKSTART.md`) → staged rollout.
-- [ ] Crash reporting decision: Sentry (or re-enable Crashlytics) so bugs surface before users report them.
-- [ ] Payments: RevenueCat is coded but disabled. Decide model before enabling paid tiers (in-app purchase is mandatory for digital subscriptions; Stripe not allowed for in-app digital goods). Not a launch blocker if launch is free.
+- [x] Crash reporting decision. ✅ 2026-07-05 — founder decision (Roadmap-Session): Sentry, DSGVO-konform mit EU-Datenhaltung; in Anwalts-Policy + Nutrition Labels aufnehmen.
+- [ ] Sentry einbauen + verifizieren (Test-Crash kommt im Dashboard an), idealerweise vor dem ersten TestFlight-Build.
+- [x] Payments decision. ✅ 2026-07-05 — founder decision: Launch ist kostenlos, Paket 1 bleibt kostenlos; keine Paywall im Launch-Build. (Korrektur der alten Zeile „RevenueCat is coded but disabled": im Code existiert nur ein leeres Config-Feld, `purchases_flutter` ist in pubspec auskommentiert — Code-Prüfung 2026-07-05.) Post-Launch-Plan siehe „Open questions / parked".
+
+### P3.W — Website Launch-Pflichtseiten (äußeres Repo `reflexjourney-app-site/`, Vercel)
+
+Quellen/Begründung: `docs/APPSTORE_LAUNCH_ROADMAP.md` §6. Support- und Datenschutz-URL sind ASC-Pflichtfelder.
+
+- [ ] Website: `/impressum` mit Pflichtangaben (Anwalt bestätigt) — Launch-Blocker.
+- [ ] Website: `/support` + offizielle Support-Mail (ASC-Pflichtfeld Support-URL) — Launch-Blocker.
+- [ ] Website: schlanke Landingpage ersetzt Platzhalter (heilversprechen-freie Copy; aktueller Platzhalter-Claim „Nervensystem-Training für den Alltag" wird ersetzt) — Launch-Blocker in Minimalform.
+- [ ] Website: `/datenschutz` mit Anwalts-Text (ASC-Pflichtfeld Datenschutz-URL) — Launch-Blocker, hängt an P0.6.
+- [ ] Website: `/trainer` + Bewerbungsformular (Marketing-Spec Teil C; einfaches Formular, kein Datei-Upload; Sichtprüfungs-Ablauf siehe Roadmap §7) — kein Launch-Blocker; Blocker für den Akquise-Piloten. Founder 2026-07-05: Angebot freigegeben, einfaches Formular + Einzelprüfung mit Führungszeugnis.
 
 ---
 
@@ -145,5 +169,6 @@ The 2026-06-18 architecture audit's verdict: the codebase is substantially bette
 ## Open questions / parked
 
 - Chatbot feature: neutralized for launch 2026-07-03 (see P0.2) — app no longer calls it, endpoint stubbed. The user-facing need it hinted at is now properly scoped: **Stufe 1** = curated FAQ section (P2.C, content from Sina's forum). Post-launch roadmap: **Stufe 2** = guided question flow (free-text input matched against reviewed FAQs only, with real trainer forwarding rebuilt on FCM HTTP v1); **Stufe 3** = content-gated chatbot (own project, product + legal review). The 4 seeded `bot_faqs` rows sit unused in the DB; reuse or delete when P2.C is built.
+- Post-Launch-Monetarisierung: RevenueCat + Apple IAP nach `docs/superpowers/specs/2026-05-28-monetization-design.md` Phase 2; vorher AGB/Widerruf (Anwalt) + IAP-Produkte in ASC. Stripe-Checkout fürs Abo ist im App Store nicht zulässig (Guideline 3.1.1). **Founder-Anforderung 2026-07-05:** Freischalt-Codes für bestimmte Nutzer („Gründungsnutzer" o. ä.), die allen Content dauerhaft oder teilweise kostenlos geben — beim Paywall-Design von Anfang an einplanen (die vorhandene `access_codes`-Tabelle ist ein möglicher Anknüpfungspunkt, aktuell service-role-only/deny-all). Bestandsschutz-Kommunikation für Gratis-Phase-Nutzer festlegen, bevor die Paywall live geht.
 - Old repos: `/Users/alexandermessinger/dev/corejourney` (obsolete) and `_ARCHIVED_corejourney_old` — consider archiving/removing to reduce confusion.
 - Outer repo (`claudvibes/corejourney`) has its own uncommitted admin-web changes + untracked specs — needs a housekeeping commit.
