@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
+import 'osm_attribution.dart';
+
 class TrainerLocationPickerWidget extends StatefulWidget {
   const TrainerLocationPickerWidget({
     super.key,
@@ -75,6 +77,7 @@ class _TrainerLocationPickerWidgetState
                   ),
                 ],
               ),
+            const OsmAttribution(),
           ],
         ),
         if (_pickedLocation == null)

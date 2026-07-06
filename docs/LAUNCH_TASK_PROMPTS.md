@@ -63,7 +63,7 @@ Für jeden offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Blo
 | T10 | Android-Manifest bereinigen | P1 | — | ☐ offen |
 | T11 | Env-/Bundle-Hygiene | P1 | — | ☐ offen |
 | T12 | Nutrition-Labels-Entwurf v2 (inkl. Standort) | P1 | sinnvoll nach T13 (Datenfluss-Beleg) | ☐ offen |
-| T13 | Trainer-Discovery fertig bauen („make it work“) | P1 | — | ☐ offen |
+| T13 | Trainer-Discovery fertig bauen („make it work“) | P1 | — | ✅ 2026-07-06 (Code) — Standort jetzt strikt nutzerinitiiert (CTA statt initState-Abruf); alle 4 Permission-Zweige gestaltet (Einstellungen-Buttons via neuer testbarer `LocationService`-Abstraktion); Empty-States global („noch keine Trainer freigeschaltet“ + CTA) vs. Umkreis getrennt; OSM-Attribution auf Discovery- UND Picker-Karte (tappbar); Offline-Banner + Error-State mit Retry; alles l10n DE+EN. 9 neue Widget-Tests, Suite 215 grün via `make release-readiness-mobile`, Prod-Build ✓ 101.2MB. Screenshots (13 Zustände): `docs/evidence/T13/`. Datenfluss-Doku: `docs/STANDORT_DATENFLUSS_T13.md` (Input für T12/T05/P0.6). **Offen: on-device-Durchlauf → reitet mit T17-Gerätesitzung (R2)** |
 | T14 | Review-Paket: Demo-Account + Review-Notizen | P1 | ASC-Record (Founder legt an) | ⛔ blockiert: ASC-Record |
 | T15 | Sentry einbauen (EU, DSGVO-schonend) | P1 | — (Entscheidung 8.6 liegt vor: Sentry) | ☐ offen |
 | T16 | Build-Nummern-Bump-Prozess | P1 | — | ☐ offen |

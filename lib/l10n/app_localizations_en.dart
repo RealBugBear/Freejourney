@@ -748,16 +748,90 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trainerDiscoveryTitle => 'Find Trainer';
 
   @override
-  String get trainerDiscoveryLocationDenied =>
-      'Location permission is required to find trainers nearby.';
-
-  @override
   String trainerDiscoveryRadiusLabel(int radius) {
     return '$radius km';
   }
 
   @override
-  String get trainerDiscoveryEmpty => 'No trainers found nearby.';
+  String get trainerDiscoveryAll => 'All';
+
+  @override
+  String get trainerDiscoveryNearby => 'Nearby';
+
+  @override
+  String get trainerDiscoveryTabMap => 'Map';
+
+  @override
+  String get trainerDiscoveryTabList => 'List';
+
+  @override
+  String get trainerDiscoverySearchHint => 'Search trainers';
+
+  @override
+  String get trainerDiscoveryNoMatches => 'No matches.';
+
+  @override
+  String get trainerDiscoveryLocationCtaText =>
+      'Find trainers near you. Your location is only used for this search and never stored.';
+
+  @override
+  String get trainerDiscoveryLocationCtaButton => 'Use my location';
+
+  @override
+  String get trainerDiscoveryServiceDisabled =>
+      'Your device\'s location services are turned off. Turn them on to find trainers near you.';
+
+  @override
+  String get trainerDiscoveryOpenLocationSettings => 'Location settings';
+
+  @override
+  String get trainerDiscoveryDenied =>
+      'Without location access we show all trainers without a distance filter.';
+
+  @override
+  String get trainerDiscoveryDeniedForever =>
+      'Location access is disabled for the app. You can allow it again in Settings.';
+
+  @override
+  String get trainerDiscoveryOpenAppSettings => 'Open settings';
+
+  @override
+  String get trainerDiscoveryLocationError =>
+      'We couldn\'t determine your location. Please try again in a moment.';
+
+  @override
+  String get trainerDiscoveryRetry => 'Try again';
+
+  @override
+  String get trainerDiscoveryEmptyGlobalTitle => 'No trainers approved yet';
+
+  @override
+  String get trainerDiscoveryEmptyGlobalBody =>
+      'We\'re reviewing and approving the first trainers right now. Check back soon — your training continues without a trainer.';
+
+  @override
+  String get trainerDiscoveryEmptyGlobalCta => 'Back to training';
+
+  @override
+  String get trainerDiscoveryEmptyNearbyTitle => 'No trainers near you';
+
+  @override
+  String get trainerDiscoveryEmptyNearbyBody =>
+      'Widen the radius or view all trainers.';
+
+  @override
+  String get trainerDiscoveryEmptyNearbyCta => 'Show all trainers';
+
+  @override
+  String get trainerDiscoveryLoadErrorTitle => 'Couldn\'t load trainers';
+
+  @override
+  String get trainerDiscoveryLoadErrorBody =>
+      'Check your internet connection and try again.';
+
+  @override
+  String get trainerDiscoveryOfflineBanner =>
+      'You\'re offline — the map needs an internet connection.';
 
   @override
   String trainerDiscoveryDistanceLabel(double distance) {

@@ -1454,23 +1454,155 @@ abstract class AppLocalizations {
   /// **'Trainer finden'**
   String get trainerDiscoveryTitle;
 
-  /// No description provided for @trainerDiscoveryLocationDenied.
-  ///
-  /// In de, this message translates to:
-  /// **'Standortzugriff ist erforderlich, um Trainer in deiner Nähe zu finden.'**
-  String get trainerDiscoveryLocationDenied;
-
   /// No description provided for @trainerDiscoveryRadiusLabel.
   ///
   /// In de, this message translates to:
   /// **'{radius} km'**
   String trainerDiscoveryRadiusLabel(int radius);
 
-  /// No description provided for @trainerDiscoveryEmpty.
+  /// No description provided for @trainerDiscoveryAll.
   ///
   /// In de, this message translates to:
-  /// **'Keine Trainer in der Nähe gefunden.'**
-  String get trainerDiscoveryEmpty;
+  /// **'Alle'**
+  String get trainerDiscoveryAll;
+
+  /// No description provided for @trainerDiscoveryNearby.
+  ///
+  /// In de, this message translates to:
+  /// **'Umkreis'**
+  String get trainerDiscoveryNearby;
+
+  /// No description provided for @trainerDiscoveryTabMap.
+  ///
+  /// In de, this message translates to:
+  /// **'Karte'**
+  String get trainerDiscoveryTabMap;
+
+  /// No description provided for @trainerDiscoveryTabList.
+  ///
+  /// In de, this message translates to:
+  /// **'Liste'**
+  String get trainerDiscoveryTabList;
+
+  /// No description provided for @trainerDiscoverySearchHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer suchen'**
+  String get trainerDiscoverySearchHint;
+
+  /// No description provided for @trainerDiscoveryNoMatches.
+  ///
+  /// In de, this message translates to:
+  /// **'Keine Treffer.'**
+  String get trainerDiscoveryNoMatches;
+
+  /// No description provided for @trainerDiscoveryLocationCtaText.
+  ///
+  /// In de, this message translates to:
+  /// **'Finde Trainer in deiner Nähe. Dein Standort wird nur für diese Suche verwendet und nicht gespeichert.'**
+  String get trainerDiscoveryLocationCtaText;
+
+  /// No description provided for @trainerDiscoveryLocationCtaButton.
+  ///
+  /// In de, this message translates to:
+  /// **'Standort verwenden'**
+  String get trainerDiscoveryLocationCtaButton;
+
+  /// No description provided for @trainerDiscoveryServiceDisabled.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Ortungsdienste deines Geräts sind ausgeschaltet. Schalte sie ein, um Trainer in deiner Nähe zu finden.'**
+  String get trainerDiscoveryServiceDisabled;
+
+  /// No description provided for @trainerDiscoveryOpenLocationSettings.
+  ///
+  /// In de, this message translates to:
+  /// **'Ortungs-Einstellungen'**
+  String get trainerDiscoveryOpenLocationSettings;
+
+  /// No description provided for @trainerDiscoveryDenied.
+  ///
+  /// In de, this message translates to:
+  /// **'Ohne Standort-Freigabe zeigen wir dir alle Trainer ohne Umkreisfilter.'**
+  String get trainerDiscoveryDenied;
+
+  /// No description provided for @trainerDiscoveryDeniedForever.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Standort-Zugriff ist für die App deaktiviert. Du kannst ihn in den Einstellungen wieder erlauben.'**
+  String get trainerDiscoveryDeniedForever;
+
+  /// No description provided for @trainerDiscoveryOpenAppSettings.
+  ///
+  /// In de, this message translates to:
+  /// **'Einstellungen öffnen'**
+  String get trainerDiscoveryOpenAppSettings;
+
+  /// No description provided for @trainerDiscoveryLocationError.
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Standort konnte nicht ermittelt werden. Versuch es gleich noch einmal.'**
+  String get trainerDiscoveryLocationError;
+
+  /// No description provided for @trainerDiscoveryRetry.
+  ///
+  /// In de, this message translates to:
+  /// **'Erneut versuchen'**
+  String get trainerDiscoveryRetry;
+
+  /// No description provided for @trainerDiscoveryEmptyGlobalTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine Trainer freigeschaltet'**
+  String get trainerDiscoveryEmptyGlobalTitle;
+
+  /// No description provided for @trainerDiscoveryEmptyGlobalBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Wir prüfen und schalten gerade die ersten Trainer frei. Schau bald wieder vorbei — dein Training läuft auch ohne Trainer weiter.'**
+  String get trainerDiscoveryEmptyGlobalBody;
+
+  /// No description provided for @trainerDiscoveryEmptyGlobalCta.
+  ///
+  /// In de, this message translates to:
+  /// **'Zurück zum Training'**
+  String get trainerDiscoveryEmptyGlobalCta;
+
+  /// No description provided for @trainerDiscoveryEmptyNearbyTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Keine Trainer in deiner Nähe'**
+  String get trainerDiscoveryEmptyNearbyTitle;
+
+  /// No description provided for @trainerDiscoveryEmptyNearbyBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Vergrößere den Umkreis oder sieh dir alle Trainer an.'**
+  String get trainerDiscoveryEmptyNearbyBody;
+
+  /// No description provided for @trainerDiscoveryEmptyNearbyCta.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Trainer anzeigen'**
+  String get trainerDiscoveryEmptyNearbyCta;
+
+  /// No description provided for @trainerDiscoveryLoadErrorTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer konnten nicht geladen werden'**
+  String get trainerDiscoveryLoadErrorTitle;
+
+  /// No description provided for @trainerDiscoveryLoadErrorBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Prüfe deine Internetverbindung und versuch es erneut.'**
+  String get trainerDiscoveryLoadErrorBody;
+
+  /// No description provided for @trainerDiscoveryOfflineBanner.
+  ///
+  /// In de, this message translates to:
+  /// **'Du bist offline — die Karte braucht eine Internetverbindung.'**
+  String get trainerDiscoveryOfflineBanner;
 
   /// No description provided for @trainerDiscoveryDistanceLabel.
   ///

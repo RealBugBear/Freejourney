@@ -762,16 +762,92 @@ class AppLocalizationsDe extends AppLocalizations {
   String get trainerDiscoveryTitle => 'Trainer finden';
 
   @override
-  String get trainerDiscoveryLocationDenied =>
-      'Standortzugriff ist erforderlich, um Trainer in deiner Nähe zu finden.';
-
-  @override
   String trainerDiscoveryRadiusLabel(int radius) {
     return '$radius km';
   }
 
   @override
-  String get trainerDiscoveryEmpty => 'Keine Trainer in der Nähe gefunden.';
+  String get trainerDiscoveryAll => 'Alle';
+
+  @override
+  String get trainerDiscoveryNearby => 'Umkreis';
+
+  @override
+  String get trainerDiscoveryTabMap => 'Karte';
+
+  @override
+  String get trainerDiscoveryTabList => 'Liste';
+
+  @override
+  String get trainerDiscoverySearchHint => 'Trainer suchen';
+
+  @override
+  String get trainerDiscoveryNoMatches => 'Keine Treffer.';
+
+  @override
+  String get trainerDiscoveryLocationCtaText =>
+      'Finde Trainer in deiner Nähe. Dein Standort wird nur für diese Suche verwendet und nicht gespeichert.';
+
+  @override
+  String get trainerDiscoveryLocationCtaButton => 'Standort verwenden';
+
+  @override
+  String get trainerDiscoveryServiceDisabled =>
+      'Die Ortungsdienste deines Geräts sind ausgeschaltet. Schalte sie ein, um Trainer in deiner Nähe zu finden.';
+
+  @override
+  String get trainerDiscoveryOpenLocationSettings => 'Ortungs-Einstellungen';
+
+  @override
+  String get trainerDiscoveryDenied =>
+      'Ohne Standort-Freigabe zeigen wir dir alle Trainer ohne Umkreisfilter.';
+
+  @override
+  String get trainerDiscoveryDeniedForever =>
+      'Der Standort-Zugriff ist für die App deaktiviert. Du kannst ihn in den Einstellungen wieder erlauben.';
+
+  @override
+  String get trainerDiscoveryOpenAppSettings => 'Einstellungen öffnen';
+
+  @override
+  String get trainerDiscoveryLocationError =>
+      'Dein Standort konnte nicht ermittelt werden. Versuch es gleich noch einmal.';
+
+  @override
+  String get trainerDiscoveryRetry => 'Erneut versuchen';
+
+  @override
+  String get trainerDiscoveryEmptyGlobalTitle =>
+      'Noch keine Trainer freigeschaltet';
+
+  @override
+  String get trainerDiscoveryEmptyGlobalBody =>
+      'Wir prüfen und schalten gerade die ersten Trainer frei. Schau bald wieder vorbei — dein Training läuft auch ohne Trainer weiter.';
+
+  @override
+  String get trainerDiscoveryEmptyGlobalCta => 'Zurück zum Training';
+
+  @override
+  String get trainerDiscoveryEmptyNearbyTitle => 'Keine Trainer in deiner Nähe';
+
+  @override
+  String get trainerDiscoveryEmptyNearbyBody =>
+      'Vergrößere den Umkreis oder sieh dir alle Trainer an.';
+
+  @override
+  String get trainerDiscoveryEmptyNearbyCta => 'Alle Trainer anzeigen';
+
+  @override
+  String get trainerDiscoveryLoadErrorTitle =>
+      'Trainer konnten nicht geladen werden';
+
+  @override
+  String get trainerDiscoveryLoadErrorBody =>
+      'Prüfe deine Internetverbindung und versuch es erneut.';
+
+  @override
+  String get trainerDiscoveryOfflineBanner =>
+      'Du bist offline — die Karte braucht eine Internetverbindung.';
 
   @override
   String trainerDiscoveryDistanceLabel(double distance) {
