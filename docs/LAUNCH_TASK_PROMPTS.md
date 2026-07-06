@@ -13,15 +13,15 @@ Erstellt: 2026-07-06 (aus der Delta-Analyse vom 2026-07-05). Gehört zu `docs/LA
 
 ---
 
-## Offene Founder-Entscheidungen (blockieren Tasks)
+## Founder-Entscheidungen — ENTSCHIEDEN 2026-07-06
 
-| # | Frage | Optionen | Empfehlung | Entsperrt | Status |
-|---|-------|----------|------------|-----------|--------|
-| **D1** | Community-Tab + Experience-Feed in v1? | A: verstecken · B: Minimal-Moderation bauen (Melden + Blocken + Kontakt) | **A** — Apple 1.2 verlangt sonst 4 Mechanismen; verstecken spart ~1 Woche und schrumpft die Review-Fläche. Trainer-1:1-Chat bleibt in beiden Fällen (mit Melde-Option oder Review-Notiz) | A→T04, B→T02+T03 | ⛔ Founder |
-| **D2** | Video-Calls in v1? | A: verstecken · B: `AGORA_APP_ID` in Prod konfigurieren | **A** — Feature ist in Prod nachweislich kaputt (App-ID fehlt); B zieht Agora in Policy/DPA/Labels und vergrößert den Anwaltsauftrag | A→T06, B→Konfig+P0.6-Erweiterung | ⛔ Founder |
-| **D3** | Trainer-Discovery (Karte + Standort) in v1? | A: verstecken · B: Empty-State + OSM-Attribution bauen | **A** — live 0 freigeschaltete Trainer; B erzwingt „Standort“ in den Nutrition Labels und OSM in der Policy | A/B→T13, beides→T12 | ⛔ Founder |
+| # | Frage | Entscheidung | Konsequenz |
+|---|-------|--------------|------------|
+| **D1** | Community-Tab + Experience-Feed in v1? | **A — verstecken** ✅ 2026-07-06 | T04 aktiv; T02/T03 entfallen. Trainer-1:1-Chat bleibt; Review-Notiz erklärt Kontaktweg (T14) |
+| **D2** | Video-Calls in v1? | **A — verstecken** ✅ 2026-07-06 | T06 aktiv. Agora bleibt aus Policy/DPA/Labels raus |
+| **D3** | Trainer-Discovery (Karte + Standort) in v1? | **B — bleibt drin, „make it work“** ✅ 2026-07-06 | T13 ist jetzt ein vollwertiges Fertigbau-Paket (Empty-State, Permission-UX, OSM-Attribution, Offline-Verhalten). Folgen: **Standort** kommt fix in Nutrition Labels (T12), Consent-Entwurf (T05) und Anwalts-Policy (P0.6 — dem Anwalt melden: Geolocation + OSM-Tileserver als Empfänger); iOS/Android-Location-Permissions bleiben (T09/T10) |
 
-**Notiz für Sessions:** Solange D1–D3 offen sind, diese Tabelle dem Founder am Session-Ende gebündelt vorlegen (nicht mitten in der Arbeit einzeln nachfragen).
+**Founder-Auflage zu allen dreien (2026-07-06):** Code UND UI müssen sauber angepasst werden — **keine hässlichen Lücken** (keine leeren Tabs/Sektionen, keine verwaisten Buttons/CTAs, Layouts fließen ohne Löcher nach). Das ist in T04/T06/T13 als hartes Akzeptanzkriterium verankert.
 
 ---
 
@@ -29,19 +29,19 @@ Erstellt: 2026-07-06 (aus der Delta-Analyse vom 2026-07-05). Gehört zu `docs/LA
 
 | Task | Titel | Prio | Blockiert durch | Status |
 |------|-------|------|-----------------|--------|
-| T01 | Entscheidungsvorlage Sichtbarkeit (UGC/Video/Discovery) | P0 | — | ✅ 2026-07-05 — durch Delta-Analyse erledigt; Ergebnis ist die D1–D3-Tabelle oben; wartet nur noch auf Founder-Antwort |
-| T02 | Melde-Funktion Chat/Feed | P0 | D1=B | ⛔ blockiert: D1 |
-| T03 | Nutzer blockieren | P0 | D1=B | ⛔ blockiert: D1 |
-| T04 | Community/Feed für v1 verstecken | P0 | D1=A | ⛔ blockiert: D1 |
-| T05 | Consent-Screen Launch-Fassung | P0 | Struktur: — · Finaltext: P0.6 (Anwalt) | ☐ offen (Vorbereitung möglich) |
-| T06 | Video-Calls für v1 verstecken | P0 | D2=A | ⛔ blockiert: D2 |
+| T01 | Entscheidungsvorlage Sichtbarkeit (UGC/Video/Discovery) | P0 | — | ✅ 2026-07-06 — Delta-Analyse lieferte die Vorlage; Founder entschied: D1=A, D2=A, D3=B |
+| T02 | Melde-Funktion Chat/Feed | — | — | ✖ entfällt (D1=A; Prompt-Fassung in git-Historie, Commit 7db274f) |
+| T03 | Nutzer blockieren | — | — | ✖ entfällt (D1=A; Prompt-Fassung in git-Historie, Commit 7db274f) |
+| T04 | Community/Feed für v1 verstecken — ohne UI-Lücken | P0 | — | ☐ offen |
+| T05 | Consent-Screen Launch-Fassung (inkl. Standort/OSM-Passage) | P0 | Struktur: — · Finaltext: P0.6 (Anwalt) | ☐ offen (Vorbereitung möglich) |
+| T06 | Video-Calls für v1 verstecken — ohne UI-Lücken | P0 | — | ☐ offen |
 | T07 | Alt-Policies neutralisieren | P0 | — | ☐ offen |
 | T08 | `experience_shares` Baseline-Migration | P1 | — (Apply gated: Founder-Go) | ☐ offen |
 | T09 | iOS Info.plist bereinigen + Export-Compliance-Key | P1 | — | ☐ offen |
 | T10 | Android-Manifest bereinigen | P1 | — | ☐ offen |
 | T11 | Env-/Bundle-Hygiene | P1 | — | ☐ offen |
-| T12 | Nutrition-Labels-Entwurf v2 | P1 | D2 + D3 | ⛔ blockiert: D2/D3 |
-| T13 | Trainer-Discovery umsetzen (verstecken oder Empty-State) | P1 | D3 | ⛔ blockiert: D3 |
+| T12 | Nutrition-Labels-Entwurf v2 (inkl. Standort) | P1 | sinnvoll nach T13 (Datenfluss-Beleg) | ☐ offen |
+| T13 | Trainer-Discovery fertig bauen („make it work“) | P1 | — | ☐ offen |
 | T14 | Review-Paket: Demo-Account + Review-Notizen | P1 | ASC-Record (Founder legt an) | ⛔ blockiert: ASC-Record |
 | T15 | Sentry einbauen (EU, DSGVO-schonend) | P1 | — (Entscheidung 8.6 liegt vor: Sentry) | ☐ offen |
 | T16 | Build-Nummern-Bump-Prozess | P1 | — | ☐ offen |
@@ -52,7 +52,7 @@ Erstellt: 2026-07-06 (aus der Delta-Analyse vom 2026-07-05). Gehört zu `docs/LA
 | T21 | Trainer-Selbst-Freischaltung: DEV-Bypass verifizieren | P1 | — | ☐ offen |
 | T22 | aps-environment im ersten Store-Archiv prüfen | P1 | erster Archive-Build (nach T09/T16) | ⛔ blockiert: erster Archiv-Build |
 
-**Empfohlene Reihenfolge der sofort machbaren Tasks:** T07 → T09 → T10 → T11 → T21 → T05 (Vorbereitung) → T08 → T16 → T15 → T20 → T18.
+**Empfohlene Reihenfolge (Stand 2026-07-06, D1–D3 entschieden):** T04 → T06 → T07 (P0-Block) → T13 → T09 → T10 → T11 → T21 → T05 (Vorbereitung) → T08 → T16 → T15 → T12 → T20 → T18. T04+T06 zuerst, weil sie dieselbe `launch_flags.dart` anlegen und die Chat-UI gemeinsam anfassen (eine Session kann beide nacheinander machen); T13 vor T12, damit die Labels den realen Standort-Datenfluss belegen können.
 
 ---
 
@@ -62,55 +62,13 @@ Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeins
 
 ---
 
-### T02 — Melde-Funktion für Chat und Experience-Feed *(nur falls D1=B)*
+### T02 / T03 — ✖ ENTFALLEN (Founder-Entscheidung D1=A, 2026-07-06)
 
-**Rolle:** Du bist Senior Flutter Engineer mit Trust-&-Safety-Erfahrung aus Social-Apps — du hast schon Melde-Flows gebaut, die App-Review bestanden haben, und weißt, dass ein Melde-Flow ohne Bearbeitungspfad wertlos ist.
-
-**Ziel:** Nutzer können Chat-Nachrichten und Experience-Shares melden; Meldungen landen sichtbar beim Admin. Erfüllt Apple 1.2 („mechanism to report offensive content“).
-
-**Kontext & Befund (2026-07-05):** UGC-Flächen: `lib/features/chat/` (Channels + DMs), `lib/features/experience/` (Feed, Freitext, für alle eingeloggten Nutzer lesbar, anonym möglich). Es existiert nur `moderator_delete_experience_share` (RPC, nur live — siehe T08). Kein Report-UI, keine Report-Tabelle.
-
-**Lies zuerst:** `lib/features/chat/presentation/widgets/message_bubble.dart`, `lib/features/experience/presentation/widgets/experience_card.dart`, `supabase/migrations/20260413_chat_foundation.sql` (Policy-Muster), Admin-Panel-Einstieg `lib/features/admin/`.
-
-**Aufgabe:**
-1. Migration entwerfen (NICHT live anwenden): Tabelle `content_reports` (id, reporter_id, content_type `chat_message|experience_share`, content_id, reason enum/kurz, created_at, status `open|resolved`), RLS: Insert nur `auth.uid() = reporter_id`, Select nur Admin (Muster: `profiles.role='admin'`-Check wie in bestehenden Policies).
-2. UI: Long-Press/Overflow-Menü „Melden“ auf `message_bubble` und `experience_card`; kurzer Grund-Dialog; Bestätigungs-Snackbar. DE+EN l10n, keine Therapie-/Medizinsprache.
-3. Admin-Sicht: einfachste Liste offener Meldungen im bestehenden Admin-Panel (kein neues Framework).
-4. Tests: Widget-Test „Melden erzeugt Insert“, RLS-Verhalten als SQL-Kommentar in der Migration dokumentiert.
-
-**Akzeptanzkriterien:** Meldung aus beiden Flächen möglich; Meldung im Admin-Panel sichtbar; Nicht-Admins können fremde Meldungen nicht lesen (Policy); `make release-readiness-mobile` grün.
-
-**Verifikation:** `supabase db reset --local` spielt die Migration grün ein; Tests laufen; Screenshot/Beschreibung des Flows im Abschlussbericht.
-
-**Nicht-Ziele/Verboten:** Kein Auto-Filter/ML, keine E-Mail-Benachrichtigung, kein Live-DDL ohne Founder-Go (Migration vorbereiten, Apply ist gated), keine Änderungen am Trainer-1:1-Chat-Verhalten selbst.
+Melde-Funktion und Nutzer-Blocken werden für v1 nicht gebaut — Community/Feed werden versteckt (T04). Die vollständigen Prompt-Fassungen liegen in der git-Historie (Commit `7db274f`). **Falls die UGC-Flächen post-launch reaktiviert werden, MÜSSEN T02+T03 vorher umgesetzt sein (Apple 1.2)** — dieser Satz gehört dann in den Reaktivierungs-Plan.
 
 ---
 
-### T03 — Nutzer blockieren *(nur falls D1=B)*
-
-**Rolle:** Du bist Backend-Security-Engineer mit Postgres-RLS-Spezialisierung — du denkst in Policies, nicht in Client-Filtern, und weißt, dass Client-seitiges Ausblenden allein Apple 1.2 nicht erfüllt.
-
-**Ziel:** Ein Nutzer kann einen anderen blockieren; Inhalte des Blockierten (Chat-Nachrichten in gemeinsamen Kanälen, Experience-Shares) sind für ihn nicht mehr sichtbar.
-
-**Kontext & Befund:** `chat_messages` hat 4 Policies, `experience_shares` 3 (live; `shares_read: auth.uid() IS NOT NULL`). Es gibt keine Block-Tabelle.
-
-**Lies zuerst:** T02-Ergebnis (falls vorhanden), `supabase/migrations/20260413_chat_foundation.sql`, `lib/features/experience/data/repositories/experience_repository.dart`, `lib/features/chat/presentation/providers/chat_providers.dart`.
-
-**Aufgabe:**
-1. Migration entwerfen: `user_blocks` (blocker_id, blocked_id, created_at, PK beide), RLS: Nutzer verwaltet nur eigene Blocks.
-2. Sichtbarkeit: bevorzugt RLS-seitig (SELECT-Policies um `NOT EXISTS (SELECT 1 FROM user_blocks …)` erweitern) — prüfe Performance-Implikation (Index auf `user_blocks(blocker_id, blocked_id)`); Client-Filter nur als Ergänzung.
-3. UI: „Blockieren“ im selben Menü wie „Melden“; Verwaltungsliste in den Einstellungen (entblocken).
-4. Tests für Repository-Filter; Policy-Änderungen im Migrations-Kommentar dokumentiert.
-
-**Akzeptanzkriterien:** Blockierter Nutzer verschwindet aus Feed + Kanal-Ansicht des Blockierenden; Entblocken stellt Sichtbarkeit wieder her; bestehende Chat-Tests bleiben grün.
-
-**Verifikation:** `supabase db reset --local` grün; `make release-readiness-mobile` grün; manueller Zwei-Konten-Test dokumentiert (lokal/Dev).
-
-**Nicht-Ziele/Verboten:** Kein Live-DDL ohne Go; DMs zwischen Trainer und Klient nicht blockierbar machen (Vertragsbeziehung — stattdessen Hinweis auf Trainer-Trennung); keine Push-/E-Mail-Logik.
-
----
-
-### T04 — Community-Tab + Experience-Feed für v1 verstecken *(nur falls D1=A)*
+### T04 — Community-Tab + Experience-Feed für v1 verstecken — ohne UI-Lücken *(D1=A, aktiv)*
 
 **Rolle:** Du bist Senior Flutter Engineer mit Release-Management-Fokus — dein Markenzeichen sind minimal-invasive, per Konstante reversible Feature-Gates, die keinen toten Code hinterlassen, sondern lebenden Code schlafen legen.
 
@@ -123,14 +81,15 @@ Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeins
 **Aufgabe:**
 1. Eine compile-time Konstante einführen (z. B. `const bool kCommunityEnabled = false;` in einer kleinen `lib/config/launch_flags.dart`) — bewusst simpel, kein Remote-Config.
 2. Alle Einstiegspunkte dahinter gaten: Route-Registrierung, Shell-Ziel(e), Mood-Sheet-CTA. Direkter Route-Aufruf soll sauber auf Dashboard redirecten (kein Crash).
-3. Grep-Sweep nach weiteren Einstiegen (`Routes.community`, `Routes.experienceFeed`, `communityChannel`).
-4. Tests anpassen; ein Test ergänzen: „bei deaktiviertem Flag ist /community nicht erreichbar“.
+3. Grep-Sweep nach weiteren Einstiegen (`Routes.community`, `Routes.experienceFeed`, `communityChannel`) — insbesondere den „Begleitung“-Tab (`lib/features/accompaniment/`) prüfen: verweist er auf Community-Kanäle/„Erfahrungen“?
+4. **UI-Lücken-Pass (Founder-Auflage 2026-07-06):** Jeden Screen, von dem ein Einstieg entfernt wurde, danach visuell prüfen und nacharbeiten — kein leerer Abschnitt, keine verwaiste Überschrift, kein einsamer Divider, kein Loch im Layout. Konkret erwartbar: (a) Mood-Check-in-Sheet: Abschluss-Flow muss ohne den Feed-CTA rund wirken (Button-Reihe/Abstände anpassen, ggf. Abschluss-Text der jetzt allein steht umformulieren lassen — l10n); (b) „Begleitung“-Tab: verbleibende Inhalte (Trainer-DMs, Termine) müssen den Platz sinnvoll füllen — notfalls Sektionen zusammenrücken; (c) Community-AppBar-Actions (DM-Icon), falls die DM-Funktion woanders schon erreichbar ist, nicht doppelt/verwaist stehen lassen.
+5. Tests anpassen; ein Test ergänzen: „bei deaktiviertem Flag ist /community nicht erreichbar“.
 
-**Akzeptanzkriterien:** Mit Flag=false existiert kein tappbarer Weg zu Feed/Community; Mood-Check-in funktioniert ohne den CTA; DM-/Trainer-Chat unverändert; Flag=true stellt alles wieder her.
+**Akzeptanzkriterien:** Mit Flag=false existiert kein tappbarer Weg zu Feed/Community; **jeder angefasste Screen sieht absichtsvoll aus, nicht amputiert** (Screenshot-Vergleich vorher/nachher im Bericht); Mood-Check-in-Abschluss fühlt sich vollständig an; DM-/Trainer-Chat unverändert; Flag=true stellt alles wieder her.
 
-**Verifikation:** `make release-readiness-mobile` grün; `flutter build ios --flavor production -t lib/main_production.dart --release --no-codesign` baut; kurzer Sim-Durchlauf: Dashboard → Mood-Check-in → kein Feed-CTA.
+**Verifikation:** `make release-readiness-mobile` grün; `flutter build ios --flavor production -t lib/main_production.dart --release --no-codesign` baut; Sim-Durchlauf mit Screenshots: Dashboard → Mood-Check-in → Abschluss, Begleitung-Tab, Einstellungen.
 
-**Nicht-Ziele/Verboten:** Keine Dateien/Features löschen, keine DB-Änderungen, `chat_channels`-Backend unangetastet (Enrollment-Trigger dürfen weiterlaufen), keine l10n-Strings entfernen.
+**Nicht-Ziele/Verboten:** Keine Dateien/Features löschen, keine DB-Änderungen, `chat_channels`-Backend unangetastet (Enrollment-Trigger dürfen weiterlaufen), keine l10n-Strings entfernen (neue dürfen dazukommen).
 
 ---
 
@@ -145,7 +104,7 @@ Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeins
 **Lies zuerst:** den ganzen `consent_screen.dart`, die `kConsentVersion`-Definition und ihren Prüfpfad, `supabase/migrations/2026041601_user_consents.sql`, D1–D3-Entscheidungsstand im Tracker.
 
 **Aufgabe (Stufe 1):**
-1. Neue Textstruktur DE+EN als Entwurf im Code (hinter der bestehenden Struktur, klar als ENTWURF kommentiert, noch nicht aktiv): ohne „vorläufig“/Testphase/6-Monats-Klausel; AV-Liste vollständig gemäß D2/D3-Stand; Passage „Profile für Kinder werden durch den erziehungsberechtigten Kontoinhaber angelegt und verwaltet“; Speicherdauer-Formulierung neutral („bis Konto-Löschung; Details in der Datenschutzerklärung“).
+1. Neue Textstruktur DE+EN als Entwurf im Code (hinter der bestehenden Struktur, klar als ENTWURF kommentiert, noch nicht aktiv): ohne „vorläufig“/Testphase/6-Monats-Klausel; AV-Liste vollständig — **Stand nach D-Entscheidungen 2026-07-06: Supabase (EU), Google/FCM (Push), Resend (E-Mail-Versand), OpenStreetMap Foundation (Karten-Tiles bei der Trainer-Suche); Standort-Passage gemäß T13-Datenfluss-Doku („Standort wird nur auf deine Anfrage zur Trainer-Suche verwendet, nicht gespeichert“ — nur behaupten, wenn T13 es belegt!); Agora NICHT aufnehmen (Video-Calls deaktiviert, D2=A)**; Passage „Profile für Kinder werden durch den erziehungsberechtigten Kontoinhaber angelegt und verwaltet“; Speicherdauer-Formulierung neutral („bis Konto-Löschung; Details in der Datenschutzerklärung“).
 2. Liste aller Behauptungen mit Code-Beleg (z. B. „von Backups ausgeschlossen“ → P0.5-Commits) als Kommentarblock — der Anwalt bekommt diese Liste.
 3. NICHT aktivieren, `kConsentVersion` NICHT bumpen — das ist Stufe 2.
 
@@ -157,7 +116,7 @@ Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeins
 
 ---
 
-### T06 — Video-Calls für v1 verstecken *(nur falls D2=A)*
+### T06 — Video-Calls für v1 verstecken — ohne UI-Lücken *(D2=A, aktiv)*
 
 **Rolle:** Du bist Senior Flutter Engineer mit Release-Management-Fokus (wie T04) — gleiche Gate-Philosophie, anderes Feature.
 
@@ -168,14 +127,15 @@ Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeins
 **Lies zuerst:** `chat_channel_screen.dart`, `app.dart`, `lib/features/video/presentation/widgets/incoming_call_listener.dart`, T04-Flag-Datei (falls vorhanden — gleiche Konstanten-Datei nutzen: `kVideoCallsEnabled`).
 
 **Aufgabe:**
-1. Flag `kVideoCallsEnabled = false` in derselben `launch_flags.dart`.
+1. Flag `kVideoCallsEnabled = false` in derselben `launch_flags.dart` (T04 legt sie an — Reihenfolge beachten oder gemeinsam in einer Session).
 2. Videocam-Buttons und `IncomingCallListener` dahinter gaten; eingehende Call-Events werden bei deaktiviertem Flag still ignoriert (kein Crash, Log-Zeile reicht).
-3. Grep-Sweep: `VideoCall`, `openVideoCall`, `video_calls`-Referenzen in UI.
-4. Test: Chat-Screen rendert ohne Call-Button bei Flag=false; bestehende 19 Chat-Tests bleiben grün.
+3. Grep-Sweep: `VideoCall`, `openVideoCall`, `video_calls`-Referenzen in UI — auch Termin-/Appointment-Screens prüfen (gibt es dort „Call starten“-Wege?).
+4. **UI-Lücken-Pass (Founder-Auflage 2026-07-06):** Die Chat-AppBar hat zwei videocam-Actions (`chat_channel_screen.dart:395,403`) — nach deren Entfernung darf die AppBar nicht leer/unausgewogen wirken; verbleibende Actions (falls keine: Titel-Layout) prüfen und Abstände anpassen. Falls Appointment-Flows einen Video-Verweis in Texten haben („per Video-Call“ in l10n/Terminen), Kopie auf neutrale Formulierung prüfen und anpassen lassen.
+5. Test: Chat-Screen rendert ohne Call-Button bei Flag=false; bestehende 19 Chat-Tests bleiben grün.
 
-**Akzeptanzkriterien:** Prod-Build ohne sichtbares/erreichbares Call-UI; Dev-Verhalten mit Flag=true unverändert; `make release-readiness-mobile` grün.
+**Akzeptanzkriterien:** Prod-Build ohne sichtbares/erreichbares Call-UI; **Chat- und Termin-Screens sehen vollständig aus, keine verwaisten Icons/Texte** (Screenshots vorher/nachher); Dev-Verhalten mit Flag=true unverändert; `make release-readiness-mobile` grün.
 
-**Verifikation:** Testlauf + Prod-Build (`--no-codesign`); Sim-Durchlauf Chat-Screen.
+**Verifikation:** Testlauf + Prod-Build (`--no-codesign`); Sim-Durchlauf Chat-Screen + Termin-Screen mit Screenshots.
 
 **Nicht-Ziele/Verboten:** Agora-Dependency NICHT aus pubspec entfernen (großer Diff, unnötig); Edge Functions nicht anfassen; keine Secrets ändern. Hinweis in den Abschlussbericht: Kamera-/Mikrofon-Strings in Info.plist bleiben (Apple toleriert deklarierte, ungenutzte Beschreibungen; Entfernen wäre T09-Scope-Kollision — dort abstimmen).
 
@@ -235,9 +195,9 @@ Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeins
 
 **Ziel:** `Info.plist` deklariert genau das, was die App nutzt, plus `ITSAppUsesNonExemptEncryption=false`.
 
-**Kontext & Befund (2026-07-05, `ios/Runner/Info.plist`):** (a) `ITSAppUsesNonExemptEncryption` fehlt — App nutzt nur Standard-HTTPS/Plattform-Krypto → `false` ist korrekt (Roadmap 3.5, Quelle dort). (b) `NSLocationAlwaysAndWhenInUseUsageDescription` deklariert, aber Code nutzt nur `Geolocator.getCurrentPosition` (When-In-Use) → Always-Key entfernen. (c) `NSCalendarsUsageDescription` + `NSCalendarsWriteOnlyAccessUsageDescription` deklariert, aber `device_calendar` ist in pubspec auskommentiert → entfernen. (d) Kamera/Mikro-Strings: bleiben, solange Agora-Code im Bundle ist (auch bei D2=A — die Beschreibungen schaden nicht, fehlende crashen bei versehentlichem Zugriff). (e) `NSLocationWhenInUseUsageDescription`: bleibt nur bei D3=B; bei D3=A UND komplett entferntem Geolocator-Aufruf prüfen — falls Code drin bleibt (nur versteckt), Key drin lassen.
+**Kontext & Befund (2026-07-05, `ios/Runner/Info.plist`; D-Entscheidungen 2026-07-06 eingearbeitet):** (a) `ITSAppUsesNonExemptEncryption` fehlt — App nutzt nur Standard-HTTPS/Plattform-Krypto → `false` ist korrekt (Roadmap 3.5, Quelle dort). (b) `NSLocationAlwaysAndWhenInUseUsageDescription` deklariert, aber Code nutzt nur `Geolocator.getCurrentPosition` (When-In-Use) → Always-Key entfernen. (c) `NSCalendarsUsageDescription` + `NSCalendarsWriteOnlyAccessUsageDescription` deklariert, aber `device_calendar` ist in pubspec auskommentiert → entfernen. (d) Kamera/Mikro-Strings: **bleiben** — Agora-Code bleibt im Bundle, nur UI versteckt (D2=A); fehlende Beschreibungen würden bei versehentlichem Zugriff crashen. (e) `NSLocationWhenInUseUsageDescription`: **bleibt** — Trainer-Discovery ist Launch-Feature (D3=B); Wortlaut gegen die T13-Permission-UX gegenlesen (Text muss zur nutzerinitiierten Suche passen: „…um Trainer in deiner Nähe anzuzeigen“ passt).
 
-**Lies zuerst:** `ios/Runner/Info.plist`, D2/D3-Stand im Tracker, `grep -rn "Geolocator\." lib/`.
+**Lies zuerst:** `ios/Runner/Info.plist`, T13-Stand im Tracker, `grep -rn "Geolocator\." lib/`.
 
 **Aufgabe:** Keys gemäß Befund ändern; jede Entscheidung im Commit-Text begründen; iOS-Build beider Flavors bauen.
 
@@ -255,9 +215,9 @@ Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeins
 
 **Ziel:** Keine deklarierten Permissions ohne genutzte Funktion.
 
-**Kontext & Befund (2026-07-05, `android/app/src/main/AndroidManifest.xml`):** `READ_CALENDAR` + `WRITE_CALENDAR` deklariert, `device_calendar` ist deaktiviert (pubspec Z. 81) → entfernen. `ACCESS_FINE_LOCATION`/`ACCESS_COARSE_LOCATION`: abhängig von D3 (bei D3=A und nur verstecktem Code: drin lassen, im Bericht vermerken — Play-Data-Safety muss Standort dann trotzdem NICHT deklarieren, solange kein Code-Pfad ihn abruft; bei komplett totem Pfad besser entfernen). CAMERA/RECORD_AUDIO analog D2 (Agora-Code bleibt im Bundle → drin lassen).
+**Kontext & Befund (2026-07-05, `android/app/src/main/AndroidManifest.xml`; D-Entscheidungen 2026-07-06 eingearbeitet):** `READ_CALENDAR` + `WRITE_CALENDAR` deklariert, `device_calendar` ist deaktiviert (pubspec Z. 81) → entfernen. `ACCESS_FINE_LOCATION`/`ACCESS_COARSE_LOCATION`: **bleiben** — Trainer-Discovery ist Launch-Feature (D3=B); in Play-Data-Safety wird Standort entsprechend deklariert (T12). CAMERA/RECORD_AUDIO: **bleiben** (Agora-Code bleibt im Bundle, D2=A versteckt nur die UI).
 
-**Aufgabe:** Calendar-Permissions entfernen; Location gemäß D3-Stand entscheiden und begründen; Merged Manifest prüfen.
+**Aufgabe:** Calendar-Permissions entfernen; Location/Camera/Audio-Begründung im Commit-Text dokumentieren; Merged Manifest prüfen.
 
 **Akzeptanzkriterien:** Merged Manifest ohne Calendar-Permissions; APK-Build grün.
 
@@ -290,15 +250,15 @@ Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeins
 
 ---
 
-### T12 — Privacy-Nutrition-Labels-Entwurf v2 *(nach D2+D3)*
+### T12 — Privacy-Nutrition-Labels-Entwurf v2 *(sinnvoll nach T13 — braucht dessen Datenfluss-Beleg)*
 
 **Rolle:** Du bist App-Privacy-Spezialist für Apple Nutrition Labels und Play Data Safety — du mappst tatsächliche Code-Pfade auf Apples Datentypen-Taxonomie und weißt, dass „Datenerhebung“ bei Apple schon der Transit zum Drittserver ist.
 
 **Ziel:** Ein vollständiger, code-belegter Labels-Entwurf, den der Founder nur noch in ASC/Play einträgt.
 
-**Kontext & Befund (2026-07-05):** Roadmap-3.3-Entwurf (E-Mail, Health & Fitness, User Content, Nutzungsdaten, kein Tracking) ist unvollständig: fehlt **Standort** (falls D3=B: `Geolocator.getCurrentPosition` + OSM-Tileserver-Kontakt), **Kamera/Mikrofon-Nutzung** (falls D2=B; Achtung: Kamera/Mikro sind bei Apple keine „Datentypen“, aber Agora = Drittverarbeiter), **Diagnostics** (sobald Sentry, T15, drin ist), Device-Tokens (FCM → `device_tokens`-Tabelle, 4 Policies live).
+**Kontext & Befund (2026-07-05; D-Entscheidungen 2026-07-06 eingearbeitet):** Roadmap-3.3-Entwurf (E-Mail, Health & Fitness, User Content, Nutzungsdaten, kein Tracking) ist unvollständig. **Fix dazu kommt: Standort** (D3=B — `Geolocator.getCurrentPosition` bei der Trainer-Suche + Kontakt zum OSM-Tileserver; ob „präziser Standort, erhoben“ oder nur transient, entscheidet der T13-Datenfluss-Abschnitt — deshalb T13 zuerst). **Nicht dazu kommt: Kamera/Mikrofon-Daten** (Video-Calls versteckt, D2=A — Permissions bleiben deklariert, aber es fließen keine Daten). Dazu: **Diagnostics** (sobald Sentry, T15, drin ist) und Device-Tokens (FCM → `device_tokens`-Tabelle, 4 Policies live).
 
-**Lies zuerst:** D2/D3/T15-Stand, `docs/APPSTORE_LAUNCH_ROADMAP.md` §3, alle `.from('…')`-Tabellen (Grep), `lib/core/push/`.
+**Lies zuerst:** T13-Datenfluss-Abschnitt (Pflicht-Input), T15-Stand, `docs/APPSTORE_LAUNCH_ROADMAP.md` §3, alle `.from('…')`-Tabellen (Grep), `lib/core/push/`.
 
 **Aufgabe:** Je Apple-Datentyp: erhoben ja/nein, verknüpft mit Identität ja/nein, Tracking nein, Zweck — mit Code-/Tabellen-Beleg pro Zeile. Gleiches als Play-Data-Safety-Mapping. Als Markdown-Tabelle in `docs/STORE_LISTING_DRAFT.md` anhängen oder eigene Datei `docs/PRIVACY_LABELS_DRAFT.md`.
 
@@ -310,21 +270,31 @@ Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeins
 
 ---
 
-### T13 — Trainer-Discovery umsetzen *(nach D3)*
+### T13 — Trainer-Discovery fertig bauen: „make it work“ *(D3=B, Founder-Entscheidung 2026-07-06)*
 
-**Rolle:** Du bist Product-minded Flutter Engineer mit Maps-Erfahrung — du kennst OSM-Attributionspflichten und baust Empty-States, die nicht nach Fehler aussehen.
+**Rolle:** Du bist Senior Product Engineer mit Maps-/Geo-Spezialisierung und Privacy-Bewusstsein — du hast Karten-Features gebaut, die mit null Einträgen genauso überzeugend wirken wie mit tausend, du kennst die OSM-Tile-Usage-Policy auswendig, und du behandelst jeden Standort-Abruf als datenschutzrelevantes Ereignis, das begründet, minimal und nutzerinitiiert sein muss.
 
-**Ziel:** Je nach D3: (A) Discovery-Einstiegspunkte verstecken (Muster T04, Flag `kTrainerDiscoveryEnabled`) ODER (B) ehrlicher Empty-State („Wir schalten gerade die ersten Trainer frei“) + OSM-Attribution.
+**Ziel:** Die Trainer-Suche ist launch-fertig: sie funktioniert einwandfrei mit 0 Trainern (Launch-Realität), mit wenigen und mit vielen; jede Permission-Verzweigung endet sinnvoll statt in einer Sackgasse; die Karte erfüllt die OSM-Auflagen; und der Standort-Datenfluss ist dokumentiert (Input für T12-Labels, T05-Consent und den Anwaltsauftrag P0.6).
 
-**Kontext & Befund (2026-07-05):** Live 0 freigeschaltete Trainer (Aggregat). `trainer_discovery_screen.dart`: Standort-Abfrage Z. 39–53, `TileLayer` mit `tile.openstreetmap.org` Z. 392–394, **keine Attribution** (OSM-Policy verlangt „© OpenStreetMap contributors“ mit Copyright-Link). Einstiegspunkte per Grep suchen (`Routes.trainerDiscovery`).
+**Kontext & Befund (2026-07-05):** Live 0 freigeschaltete Trainer, 1 pending (Aggregat — NICHT davon ausgehen, dass zum Launch welche da sind). `trainer_discovery_screen.dart`: Standort-Abfrage Z. 39–53 (`Geolocator.checkPermission/requestPermission/getCurrentPosition`), `TileLayer` mit `tile.openstreetmap.org` Z. 392–394, `userAgentPackageName` gesetzt, **keine Attribution** (OSM verlangt „© OpenStreetMap contributors“ mit Link auf openstreetmap.org/copyright). Zweite Karte: `trainer_location_picker_widget.dart` (Trainer-Onboarding) — ebenfalls OSM, ebenfalls ohne Attribution. Backend: RPCs `find_trainers_nearby` (Migration `2026042901`) und `list_public_trainers` (`2026050502`). **Achtung: eine einzige Supabase-Instanz für Dev+Prod mit echten Daten — keinerlei Test-Trainer live anlegen.**
 
-**Aufgabe (A):** Flag + Gating aller Einstiege; Standort-Permission-Text-Konsequenzen an T09/T10 melden. **Aufgabe (B):** `RichAttributionWidget`/`SimpleAttributionWidget` von flutter_map ergänzen; Empty-State-Copy DE+EN (heilversprechen-frei); Standort-Abfrage erst nach explizitem Nutzer-Tap („Trainer in meiner Nähe suchen“), nicht beim Screen-Öffnen.
+**Lies zuerst:** `trainer_discovery_screen.dart` komplett, `trainer_location_picker_widget.dart`, beide RPC-Migrationen, `lib/features/trainer/presentation/providers/` (Discovery-Provider), Einstiegspunkte per Grep `Routes.trainerDiscovery`, `docs/LAUNCH_MASTER_PROMPT.md` (Live-DB-Regeln).
 
-**Akzeptanzkriterien (A):** kein UI-Pfad erreicht Discovery; (B): Attribution sichtbar, Empty-State statt leerer Karte, Permission erst nach Nutzeraktion.
+**Aufgabe:**
+1. **Flow- und Datenfluss-Analyse (zuerst, dokumentieren):** Von welchen Screens ist die Suche erreichbar? Und kritisch: **verlassen die Gerätekoordinaten das Gerät** (z. B. als Parameter an `find_trainers_nearby`)? Werden sie gespeichert oder nur transient in der Query genutzt? Ergebnis als kurzer Abschnitt „Standort-Datenfluss“ in den Bericht — wörtlich verwendbar für T12/T05/P0.6.
+2. **Permission-UX nutzerinitiiert machen:** Standort erst nach explizitem Tap („Trainer in meiner Nähe finden“), nie beim Screen-Öffnen. Alle Zweige bauen: (a) erlaubt → Suche läuft; (b) abgelehnt → freundliche Erklärung + Alternative (siehe 3.); (c) dauerhaft abgelehnt → Erklärung + „Einstellungen öffnen“-Button; (d) Ortungsdienste systemweit aus → eigener Hinweis. Kein Zweig endet in leerem Screen oder Roh-Exception.
+3. **Alternative ohne Standort:** prüfen, was die RPCs hergeben — wenn `list_public_trainers` eine standortfreie Liste liefert, als Fallback „Alle Trainer anzeigen“ anbieten. Damit ist die Suche auch für Nutzer ohne Standort-Freigabe nutzbar (und der Reviewer ohne Location sieht trotzdem ein funktionierendes Feature).
+4. **Empty-States ehrlich und absichtsvoll (Founder-Auflage: keine hässlichen Lücken):** zwei Fälle unterscheiden — „keine Trainer in deiner Nähe“ vs. „noch keine Trainer freigeschaltet“ (Launch-Realität). Copy DE+EN, heilversprechen-frei, einladend statt entschuldigend (z. B. „Wir prüfen und schalten gerade die ersten Trainer frei. Schau bald wieder vorbei — dein Training läuft auch ohne Trainer weiter.“). Gestaltung: Illustration/Icon + Text + sinnvoller CTA (zurück zum Training), keine leere Grau-Karte.
+5. **OSM-Attribution auf BEIDEN Karten:** flutter_map `RichAttributionWidget` (oder `SimpleAttributionWidget`) mit „© OpenStreetMap contributors“, Tap öffnet openstreetmap.org/copyright via url_launcher.
+6. **Netz-/Fehlerzustände:** Tiles brauchen Netz — bei Offline/Timeout klare Meldung statt grauer Kachelwüste (App ist sonst offline-first, Nutzer erwarten Funktion); Ladezustand mit Indikator; RPC-Fehler → Retry-Angebot.
+7. **UI-Lücken-Pass:** kompletter Screen-Durchlauf aller Zustände mit Screenshots (Erst-Öffnen, Suchen, Ergebnis, jeder Permission-Zweig, offline, leer) — jeder Zustand muss gestaltet aussehen.
+8. **Tests:** Provider-/Repository-Tests für die Zustandslogik (Permission-Zweige mocken, Empty-Ergebnis, RPC-Fehler); bestehende Trainer-Tests bleiben grün. Backend-Verhalten der RPCs read-only gegen die Live-DB belegen (Aggregat/EXPLAIN reicht) oder lokal via `supabase db reset --local` + lokalem Seed testen — **niemals Seeds in die Live-DB**.
 
-**Verifikation:** `make release-readiness-mobile` grün; Sim-Durchlauf dokumentiert.
+**Akzeptanzkriterien:** Alle 7 UI-Zustände gestaltet (Screenshot-Serie im Bericht); Standort-Abruf nur nach Nutzer-Tap; Attribution auf beiden Karten sichtbar und tappbar; standortfreier Fallback funktioniert (falls RPC vorhanden — sonst begründet dokumentiert); „Standort-Datenfluss“-Abschnitt liegt vor; `make release-readiness-mobile` grün; on-device-Durchlauf (Dev-Build) bestanden.
 
-**Nicht-Ziele/Verboten:** Kein Tile-Provider-Wechsel; keine Trainer-Daten seeden; RLS unangetastet.
+**Verifikation:** Testlauf + Sim/Geräte-Durchlauf mit systematischem Durchspielen aller Permission-Zweige (iOS-Einstellungen → Standort wechseln); Screenshots; RPC-Belege.
+
+**Nicht-Ziele/Verboten:** Kein Tile-Provider-Wechsel und kein eigener Tile-Proxy (post-launch, falls Volumen); **keine Trainer-/Testdaten in der Live-DB anlegen**; RLS/RPCs nicht umbauen (nur lesen/verstehen); kein Redesign der Trainer-Profilseiten; Trainer-Onboarding-Flow (Bewerbung) nicht anfassen — nur die Picker-Karte bekommt Attribution.
 
 ---
 
@@ -513,3 +483,4 @@ Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeins
 ## Änderungshistorie dieser Datei
 
 - 2026-07-06: Erstanlage aus der Delta-Analyse 2026-07-05 (T01 dort bereits erledigt). T-Nummern entsprechen der Analyse; T01 ist als D1–D3-Entscheidungsblock aufgegangen.
+- 2026-07-06 (später): Founder-Entscheidungen eingearbeitet — D1=A (Community/Feed verstecken), D2=A (Video verstecken), D3=B (Trainer-Discovery fertig bauen). T02/T03 entfallen; T04/T06 um verbindlichen UI-Lücken-Pass erweitert (Founder-Auflage: keine hässlichen Lücken); T13 zum vollwertigen „make it work“-Paket ausgebaut (Permission-UX, Empty-States, OSM-Attribution, Offline-Verhalten, Standort-Datenfluss-Doku); T05/T09/T10/T12 auf den Entscheidungsstand konkretisiert.
