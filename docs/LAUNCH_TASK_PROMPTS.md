@@ -59,7 +59,7 @@ Für jeden offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Blo
 | T06 | Video-Calls für v1 verstecken — ohne UI-Lücken | P0 | — | ✅ 2026-07-06 — `kVideoCallsEnabled=false`; AppBar-, Input-Bar- (ungelisteter Einstieg) und Bubble-Actions, IncomingCallListener + Call-Pushes gegated; Screenshots `docs/evidence/T06/`; Chat-Tests 22/22, Suite grün, Prod-Build ✓; Info.plist-Hinweis an T09 |
 | T07 | Alt-Policies neutralisieren | P0 | — | ✅ 2026-07-06 — curl: alte Firebase-Site **live** (prod 200 inkl. `/privacy.html`, dev 404, GitHub Pages 404); Grep beider Repos: keine Verweise in lib/ oder app-site, nur Doku; `public/privacy.html` gelöscht, `docs/privacy_policy.md` → Stub. **Neuer Founder-Punkt in P0.10: Hosting abschalten (⛔, launch-blocking, Anleitung dort)** |
 | T08 | `experience_shares` Baseline-Migration | P1 | — (Apply gated: Founder-Go) | ☐ offen |
-| T09 | iOS Info.plist bereinigen + Export-Compliance-Key | P1 | — | ☐ offen |
+| T09 | iOS Info.plist bereinigen + Export-Compliance-Key | P1 | — | ✅ 2026-07-06 — `ITSAppUsesNonExemptEncryption=false` gesetzt (nur Standard-HTTPS/Plattform-Krypto); `NSLocationAlwaysAndWhenInUse` + beide `NSCalendars*`-Keys entfernt (Code nutzt nur When-In-Use; device_calendar deaktiviert); Kamera/Mikro + When-In-Use-Standort bleiben (D2=A/D3=B; Standort-Wortlaut passt zur T13-UX). Verifiziert: `plutil -lint` OK, Dev-Sim-Build ✓, Prod-Build ✓ 101.2MB, `plutil -p` des gebauten Prod-Bundles zeigt exakt die Ziel-Keys |
 | T10 | Android-Manifest bereinigen | P1 | — | ☐ offen |
 | T11 | Env-/Bundle-Hygiene | P1 | — | ☐ offen |
 | T12 | Nutrition-Labels-Entwurf v2 (inkl. Standort) | P1 | sinnvoll nach T13 (Datenfluss-Beleg) | ☐ offen |

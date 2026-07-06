@@ -50,10 +50,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Reflex Journey braucht Kalender-Zugriff, um Termine mit deinen Trainees zu verwalten.</string>
-	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
-	<string>Reflex Journey schreibt Termine in deinen Kalender.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -68,7 +64,7 @@
 	<string>Reflex Journey benötigt Mikrofon-Zugriff für Video-Calls mit deinem Trainer.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Reflex Journey benötigt deinen Standort, um Trainer in deiner Nähe anzuzeigen.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Reflex Journey benötigt deinen Standort, um Trainer in deiner Nähe anzuzeigen.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
