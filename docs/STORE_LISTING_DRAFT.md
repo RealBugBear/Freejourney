@@ -117,9 +117,13 @@ Anleitung existiert: `docs/screenshot_guide.md`. Braucht Gerät + finale Inhalte
 
 ## Offene Entscheidungen (Founder)
 
+*Stand 2026-07-06: Fragen 2–5 sind entschieden (Roadmap-Session 2026-07-05: eigene Support-Adresse — Details 🔶 R5 im Backlog; Datenschutz-URL `reflexjourney.app/datenschutz`; Launch kostenlos; EN-Listing zum Launch). **Offen sind nur noch 1 (Untertitel) und 6 (Copy-Freigabe).***
+
 1. **Untertitel:** „Dein Reflexintegrations-Weg“ oder „Training für frühe Reflexe“?
-2. **Support-Kontakt:** Welche E-Mail-Adresse ist die offizielle Support-Adresse (erscheint öffentlich im Store)? Eigene Adresse wie `support@reflexjourney.de` empfohlen.
-3. **Datenschutz-URL:** wohin kommt die finale Policy (z. B. `https://reflexjourney.app/privacy`)? Hängt an P0.6.
-4. **Preis:** Launch kostenlos (RevenueCat bleibt aus)? Betrifft auch die Play-/ASC-Preisseite.
-5. **EN-Version:** zum Launch nur DE, oder EN-Listing gleich mit? (App selbst ist zweisprachig.)
+2. **Support-Kontakt:** Welche E-Mail-Adresse ist die offizielle Support-Adresse (erscheint öffentlich im Store)? Eigene Adresse wie `support@reflexjourney.de` empfohlen. *(✅ entschieden: eigene Adresse; konkrete Umsetzung siehe 🔶 R5 im Backlog.)*
+3. **Datenschutz-URL:** wohin kommt die finale Policy (z. B. `https://reflexjourney.app/privacy`)? Hängt an P0.6. *(✅ entschieden: `/datenschutz`.)*
+4. **Preis:** Launch kostenlos (RevenueCat bleibt aus)? Betrifft auch die Play-/ASC-Preisseite. *(✅ entschieden: kostenlos.)*
+5. **EN-Version:** zum Launch nur DE, oder EN-Listing gleich mit? (App selbst ist zweisprachig.) *(✅ entschieden: EN zum Launch, Übersetzung nach DE-Freigabe.)*
 6. **Copy-Review:** jeden Satz oben freigeben oder ändern — insbesondere die Programmbeschreibung und den Hinweis-Absatz am Ende.
+
+> 🔶 **R3 — Empfehlung zur Entscheidung (2026-07-06):** **Untertitel: „Dein Reflexintegrations-Weg“** (27 Zeichen). Er trägt die Marken-Metapher „Journey/Weg“ weiter, spricht den Nutzer direkt an („Dein“) und beschreibt einen persönlichen Weg statt eines generischen „Trainings“; „Training für frühe Reflexe“ bleibt als Fallback, falls der Begriff „Reflexintegration“ im Review Fragen aufwerfen sollte (unwahrscheinlich — er ist beschreibend, kein Wirkversprechen). **Copy-Freigabe als EIN Durchgang (~15 Min.):** Draft von oben nach unten lesen, nur ändern was stört — was du nicht anmerkst, gilt danach als freigegeben. Direkt im Anschluss erstellt eine Session das EN-Listing als Folge-Task. **Zu entscheiden:** Untertitel A/B + „Copy-Durchgang gemacht, freigegeben“. *(Nach Entscheidung: Index in `docs/LAUNCH_TASK_PROMPTS.md` aktualisieren.)*

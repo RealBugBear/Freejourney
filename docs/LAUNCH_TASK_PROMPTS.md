@@ -10,6 +10,7 @@ Erstellt: 2026-07-06 (aus der Delta-Analyse vom 2026-07-05). Gehört zu `docs/LA
 4. Am Session-Ende: **den Prompt des nächsten anstehenden Tasks wörtlich ausgeben**, damit der Founder ihn direkt in eine frische Session einfügen kann (oder die Session macht direkt weiter, wenn Kontext-Budget reicht).
 5. Statuswerte: `☐ offen` · `🔄 in Arbeit` · `✅ erledigt` · `⛔ blockiert: <wer/was>`. Ein Task wird **nie** auf ✅ gesetzt ohne beobachtete Evidenz (Regel aus dem Master-Prompt).
 6. Es gelten immer die Regeln aus `CLAUDE.md` und `docs/LAUNCH_MASTER_PROMPT.md`: keine PII/Secrets ausgeben, Live-SQL nur read-only + aggregiert, Deploys/mutierendes SQL/Secrets/`git push` nur mit explizitem Founder-Go, lokale Commits mit expliziten Dateilisten.
+7. **🔶 Founder-Review-Vorlagen (R1–R12):** In den Plandokumenten liegen mit 🔶 markierte, vorbereitete Empfehlungsblöcke (Index: Tabelle unten). Regel: **Bevor** eine Session einen Punkt umsetzt, an dem ein offener 🔶-Block hängt, legt sie dem Founder den Block wörtlich zur Entscheidung vor (annehmen / ändern / ablehnen) und wartet auf die Antwort. Zusätzlich prüft jede Session zu Beginn die Index-Tabelle und legt alle Blöcke vor, deren „Vorlegen wann“-Bedingung jetzt erfüllt ist. Nach der Entscheidung: Status in der Index-Tabelle auf ✅ mit Datum + Kurzfassung der Entscheidung setzen und die Konsequenz am Zielort einarbeiten.
 
 ---
 
@@ -22,6 +23,27 @@ Erstellt: 2026-07-06 (aus der Delta-Analyse vom 2026-07-05). Gehört zu `docs/LA
 | **D3** | Trainer-Discovery (Karte + Standort) in v1? | **B — bleibt drin, „make it work“** ✅ 2026-07-06 | T13 ist jetzt ein vollwertiges Fertigbau-Paket (Empty-State, Permission-UX, OSM-Attribution, Offline-Verhalten). Folgen: **Standort** kommt fix in Nutrition Labels (T12), Consent-Entwurf (T05) und Anwalts-Policy (P0.6 — dem Anwalt melden: Geolocation + OSM-Tileserver als Empfänger); iOS/Android-Location-Permissions bleiben (T09/T10) |
 
 **Founder-Auflage zu allen dreien (2026-07-06):** Code UND UI müssen sauber angepasst werden — **keine hässlichen Lücken** (keine leeren Tabs/Sektionen, keine verwaisten Buttons/CTAs, Layouts fließen ohne Löcher nach). Das ist in T04/T06/T13 als hartes Akzeptanzkriterium verankert.
+
+---
+
+## 🔶 Founder-Review-Vorlagen — Index (angelegt 2026-07-06)
+
+Für jeden offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Block **an der relevanten Stelle** im jeweiligen Dokument (Fundort unten). Vorlege-Regel: siehe „Wie diese Datei benutzt wird“, Punkt 7. Statuswerte wie im Status-Tracker.
+
+| R# | Thema (Kurzfassung der Empfehlung) | Detail-Block liegt in | Vorlegen wann | Status |
+|----|-------------------------------------|------------------------|----------------|--------|
+| R1 | Anwaltsauftrag: erst versandfertiges Briefing erstellen, dann 2–3 Kanzleien mit Festpreis-Anfrage | Backlog P0.6 | **sofort** (nächste Session) | ☐ offen |
+| R2 | Confirm-Link-Test mit der Screenshot-Sitzung koppeln (eine Geräte-Sitzung für beides) | Tracker, T17-Prompt unten | nächste Geräte-Gelegenheit | ☐ offen |
+| R3 | Untertitel „Dein Reflexintegrations-Weg“ + Copy-Freigabe als ein 15-Min-Durchgang | `STORE_LISTING_DRAFT.md`, „Offene Entscheidungen“ | **sofort** | ☐ offen |
+| R4 | ASC-App-Record in gemeinsamer Claude-in-Chrome-Sitzung anlegen (~20 Min.) | Backlog P3 (ASC-Record) | **sofort** | ☐ offen |
+| R5 | Support-Postfach: `support@reflexjourney.app` als echtes Postfach (mailbox.org) | Backlog P3 (Support-Postfach) | **sofort** | ☐ offen |
+| R6 | Secrets-Löschung freigeben (Beleglage vollständig, ein „Go R6“ genügt) | Backlog „Next up“ Punkt 5 | **sofort** | ☐ offen |
+| R7 | Telefonnummer: jetzt nichts kaufen; nach Anwalts-Antwort ggf. sipgate | Backlog P3 (EU-Trader-Status) | nach R1/Anwalts-Antwort | ☐ offen |
+| R8 | Paywall: Trigger-basiert post-launch planen + Bestandsschutz-Formel-Vorschlag | Backlog „Open questions / parked“ (Monetarisierung) | Formel: vor der ersten Launch-Kommunikation · Rest: post-launch | ☐ offen |
+| R9 | Reaktivierungs-Checkliste Community/Video statt eigenem Plan jetzt | Backlog „Open questions / parked“ (neuer Punkt) | erst bei Reaktivierungswunsch | ☐ offen |
+| R10 | FAQ-Bereich als statische, gebündelte Inhalte (offline-fähig, kein Backend) | Backlog P2, Punkt C | wenn Sinas Content eintrifft | ☐ offen |
+| R11 | `/trainer`-Formular: kleine Vercel-Function + Resend-Mail (kein neuer Dienstleister) | Backlog P3.W (W5-Zeile) | vor dem Bau von W5 | ☐ offen |
+| R12 | P4-Reihenfolge post-launch (nur Kenntnisnahme, keine Entscheidung) | Backlog P4 (Einleitung) | erster Post-Launch-Planungstermin | ☐ offen |
 
 ---
 
@@ -382,6 +404,8 @@ Melde-Funktion und Nutzer-Blocken werden für v1 nicht gebaut — Community/Feed
 **Verifikation:** Founder-Protokoll; Backlog-P1.2-Restpunkt abhaken mit Datum.
 
 **Nicht-Ziele/Verboten:** Kein Test mit echter persönlicher E-Mail; keine Auth-Config-Änderungen; falls es fehlschlägt → als Bug protokollieren, `systematic-debugging`-Session starten, NICHT ad-hoc an Configs drehen.
+
+> 🔶 **R2 — Empfehlung zur Entscheidung (2026-07-06):** Diesen 5-Minuten-Test mit der **Screenshot-Sitzung** (P3: Store-Screenshots, 6,9″) koppeln — beides braucht das iPhone in der Hand, eine Sitzung erledigt beides. Ablauf exakt nach dem Prompt oben: Temp-Mail-Dienst im iPhone-Safari (z. B. temp-mail.org), in der App registrieren, Link **antippen**; als Beleg reicht ein kurzes Bildschirmvideo oder zwei Screenshots. **Zu entscheiden:** nur der Termin — sag in einer Session „Geräte-Sitzung jetzt“, Claude führt dich durch. *(Nach Entscheidung: Index in diesem Dokument aktualisieren.)*
 
 ---
 
