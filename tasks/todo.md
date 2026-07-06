@@ -55,6 +55,43 @@ unangetastet. Icons in den Evidenz-PNGs erscheinen als Kästchen
 
 ---
 
+# T06 — Video-Calls für v1 verstecken (2026-07-06, direkt nach T04)
+
+In derselben Session nach T04 ausgeführt (gleiche `launch_flags.dart`).
+Befund-Update: Neben den im Prompt gelisteten Einstiegen (2× AppBar-videocam,
+IncomingCallListener, openVideoCall) existieren weitere: videocam-Button in
+der **Message-Input-Bar** (`message_input_bar.dart:69`), „Annehmen“-Action auf
+Call-Request-Bubbles (`message_bubble.dart`, via `onAcceptCall`), Foreground-
+Anzeige von Call-Pushes (`push_notification_service.dart`) und der
+`video_call`-Push-Payload-Pfad (`app.dart`). `ChatInboxScreen` erwähnt
+Video-Calls, ist aber nirgends geroutet (toter Screen — unangetastet).
+
+## Ausgeführt
+
+- [x] `kVideoCallsEnabled = false` in `lib/config/launch_flags.dart`
+- [x] Chat-Screen: beide AppBar-videocam-Actions, `onAcceptCall`,
+      `onCallRequest` (Input-Bar versteckt ihren Button selbst) gegated
+- [x] `app.dart`: IncomingCallListener nur bei Flag=true; `video_call`-Payload
+      → Log + Return (still ignoriert, kein Crash)
+- [x] Push-Service: Foreground-Notifications für `video_call`/`call_request`
+      unterdrückt (Log-Zeile)
+- [x] Termin-Scheduler: Hinttext „Ort oder Video-Call“ → neutral bei Flag=false
+- [x] Tests: Flag-Guard + Chat-Screen (Practitioner & Moderator) ohne
+      videocam, Termin-Icon bleibt → Chat-Tests 22/22
+- [x] Screenshots vorher/nachher `docs/evidence/T06/` (before via git stash)
+- [x] `make release-readiness-mobile` grün; Prod-Build ✓ (101.2MB)
+
+## Review
+
+AppBar zeigt ohne Call-Button nur Titel (Practitioner) bzw. Termin-Icon
+(Moderator) — Standard-Look, keine Lücke; Input-Bar beginnt sauber mit dem
+Textfeld. Agora-Dependency, Edge Functions, Secrets unangetastet. Historische
+Call-Request-Bubbles bleiben als Text lesbar, nur ohne „Annehmen“. Hinweis an
+T09 (im Tracker vermerkt): Kamera-/Mikro-Strings in Info.plist bleiben, weil
+der Agora-Code im Bundle bleibt.
+
+---
+
 # P3 — Store-Metadaten-Entwurf (2026-07-04)
 
 Goal: a review-ready draft of all App Store / Play Store text fields under the

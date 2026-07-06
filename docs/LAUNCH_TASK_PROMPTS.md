@@ -34,7 +34,7 @@ Erstellt: 2026-07-06 (aus der Delta-Analyse vom 2026-07-05). Gehört zu `docs/LA
 | T03 | Nutzer blockieren | — | — | ✖ entfällt (D1=A; Prompt-Fassung in git-Historie, Commit 7db274f) |
 | T04 | Community/Feed für v1 verstecken — ohne UI-Lücken | P0 | — | ✅ 2026-07-06 — `launch_flags.dart` (kCommunityEnabled=false); Routen-Redirect + alle 4 UI-Einstiege gegated (inkl. Post-Training-Share-Checkbox, im Prompt ungelistet); Screenshots vorher/nachher in `docs/evidence/T04/`; 203 Tests grün (3 neue), Prod-Build ✓ |
 | T05 | Consent-Screen Launch-Fassung (inkl. Standort/OSM-Passage) | P0 | Struktur: — · Finaltext: P0.6 (Anwalt) | ☐ offen (Vorbereitung möglich) |
-| T06 | Video-Calls für v1 verstecken — ohne UI-Lücken | P0 | — | ☐ offen |
+| T06 | Video-Calls für v1 verstecken — ohne UI-Lücken | P0 | — | ✅ 2026-07-06 — `kVideoCallsEnabled=false`; AppBar-, Input-Bar- (ungelisteter Einstieg) und Bubble-Actions, IncomingCallListener + Call-Pushes gegated; Screenshots `docs/evidence/T06/`; Chat-Tests 22/22, Suite grün, Prod-Build ✓; Info.plist-Hinweis an T09 |
 | T07 | Alt-Policies neutralisieren | P0 | — | ☐ offen |
 | T08 | `experience_shares` Baseline-Migration | P1 | — (Apply gated: Founder-Go) | ☐ offen |
 | T09 | iOS Info.plist bereinigen + Export-Compliance-Key | P1 | — | ☐ offen |

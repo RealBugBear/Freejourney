@@ -10,6 +10,15 @@
 /// sein — siehe docs/LAUNCH_TASK_PROMPTS.md.
 library;
 
+/// Video-Calls (D2=A: für v1 versteckt).
+///
+/// Gated: videocam-Actions in Chat-AppBar und Message-Input-Bar, „Annehmen“
+/// auf Call-Request-Bubbles, der globale [IncomingCallListener] sowie
+/// Anzeige/Weiterleitung eingehender `video_call`-Push-Events (werden mit
+/// Log-Zeile still ignoriert). Agora-Code und Edge Functions bleiben
+/// unangetastet; Dev-Verhalten mit Flag=true unverändert.
+const bool kVideoCallsEnabled = false;
+
 /// Community-Kanäle + Experience-Feed (D1=A: für v1 versteckt).
 ///
 /// Gated: Routen `/community` und `/experience/:channelId` (Redirect aufs

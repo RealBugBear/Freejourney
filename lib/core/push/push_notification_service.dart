@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../config/app_config.dart';
+import '../../config/launch_flags.dart';
 import '../../firebase_options.dart';
 import '../logging/app_logger.dart';
 import '../notifications/notification_service.dart';
@@ -215,6 +216,12 @@ class PushNotificationService {
   Future<void> _showForegroundNotification(RemoteMessage message) async {
     final data = _stringData(message.data);
     final type = data['type'] ?? 'push';
+    // T06 (D2=A): Call-Pushes still ignorieren, solange Video-Calls aus sind.
+    if (!kVideoCallsEnabled &&
+        (type == 'video_call' || type == 'call_request')) {
+      appLogger.i('Call push suppressed: kVideoCallsEnabled is false');
+      return;
+    }
     final title = message.notification?.title ??
         (type == 'video_call'
             ? 'Eingehender Video-Call'

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../config/launch_flags.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -387,7 +388,7 @@ class _AppointmentSchedulerScreenState
           TextField(
             controller: _locationCtrl,
             decoration: InputDecoration(
-              labelText: _isReviewFlow
+              labelText: _isReviewFlow && kVideoCallsEnabled
                   ? 'Ort oder Video-Call'
                   : l10n.appointmentLocationLabel,
               border:

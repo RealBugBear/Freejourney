@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'bootstrap/providers.dart';
+import 'config/launch_flags.dart';
 import 'core/navigation/app_router.dart';
 import 'core/logging/app_logger.dart';
 import 'core/settings/settings_provider.dart';
@@ -230,9 +231,11 @@ class _CoreJourneyAppView extends ConsumerWidget {
       themeMode: themeMode,
       locale: locale,
       routerConfig: router,
-      builder: (context, child) => IncomingCallListener(
-        child: child ?? const SizedBox.shrink(),
-      ),
+      // T06 (D2=A): Ohne Video-Calls lauscht niemand auf eingehende Calls —
+      // der Listener (und seine Realtime-Subscriptions) bleibt komplett aus.
+      builder: (context, child) => kVideoCallsEnabled
+          ? IncomingCallListener(child: child ?? const SizedBox.shrink())
+          : (child ?? const SizedBox.shrink()),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -255,6 +258,10 @@ Future<void> _handleNotificationPayload(
 ) async {
   final type = payload['type'];
   if (type == 'video_call') {
+    if (!kVideoCallsEnabled) {
+      appLogger.i('Video-call push ignored: kVideoCallsEnabled is false');
+      return;
+    }
     await _openCallFromPayload(ref, payload);
     return;
   }

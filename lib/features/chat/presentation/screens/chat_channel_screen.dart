@@ -17,6 +17,7 @@ import '../../../video/presentation/providers/video_providers.dart';
 import '../../../video/presentation/widgets/incoming_call_listener.dart';
 import '../../../trainer/domain/models/trainer_client.dart';
 import '../../../trainer/presentation/providers/trainer_provider.dart';
+import '../../../../config/launch_flags.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/navigation/app_router.dart';
 import 'package:go_router/go_router.dart';
@@ -381,7 +382,7 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
                 ? const Text('Trainer-Bewerbung')
                 : Text(channel?.channelDisplayName() ?? 'Chat'),
         actions: [
-          // Trainer/Admin moderator: start call + propose appointment.
+          // Trainer/Admin moderator: propose appointment (+ call, if enabled).
           if (canModerateCall) ...[
             IconButton(
               icon: const Icon(Icons.event_outlined),
@@ -391,14 +392,15 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
                 reviewFlow: isApplicationReview,
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.videocam_outlined),
-              tooltip: 'Call starten',
-              onPressed: _startCall,
-            ),
+            if (kVideoCallsEnabled)
+              IconButton(
+                icon: const Icon(Icons.videocam_outlined),
+                tooltip: 'Call starten',
+                onPressed: _startCall,
+              ),
           ],
           // Practitioner: request video call.
-          if (isPractitioner)
+          if (isPractitioner && kVideoCallsEnabled)
             IconButton(
               icon: const Icon(Icons.videocam_outlined),
               tooltip: 'Video-Call anfragen',
@@ -468,7 +470,9 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
                                   msg.isOwnMessage(_currentUserId()))
                               ? () => _confirmDelete(msg)
                               : null,
-                          onAcceptCall: isModerator ? _startCall : null,
+                          onAcceptCall: kVideoCallsEnabled && isModerator
+                              ? _startCall
+                              : null,
                           onProposeAppointment: canModerateCall
                               ? () => _proposeAppointment(
                                     ref,
@@ -499,7 +503,8 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
                   unreadCount: 0,
                 ),
             onSend: _sendMessage,
-            onCallRequest: isPractitioner ? _sendCallRequest : null,
+            onCallRequest:
+                kVideoCallsEnabled && isPractitioner ? _sendCallRequest : null,
             onTyping: () => ref
                 .read(chatRepositoryProvider)
                 .broadcastTyping(widget.channelId),
