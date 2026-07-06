@@ -1,3 +1,60 @@
+# T04 — Community-Tab + Experience-Feed für v1 verstecken (2026-07-06)
+
+Befund-Update gegenüber dem Task-Prompt: Es gibt **zwei zusätzliche Einstiege**,
+die der Prompt nicht listet — (a) die Checkbox „Als geteilte Erfahrung
+einreichen" im Post-Training-Sheet (`training_experience_sheet.dart`, schreibt
+direkt in `experience_shares`), (b) die Review-Karte im Trainer-Dashboard
+(`trainer_dashboard_screen.dart:135`). Der DM-Screen filtert Community-Kanäle
+bereits heraus (kein Handlungsbedarf). `profiles.display_name` wird auch im
+Trainer-Chat als Anzeigename genutzt → Profil-Sektion „Anzeigename" bleibt,
+nur ihr Community-Feed-Untertitel wird neutral gefasst. Admin-Panel-Tab
+„Erfahrungen" bleibt bewusst (Admin-only = Founder, Moderation von
+Altbeständen; kein Prod-Nutzerpfad).
+
+## Schritte
+
+- [x] 1. Vorher-Screenshots per Widget-Test-Harness (Begleitung-Tab ohne
+      Trainer, Training-Experience-Sheet, Mood-Check-in-Sheet) →
+      docs/evidence/T04/before/
+- [x] 2. `lib/config/launch_flags.dart` mit `const bool kCommunityEnabled = false;`
+- [x] 3. Router: `communityGateRedirect` (→ Dashboard) an Routen `community`
+      und `experienceFeed`
+- [x] 4. `mood_checkin_sheet.dart`: Share-Dialog-Aufruf gaten (Sheet-Layout
+      unverändert)
+- [x] 5. `training_experience_sheet.dart`: Share-Checkboxen + Save-Branch
+      gaten, Abstände so umbauen, dass ohne Checkboxen kein Loch bleibt
+- [x] 6. `accompaniment_screen.dart`: Karte „Geteilte Erfahrungen" +
+      zugehörigen Spacer gaten (Listen-Ende bleibt sauber)
+- [x] 7. `trainer_dashboard_screen.dart`: `_SharedExperienceReviewCard` gaten
+- [x] 8. `profile_screen.dart`: Untertitel „Wird im Community-Feed angezeigt…"
+      → neutrale Fassung bei deaktiviertem Flag; `username_setup_screen.dart`:
+      Satz „…von deinem Community-Namen unterscheiden" gaten
+- [x] 9. Neuer Test `test/core/navigation/launch_gate_test.dart`: Flag-Guard +
+      Redirect /community und /experience/:id → Dashboard
+- [x] 10. Nachher-Screenshots (gleiches Harness) → docs/evidence/T04/after/;
+      Harness danach entfernen (temporäre Datei)
+- [x] 11. `make release-readiness-mobile` grün
+- [x] 12. `flutter build ios --flavor production -t lib/main_production.dart
+      --release --no-codesign` grün
+- [x] 13. Commit (explizite Dateiliste), Tracker + Backlog mit Evidenz,
+      T06-Prompt ausgeben oder direkt anschließen
+
+## Review (2026-07-06)
+
+Alle 13 Schritte ausgeführt. Ergebnis: Mit `kCommunityEnabled=false` existiert
+kein tappbarer oder tief verlinkter Weg zu Community/Feed; direkter Aufruf
+beider Routen redirectet auf das Dashboard (produktiver `communityGateRedirect`,
+per Widget-Test belegt). Kein Code gelöscht — Flag auf `true` stellt alles
+identisch wieder her. Evidenz: `docs/evidence/T04/` (before/after-PNGs),
+`make release-readiness-mobile` → 203 Tests grün / analyze 0 Fehler+Warnungen,
+Prod-iOS-Build ✓ (101.4MB, --no-codesign). Bewusste Scope-Entscheidungen:
+Admin-Moderations-Tab bleibt (nur Rolle admin); `app_shell.dart`-Tab-Mapping
+für `/community` bleibt (harmlos, greift nie, minimiert Diff); DM-/Trainer-Chat
+unangetastet. Icons in den Evidenz-PNGs erscheinen als Kästchen
+(Widget-Test-Rendering ohne Icon-Font) — Layout/Text sind voll aussagekräftig.
+
+---
+
 # P3 — Store-Metadaten-Entwurf (2026-07-04)
 
 Goal: a review-ready draft of all App Store / Play Store text fields under the

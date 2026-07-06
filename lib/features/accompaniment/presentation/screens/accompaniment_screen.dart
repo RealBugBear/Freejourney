@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/onboarding/onboarding_hint_gate.dart';
 import '../../../../core/onboarding/onboarding_hint_provider.dart';
@@ -290,18 +291,20 @@ class AccompanimentScreen extends ConsumerWidget {
                   context.push(Routes.appointmentProposals);
                 },
               ),
-            const SizedBox(height: 12),
+            if (activeConnection != null) const SizedBox(height: 12),
             if (activeConnection != null)
               _ReflexProfileSharingCard(connection: activeConnection),
-            if (activeConnection != null) const SizedBox(height: 12),
-            _ActionSection(
-              icon: Icons.rate_review_outlined,
-              title: 'Geteilte Erfahrungen',
-              subtitle:
-                  'Moderierte Beobachtungen aus laufenden Paketen ansehen.',
-              actionLabel: 'Erfahrungen öffnen',
-              onTap: () => context.push(Routes.community),
-            ),
+            if (kCommunityEnabled) ...[
+              const SizedBox(height: 12),
+              _ActionSection(
+                icon: Icons.rate_review_outlined,
+                title: 'Geteilte Erfahrungen',
+                subtitle:
+                    'Moderierte Beobachtungen aus laufenden Paketen ansehen.',
+                actionLabel: 'Erfahrungen öffnen',
+                onTap: () => context.push(Routes.community),
+              ),
+            ],
           ],
         ),
       ),

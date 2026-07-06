@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
@@ -96,8 +97,8 @@ class _UsernameSetupScreenState extends ConsumerState<UsernameSetupScreen> {
               ),
               const SizedBox(height: 10),
               Text(
-                'Dein Kontaktname ist sichtbar für Trainer und im Kursbereich. '
-                'Er kann sich von deinem Community-Namen unterscheiden.',
+                'Dein Kontaktname ist sichtbar für Trainer und im Kursbereich.'
+                '${kCommunityEnabled ? ' Er kann sich von deinem Community-Namen unterscheiden.' : ''}',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),

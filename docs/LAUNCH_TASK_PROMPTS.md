@@ -32,7 +32,7 @@ Erstellt: 2026-07-06 (aus der Delta-Analyse vom 2026-07-05). Gehört zu `docs/LA
 | T01 | Entscheidungsvorlage Sichtbarkeit (UGC/Video/Discovery) | P0 | — | ✅ 2026-07-06 — Delta-Analyse lieferte die Vorlage; Founder entschied: D1=A, D2=A, D3=B |
 | T02 | Melde-Funktion Chat/Feed | — | — | ✖ entfällt (D1=A; Prompt-Fassung in git-Historie, Commit 7db274f) |
 | T03 | Nutzer blockieren | — | — | ✖ entfällt (D1=A; Prompt-Fassung in git-Historie, Commit 7db274f) |
-| T04 | Community/Feed für v1 verstecken — ohne UI-Lücken | P0 | — | ☐ offen |
+| T04 | Community/Feed für v1 verstecken — ohne UI-Lücken | P0 | — | ✅ 2026-07-06 — `launch_flags.dart` (kCommunityEnabled=false); Routen-Redirect + alle 4 UI-Einstiege gegated (inkl. Post-Training-Share-Checkbox, im Prompt ungelistet); Screenshots vorher/nachher in `docs/evidence/T04/`; 203 Tests grün (3 neue), Prod-Build ✓ |
 | T05 | Consent-Screen Launch-Fassung (inkl. Standort/OSM-Passage) | P0 | Struktur: — · Finaltext: P0.6 (Anwalt) | ☐ offen (Vorbereitung möglich) |
 | T06 | Video-Calls für v1 verstecken — ohne UI-Lücken | P0 | — | ☐ offen |
 | T07 | Alt-Policies neutralisieren | P0 | — | ☐ offen |

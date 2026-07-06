@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/onboarding/onboarding_hint_gate.dart';
 import '../../../../core/onboarding/onboarding_hint_provider.dart';
@@ -570,7 +571,11 @@ class _UsernameSectionState extends ConsumerState<_UsernameSection> {
           ],
         ),
         Text(
-          'Wird im Community-Feed angezeigt, wenn du Erfahrungen teilst.',
+          // Ohne Community-Feed (T04) beschreibt der Untertitel nur die
+          // verbleibende Verwendung des Anzeigenamens: den Trainer-Chat.
+          kCommunityEnabled
+              ? 'Wird im Community-Feed angezeigt, wenn du Erfahrungen teilst.'
+              : 'Sichtbar für deinen Trainer, zum Beispiel im Chat.',
           style: Theme.of(context)
               .textTheme
               .bodySmall

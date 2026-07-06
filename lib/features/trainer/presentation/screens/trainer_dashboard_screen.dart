@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -132,7 +133,7 @@ class _TraineesTab extends ConsumerWidget {
           _RecentObservationsCard(
             observations: observationsAsync.valueOrNull ?? const [],
           ),
-          const _SharedExperienceReviewCard(),
+          if (kCommunityEnabled) const _SharedExperienceReviewCard(),
           if (kDebugMode) const _TrainerClientsDebugPanel(),
 
           // ── Clients ─────────────────────────────────────────────────────

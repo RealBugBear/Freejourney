@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../config/launch_flags.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../settings/settings_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
@@ -101,6 +102,12 @@ class Routes {
   static const onboardingEntryPoints = '/onboarding/entry-points';
   static const experienceFeed = '/experience/:channelId';
 }
+
+/// T04 (D1=A): Solange Community/Feed deaktiviert sind, landet jede direkte
+/// Navigation dorthin (Deep Link, alter Push-Payload, programmatischer
+/// Aufruf) sauber auf dem Dashboard statt in einem Crash oder 404.
+String? communityGateRedirect(BuildContext context, GoRouterState state) =>
+    kCommunityEnabled ? null : Routes.dashboard;
 
 /// Bridges a Stream into a [Listenable] so GoRouter can react to auth changes.
 class _StreamRefreshListenable extends ChangeNotifier {
@@ -358,6 +365,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: rootNavigatorKey,
         path: Routes.experienceFeed,
         name: 'experience-feed',
+        redirect: communityGateRedirect,
         builder: (context, state) {
           final channel = state.extra as ChatChannel;
           return ExperienceFeedScreen(channel: channel);
@@ -408,6 +416,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: Routes.community,
             name: 'community',
+            redirect: communityGateRedirect,
             pageBuilder: (context, state) => NoTransitionPage(
               key: state.pageKey,
               child: const CommunityScreen(),

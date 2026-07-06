@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../bootstrap/providers.dart';
+import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/database/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -120,7 +121,7 @@ class _MoodCheckinSheetState extends ConsumerState<MoodCheckinSheet> {
       if (!mounted) return;
       widget.onSaved?.call();
       navigator.pop(true);
-      if (noteText.isNotEmpty) {
+      if (kCommunityEnabled && noteText.isNotEmpty) {
         await _promptCommunityShare(
           rootNavigator: rootNavigator,
           router: router,

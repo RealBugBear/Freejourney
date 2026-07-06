@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../config/launch_flags.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/error_retry_widget.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -96,7 +97,7 @@ class _TrainingExperienceSheetState
       );
 
       // 2. Optionally share to community feed.
-      if (_shareWithCommunity) {
+      if (kCommunityEnabled && _shareWithCommunity) {
         final profile = ref.read(profileProvider).valueOrNull;
         final displayName =
             _anonymous ? 'Anonym' : profile?.effectiveDisplayName ?? 'Anonym';
@@ -260,28 +261,30 @@ class _TrainingExperienceSheetState
             ),
           ),
           const SizedBox(height: 20),
-          CheckboxListTile(
-            contentPadding: EdgeInsets.zero,
-            title: const Text('Als geteilte Erfahrung einreichen'),
-            value: _shareWithCommunity,
-            activeColor: AppColors.primary,
-            onChanged: (v) => setState(() {
-              _shareWithCommunity = v ?? false;
-              if (_shareWithCommunity) _anonymous = true;
-            }),
-          ),
-          if (_shareWithCommunity)
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: CheckboxListTile(
-                contentPadding: EdgeInsets.zero,
-                title: const Text('Anonym einreichen'),
-                value: _anonymous,
-                activeColor: AppColors.primary,
-                onChanged: (v) => setState(() => _anonymous = v ?? false),
-              ),
+          if (kCommunityEnabled) ...[
+            CheckboxListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Als geteilte Erfahrung einreichen'),
+              value: _shareWithCommunity,
+              activeColor: AppColors.primary,
+              onChanged: (v) => setState(() {
+                _shareWithCommunity = v ?? false;
+                if (_shareWithCommunity) _anonymous = true;
+              }),
             ),
-          const SizedBox(height: 12),
+            if (_shareWithCommunity)
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Anonym einreichen'),
+                  value: _anonymous,
+                  activeColor: AppColors.primary,
+                  onChanged: (v) => setState(() => _anonymous = v ?? false),
+                ),
+              ),
+            const SizedBox(height: 12),
+          ],
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
