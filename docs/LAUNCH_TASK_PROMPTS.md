@@ -70,7 +70,7 @@ Für jeden offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Blo
 | T17 | Confirm-Link auf iPhone antippen | P1 | Founder (Gerät, ~5 Min.) | ⛔ blockiert: Founder |
 | T18 | Firebase-Admin-Key verschieben/rotieren | P2 | Founder-Mitwirkung (Keychain) | ☐ offen |
 | T19 | In-App-Link zur Datenschutz-URL | P2 | P0.6 (URL live) | ⛔ blockiert: P0.6 |
-| T20 | Doku-Korrekturen (FEATURE_FLAGS, TESTFLIGHT_QUICKSTART) | P3 | — | ☐ offen |
+| T20 | Doku-Korrekturen (FEATURE_FLAGS, TESTFLIGHT_QUICKSTART) | P3 | — | ✅ 2026-07-07 — `FEATURE_FLAGS.md`: 314 Zeilen Remote-Config-Fiktion → 28 Zeilen Realität (launch_flags.dart-Konstanten kCommunityEnabled/kVideoCallsEnabled/kUsePrivacyLaunchDraft, `feature_flags`-Tabelle als ungenutzt/parked markiert). `TESTFLIGHT_QUICKSTART.md`: neu auf heutigem Stand (Bundle-ID de.reflexjourney.app, `make bump-build` + `make testflight`, ASC-Record-Verweis auf R4, T22-Hinweis, Live-DB-Warnung); alte GitHub-Pages-/corejourney-Pfade raus |
 | T21 | Trainer-Selbst-Freischaltung: DEV-Bypass verifizieren | P1 | — | ✅ 2026-07-07 — Client-Bypass existiert nicht mehr (Grep 0 Treffer; einziger Weg = Edge Function mit server-seitigem Code-Check; kDebugMode-Panels sind Anzeige-only; DB-Trigger `trg_prevent_direct_role_change` aus Migration 2026041504). Vollständiger Beleg-Bericht im Backlog P1.5. Mini-Rest: Live-Trigger-Existenz (1 read-only Query) — in dieser Session vom Permission-Modus geblockt, Nachholen in Session mit Standard-Freigaben |
 | T22 | aps-environment im ersten Store-Archiv prüfen | P1 | erster Archive-Build (nach T09/T16) | ⛔ blockiert: erster Archiv-Build |
 

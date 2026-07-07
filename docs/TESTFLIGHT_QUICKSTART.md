@@ -1,138 +1,47 @@
-# TestFlight Quick Start Guide
+# TestFlight Quickstart — Reflex Journey
 
-**Goal:** Get your app to beta testers in 2-3 days.
+Stand: 2026-07-07 (T20; die frühere Fassung nannte die alte Bundle-ID,
+GitHub-Pages-Hosting und Pfade unter `/dev/corejourney` — alles obsolet).
 
-## What You Need
+## Ist-Zustand (was schon existiert)
 
-✅ **Already have:**
-- Working Flutter app with dev/staging/prod flavors
-- Firebase configured
-- Privacy policy document
+- Apple-Developer-Account aktiv, Team-ID `5X6VFP7F58`.
+- Bundle-IDs registriert (2026-07-03): `de.reflexjourney.app` (+ `.dev`,
+  `.staging`), je mit Associated Domains + Push.
+- APNs-Key in Firebase (`corejourney-prod`) für alle drei iOS-Apps
+  hinterlegt.
+- Flavors/Schemes funktionieren (`production` → `lib/main_production.dart`).
+- `ITSAppUsesNonExemptEncryption=false` gesetzt (T09) → keine
+  Export-Compliance-Rückfrage pro Build.
 
-⏳ **Still need:**
-- Apple Developer account ($99/year, 24-48h approval)
-- Xcode schemes configured
-- Privacy policy hosted publicly
-- First production build uploaded
+## Noch offen, bevor der erste Upload möglich ist
 
-## Step-by-Step
+1. **ASC-App-Record anlegen** unter `de.reflexjourney.app`
+   (Founder-Klickarbeit, 🔶 R4 — Empfehlung: Claude-in-Chrome-Sitzung).
+   Backlog P3 führt die zugehörigen Pflicht-Formulare (Altersfreigabe NEU,
+   Nutrition Labels aus `docs/PRIVACY_LABELS_DRAFT.md`, EU-Trader-Status).
+2. Datenschutz-URL live (`reflexjourney.app/datenschutz`, nach P0.6).
 
-### 1. Apple Developer Account (Start Today!)
+## Upload-Ablauf (pro Build)
 
-1. Go to https://developer.apple.com/programs/enroll/
-2. Pay $99, wait 24-48 hours for approval
-3. While waiting: Do steps 2-3 below
-
-### 2. Configure Xcode (2-3 hours)
-
-See detailed guide: [docs/IOS_SCHEMES_SETUP.md](file:///Users/alexandermessinger/dev/corejourney/docs/IOS_SCHEMES_SETUP.md)
-
-**Quick version:**
 ```bash
-# Open Xcode
-open ios/Runner.xcworkspace
-
-# In Xcode:
-# 1. Create build configurations (Debug-development, Release-staging, Release-production)
-# 2. Set bundle IDs per config
-# 3. Create schemes (development, staging, production)
-# 4. Link schemes to configurations
+make bump-build            # Pflicht: Build-Nummer auf heute+NN (T16)
+make testflight            # baut IPA (production-Flavor) und öffnet Transporter
 ```
 
-**Test it works:**
-```bash
-flutter build ios --flavor production -t lib/main_production.dart
-```
+`make testflight` nutzt `ios/ExportOptions.plist` und übergibt Version +
+Build-Nummer aus `pubspec.yaml`. Alternativ Xcode: Product → Archive →
+Distribute (Scheme `production`).
 
-### 3. Host Privacy Policy (15 minutes)
+Nach dem Upload in ASC: Build erscheint unter TestFlight (Verarbeitung
+~10–30 Min.), beim **ersten** Build von T22 den `aps-environment`-Check
+machen (Tracker T22). Interne Tester (bis 100, sofort): Nutzer mit
+App-Store-Connect-Zugang hinzufügen. Externe Tester brauchen eine eigene
+Beta-Review durch Apple.
 
-**Easiest: GitHub Pages**
-```bash
-# In your GitHub repo:
-# Settings → Pages → Deploy from: main branch → /docs folder
+## Stolperfallen
 
-# Your URL will be:
-https://YOUR_USERNAME.github.io/corejourney/privacy_policy
-```
-
-**Add link to app:**
-```dart
-// In settings screen
-ListTile(
-  title: Text('Privacy Policy'),
-  onTap: () => launch('https://YOUR-URL/privacy'),
-)
-```
-
-### 4. Create App in App Store Connect (5 minutes)
-
-After Apple account approved:
-1. https://appstoreconnect.apple.com
-2. My Apps → + → New App
-3. Name: CoreJourney
-4. Bundle ID: com.alexandermessinger.corejourney
-5. SKU: corejourney-2025
-6. Privacy URL: Your hosted URL
-
-### 5. Upload to TestFlight (30 minutes)
-
-**Build & Archive:**
-```bash
-# In Xcode:
-# Select: production scheme + Any iOS Device
-# Product → Archive (wait 5-10 min)
-# Organizer → Distribute App → Upload
-```
-
-**Wait for processing:** 10-30 minutes
-
-### 6. Invite Testers (5 minutes)
-
-1. App Store Connect → TestFlight → Internal Testing
-2. Add emails (up to 100, no review needed!)
-3. Testers get email → Install TestFlight app → Download your app
-
-## Timeline
-
-- **Day 1**: Sign up Apple Developer, start Xcode config
-- **Day 2**: Finish Xcode, host privacy policy, test build
-- **Day 3**: Upload to TestFlight
-- **Day 4**: Testers using your app! 🎉
-
-## Troubleshooting
-
-**"No signing certificate"**
-- Xcode → Automatically manage signing ✓
-
-**Upload fails**
-- Check bundle ID matches exactly
-- Try archiving again
-
-**Processing stuck**
-- Normal: 10-30 min
-- Check App Store Connect → Activity for errors
-
-## After First Beta
-
-1. Collect feedback
-2. Fix bugs
-3. Upload new build (increment version)
-4. Iterate!
-
-When ready for public: Add screenshots, full metadata, submit to App Store.
-
----
-
-**Commands Cheat Sheet:**
-```bash
-# Open Xcode
-open ios/Runner.xcworkspace
-
-# Build production
-flutter build ios --flavor production -t lib/main_production.dart --release
-
-# Clean build
-flutter clean && flutter pub get
-```
-
-Good luck! 🚀
+- Ohne `make bump-build` lehnt ASC den Upload ab (Build-Nummer nicht höher).
+- Signing: Xcode „Automatically manage signing“ mit dem Team `5X6VFP7F58`.
+- Der Prod-Build spricht die Live-Supabase-Instanz an — Testkonten nur mit
+  Wegwerf-Adressen (E-Mail-Bestätigung ist AN).

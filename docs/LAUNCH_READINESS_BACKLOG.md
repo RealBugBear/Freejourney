@@ -212,7 +212,7 @@ The 2026-06-18 architecture audit's verdict: the codebase is substantially bette
 - [ ] Adopt the adapter-boundary standard from the MVP package incrementally (repositories isolate Supabase access) — opportunistic, per feature touched, not big-bang.
 - [ ] Admin-web: close the client-side audit gap (move destructive mutations into RPCs/Edge Functions) — carried from the MVP package Phase 10.
 - [ ] HANDOFF_STATUS.md refresh: it currently points at the obsolete `/dev/corejourney` paths.
-- [ ] **T20** Doku-Korrekturen (Delta-Analyse 2026-07-05): `docs/FEATURE_FLAGS.md` beschreibt ein Firebase-Remote-Config-System, das im Code nicht existiert (0 Flag-Nutzungen in lib/; `feature_flags`-Tabelle live, aber ungelesen) — korrigieren oder als „nicht implementiert“ markieren. `docs/TESTFLIGHT_QUICKSTART.md` komplett neu schreiben (nennt altes Bundle-ID `com.alexandermessinger.corejourney`, GitHub-Pages-Hosting, obsolete Pfade — Roadmap-Einschätzung „Inhalt sonst brauchbar“ war zu freundlich).
+- [x] **T20** Doku-Korrekturen. ✅ 2026-07-07 — beide Dokumente durch wahre Kurz-Fassungen ersetzt: `FEATURE_FLAGS.md` beschreibt jetzt das reale compile-time-System (`launch_flags.dart` + Consent-Draft-Flag, `feature_flags`-Tabelle als parked markiert); `TESTFLIGHT_QUICKSTART.md` neu geschrieben (richtige Bundle-ID, `make bump-build`/`make testflight`-Ablauf, offene ASC-Voraussetzungen mit R4-Verweis, T22-Check, Live-DB-Warnung).
 
 ---
 
