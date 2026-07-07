@@ -71,7 +71,7 @@ Für jeden offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Blo
 | T18 | Firebase-Admin-Key verschieben/rotieren | P2 | Founder-Mitwirkung (Keychain) | ☐ offen |
 | T19 | In-App-Link zur Datenschutz-URL | P2 | P0.6 (URL live) | ⛔ blockiert: P0.6 |
 | T20 | Doku-Korrekturen (FEATURE_FLAGS, TESTFLIGHT_QUICKSTART) | P3 | — | ☐ offen |
-| T21 | Trainer-Selbst-Freischaltung: DEV-Bypass verifizieren | P1 | — | ☐ offen |
+| T21 | Trainer-Selbst-Freischaltung: DEV-Bypass verifizieren | P1 | — | ✅ 2026-07-07 — Client-Bypass existiert nicht mehr (Grep 0 Treffer; einziger Weg = Edge Function mit server-seitigem Code-Check; kDebugMode-Panels sind Anzeige-only; DB-Trigger `trg_prevent_direct_role_change` aus Migration 2026041504). Vollständiger Beleg-Bericht im Backlog P1.5. Mini-Rest: Live-Trigger-Existenz (1 read-only Query) — in dieser Session vom Permission-Modus geblockt, Nachholen in Session mit Standard-Freigaben |
 | T22 | aps-environment im ersten Store-Archiv prüfen | P1 | erster Archive-Build (nach T09/T16) | ⛔ blockiert: erster Archiv-Build |
 
 **Empfohlene Reihenfolge (Stand 2026-07-06, D1–D3 entschieden):** T04 → T06 → T07 (P0-Block) → T13 → T09 → T10 → T11 → T21 → T05 (Vorbereitung) → T08 → T16 → T15 → T12 → T20 → T18. T04+T06 zuerst, weil sie dieselbe `launch_flags.dart` anlegen und die Chat-UI gemeinsam anfassen (eine Session kann beide nacheinander machen); T13 vor T12, damit die Labels den realen Standort-Datenfluss belegen können.
