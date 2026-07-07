@@ -21,6 +21,7 @@ Erstellt: 2026-07-06 (aus der Delta-Analyse vom 2026-07-05). Gehört zu `docs/LA
 | **D1** | Community-Tab + Experience-Feed in v1? | **A — verstecken** ✅ 2026-07-06 | T04 aktiv; T02/T03 entfallen. Trainer-1:1-Chat bleibt; Review-Notiz erklärt Kontaktweg (T14) |
 | **D2** | Video-Calls in v1? | **A — verstecken** ✅ 2026-07-06 | T06 aktiv. Agora bleibt aus Policy/DPA/Labels raus |
 | **D3** | Trainer-Discovery (Karte + Standort) in v1? | **B — bleibt drin, „make it work“** ✅ 2026-07-06 | T13 ist jetzt ein vollwertiges Fertigbau-Paket (Empty-State, Permission-UX, OSM-Attribution, Offline-Verhalten). Folgen: **Standort** kommt fix in Nutrition Labels (T12), Consent-Entwurf (T05) und Anwalts-Policy (P0.6 — dem Anwalt melden: Geolocation + OSM-Tileserver als Empfänger); iOS/Android-Location-Permissions bleiben (T09/T10) |
+| **D4** | Paywall-Struktur jetzt bauen? | **JA — Struktur sofort, Aktivierung später** ✅ 2026-07-07 | Founder bestätigt die Empfehlungen aus `docs/MONETARISIERUNG_EVALUATION.md`: Trio Monat 12,99 € / Jahr 89,99 € (hervorgehoben) / Lifetime 149 €; **kein Einzelpaket-Verkauf** zum Start. Neue Fakten: **alle Pakete launchen gleichzeitig**, Nutzer trainieren chronologisch (einzelne Frühnutzer werden manuell in spätere Pakete gesetzt — Admin-Fall, kein Paywall-Scope); reale **Programmdauer 10–12+ Monate** (Pausen/Neustarts möglich) → validiert Jahres-Abo als Sweet Spot. Konsequenz: neue Tasks **T23 (Struktur, inaktiv hinter Flag) → T24 (Freischalt-Codes) → T25 (IAP/RevenueCat, ⛔ extern)**. Launch bleibt kostenlos (8.4 unverändert); Aktivierung erst nach R8-Trigger + AGB (Anwalt) |
 
 **Founder-Auflage zu allen dreien (2026-07-06):** Code UND UI müssen sauber angepasst werden — **keine hässlichen Lücken** (keine leeren Tabs/Sektionen, keine verwaisten Buttons/CTAs, Layouts fließen ohne Löcher nach). Das ist in T04/T06/T13 als hartes Akzeptanzkriterium verankert.
 
@@ -39,7 +40,7 @@ Für jeden offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Blo
 | R5 | Support-Postfach: `support@reflexjourney.app` als echtes Postfach (mailbox.org) | Backlog P3 (Support-Postfach) | **sofort** | ☐ offen |
 | R6 | Secrets-Löschung freigeben (Beleglage vollständig, ein „Go R6“ genügt) | Backlog „Next up“ Punkt 5 | **sofort** | ☐ offen |
 | R7 | Telefonnummer: jetzt nichts kaufen; nach Anwalts-Antwort ggf. sipgate | Backlog P3 (EU-Trader-Status) | nach R1/Anwalts-Antwort | ☐ offen |
-| R8 | Paywall: Trigger-basiert post-launch planen + Bestandsschutz-Formel-Vorschlag | Backlog „Open questions / parked“ (Monetarisierung) | Formel: vor der ersten Launch-Kommunikation · Rest: post-launch | ☐ offen |
+| R8 | Paywall: Trigger-basiert post-launch planen + Bestandsschutz-Formel-Vorschlag | Backlog „Open questions / parked“ (Monetarisierung) | Formel: vor der ersten Launch-Kommunikation · Rest: post-launch | 🔄 teilentschieden 2026-07-07 (D4): Struktur-Bau vorgezogen (T23–T25), Trio bestätigt, kein Einzelkauf; **offen bleibt:** Bestandsschutz-Formel-Freigabe + Aktivierungs-Trigger + AGB-Beauftragung |
 | R9 | Reaktivierungs-Checkliste Community/Video statt eigenem Plan jetzt | Backlog „Open questions / parked“ (neuer Punkt) | erst bei Reaktivierungswunsch | ☐ offen |
 | R10 | FAQ-Bereich als statische, gebündelte Inhalte (offline-fähig, kein Backend) | Backlog P2, Punkt C | wenn Sinas Content eintrifft | ☐ offen |
 | R11 | `/trainer`-Formular: kleine Vercel-Function + Resend-Mail (kein neuer Dienstleister) | Backlog P3.W (W5-Zeile) | vor dem Bau von W5 | ☐ offen |
@@ -73,6 +74,9 @@ Für jeden offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Blo
 | T20 | Doku-Korrekturen (FEATURE_FLAGS, TESTFLIGHT_QUICKSTART) | P3 | — | ✅ 2026-07-07 — `FEATURE_FLAGS.md`: 314 Zeilen Remote-Config-Fiktion → 28 Zeilen Realität (launch_flags.dart-Konstanten kCommunityEnabled/kVideoCallsEnabled/kUsePrivacyLaunchDraft, `feature_flags`-Tabelle als ungenutzt/parked markiert). `TESTFLIGHT_QUICKSTART.md`: neu auf heutigem Stand (Bundle-ID de.reflexjourney.app, `make bump-build` + `make testflight`, ASC-Record-Verweis auf R4, T22-Hinweis, Live-DB-Warnung); alte GitHub-Pages-/corejourney-Pfade raus |
 | T21 | Trainer-Selbst-Freischaltung: DEV-Bypass verifizieren | P1 | — | ✅ 2026-07-07 — Client-Bypass existiert nicht mehr (Grep 0 Treffer; einziger Weg = Edge Function mit server-seitigem Code-Check; kDebugMode-Panels sind Anzeige-only; DB-Trigger `trg_prevent_direct_role_change` aus Migration 2026041504). Vollständiger Beleg-Bericht im Backlog P1.5. Mini-Rest: Live-Trigger-Existenz (1 read-only Query) — in dieser Session vom Permission-Modus geblockt, Nachholen in Session mit Standard-Freigaben |
 | T22 | aps-environment im ersten Store-Archiv prüfen | P1 | erster Archive-Build (nach T09/T16) | ⛔ blockiert: erster Archiv-Build |
+| T23 | Paywall-Grundstruktur bauen (inaktiv hinter `kPaywallEnabled=false`) | P2 (post-launch-Aktivierung, Bau jetzt per D4) | — | ☐ offen |
+| T24 | Freischalt-Codes für Gründungsnutzer (access_codes-Einlösung) | P2 | Live-Schema-Check + Function-Deploy: Standard-Freigaben/Founder-Go | ☐ offen (nach T23) |
+| T25 | RevenueCat + Apple IAP verkabeln | P2 | ASC-Record (R4) + IAP-Produkte + RevenueCat-Konto (Founder) + AGB vor Aktivierung (Anwalt B8) | ⛔ blockiert: extern |
 
 **Empfohlene Reihenfolge (Stand 2026-07-06, D1–D3 entschieden):** T04 → T06 → T07 (P0-Block) → T13 → T09 → T10 → T11 → T21 → T05 (Vorbereitung) → T08 → T16 → T15 → T12 → T20 → T18. T04+T06 zuerst, weil sie dieselbe `launch_flags.dart` anlegen und die Chat-UI gemeinsam anfassen (eine Session kann beide nacheinander machen); T13 vor T12, damit die Labels den realen Standort-Datenfluss belegen können.
 
@@ -501,6 +505,55 @@ Melde-Funktion und Nutzer-Blocken werden für v1 nicht gebaut — Community/Feed
 **Verifikation:** Kommando-Ausgabe (nur der aps-environment-Wert) im Protokoll.
 
 **Nicht-Ziele/Verboten:** Entitlements-Datei nicht blind auf `production` hart editieren, ohne zu verstehen, dass Debug-Builds dann ggf. keine Sandbox-Pushes mehr bekommen — erst prüfen, dann gezielt ändern.
+
+---
+
+### T23 — Paywall-Grundstruktur bauen: inaktiv hinter Flag *(D4, Founder 2026-07-07)*
+
+**Rolle:** Du bist Senior Flutter Engineer mit Monetarisierungs-Erfahrung (Entitlements, IAP-Architekturen) und Review-/Datenschutz-Bewusstsein — du baust Kaufstrukturen so, dass sie vor der Aktivierung unsichtbar und nach der Aktivierung auditierbar sind.
+
+**Ziel:** Die komplette Paywall-Struktur existiert im Code und ist per Compile-Time-Flag deaktiviert: Entitlement-Modell, Paket-Gating ab Paket 2, Paywall-Screen (Trio) — Launch-Verhalten bleibt exakt „alles kostenlos“.
+
+**Kontext (D4, 2026-07-07):** Alle Pakete launchen gleichzeitig, Nutzer trainieren chronologisch; Programmdauer real 10–12+ Monate. Bestätigtes Trio: Monat 12,99 € / **Jahr 89,99 € (hervorgehoben)** / Lifetime 149 €; KEIN Einzelpaket-Verkauf. Pflichtlektüre: `docs/MONETARISIERUNG_EVALUATION.md` (inkl. D4-Update) + `docs/superpowers/specs/2026-05-28-monetization-design.md` §3 (Datenmodell). Muster für Flags: `lib/config/launch_flags.dart` (T04/T06).
+
+**Lies zuerst:** beide o. g. Docs; `launch_flags.dart`; den Paket-/Enrollment-Flow (Grep: `Routes.packages`, `enrollments`, wo Paketzugang entsteht und wo Paket 1 endet); `supabase/migrations/20260702_rls_baseline_core_tables.sql` (profiles-Stand); bestehende Paket-/Enrollment-Tests.
+
+**Aufgabe:**
+1. Migration `profiles`-Erweiterung nach Design §3: `is_premium`, `premium_type` (`monthly|yearly|lifetime|code` — `code` NEU für T24), `premium_valid_until`, `stripe_customer_id`; als Datei + `supabase db reset --local`-Replay. **Live-Apply NICHT ausführen** (gated — Founder-Go am Session-Ende sammeln).
+2. `kPaywallEnabled = false` in `launch_flags.dart` (Kommentar: Aktivierung erst nach R8-Trigger + AGB).
+3. `PremiumRepository` + `entitlementProvider`. Semantik glasklar: Flag aus → jeder Zugriff „frei“ (heutiges Verhalten); Flag an → Paket 1 frei, Paket 2+ nur mit Entitlement (`is_premium` bzw. lifetime/code ohne Ablauf).
+4. Paywall-Screen: Trio B, Jahr visuell hervorgehoben („2 Monate geschenkt“), Lifetime als Anker; ehrliche Dauer-Angabe erlaubt („Das Programm dauert typischerweise 10–12 Monate“) — **keine Countdown-/Rabatt-/Angst-Mechaniken, keine Heil-/Wirkversprechen**; DE+EN l10n; Preise aus einer einzigen Konstanten-Datei. Kaufbuttons rufen eine abstrakte `PurchaseService`-Schnittstelle — Stub meldet „Kauf in dieser Version noch nicht verfügbar“ (RevenueCat = T25).
+5. Gating-Einbau am Paketübergang (Trigger laut Design: Abschluss Paket 1 → Start Paket 2) + defensiver Route-Guard für Paket-Inhalte.
+6. Tests: Flag-aus = alles frei (Regressionsschutz!); Flag-an-Matrix (kein Entitlement/monthly abgelaufen/yearly aktiv/lifetime/code); Paywall rendert Trio ohne aktiven Kaufpfad.
+7. Screenshot-Evidenz Paywall (DE+EN, Harness-Muster T04/T13) → `docs/evidence/T23/`.
+
+**Akzeptanzkriterien:** `make release-readiness-mobile` grün; Prod-Build baut; Verhalten mit Flag=false nachweislich unverändert; Migration replayt lokal sauber; Screenshots liegen vor.
+
+**Nicht-Ziele/Verboten:** kein RevenueCat/IAP-SDK (T25); kein Live-DDL; kein Stripe; keine AGB-/Rechtstexte erfinden; Einzelpaket-Kauf NICHT bauen (bewusst, D4).
+
+---
+
+### T24 — Freischalt-Codes für Gründungsnutzer *(nach T23)*
+
+**Rolle:** Du bist Backend-Engineer mit Security-Fokus — Codes sind Zahlungsäquivalente, Einlösung passiert ausschließlich server-seitig.
+
+**Ziel:** Ein Gründungsnutzer-Code lässt sich in der App einlösen und setzt ein dauerhaftes Entitlement (`premium_type='code'`); Erzeugung/Verwaltung bleibt service-role-only.
+
+**Kontext:** Live-Tabelle `access_codes` existiert (RLS an, 0 Policies = deny-all für Clients — so lassen!). Founder-Anforderung 2026-07-05: Codes geben allen Content dauerhaft oder teilweise kostenlos.
+
+**Aufgabe:** (1) Live-Schema von `access_codes` prüfen (read-only Katalog-Query — braucht Session mit Standard-Freigaben) und fehlende Spalten (z. B. `redeemed_by`, `redeemed_at`, `grants`) als Migration ergänzen; (2) Edge Function `redeem-access-code`: JWT-Pflicht, validiert Code, markiert einmalige Einlösung atomar, setzt Entitlement in `profiles`; deno-Tests; **Deploy gated (Founder-Go)**; (3) Einlöse-UI in den Einstellungen (sichtbar auch bei aktiver Paywall sinnvoll positioniert); (4) Doku: wie der Founder Codes erzeugt (service-role, nie im Chat/Repo).
+
+**Akzeptanzkriterien:** Doppel-Einlösung unmöglich (Test); Client kann Codes weder lesen noch erzeugen; Suite grün.
+
+**Nicht-Ziele/Verboten:** keine Codes im Klartext in Logs/Chat; keine Client-seitige Validierung; RLS von `access_codes` nicht öffnen.
+
+---
+
+### T25 — RevenueCat + Apple IAP verkabeln *(⛔ extern blockiert)*
+
+**Blockiert durch:** ASC-App-Record (R4) → IAP-Produkte (Abo-Gruppe: Monat/Jahr + Non-Consumable Lifetime) → RevenueCat-Konto (Founder legt an, EU-Datenverarbeitung prüfen) → AGB/Widerruf (Anwalts-Baustein 8) **vor Aktivierung**.
+
+**Kurzumriss (wird bei Blocker-Wegfall konkretisiert):** `purchases_flutter` einbinden; `PurchaseService`-Stub aus T23 durch RevenueCat-Implementierung ersetzen; Entitlement-Sync RevenueCat→profiles (Webhook oder Client-Sync abwägen); Restore Purchases; Sandbox-Tests; Small Business Program (15 %) in ASC beantragen; Datenschutz: RevenueCat als Verarbeiter in Consent/Labels ergänzen (T05/T12-Nachtrag). Aktivierung (`kPaywallEnabled=true` + Bestandsschutz-Kommunikation) ist ein eigener Founder-Go nach R8-Trigger.
 
 ---
 

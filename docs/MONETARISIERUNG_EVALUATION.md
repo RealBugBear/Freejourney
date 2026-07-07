@@ -155,9 +155,36 @@ Zahlungsbereitschaft, aber **Vertrauensmarkt**. Konsequenzen:
    „kostenlos“ faktisch überholt — direkt auf Phase 2 (IAP) zielen, Stripe
    nur noch für Trainer-Sessions.
 
-## Offene Founder-Entscheidungen (wenn R8 aktiviert wird)
+## Founder-Entscheidung D4 (2026-07-07) — Update
 
-- Preispunkte bestätigen/justieren (Datenlage nach Launch).
-- Bestandsschutz-Formel freigeben (R8-Wortlaut).
-- Trainer-Monetarisierung: nur Provision vs. Provision + Werkzeug-Abo.
-- Steuer-/Rechtsform-Frage (§ 19 UStG) mit Steuerberater.
+Der Founder bestätigt die Empfehlungen (Trio, kein Einzelkauf zum Start)
+und zieht den **Bau der Paywall-Struktur vor** (Aktivierung bleibt
+post-launch). Neue Fakten aus der Praxis:
+
+- **Alle Pakete launchen gleichzeitig**; Nutzer trainieren chronologisch.
+  Einzelne Frühnutzer werden manuell in ein späteres Paket gesetzt —
+  Admin-Sonderfall, kein Paywall-Scope.
+- **Reale Programmdauer: 10–12+ Monate** (bei Pausen/Neustarts länger).
+  Das validiert die Preisleiter: Monats-Abo über die volle Dauer
+  ≈ 156 € > Lifetime 149 € > Jahres-Abo 89,99 €. Jede Option hat damit
+  eine ehrliche Rolle: Monat = unverbindlicher Einstieg (zahlt Aufpreis
+  für Flexibilität), **Jahr = rationaler Standard** (deckt fast die ganze
+  Journey), Lifetime = Pausen-/Neustart-Sicherheit + Abo-Verweigerer.
+  Paywall-Copy darf diese Logik ehrlich zeigen („Das Programm dauert
+  typischerweise 10–12 Monate“) — das ist Transparenz, kein Druckmittel.
+
+Umsetzung: Tasks **T23** (Entitlement-Modell + Paket-Gating + Paywall-UI,
+alles hinter `kPaywallEnabled=false`), **T24** (Freischalt-Codes für
+Gründungsnutzer über `access_codes`), **T25** (RevenueCat/IAP-Verkabelung,
+⛔ bis ASC-Record + Produkte + RevenueCat-Konto existieren) — Prompts im
+Tracker.
+
+## Offene Founder-Entscheidungen (bei Aktivierung der Paywall)
+
+- Bestandsschutz-Formel freigeben (R8-Wortlaut) — vor der ersten
+  Launch-Kommunikation.
+- Aktivierungs-Trigger bestätigen (Launch stabil + Nutzer erreichen Paket 2).
+- AGB/Widerruf beim Anwalt beauftragen (Briefing-Baustein 8 → Festpreis
+  liegt dann schon vor).
+- Trainer-Monetarisierung (Phase 3): nur Provision vs. Provision +
+  Werkzeug-Abo; § 19 UStG mit Steuerberater.
