@@ -442,6 +442,12 @@ class _TermsTab extends StatelessWidget {
 
 // ── Tab 3: Datenschutzerklärung / Privacy Policy ──────────────────────────────
 
+/// T05 Stufe 2 (nach P0.6/Anwalt): auf `true` stellen, Anwalts-Formulierungen
+/// in die _buildLaunchDraft*-Methoden einarbeiten und `kConsentVersion`
+/// bumpen (Re-Consent-Mechanik existiert). Bis dahin bleibt die
+/// Testphasen-Fassung aktiv — der Entwurf ist bewusst toter Code.
+const bool kUsePrivacyLaunchDraft = false;
+
 class _PrivacyTab extends StatelessWidget {
   final bool isDE;
   const _PrivacyTab({required this.isDE});
@@ -450,7 +456,13 @@ class _PrivacyTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
-      child: isDE ? _buildDE(context) : _buildEN(context),
+      child: isDE
+          ? (kUsePrivacyLaunchDraft
+              ? _buildLaunchDraftDE(context)
+              : _buildDE(context))
+          : (kUsePrivacyLaunchDraft
+              ? _buildLaunchDraftEN(context)
+              : _buildEN(context)),
     );
   }
 
@@ -613,6 +625,234 @@ class _PrivacyTab extends StatelessWidget {
           'This Privacy Policy is provisional and will be reviewed by a data protection officer '
           'and finalised in accordance with GDPR before a public release. '
           'By using the app, you agree to this provisional Privacy Policy.',
+    );
+  }
+
+  // ═══ ENTWURF — Launch-Fassung (T05 Stufe 1, 2026-07-07) — NICHT AKTIV ═══
+  //
+  // Aktivierung (Stufe 2, nach P0.6): kUsePrivacyLaunchDraft=true,
+  // Anwalts-Formulierungen einarbeiten, kConsentVersion bumpen.
+  //
+  // Beleg-Liste für den Anwalt — jede Tatsachenbehauptung ist im Code belegt:
+  // • „Supabase, EU-Region“ → Backlog P0.4 ✅ 2026-07-02 (West EU/Irland).
+  // • „app-eigene DB, Geräteverschlüsselung, von Backups ausgeschlossen“
+  //   → P0.5, Commit c654998 (iOS backup-excluded local_store/,
+  //   Android allowBackup=false).
+  // • „Konto und Daten jederzeit in der App löschbar“ → P0.5-Verifikation:
+  //   profile_screen `rpc('delete_user')` + `clearUserData()` wischt alle
+  //   8 lokalen Nutzertabellen.
+  // • „Standort nur auf Anfrage, nicht gespeichert“ + „OSMF erhält IP und
+  //   Kartengebiet“ → docs/STANDORT_DATENFLUSS_T13.md (RPC `STABLE`,
+  //   nutzerinitiierter CTA, kein Persistenzpfad).
+  // • „Geräte-Token über Firebase Cloud Messaging“ → lib/core/push/,
+  //   Live-Tabelle device_tokens (4 Policies).
+  // • „Resend (System-E-Mails)“ → P1.4: Custom SMTP send.reflexjourney.de.
+  // • „Kinderprofile durch Kontoinhaber“ → Tabelle reflex_subject_profiles
+  //   (owner-scoped RLS, kein Kinder-Login).
+  // • Kein Tracking/keine Analytics behauptet → pubspec enthält kein
+  //   Analytics-/Ad-SDK (Firebase Analytics/Crashlytics nicht eingebunden).
+  // • Agora bewusst NICHT genannt → Video-Calls deaktiviert (D2=A,
+  //   kVideoCallsEnabled=false); vor Reaktivierung Consent erweitern
+  //   (Merkposten R9 im Backlog).
+  // • Sentry noch NICHT genannt → erst mit T15 einbauen und hier ergänzen.
+
+  Widget _buildLaunchDraftDE(BuildContext context) {
+    return const _ConsentContent(
+      title: 'Datenschutzerklärung',
+      intro:
+          'Diese Datenschutzerklärung informiert dich darüber, wie Reflex Journey '
+          'personenbezogene Daten gemäß DSGVO verarbeitet.',
+      points: [
+        _ConsentPoint(
+          icon: Icons.person_pin_outlined,
+          title: 'Verantwortlicher',
+          body: 'Verantwortlicher im Sinne der DSGVO: Alexander Messinger. '
+              'Kontakt für Datenschutzanfragen: über die in der App hinterlegten '
+              'Kontaktdaten.',
+        ),
+        _ConsentPoint(
+          icon: Icons.storage_outlined,
+          title: 'Erhobene Daten',
+          body: 'Wir verarbeiten: E-Mail-Adresse und Passwort (Registrierung), '
+              'Fortschrittsdaten (Trainingseinheiten, Einstiegsfragebogen), '
+              'Stimmungs- und Journaldaten, deine optionale Angabe zum '
+              'Einstiegsbereich, Geräteinformationen (Betriebssystem, App-Version) '
+              'sowie — wenn du Mitteilungen aktivierst — ein Geräte-Token für '
+              'Push-Nachrichten.',
+        ),
+        _ConsentPoint(
+          icon: Icons.escalator_warning_outlined,
+          title: 'Profile für Kinder',
+          body: 'Profile für Kinder werden ausschließlich durch den '
+              'erziehungsberechtigten Kontoinhaber angelegt und verwaltet. '
+              'Die Daten des Kindes (z. B. Name, Geburtsdatum, '
+              'Trainingsfortschritt) gehören zu deinem Konto und werden wie '
+              'deine eigenen Daten geschützt.',
+        ),
+        _ConsentPoint(
+          icon: Icons.near_me_outlined,
+          title: 'Standort & Karte',
+          body: 'Dein Standort wird nur auf deine Anfrage für die Trainer-Suche '
+              'verwendet und nicht gespeichert. Beim Anzeigen der Karte werden '
+              'Kartenkacheln von Servern der OpenStreetMap Foundation geladen; '
+              'diese erhält dabei technisch bedingt deine IP-Adresse und das '
+              'angezeigte Kartengebiet.',
+        ),
+        _ConsentPoint(
+          icon: Icons.task_alt_outlined,
+          title: 'Zweck der Verarbeitung',
+          body: 'Bereitstellung der App-Funktionen, Speicherung und '
+              'Synchronisierung deines Trainingsfortschritts, Zustellung von '
+              'Mitteilungen und Erinnerungen sowie System-E-Mails zu deinem '
+              'Konto (z. B. Registrierungs-Bestätigung, Passwort-Zurücksetzen).',
+        ),
+        _ConsentPoint(
+          icon: Icons.cloud_outlined,
+          title: 'Datenverarbeitung & Speicherort',
+          body:
+              'Deine Daten werden verschlüsselt auf Servern von Supabase (EU-Region) '
+              'gespeichert. Lokal auf deinem Gerät werden Daten für die '
+              'Offline-Funktionalität in einer app-eigenen Datenbank gehalten, die '
+              'nur diese App lesen kann, durch die Geräteverschlüsselung deines '
+              'Betriebssystems geschützt ist und von Geräte-Backups ausgeschlossen '
+              'wird.',
+        ),
+        _ConsentPoint(
+          icon: Icons.share_outlined,
+          title: 'Auftragsverarbeiter & Empfänger',
+          body: 'Deine Daten werden nicht verkauft. Eine Übermittlung erfolgt nur '
+              'an technische Dienstleister im Rahmen der Auftragsverarbeitung '
+              '(Art. 28 DSGVO): Supabase (Datenbank und Anmeldung, EU-Region), '
+              'Google Firebase Cloud Messaging (Zustellung von Push-Nachrichten) '
+              'und Resend (Versand von System-E-Mails). Beim Kartenabruf in der '
+              'Trainer-Suche ist die OpenStreetMap Foundation externer Empfänger '
+              '(IP-Adresse, Kartengebiet).',
+        ),
+        _ConsentPoint(
+          icon: Icons.notifications_none_outlined,
+          title: 'Push-Benachrichtigungen',
+          body: 'Erinnerungen können lokal auf deinem Gerät geplant werden. Für '
+              'Mitteilungen (z. B. Nachrichten deines Trainers) wird ein '
+              'Geräte-Token über Google Firebase Cloud Messaging verarbeitet. '
+              'Mitteilungen kannst du in den Systemeinstellungen jederzeit '
+              'deaktivieren.',
+        ),
+        _ConsentPoint(
+          icon: Icons.timer_outlined,
+          title: 'Speicherdauer',
+          body: 'Deine Daten bleiben gespeichert, bis du dein Konto löschst. '
+              'Konto und Daten kannst du jederzeit direkt in der App löschen; '
+              'Details zur Speicherdauer einzelner Datenarten regelt die '
+              'Datenschutzerklärung.',
+        ),
+        _ConsentPoint(
+          icon: Icons.verified_user_outlined,
+          title: 'Deine Rechte (DSGVO)',
+          body: 'Du hast das Recht auf: Auskunft (Art. 15), Berichtigung (Art. 16), '
+              'Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), '
+              'Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). '
+              'Zur Geltendmachung deiner Rechte kontaktiere uns über die App.',
+        ),
+      ],
+      closing:
+          'Die vollständige Datenschutzerklärung findest du jederzeit unter '
+          'reflexjourney.app/datenschutz.',
+    );
+  }
+
+  Widget _buildLaunchDraftEN(BuildContext context) {
+    return const _ConsentContent(
+      title: 'Privacy Policy',
+      intro:
+          'This Privacy Policy explains how Reflex Journey processes personal data '
+          'in accordance with the GDPR.',
+      points: [
+        _ConsentPoint(
+          icon: Icons.person_pin_outlined,
+          title: 'Data Controller',
+          body:
+              'The data controller within the meaning of the GDPR: Alexander Messinger. '
+              'For privacy inquiries, use the contact information provided in the app.',
+        ),
+        _ConsentPoint(
+          icon: Icons.storage_outlined,
+          title: 'Data We Process',
+          body: 'We process: email address and password (registration), '
+              'progress data (training sessions, intake questionnaire), '
+              'mood and journal data, your optional entry-point selection, '
+              'device information (OS, app version), and — if you enable '
+              'notifications — a device token for push messages.',
+        ),
+        _ConsentPoint(
+          icon: Icons.escalator_warning_outlined,
+          title: 'Profiles for Children',
+          body: 'Profiles for children are created and managed exclusively by '
+              'the parent or guardian who owns the account. The child\'s data '
+              '(e.g. name, date of birth, training progress) belongs to your '
+              'account and is protected like your own data.',
+        ),
+        _ConsentPoint(
+          icon: Icons.near_me_outlined,
+          title: 'Location & Map',
+          body: 'Your location is used only at your request for the trainer '
+              'search and is never stored. When the map is shown, map tiles are '
+              'loaded from servers of the OpenStreetMap Foundation, which '
+              'technically receives your IP address and the displayed map area.',
+        ),
+        _ConsentPoint(
+          icon: Icons.task_alt_outlined,
+          title: 'Purpose of Processing',
+          body: 'Providing app features, storing and syncing your training '
+              'progress, delivering notifications and reminders, and sending '
+              'account emails (e.g. sign-up confirmation, password reset).',
+        ),
+        _ConsentPoint(
+          icon: Icons.cloud_outlined,
+          title: 'Data Processing & Storage',
+          body: 'Your data is stored encrypted on Supabase servers (EU region). '
+              'Locally on your device, data is held for offline functionality in '
+              'an app-private database that only this app can read, is protected '
+              'by your operating system\'s device encryption, and is excluded '
+              'from device backups.',
+        ),
+        _ConsentPoint(
+          icon: Icons.share_outlined,
+          title: 'Processors & Recipients',
+          body: 'Your data is never sold. It is transmitted only to technical '
+              'service providers under data processing agreements (Art. 28 GDPR): '
+              'Supabase (database and authentication, EU region), Google Firebase '
+              'Cloud Messaging (push delivery), and Resend (system emails). When '
+              'the trainer-search map is displayed, the OpenStreetMap Foundation '
+              'is an external recipient (IP address, map area).',
+        ),
+        _ConsentPoint(
+          icon: Icons.notifications_none_outlined,
+          title: 'Push Notifications',
+          body: 'Reminders can be scheduled locally on your device. For messages '
+              '(e.g. from your trainer), a device token is processed via Google '
+              'Firebase Cloud Messaging. You can disable notifications in your '
+              'system settings at any time.',
+        ),
+        _ConsentPoint(
+          icon: Icons.timer_outlined,
+          title: 'Retention Period',
+          body: 'Your data is stored until you delete your account. You can '
+              'delete your account and data at any time directly in the app; '
+              'retention details for individual data types are set out in the '
+              'Privacy Policy.',
+        ),
+        _ConsentPoint(
+          icon: Icons.verified_user_outlined,
+          title: 'Your Rights (GDPR)',
+          body: 'You have the right to: access (Art. 15), rectification (Art. 16), '
+              'erasure (Art. 17), restriction of processing (Art. 18), '
+              'data portability (Art. 20), and objection (Art. 21). '
+              'To exercise your rights, contact us via the app.',
+        ),
+      ],
+      closing:
+          'You can find the full Privacy Policy at any time at '
+          'reflexjourney.app/datenschutz.',
     );
   }
 }
