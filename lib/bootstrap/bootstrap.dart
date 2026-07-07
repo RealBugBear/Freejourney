@@ -66,7 +66,6 @@ class Bootstrap {
       supabaseUrl: dotenv.env['SUPABASE_URL']!,
       supabaseAnonKey: dotenv.env['SUPABASE_ANON_KEY']!,
       revenueCatApiKey: dotenv.env['REVENUECAT_API_KEY'] ?? '',
-      adminEmail: dotenv.env['ADMIN_EMAIL'] ?? '',
       agoraAppId: dotenv.env['AGORA_APP_ID'] ?? '',
     );
     _dbg('AppConfig created, url=${config.supabaseUrl}');

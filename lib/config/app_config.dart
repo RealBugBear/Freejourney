@@ -7,7 +7,6 @@ class AppConfig {
   final String supabaseUrl;
   final String supabaseAnonKey;
   final String revenueCatApiKey;
-  final String adminEmail;
   final String agoraAppId;
 
   const AppConfig({
@@ -15,7 +14,6 @@ class AppConfig {
     required this.supabaseUrl,
     required this.supabaseAnonKey,
     required this.revenueCatApiKey,
-    this.adminEmail = '',
     this.agoraAppId = '',
   });
 
