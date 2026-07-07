@@ -1,7 +1,26 @@
 # Monetarisierung & Paywall — Design
 
-Status: Approved v1 (2026-05-28)
+Status: Approved v1 (2026-05-28) — **TEILWEISE VERWORFEN, siehe Update unten**
 Owner: Alexander Messinger
+
+> **⚠️ Update 2026-07-07 (Founder-Entscheidung D5):** Der komplette
+> **Trainer-Payments-Teil ist GESTRICHEN** — die Abrechnung von
+> Trainer-Sitzungen läuft **ausschließlich direkt zwischen Trainer und
+> Klient**, ohne die Plattform: keine Session-Provision, kein Stripe
+> Connect, keine `session_payments`-Tabelle, keine Payment-Edge-Functions,
+> kein DAC7 (entfällt, weil die Plattform keine Zahlungen vermittelt oder
+> kennt). Betroffen: §1 Punkt 2, §4 komplett, §5 (Connect-/Payment-Teile),
+> §6 (Stripe-Connect-Zeilen + DAC7-Absatz). Trainer-Monetarisierung läuft
+> künftig — falls überhaupt — über ein **Trainer-Werkzeug-Abo** (Details:
+> `docs/MONETARISIERUNG_EVALUATION.md`).
+>
+> Ebenfalls überholt: **Phase 1 (Stripe-Checkout fürs Nutzer-Abo)** —
+> durch die Entscheidung „Launch kostenlos“ (8.4) wird direkt auf Phase 2
+> (RevenueCat + Apple IAP) gezielt; Stripe wird gar nicht mehr benötigt.
+> **Weiter gültig:** §3 Paywall-Logik/Produkte (Trio B) und das
+> profiles-Entitlement-Datenmodell — umgesetzt in T23 (Migration
+> `2026070701_premium_entitlements.sql`, `premium_type` um `'code'`
+> erweitert, plus Schutz-Trigger gegen Client-Selbstfreischaltung).
 
 ---
 

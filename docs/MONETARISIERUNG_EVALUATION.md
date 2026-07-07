@@ -83,6 +83,34 @@ Zahlungsbereitschaft, aber **Vertrauensmarkt**. Konsequenzen:
 
 ## 2. Trainer-Seite: Mittelsmann-Modell realistisch betrachtet
 
+> **⚠️ ÜBERHOLT durch Founder-Entscheidung D5 (2026-07-07):**
+> **Die Session-Provision ist gestrichen.** Trainer-Sitzungen werden
+> ausschließlich **direkt zwischen Trainer und Klient** abgerechnet — die
+> Plattform vermittelt nur den Kontakt und stellt Werkzeuge, verarbeitet
+> keine Zahlungen, erhält keine Provision und kennt keine Beträge.
+> Konsequenzen:
+> - Das **Disintermediations-Problem (unten analysiert) entfällt als
+>   Geschäftsrisiko** — es gibt nichts zu umgehen; die Analyse bleibt als
+>   Begründung der Entscheidung dokumentiert.
+> - **Trainer-Monetarisierung = Trainer-Werkzeug-Abo** (einziges Modell,
+>   post-launch zu designen): Klientenverwaltung, Fortschritts-/
+>   Reflexprofil-Ansicht, Terminplanung, Sichtbarkeits-Features. Mit dem
+>   Gründungs-Versprechen kompatibel (kostenlos ist nur Eintrag/
+>   Sichtbarkeit — Werkzeuge sind abgrenzbar; Gründungs-Trainern ggf.
+>   dauerhaft vergünstigt als Dankeschön).
+> - **Rechtlich fällt weg:** Stripe Connect/ZAG-Thematik, DAC7-Meldepflicht
+>   (Plattform vermittelt/kennt keine Zahlungen → kein meldepflichtiger
+>   Plattform-Betreiber), Storno-/Ausfallregeln im Plattformvertrag,
+>   Provisions-USt. **Bleibt zu prüfen (Anwalt, bei Phase 3):** P2B-VO
+>   (greift ggf. schon für die reine Vermittlungsleistung) und die
+>   Haftungs-Abgrenzung (Vermittlung ≠ Behandlung) — Abgrenzungs-
+>   Formulierung ist im Anwalts-Briefing ergänzt.
+> - Umsatzseitig: Die unten stehende Provisions-Beispielrechnung ist
+>   hinfällig; das Nutzer-Abo ist damit noch eindeutiger der einzige
+>   Umsatzmotor zum Start.
+
+*Ursprüngliche Analyse (Basis der Entscheidung, dokumentarisch):*
+
 ### Das designte Modell (15 % Session-Provision via Stripe Connect)
 
 - **Logik:** Sauber konstruiert — Stripe ist der lizenzierte
@@ -128,12 +156,11 @@ Zahlungsbereitschaft, aber **Vertrauensmarkt**. Konsequenzen:
 | Thema | Status |
 |---|---|
 | IAP-Pflicht für digitale Inhalte (Apple 3.1.1); Stripe-Checkout fürs Abo im App Store unzulässig | bekannt, Roadmap §4; EU-Alternativen (DMA-Link-out) für Solo-Gründer unverhältnismäßig — bleibt so |
-| Trainer-Sessions = persönliche Dienstleistung → außerhalb IAP erlaubt (Uber-Muster) | bekannt, Design §2 |
+| Trainer-Sessions: seit D5 komplett außerhalb der Plattform (direkte Abrechnung Trainer↔Klient) — kein Apple-Thema, kein Zahlungsrecht | D5 2026-07-07 |
 | AGB + Widerrufsbelehrung (digitale Inhalte, § 356 Abs. 5 BGB-Mechanik via Apple) | im Anwalts-Briefing als **Baustein 8 (optional)** angefragt ✓ |
 | Gewährleistung digitale Produkte (§§ 327 ff. BGB), Preisangaben | ins AGB-Paket (Anwalt) |
-| Trainer-Plattformvertrag: Provision, Haftungsabgrenzung (Vermittlung ≠ Behandlung), Storno-/Ausfallregeln, DAC7-Hinweis | Design §6 kennt DAC7; **NEU zu ergänzen: P2B-Verordnung (EU 2019/1150)** — gilt, sobald gewerbliche Trainer über uns Verbraucher erreichen (AGB-Transparenz, Ranking-Kriterien offenlegen, Kündigungsfristen) |
-| Kein Geld über eigenes Konto durchleiten (ZAG) | durch Stripe-Connect-Architektur gelöst — so lassen |
-| USt auf Plattform-Provision (19 %), Kleinunternehmerfrage (§ 19 UStG) | mit Steuerberater klären, wenn Phase 3 ansteht |
+| Trainer-Vertragsverhältnis: Haftungsabgrenzung (Vermittlung ≠ Behandlung, Plattform ist nicht Vertragspartei der Sitzungen) + P2B-Verordnung (EU 2019/1150) für die Vermittlungsleistung | Abgrenzungs-Formulierung im Anwalts-Briefing ergänzt (D5); P2B bei Phase 3 prüfen |
+| ~~Stripe Connect/ZAG, DAC7-Meldepflicht, Storno-Regeln, Provisions-USt~~ | **entfallen mit D5** (keine Zahlungsvermittlung, keine Kenntnis der Beträge) |
 | Keine Heilversprechen in Paywall-/Verkaufs-Copy (UWG/HWG-Nähe) | Standing Rule des Projekts, gilt auch hier |
 | Bestandsschutz-Kommunikation vor Paywall-Live | R8-Formel, Founder-Freigabe nötig |
 
@@ -146,14 +173,12 @@ Zahlungsbereitschaft, aber **Vertrauensmarkt**. Konsequenzen:
    RevenueCat + Apple IAP; Small Business Program beantragen.
 2. **Kein Einzelpaket-Verkauf zum Start**; später als Exit-Offer testen,
    wenn Paywall-Absprungdaten es rechtfertigen.
-3. **Phase 3 (Trainer-Payments):** 15 % Session-Provision via Stripe Connect
-   wie designt — mit realistischer Erwartung (Erstvermittlungs-Umsatz);
-   parallel Trainer-Werkzeug-Abo evaluieren. P2B/Storno-Regeln in den
-   Trainer-Plattformvertrag (Anwalt, separater Auftrag bei Phase 3).
-4. **Phase-1-Anpassung ans Design:** Der ursprüngliche Phase-1-Plan
-   (Stripe-Checkout fürs Abo in TestFlight) ist durch die Launch-Entscheidung
-   „kostenlos“ faktisch überholt — direkt auf Phase 2 (IAP) zielen, Stripe
-   nur noch für Trainer-Sessions.
+3. **Phase 3 (Trainer-Seite) — Stand D5 2026-07-07:** KEINE Session-Provision
+   (Abrechnung direkt Trainer↔Klient, Plattform außen vor). Einziges
+   künftiges Trainer-Modell: **Werkzeug-Abo** (eigene Design-Session
+   post-launch; P2B-Frage + Haftungs-Abgrenzung dann zum Anwalt).
+4. **Stripe entfällt komplett** (D5 + Launch-kostenlos): Nutzer-Käufe laufen
+   über Apple IAP (T25), Trainer-Zahlungen existieren plattformseitig nicht.
 
 ## Founder-Entscheidung D4 (2026-07-07) — Update
 

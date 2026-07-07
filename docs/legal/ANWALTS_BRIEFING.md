@@ -26,7 +26,14 @@
 - **Trainer-Komponente:** Zertifizierte Reflexintegrations-Trainer können
   sich bewerben, werden manuell geprüft (Ablauf s. Abschnitt 6) und sind
   danach in einer Trainer-Suche (Liste + Karte) sichtbar; Nutzer können
-  sich mit einem Trainer verbinden (1:1-Chat).
+  sich mit einem Trainer verbinden (1:1-Chat). **Wichtige Abgrenzung:**
+  Die Plattform vermittelt ausschließlich den Kontakt und stellt
+  Werkzeuge (Chat, Termine, Fortschritts-Teilen). Verträge über und die
+  Bezahlung von Trainer-Sitzungen kommen **ausschließlich direkt zwischen
+  Trainer und Klient** zustande — die Plattform ist nicht Vertragspartei,
+  verarbeitet keine Zahlungen, erhält keine Provision und kennt keine
+  Beträge. Bitte diese Abgrenzung in Datenschutzerklärung/Haftungs-
+  passagen entsprechend abbilden.
 - **Vertrieb:** Apple App Store, EU-Verteilung, Start in Deutschland.
   **Launch kostenlos**, keine In-App-Käufe zum Start.
 - **Website:** `reflexjourney.app` (Hosting: Vercel) — bekommt Impressum,
@@ -63,7 +70,10 @@
 7. **Trainer-Vetting:** Kurzbestätigung unseres Sichtprüfungs-Ablaufs
    (Abschnitt 6) — insbesondere der Grundsatz „ansehen, nie speichern“
    beim erweiterten Führungszeugnis (Art. 10 DSGVO) und der geplante
-   Prüfvermerk.
+   Prüfvermerk. Bitte dabei auch die Abgrenzungs-Formulierung aus
+   Abschnitt 1 mitdenken (reine Kontaktvermittlung; Sitzungsverträge und
+   -zahlungen ausschließlich direkt Trainer↔Klient — keine
+   Zahlungsvermittlung durch die Plattform).
 8. **OPTIONAL — bitte nur Angebotspreis:** AGB + Widerrufsbelehrung für
    spätere In-App-Abos (Apple In-App-Purchase, „Phase 2“ nach dem Launch;
    jetzt noch nicht beauftragt). Ebenfalls optional: Datenschutz-Passage
