@@ -21,6 +21,21 @@ Expected:
 - `test/features/progress/streak_logic_test.dart` passes
 - Phase-0 prompt includes midnight/offline/restart smoke cases
 
+## Build-Nummer (vor JEDEM Store-/TestFlight-Upload)
+
+Schema: `version: X.Y.Z+YYYYMMDDNN` in `pubspec.yaml` (Datum + zweistellige
+Tageslaufnummer). Das ist die **einzige Quelle** — iOS `CFBundleVersion` und
+Android `versionCode` erben daraus, und `make testflight` /
+`make android-testers` lesen sie seit T16 ebenfalls von dort.
+Limit-Check (T16): Androids `versionCode`-Maximum ist 2.147.483.647 —
+`YYYYMMDDNN` bleibt bis Ende 2099 darunter (2099123199 < 2147483647);
+Apple verlangt nur strenge Monotonie pro Version.
+
+- `make bump-build` — Build-Nummer auf heute setzen; mehrfach am selben Tag
+  → NN zählt hoch (01, 02, …). **Vor jedem Upload ausführen.**
+- `make bump-patch` — Patch-Version erhöhen (1.0.5 → 1.0.6) + Build-Nummer
+  auf heute+01. Marketing-Version nur nach Founder-Entscheidung.
+
 ## Manual smoke (must-pass)
 
 1. Hands-free training

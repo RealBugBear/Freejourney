@@ -6,8 +6,13 @@ ENTRY_PROD  := lib/main_production.dart
 IOS_DEVICE_TIMEOUT ?= 1
 IOS_RUN_ARGS ?=
 APP_VERSION := $(shell sed -n 's/^version: \([0-9.]*\)+.*/\1/p' pubspec.yaml)
-BUILD_NUMBER ?= $(shell date +%Y%m%d%H%M)
-ANDROID_BUILD_NUMBER ?= $(shell date +%Y%m%d%H)
+# Build-Nummer: einzige Quelle ist pubspec.yaml (version: X.Y.Z+YYYYMMDDNN).
+# Vor jedem Store-Upload `make bump-build` ausführen (T16). Ad-hoc-Override:
+# make testflight BUILD_NUMBER=2026070799
+# (Vorher: date-basierte Defaults — iOS %Y%m%d%H%M war 12-stellig und hätte
+# Androids versionCode-Limit von 2.147.483.647 gesprengt.)
+BUILD_NUMBER ?= $(shell sed -n 's/^version: [0-9.]*+\([0-9]*\)/\1/p' pubspec.yaml)
+ANDROID_BUILD_NUMBER ?= $(BUILD_NUMBER)
 ANDROID_DIST_FLAVOR ?= production
 ANDROID_DIST_ENTRY ?= lib/main_$(ANDROID_DIST_FLAVOR).dart
 ANDROID_DIST_GROUPS ?= testers
@@ -16,7 +21,7 @@ ANDROID_DIST_APK := build/app/outputs/flutter-apk/app-$(ANDROID_DIST_FLAVOR)-rel
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null || echo local)
 GIT_SHA := $(shell git rev-parse --short HEAD 2>/dev/null || echo local)
 
-.PHONY: run run-sim run-android release release-readiness-mobile testflight android-testers clean
+.PHONY: run run-sim run-android release release-readiness-mobile testflight android-testers clean bump-build bump-patch
 
 # NOTE: Profile mode is the ONLY stable mode on physical iPhone with iOS 26.2.1 beta.
 # Debug mode fails to establish the Xcode debug proxy.
@@ -84,6 +89,28 @@ android-testers:
 	@echo "Flavor: $(ANDROID_DIST_FLAVOR)"
 	@echo "Version: $(APP_VERSION) ($(ANDROID_BUILD_NUMBER))"
 	@echo "Groups: $(ANDROID_DIST_GROUPS)"
+
+## Build-Nummer auf heute setzen (YYYYMMDDNN); beim zweiten Lauf am selben
+## Tag zählt die Laufnummer NN hoch — Ergebnis ist immer streng steigend (T16)
+bump-build:
+	@current=$$(sed -n 's/^version: [0-9.]*+\([0-9]*\)$$/\1/p' pubspec.yaml); \
+	today=$$(date +%Y%m%d); \
+	if [ "$${current%??}" = "$$today" ]; then \
+		nn=$$(printf '%02d' $$((10#$${current#$$today} + 1))); \
+	else \
+		nn=01; \
+	fi; \
+	sed -i '' -E "s/^(version: [0-9.]+)\+[0-9]+$$/\1+$$today$$nn/" pubspec.yaml; \
+	echo "pubspec.yaml → $$(grep '^version:' pubspec.yaml)"
+
+## Patch-Version erhöhen (1.0.5 → 1.0.6) + Build-Nummer auf heute+01 (T16).
+## Marketing-Version nur nach Founder-Entscheidung anfassen!
+bump-patch:
+	@ver=$$(sed -n 's/^version: \([0-9.]*\)+.*/\1/p' pubspec.yaml); \
+	new=$$(echo $$ver | awk -F. '{printf "%d.%d.%d", $$1, $$2, $$3+1}'); \
+	today=$$(date +%Y%m%d); \
+	sed -i '' -E "s/^version: [0-9.]+\+[0-9]+$$/version: $$new+$${today}01/" pubspec.yaml; \
+	echo "pubspec.yaml → $$(grep '^version:' pubspec.yaml)"
 
 ## Clean build artifacts and reinstall packages
 clean:
