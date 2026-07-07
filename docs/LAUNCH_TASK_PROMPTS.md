@@ -32,7 +32,7 @@ Für jeden offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Blo
 
 | R# | Thema (Kurzfassung der Empfehlung) | Detail-Block liegt in | Vorlegen wann | Status |
 |----|-------------------------------------|------------------------|----------------|--------|
-| R1 | Anwaltsauftrag: erst versandfertiges Briefing erstellen, dann 2–3 Kanzleien mit Festpreis-Anfrage | Backlog P0.6 | **sofort** (nächste Session) | ☐ offen |
+| R1 | Anwaltsauftrag: erst versandfertiges Briefing erstellen, dann 2–3 Kanzleien mit Festpreis-Anfrage | Backlog P0.6 | **sofort** (nächste Session) | ✅ 2026-07-07 angenommen („go r1“) — Briefing liegt vor: `docs/legal/ANWALTS_BRIEFING.md` (inkl. E-Mail-Anschreiben; 3 Platzhalter für Founder: Rechtsform, Kontakt, Zeitrahmen). Nächster Schritt Founder: 15-Min-Review, Platzhalter füllen, an 2–3 IT-/Datenschutz-Kanzleien senden (Anlagen: Consent-Entwurf, `STANDORT_DATENFLUSS_T13.md`, `PRIVACY_LABELS_DRAFT.md`) |
 | R2 | Confirm-Link-Test mit der Screenshot-Sitzung koppeln (eine Geräte-Sitzung für beides) | Tracker, T17-Prompt unten | nächste Geräte-Gelegenheit | ☐ offen |
 | R3 | Untertitel „Dein Reflexintegrations-Weg“ + Copy-Freigabe als ein 15-Min-Durchgang | `STORE_LISTING_DRAFT.md`, „Offene Entscheidungen“ | **sofort** | ☐ offen |
 | R4 | ASC-App-Record in gemeinsamer Claude-in-Chrome-Sitzung anlegen (~20 Min.) | Backlog P3 (ASC-Record) | **sofort** | ☐ offen |
