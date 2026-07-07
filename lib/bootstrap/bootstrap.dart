@@ -11,6 +11,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../config/app_config.dart';
 import '../core/database/app_database.dart';
 import '../core/logging/app_logger.dart';
+import '../core/monitoring/sentry_service.dart';
 import '../core/notifications/notification_service.dart';
 import '../core/push/push_notification_service.dart';
 import '../core/storage/file_local_storage.dart';
@@ -69,6 +70,13 @@ class Bootstrap {
       agoraAppId: dotenv.env['AGORA_APP_ID'] ?? '',
     );
     _dbg('AppConfig created, url=${config.supabaseUrl}');
+
+    // Crash-Reporting (T15): no-op ohne SENTRY_DSN in der Env-Datei.
+    // Früh initialisieren, damit Fehler der folgenden Init-Schritte
+    // mitgemeldet werden; darf den Start selbst nie blockieren.
+    _dbg('SentryService.init start');
+    await SentryService.init(environment: environment);
+    _dbg('SentryService.init done (active=${SentryService.isActive})');
 
     // Initialize Supabase with file-based session storage.
     //

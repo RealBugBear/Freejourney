@@ -654,7 +654,11 @@ class _PrivacyTab extends StatelessWidget {
   // • Agora bewusst NICHT genannt → Video-Calls deaktiviert (D2=A,
   //   kVideoCallsEnabled=false); vor Reaktivierung Consent erweitern
   //   (Merkposten R9 im Backlog).
-  // • Sentry noch NICHT genannt → erst mit T15 einbauen und hier ergänzen.
+  // • „Sentry (Absturzberichte)“ → T15: lib/core/monitoring/sentry_service.dart
+  //   — sendDefaultPii=false, beforeSend strippt Request/User/Extra,
+  //   HTTP-/Navigations-Breadcrumbs verworfen; nur Fehlertyp, Stacktrace,
+  //   Geräte-/OS-Kontext; EU-Datenhaltung (Founder legt Projekt in
+  //   EU-Region an, Entscheidung 8.6).
 
   Widget _buildLaunchDraftDE(BuildContext context) {
     return const _ConsentContent(
@@ -723,8 +727,10 @@ class _PrivacyTab extends StatelessWidget {
           body: 'Deine Daten werden nicht verkauft. Eine Übermittlung erfolgt nur '
               'an technische Dienstleister im Rahmen der Auftragsverarbeitung '
               '(Art. 28 DSGVO): Supabase (Datenbank und Anmeldung, EU-Region), '
-              'Google Firebase Cloud Messaging (Zustellung von Push-Nachrichten) '
-              'und Resend (Versand von System-E-Mails). Beim Kartenabruf in der '
+              'Google Firebase Cloud Messaging (Zustellung von Push-Nachrichten), '
+              'Resend (Versand von System-E-Mails) und Sentry (anonymisierte '
+              'Absturzberichte: Fehlertyp, technischer Ablauf, Gerätemodell — '
+              'keine Inhalte, EU-Datenhaltung). Beim Kartenabruf in der '
               'Trainer-Suche ist die OpenStreetMap Foundation externer Empfänger '
               '(IP-Adresse, Kartengebiet).',
         ),
@@ -821,8 +827,10 @@ class _PrivacyTab extends StatelessWidget {
           body: 'Your data is never sold. It is transmitted only to technical '
               'service providers under data processing agreements (Art. 28 GDPR): '
               'Supabase (database and authentication, EU region), Google Firebase '
-              'Cloud Messaging (push delivery), and Resend (system emails). When '
-              'the trainer-search map is displayed, the OpenStreetMap Foundation '
+              'Cloud Messaging (push delivery), Resend (system emails), and '
+              'Sentry (anonymised crash reports: error type, technical trace, '
+              'device model — no content, EU data residency). When the '
+              'trainer-search map is displayed, the OpenStreetMap Foundation '
               'is an external recipient (IP address, map area).',
         ),
         _ConsentPoint(

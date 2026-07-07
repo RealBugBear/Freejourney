@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../bootstrap/providers.dart';
 import '../../../../core/database/app_database.dart';
+import '../../../../core/monitoring/sentry_service.dart';
 import '../../../../core/time/app_clock_provider.dart';
 import '../../../../features/progress/presentation/providers/progress_provider.dart';
 
@@ -235,8 +236,44 @@ class DevToolsScreen extends ConsumerWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 16),
+            // ── Diagnostics (T15) ────────────────────────────────────────────
+            _SectionCard(
+              title: 'Diagnostics',
+              color: Colors.purple.shade50,
+              children: [
+                Text(
+                  'Sentry: ${SentryService.isActive ? "aktiv" : "inaktiv (kein SENTRY_DSN in der Env-Datei)"}',
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                ),
+                const SizedBox(height: 12),
+                _ActionButton(
+                  label: 'Test-Crash an Sentry senden',
+                  icon: Icons.bug_report_outlined,
+                  color: Colors.purple,
+                  onPressed: () => _sendSentryTestCrash(context),
+                ),
+              ],
+            ),
             const SizedBox(height: 32),
           ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _sendSentryTestCrash(BuildContext context) async {
+    await SentryService.captureException(
+      StateError('Sentry test crash — Dev Tools (T15 verification)'),
+      StackTrace.current,
+    );
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          SentryService.isActive
+              ? 'Test-Event gesendet — im Sentry-Dashboard prüfen.'
+              : 'Sentry ist inaktiv (kein SENTRY_DSN) — nichts gesendet.',
         ),
       ),
     );

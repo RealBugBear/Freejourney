@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 import '../../config/app_config.dart';
+import '../monitoring/sentry_service.dart';
 
 /// Custom log levels used by LoggerService.
 enum AppLogLevel {
@@ -180,7 +181,11 @@ class LoggerService {
     return '$message | $dataStr';
   }
 
-  /// Report error to crash reporting service
+  /// Report error to crash reporting service (Sentry, T15).
+  ///
+  /// Bewusst NUR Fehlerobjekt + Stacktrace — `reason`/`data` können
+  /// Nutzdaten enthalten (Journal, Chat, Gesundheitskontext) und werden
+  /// nie mitgesendet. No-op, solange Sentry inaktiv ist (kein SENTRY_DSN).
   void _reportError(
     Object error,
     StackTrace? stackTrace,
@@ -188,8 +193,7 @@ class LoggerService {
     Map<String, dynamic>? data, {
     bool fatal = false,
   }) {
-    // This will be implemented when we add crash reporting
-    // For now, just log in debug mode
+    SentryService.captureException(error, stackTrace);
     if (kDebugMode) {
       debugPrint('[Error Report] $reason: $error');
       if (data != null) {

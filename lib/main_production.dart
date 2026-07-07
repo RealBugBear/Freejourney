@@ -7,10 +7,13 @@ import 'app.dart';
 import 'bootstrap/bootstrap.dart';
 import 'bootstrap/providers.dart';
 import 'config/app_config.dart';
+import 'core/monitoring/sentry_service.dart';
 
 void main() {
   runZonedGuarded(_main, (error, stack) {
-    // Swallow zone errors silently in production — no stack traces exposed.
+    // No stack traces exposed to the user; Sentry (falls aktiv, T15)
+    // bekommt Fehlerobjekt + Stacktrace — sonst no-op.
+    SentryService.captureException(error, stack);
     debugPrint('Zone error: $error');
   });
 }

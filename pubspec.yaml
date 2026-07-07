@@ -81,6 +81,7 @@ dependencies:
   # device_calendar: ^4.3.2  # DISABLED: crashes on iOS 26.2.1 (EKEventStore init in plugin registration)
   url_launcher: ^6.2.5
   app_links: ^7.0.0
+  sentry_flutter: ^8.14.2
 
 dependency_overrides:
   # device_calendar requires timezone ^0.9.0 but this project uses ^0.10.1.
