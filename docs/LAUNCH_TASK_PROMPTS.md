@@ -78,6 +78,8 @@ Für jeden offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Blo
 | T23 | Paywall-Grundstruktur bauen (inaktiv hinter `kPaywallEnabled=false`) | P2 (post-launch-Aktivierung, Bau jetzt per D4) | — | ✅ 2026-07-07 (Code) — Migration `2026070701_premium_entitlements.sql` (profiles-Felder + **Schutz-Trigger** `trg_prevent_direct_premium_change` gegen Client-Selbstfreischaltung; lokal replayed + per psql verifiziert, **Live-Apply offen: Founder-Go**); neues Feature `lib/features/premium/` (Entitlement-Modell mit testbarer `isPackageUnlocked`/`postCompletionDestination`, PremiumRepository mit Offline-Cache, PurchaseService-Stub, Paywall-Screen Trio B mit Jahres-Badge + ehrlichem 10–12-Monate-Hinweis, DE+EN); Route `/paywall` mit Gate-Redirect; Integration: Paketabschluss-Übergang, Packages-Screen (zentrale Unlock-Logik statt Duplikat-Konstanten), defensiver Trainingsstart-Guard. Flag aus = exakt heutiges Verhalten (per Test belegt). 17 neue Tests, Suite grün via `make release-readiness-mobile`, Prod-Build ✓ 105.6MB, Screenshots `docs/evidence/T23/` |
 | T24 | Freischalt-Codes für Gründungsnutzer (access_codes-Einlösung) | P2 | Live-Schema-Check + Function-Deploy: Standard-Freigaben/Founder-Go | ☐ offen (nach T23) |
 | T25 | RevenueCat + Apple IAP verkabeln | P2 | ASC-Record (R4) + IAP-Produkte + RevenueCat-Konto (Founder) + AGB vor Aktivierung (Anwalt B8) | ⛔ blockiert: extern |
+| T26 | Anmeldung mit Apple & Google (Social Login) | P1 (vor Launch — Signup-Reibung) | Founder-Portal-Klicks (Apple Dev, Google Cloud, Supabase-Provider-Config) — Code ist vorher baubar | ☐ offen (geplant 2026-07-07) |
+| T27 | Trainer-Werkzeug-Abo („Trainer Studio“) | Post-Launch | Launch stabil + Akquise-Pilot-Feedback + ≥ ~10 aktive Trainer; dann Design-Session | ⛔ geparkt — Plan liegt in `docs/TRAINER_TOOL_PLAN.md` |
 
 **Empfohlene Reihenfolge (Stand 2026-07-06, D1–D3 entschieden):** T04 → T06 → T07 (P0-Block) → T13 → T09 → T10 → T11 → T21 → T05 (Vorbereitung) → T08 → T16 → T15 → T12 → T20 → T18. T04+T06 zuerst, weil sie dieselbe `launch_flags.dart` anlegen und die Chat-UI gemeinsam anfassen (eine Session kann beide nacheinander machen); T13 vor T12, damit die Labels den realen Standort-Datenfluss belegen können.
 
@@ -555,6 +557,44 @@ Melde-Funktion und Nutzer-Blocken werden für v1 nicht gebaut — Community/Feed
 **Blockiert durch:** ASC-App-Record (R4) → IAP-Produkte (Abo-Gruppe: Monat/Jahr + Non-Consumable Lifetime) → RevenueCat-Konto (Founder legt an, EU-Datenverarbeitung prüfen) → AGB/Widerruf (Anwalts-Baustein 8) **vor Aktivierung**.
 
 **Kurzumriss (wird bei Blocker-Wegfall konkretisiert):** `purchases_flutter` einbinden; `PurchaseService`-Stub aus T23 durch RevenueCat-Implementierung ersetzen; Entitlement-Sync RevenueCat→profiles (Webhook oder Client-Sync abwägen); Restore Purchases; Sandbox-Tests; Small Business Program (15 %) in ASC beantragen; Datenschutz: RevenueCat als Verarbeiter in Consent/Labels ergänzen (T05/T12-Nachtrag). Aktivierung (`kPaywallEnabled=true` + Bestandsschutz-Kommunikation) ist ein eigener Founder-Go nach R8-Trigger.
+
+---
+
+### T26 — Anmeldung mit Apple & Google *(geplant 2026-07-07, Founder-Wunsch)*
+
+**Rolle:** Du bist Senior Flutter Engineer mit Auth-Schwerpunkt — du kennst Supabase-Social-Login, Apples HIG-Button-Regeln und die Review-Fallstricke (4.8, Token-Revocation) auswendig.
+
+**Ziel:** Login-/Signup-Screen bietet zusätzlich „Mit Apple anmelden“ und „Mit Google anmelden“; der bestehende E-Mail/Passwort-Flow bleibt unverändert. Social-Nutzer durchlaufen dieselbe Consent-/Onboarding-Mechanik.
+
+**Kontext & Regeln:** Apple Guideline 4.8: Wer Google-Login anbietet, MUSS Sign in with Apple (o. ä.) anbieten — wir bauen beide gleichzeitig. Supabase unterstützt beide nativ (`signInWithIdToken` mit Apple-/Google-ID-Token). Die App hat eine saubere Abstraktion: `lib/features/auth/domain/repositories/auth_repository.dart` + `supabase_auth_repository.dart` — Social Login wird dort ergänzt, Screens sprechen nur das Repository. Packages: `sign_in_with_apple`, `google_sign_in` (neu in pubspec).
+
+**Lies zuerst:** `auth_repository.dart` + `supabase_auth_repository.dart`, `login_screen.dart`, `auth_provider.dart`, den Consent-Prüfpfad (`consent_provider.dart` — wann wird der Consent-Screen erzwungen?), Signup-Flow-Verhalten seit Commit `264e2f0` (E-Mail-Bestätigung), `ios/Runner/Runner.entitlements` (bewusst: T22 betrifft nur aps-environment; die neue `com.apple.developer.applesignin`-Entitlement-Ergänzung ist erlaubt und im Bericht zu dokumentieren).
+
+**Founder-Vorarbeit (gated — Klick-Anleitungen im Abschlussbericht mitliefern, Reihenfolge egal zur Code-Arbeit):**
+1. Apple Developer: App-ID `de.reflexjourney.app` (+ .dev/.staging) um Capability „Sign in with Apple“ ergänzen; Service-ID + Sign-in-Key (.p8) für Supabase erzeugen (Key-Datei NIE ins Repo/Chat).
+2. Google Cloud Console: OAuth-Consent-Screen + iOS-Client-ID + Web-Client-ID (für Supabase).
+3. Supabase Dashboard: Provider Apple + Google aktivieren, Secrets eintragen (Auth-Config-Änderung = gated, Founder-Go).
+
+**Code-Aufgaben:**
+1. Packages einbinden; iOS: Entitlement `com.apple.developer.applesignin` + Xcode-Capability (alle 3 Flavors); Android: google_sign_in-Konfiguration (Web-Client-ID via Konstante/env — Name dokumentieren, kein Secret).
+2. `AuthRepository` um `signInWithApple()` / `signInWithGoogle()` erweitern (Supabase `signInWithIdToken`); Fehlerzweige: Nutzer-Abbruch (still), kein Netz (freundliche Meldung), Provider-Fehler.
+3. Login-Screen: Apple-Button nach Apple-HIG (Paket-Widget `SignInWithAppleButton` oder HIG-konform), Google-Button nach Google-Branding; Reihenfolge Apple zuerst (iOS-Konvention); l10n DE+EN; Layout-Pass (kein gequetschter Screen — Founder-Auflage „keine hässlichen Lücken“ gilt).
+4. Nach-Login-Pfad verifizieren: neue Social-Nutzer bekommen `profiles`-Zeile (Trigger/Upsert prüfen!), landen im Consent-Screen und Onboarding wie E-Mail-Nutzer; bestehende Router-Redirects funktionieren.
+5. Edge Cases dokumentieren + testen soweit möglich: (a) gleiche E-Mail wie bestehender Passwort-Account → Supabase-Identity-Linking-Verhalten prüfen und im Bericht festhalten; (b) Apple „Hide My Email“-Relay-Adressen (Systememails via Resend funktionieren dorthin; interner Tester-Gate @reflexjourney.de unberührt); (c) **Konto-Löschung:** Apple verlangt bei SIWA-Apps mit Account-Löschung die Token-Revocation — prüfen, was Supabase beim `delete_user` macht, sonst Revocation ergänzen/als Folge-Task dokumentieren (Review-relevant!).
+6. Tests: Repository-Abstraktion mockbar; Widget-Test Login-Screen (beide Buttons sichtbar, E-Mail-Flow unverändert); Suite grün via `make release-readiness-mobile`.
+7. Doku-Nachträge: T05-Consent-Entwurf + `PRIVACY_LABELS_DRAFT.md` um den Hinweis „Anmeldung wahlweise über Apple/Google — dabei erhält der gewählte Anbieter die Anmeldedaten“ ergänzen; kurzer Nachtrag ins Anwalts-Briefing (Abschnitt 3, eine Zeile), falls noch nicht versendet.
+
+**Akzeptanzkriterien:** Beide Buttons auf dem Login-Screen (Screenshot-Evidenz `docs/evidence/T26/`); E-Mail-Flow regressionfrei (Tests); Google-Login e2e im Dev-Build mit Wegwerf-Google-Konto verifiziert; Apple-Login e2e braucht echtes Gerät → als Founder-Checkpunkt in die nächste Gerätesitzung; Suite + Prod-Build grün.
+
+**Nicht-Ziele/Verboten:** Keine Secrets/Client-IDs mit Secret-Charakter im Repo/Chat; E-Mail-Flow nicht umbauen; kein Facebook/sonstige Provider; Supabase-Config nur mit Founder-Go.
+
+---
+
+### T27 — Trainer-Werkzeug-Abo „Trainer Studio“ *(post-launch — Plan liegt vor)*
+
+**Status:** ⛔ bewusst geparkt. Vollständige Planung: `docs/TRAINER_TOOL_PLAN.md` (Freemium-Abgrenzung zum Gründungs-Versprechen, Feature-Kandidaten priorisiert, Preis-Hypothese, Kaufweg Web-Checkout/Apple-3.1.3(b)-Einordnung, offene Rechtsfragen inkl. AVV-Konstruktion für Klienten-Notizen und P2B).
+
+**Trigger für den Start:** Launch stabil + Trainer-Akquise-Pilot ausgewertet + ~10+ aktive Trainer. Dann: Design-Session nach dem Plan-Doc (Phase 1: 3–5 Trainer-Interviews → Feature-Ranking bestätigen), erst danach Build. Das Entitlement-Muster aus T23 (Felder + Schutz-Trigger, hier auf `trainer_profiles`) wird wiederverwendet.
 
 ---
 
