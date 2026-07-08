@@ -307,6 +307,51 @@ class AppLocalizationsDe extends AppLocalizations {
   String get packageCompleted => 'Abgeschlossen';
 
   @override
+  String get paywallTitle => 'Alle Pakete freischalten';
+
+  @override
+  String get paywallSubtitle =>
+      'Paket 1 bleibt für immer kostenlos. Mit Premium schaltest du alle weiteren Reflexpakete frei — für dich und deine Familienprofile.';
+
+  @override
+  String get paywallDurationNote =>
+      'Das gesamte Programm dauert typischerweise 10–12 Monate — in deinem Tempo, Pausen inklusive.';
+
+  @override
+  String get paywallMonthlyTitle => 'Monatlich';
+
+  @override
+  String get paywallPerMonth => 'pro Monat';
+
+  @override
+  String get paywallYearlyTitle => 'Jährlich';
+
+  @override
+  String get paywallPerYear => 'pro Jahr';
+
+  @override
+  String get paywallYearlyBadge => '2 Monate geschenkt';
+
+  @override
+  String get paywallLifetimeTitle => 'Einmalig';
+
+  @override
+  String get paywallOnce => 'einmalig, dauerhaft';
+
+  @override
+  String get paywallUnlock => 'Freischalten';
+
+  @override
+  String get paywallRestore => 'Käufe wiederherstellen';
+
+  @override
+  String get paywallNotAvailable =>
+      'Käufe sind in dieser Version noch nicht verfügbar.';
+
+  @override
+  String get paywallCancelNote => 'Abos sind jederzeit kündbar.';
+
+  @override
   String get packageAvailable => 'Verfügbar';
 
   @override

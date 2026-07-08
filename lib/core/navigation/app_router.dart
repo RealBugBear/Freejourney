@@ -42,6 +42,7 @@ import '../../features/trainer/domain/models/trainer_profile.dart';
 import '../../features/journal/presentation/screens/journal_screen.dart';
 import '../../features/progress/presentation/screens/progress_overview_screen.dart';
 import '../../features/dev_tools/presentation/screens/dev_tools_screen.dart';
+import '../../features/premium/presentation/screens/paywall_screen.dart';
 import '../../features/chat/domain/models/chat_channel.dart';
 import '../../features/admin/presentation/screens/admin_panel_screen.dart';
 import '../../features/accompaniment/presentation/screens/accompaniment_screen.dart';
@@ -101,6 +102,7 @@ class Routes {
   static const onboardingForWhom = '/onboarding/for-whom';
   static const onboardingEntryPoints = '/onboarding/entry-points';
   static const experienceFeed = '/experience/:channelId';
+  static const paywall = '/paywall';
 }
 
 /// T04 (D1=A): Solange Community/Feed deaktiviert sind, landet jede direkte
@@ -108,6 +110,12 @@ class Routes {
 /// Aufruf) sauber auf dem Dashboard statt in einem Crash oder 404.
 String? communityGateRedirect(BuildContext context, GoRouterState state) =>
     kCommunityEnabled ? null : Routes.dashboard;
+
+/// T23 (D4): Solange die Paywall deaktiviert ist, leitet jede direkte
+/// Navigation zu `/paywall` aufs Dashboard um — der Screen existiert im
+/// Code, ist aber vor der Aktivierung (R8-Trigger + AGB + T25) unerreichbar.
+String? paywallGateRedirect(BuildContext context, GoRouterState state) =>
+    kPaywallEnabled ? null : Routes.dashboard;
 
 /// Bridges a Stream into a [Listenable] so GoRouter can react to auth changes.
 class _StreamRefreshListenable extends ChangeNotifier {
@@ -375,6 +383,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: Routes.devTools,
         name: 'dev-tools',
         builder: (context, state) => const DevToolsScreen(),
+      ),
+      GoRoute(
+        path: Routes.paywall,
+        name: 'paywall',
+        redirect: paywallGateRedirect,
+        builder: (context, state) => const PaywallScreen(),
       ),
       GoRoute(
         path: Routes.trainerDiscovery,

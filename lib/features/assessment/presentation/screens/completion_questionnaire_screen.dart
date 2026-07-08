@@ -7,6 +7,8 @@ import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/error_retry_widget.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../premium/domain/entitlement.dart';
+import '../../../premium/presentation/providers/premium_provider.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
 
 enum _ScreenState { question, celebrating, extended }
@@ -96,15 +98,24 @@ class _CompletionQuestionnaireScreenState
       return;
     }
 
-    // Update selected package and either start intake or show packages screen
+    // Update selected package, then route via the central entitlement
+    // decision (T23): unlocked → training start; locked → paywall (flag an)
+    // bzw. packages screen (heutiges Verhalten, flag aus).
     ref.read(selectedPackageIdProvider.notifier).select(next);
 
-    if (freePackageIds.contains(next)) {
-      // Free — go straight to intake for next package
-      context.go(Routes.trainingStart, extra: next);
-    } else {
-      // Paid — go to packages screen (paywall coming later)
-      context.go(Routes.packages);
+    final entitlement =
+        ref.read(entitlementProvider).valueOrNull ?? Entitlement.none;
+    switch (postCompletionDestination(
+      next,
+      entitlement: entitlement,
+      now: DateTime.now(),
+    )) {
+      case PostCompletionDestination.trainingStart:
+        context.go(Routes.trainingStart, extra: next);
+      case PostCompletionDestination.paywall:
+        context.go(Routes.paywall);
+      case PostCompletionDestination.packages:
+        context.go(Routes.packages);
     }
   }
 

@@ -298,6 +298,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get packageCompleted => 'Completed';
 
   @override
+  String get paywallTitle => 'Unlock all packages';
+
+  @override
+  String get paywallSubtitle =>
+      'Package 1 stays free forever. Premium unlocks every further reflex package — for you and your family profiles.';
+
+  @override
+  String get paywallDurationNote =>
+      'The full programme typically takes 10–12 months — at your pace, pauses included.';
+
+  @override
+  String get paywallMonthlyTitle => 'Monthly';
+
+  @override
+  String get paywallPerMonth => 'per month';
+
+  @override
+  String get paywallYearlyTitle => 'Yearly';
+
+  @override
+  String get paywallPerYear => 'per year';
+
+  @override
+  String get paywallYearlyBadge => '2 months free';
+
+  @override
+  String get paywallLifetimeTitle => 'One-time';
+
+  @override
+  String get paywallOnce => 'one-time, forever';
+
+  @override
+  String get paywallUnlock => 'Unlock';
+
+  @override
+  String get paywallRestore => 'Restore purchases';
+
+  @override
+  String get paywallNotAvailable =>
+      'Purchases are not available in this version yet.';
+
+  @override
+  String get paywallCancelNote => 'Subscriptions can be cancelled anytime.';
+
+  @override
   String get packageAvailable => 'Available';
 
   @override

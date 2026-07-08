@@ -4,14 +4,20 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/training/vorrunde_status_settings.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../premium/domain/entitlement.dart';
+import '../../../premium/presentation/providers/premium_provider.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
 import '../../../training/presentation/screens/training_session_screen.dart';
 import '../../../training/presentation/screens/vorrunde_interstitial_screen.dart';
 
+// Anzeige-Namen; die Reihenfolge/IDs sind identisch mit [packageOrder]
+// (progress_provider) — die Freischalt-Logik kommt zentral aus
+// isPackageUnlocked (T23), nicht mehr aus lokalen Index-Konstanten.
 const _packages = [
   ('moro', 'Moro Reflex'),
   ('spinal_galant', 'Spinaler Galant + Amphibien'),
@@ -23,9 +29,6 @@ const _packages = [
   ('babinski', 'Babinski Reflex'),
   ('landau', 'Landau Reflex'),
 ];
-
-// Indices of packages that are free/unlocked
-const _freePackageIndices = {0, 1, 2};
 
 class PackagesScreen extends ConsumerStatefulWidget {
   const PackagesScreen({super.key});
@@ -87,6 +90,9 @@ class _PackagesScreenState extends ConsumerState<PackagesScreen> {
       for (final e in allEnrollments)
         if (e.status == 'completed') e.packageId,
     };
+    final entitlement =
+        ref.watch(entitlementProvider).valueOrNull ?? Entitlement.none;
+    final now = DateTime.now();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.packages)),
@@ -97,7 +103,11 @@ class _PackagesScreenState extends ConsumerState<PackagesScreen> {
         itemBuilder: (context, index) {
           final (packageId, packageName) = _packages[index];
           final isSelected = packageId == selectedPackageId;
-          final isLocked = !_freePackageIndices.contains(index);
+          final isLocked = !isPackageUnlocked(
+            packageId,
+            entitlement: entitlement,
+            now: now,
+          );
           final isCompleted = completedPackageIds.contains(packageId);
 
           final Color avatarColor;
@@ -120,7 +130,11 @@ class _PackagesScreenState extends ConsumerState<PackagesScreen> {
                           .select(packageId);
                       context.pop();
                     }
-                  : null,
+                  // T23: Gesperrtes Paket führt bei aktiver Paywall zum
+                  // Kauf-Screen (Flag aus → wie bisher nicht tappbar).
+                  : (kPaywallEnabled && isLocked)
+                      ? () => context.push(Routes.paywall)
+                      : null,
               leading: Container(
                 width: 36,
                 height: 36,

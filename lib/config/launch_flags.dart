@@ -27,3 +27,17 @@ const bool kVideoCallsEnabled = false;
 /// Trainer-Dashboard sowie Community-Feed-Formulierungen im Profil.
 /// Trainer-1:1-Chat (DMs) ist davon unabhängig und bleibt aktiv.
 const bool kCommunityEnabled = false;
+
+/// Paywall (D4, 2026-07-07: Struktur gebaut, Aktivierung erst post-launch).
+///
+/// Flag AUS = heutiges Launch-Verhalten: die ersten drei Pakete sind frei,
+/// spätere im UI gesperrt, Route `/paywall` leitet aufs Dashboard um.
+/// Flag AN = Paket 1 (Moro) frei, Paket 2+ nur mit Entitlement
+/// (`profiles.is_premium`, gesetzt ausschließlich server-seitig — DB-Trigger
+/// `trg_prevent_direct_premium_change`); Paketübergang und gesperrte Pakete
+/// führen zum Paywall-Screen (Trio: Monat/Jahr/Lifetime).
+///
+/// VOR Aktivierung MÜSSEN vorliegen: R8-Trigger (Founder), Bestandsschutz-
+/// Kommunikation, AGB/Widerruf (Anwalts-Baustein 8), T25 (RevenueCat/IAP,
+/// echter Kaufweg) und die live angewendete Migration 2026070701.
+const bool kPaywallEnabled = false;

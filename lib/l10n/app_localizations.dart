@@ -620,6 +620,90 @@ abstract class AppLocalizations {
   /// **'Abgeschlossen'**
   String get packageCompleted;
 
+  /// No description provided for @paywallTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Pakete freischalten'**
+  String get paywallTitle;
+
+  /// No description provided for @paywallSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Paket 1 bleibt für immer kostenlos. Mit Premium schaltest du alle weiteren Reflexpakete frei — für dich und deine Familienprofile.'**
+  String get paywallSubtitle;
+
+  /// No description provided for @paywallDurationNote.
+  ///
+  /// In de, this message translates to:
+  /// **'Das gesamte Programm dauert typischerweise 10–12 Monate — in deinem Tempo, Pausen inklusive.'**
+  String get paywallDurationNote;
+
+  /// No description provided for @paywallMonthlyTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Monatlich'**
+  String get paywallMonthlyTitle;
+
+  /// No description provided for @paywallPerMonth.
+  ///
+  /// In de, this message translates to:
+  /// **'pro Monat'**
+  String get paywallPerMonth;
+
+  /// No description provided for @paywallYearlyTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Jährlich'**
+  String get paywallYearlyTitle;
+
+  /// No description provided for @paywallPerYear.
+  ///
+  /// In de, this message translates to:
+  /// **'pro Jahr'**
+  String get paywallPerYear;
+
+  /// No description provided for @paywallYearlyBadge.
+  ///
+  /// In de, this message translates to:
+  /// **'2 Monate geschenkt'**
+  String get paywallYearlyBadge;
+
+  /// No description provided for @paywallLifetimeTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Einmalig'**
+  String get paywallLifetimeTitle;
+
+  /// No description provided for @paywallOnce.
+  ///
+  /// In de, this message translates to:
+  /// **'einmalig, dauerhaft'**
+  String get paywallOnce;
+
+  /// No description provided for @paywallUnlock.
+  ///
+  /// In de, this message translates to:
+  /// **'Freischalten'**
+  String get paywallUnlock;
+
+  /// No description provided for @paywallRestore.
+  ///
+  /// In de, this message translates to:
+  /// **'Käufe wiederherstellen'**
+  String get paywallRestore;
+
+  /// No description provided for @paywallNotAvailable.
+  ///
+  /// In de, this message translates to:
+  /// **'Käufe sind in dieser Version noch nicht verfügbar.'**
+  String get paywallNotAvailable;
+
+  /// No description provided for @paywallCancelNote.
+  ///
+  /// In de, this message translates to:
+  /// **'Abos sind jederzeit kündbar.'**
+  String get paywallCancelNote;
+
   /// No description provided for @packageAvailable.
   ///
   /// In de, this message translates to:

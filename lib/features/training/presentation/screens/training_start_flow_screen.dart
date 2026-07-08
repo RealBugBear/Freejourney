@@ -3,9 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
+import '../../../premium/domain/entitlement.dart';
+import '../../../premium/presentation/providers/premium_provider.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
 import '../../../trainer/presentation/providers/trainer_provider.dart';
 import '../../domain/services/vorrunde_phase_service.dart';
@@ -23,6 +26,27 @@ class _TrainingStartFlowScreenState
   bool? _hadIsometricWithTrainer;
   bool _reflexProfileSkipped = false;
   bool _showTrainerWaitingOption = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // T23: defensiver Entitlement-Guard — verhindert bei aktiver Paywall
+    // den direkten Einstieg in ein gesperrtes Paket (Deep Link, alter
+    // Navigations-Rest). Mit kPaywallEnabled=false vollständig inert.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _guardEntitlement());
+  }
+
+  void _guardEntitlement() {
+    if (!kPaywallEnabled || !mounted) return;
+    final entitlement =
+        ref.read(entitlementProvider).valueOrNull ?? Entitlement.none;
+    final unlocked = isPackageUnlocked(
+      _packageId,
+      entitlement: entitlement,
+      now: DateTime.now(),
+    );
+    if (!unlocked) context.go(Routes.paywall);
+  }
 
   String get _packageId {
     final extra = GoRouterState.of(context).extra;
