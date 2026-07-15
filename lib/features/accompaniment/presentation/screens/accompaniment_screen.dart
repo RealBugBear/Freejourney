@@ -8,6 +8,7 @@ import '../../../../core/navigation/app_router.dart';
 import '../../../../core/onboarding/onboarding_hint_gate.dart';
 import '../../../../core/onboarding/onboarding_hint_provider.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
 import '../../../chat/presentation/navigation/chat_navigation.dart';
 import '../../../chat/presentation/providers/chat_providers.dart';
@@ -23,6 +24,7 @@ class AccompanimentScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) async {
+    final l10n = AppLocalizations.of(context);
     final controller = TextEditingController();
     String? errorText;
     var connecting = false;
@@ -31,22 +33,20 @@ class AccompanimentScreen extends ConsumerWidget {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          title: const Text('Mit Trainer verbinden'),
+          title: Text(l10n.trainerOnboardingInviteTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Füge den Einladungslink oder den 6-stelligen Code ein, den du von deinem Trainer erhalten hast.',
-              ),
+              Text(l10n.accompanimentConnectBody),
               const SizedBox(height: 14),
               TextField(
                 controller: controller,
                 autofocus: true,
                 textCapitalization: TextCapitalization.characters,
                 decoration: InputDecoration(
-                  labelText: 'Einladungslink oder Code',
-                  hintText: 'A1B2C3 oder https://...',
+                  labelText: l10n.accompanimentInviteLinkOrCodeLabel,
+                  hintText: l10n.accompanimentInviteLinkOrCodeHint,
                   border: const OutlineInputBorder(),
                   errorText: errorText,
                 ),
@@ -57,7 +57,7 @@ class AccompanimentScreen extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: connecting ? null : () => Navigator.pop(ctx),
-              child: const Text('Abbrechen'),
+              child: Text(l10n.cancel),
             ),
             FilledButton(
               onPressed: connecting
@@ -66,8 +66,7 @@ class AccompanimentScreen extends ConsumerWidget {
                       final code = _extractTrainerInviteCode(controller.text);
                       if (code == null) {
                         setDialogState(() {
-                          errorText =
-                              'Bitte gib einen gültigen 6-stelligen Code oder Einladungslink ein.';
+                          errorText = l10n.accompanimentConnectInvalidInvite;
                         });
                         return;
                       }
@@ -79,8 +78,7 @@ class AccompanimentScreen extends ConsumerWidget {
                       } catch (e) {
                         setDialogState(() {
                           connecting = false;
-                          errorText =
-                              'Verbindung konnte nicht hergestellt werden: $e';
+                          errorText = l10n.accompanimentConnectFailed('$e');
                         });
                       }
                     },
@@ -90,7 +88,7 @@ class AccompanimentScreen extends ConsumerWidget {
                       height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Text('Verbinden'),
+                  : Text(l10n.accompanimentConnectAction),
             ),
           ],
         ),
@@ -101,7 +99,7 @@ class AccompanimentScreen extends ConsumerWidget {
     if (connected == true && context.mounted) {
       _invalidateTrainerConnectionState(ref);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Trainer wurde verbunden.')),
+        SnackBar(content: Text(l10n.accompanimentConnectedSuccess)),
       );
     }
   }
@@ -110,26 +108,25 @@ class AccompanimentScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) async {
+    final l10n = AppLocalizations.of(context);
     final controller = TextEditingController();
     final code = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Begleitung wechseln'),
+        title: Text(l10n.accompanimentSwitchTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Nach dem Wechsel erscheint dein Verlauf beim neuen Trainer. Dein bisheriger Trainer sieht dich danach nicht mehr in seiner Klientenübersicht.',
-            ),
+            Text(l10n.accompanimentSwitchBody),
             const SizedBox(height: 14),
             TextField(
               controller: controller,
               textCapitalization: TextCapitalization.characters,
-              decoration: const InputDecoration(
-                labelText: 'Einladungslink oder Code',
-                hintText: 'A1B2C3 oder https://...',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.accompanimentInviteLinkOrCodeLabel,
+                hintText: l10n.accompanimentInviteLinkOrCodeHint,
+                border: const OutlineInputBorder(),
               ),
             ),
           ],
@@ -137,11 +134,11 @@ class AccompanimentScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Abbrechen'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-            child: const Text('Wechsel bestätigen'),
+            child: Text(l10n.accompanimentSwitchConfirm),
           ),
         ],
       ),
@@ -152,21 +149,19 @@ class AccompanimentScreen extends ConsumerWidget {
     try {
       final inviteCode = _extractTrainerInviteCode(code);
       if (inviteCode == null) {
-        throw Exception(
-            'Bitte gib einen gültigen Einladungslink oder Code ein.');
+        throw Exception(l10n.accompanimentSwitchInvalidInvite);
       }
       await switchTrainer(inviteCode);
       _invalidateTrainerConnectionState(ref);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Begleitung wurde aktualisiert.')),
+          SnackBar(content: Text(l10n.accompanimentSwitchUpdated)),
         );
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('Wechsel konnte nicht gespeichert werden: $e')),
+          SnackBar(content: Text(l10n.accompanimentSwitchFailed('$e'))),
         );
       }
     }
@@ -177,21 +172,20 @@ class AccompanimentScreen extends ConsumerWidget {
     WidgetRef ref,
     ClientTrainerConnection request,
   ) async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Anfrage zurückziehen?'),
-        content: Text(
-          'Die Anfrage an ${request.displayName} wird zurückgezogen. Du kannst später erneut eine passende Begleitung anfragen.',
-        ),
+        title: Text(l10n.accompanimentWithdrawTitle),
+        content: Text(l10n.accompanimentWithdrawBody(request.displayName)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Abbrechen'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Anfrage zurückziehen'),
+            child: Text(l10n.accompanimentWithdrawAction),
           ),
         ],
       ),
@@ -206,14 +200,14 @@ class AccompanimentScreen extends ConsumerWidget {
       ref.invalidate(chatChannelsProvider);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Anfrage wurde zurückgezogen.')),
+          SnackBar(content: Text(l10n.accompanimentWithdrawSuccess)),
         );
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Anfrage konnte nicht zurückgezogen werden: $e'),
+            content: Text(l10n.accompanimentWithdrawFailed('$e')),
           ),
         );
       }
@@ -222,6 +216,7 @@ class AccompanimentScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final connections =
         ref.watch(clientTrainerConnectionsProvider).valueOrNull ?? const [];
     final activeConnection =
@@ -233,12 +228,12 @@ class AccompanimentScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Begleitung'),
+        title: Text(l10n.accompanimentTitle),
         actions: [
           const DirectMessagesAction(),
           IconButton(
             icon: const Icon(Icons.settings_outlined),
-            tooltip: 'Einstellungen',
+            tooltip: l10n.settings,
             onPressed: () => context.push(Routes.settings),
           ),
         ],
@@ -298,10 +293,9 @@ class AccompanimentScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               _ActionSection(
                 icon: Icons.rate_review_outlined,
-                title: 'Geteilte Erfahrungen',
-                subtitle:
-                    'Moderierte Beobachtungen aus laufenden Paketen ansehen.',
-                actionLabel: 'Erfahrungen öffnen',
+                title: l10n.accompanimentSharedExperiencesTitle,
+                subtitle: l10n.accompanimentSharedExperiencesBody,
+                actionLabel: l10n.accompanimentSharedExperiencesAction,
                 onTap: () => context.push(Routes.community),
               ),
             ],
@@ -317,6 +311,7 @@ class _IsometricExplanationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     return Card(
       child: Padding(
@@ -328,28 +323,27 @@ class _IsometricExplanationCard extends StatelessWidget {
                 color: AppColors.primary),
             const SizedBox(height: 10),
             Text(
-              'Professionelle Begleitung',
+              l10n.accompanimentProfessionalTitle,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
             ),
             const SizedBox(height: 6),
             Text(
-              'Manche Übungen werden mit einer zweiten Person durchgeführt. Dabei geht es nicht um Krafttraining, sondern um klares Spüren von Richtung, Bewegung und Widerstand. Ein geschulter Trainer kann dich dabei sicher anleiten.',
+              l10n.accompanimentProfessionalBody,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: cs.onSurfaceVariant,
                     height: 1.35,
                   ),
             ),
             const SizedBox(height: 10),
-            const _PlainInfoRow(
+            _PlainInfoRow(
               icon: Icons.flag_outlined,
-              text: 'Besonders relevant am Anfang eines Pakets.',
+              text: l10n.accompanimentPackageStartNote,
             ),
-            const _PlainInfoRow(
+            _PlainInfoRow(
               icon: Icons.self_improvement,
-              text:
-                  'Deine täglichen rhythmischen Einheiten bleiben selbstgeführt.',
+              text: l10n.accompanimentDailySessionsNote,
             ),
           ],
         ),
@@ -371,6 +365,7 @@ class _NoTrainerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     return Card(
       child: Padding(
@@ -379,14 +374,14 @@ class _NoTrainerCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Noch keine Begleitung verbunden',
+              l10n.accompanimentNoTrainerTitle,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
             ),
             const SizedBox(height: 6),
             Text(
-              'Du kannst dein Paket weiter selbstgeführt üben und bei Bedarf eine professionelle Begleitung für Partnerübungen oder Gespräche finden.',
+              l10n.accompanimentNoTrainerBody,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: cs.onSurfaceVariant,
                     height: 1.35,
@@ -396,18 +391,18 @@ class _NoTrainerCard extends StatelessWidget {
             FilledButton.icon(
               onPressed: onFindTrainer,
               icon: const Icon(Icons.person_search_outlined),
-              label: const Text('Trainer finden'),
+              label: Text(l10n.trainingFindTrainer),
             ),
             const SizedBox(height: 8),
             OutlinedButton.icon(
               onPressed: onConnectWithLink,
               icon: const Icon(Icons.link_outlined),
-              label: const Text('Einladungslink eingeben'),
+              label: Text(l10n.accompanimentEnterInviteLink),
             ),
             const SizedBox(height: 8),
             TextButton(
               onPressed: onContinue,
-              child: const Text('Ohne Trainer fortfahren'),
+              child: Text(l10n.accompanimentContinueWithoutTrainer),
             ),
           ],
         ),
@@ -423,6 +418,7 @@ class _ReflexProfileSharingCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     final summariesAsync = ref.watch(profilesWithAssessmentsProvider);
 
@@ -454,7 +450,7 @@ class _ReflexProfileSharingCard extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Reflexprofil-Freigabe',
+                            l10n.accompanimentProfileSharingTitle,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium
@@ -462,9 +458,7 @@ class _ReflexProfileSharingCard extends ConsumerWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Du kannst festlegen, ob der verbundene Trainer '
-                            'die abgeschlossenen Reflexprofile sehen darf. '
-                            'Das gilt nur, solange diese Begleitung aktiv ist.',
+                            l10n.accompanimentProfileSharingBody,
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: cs.onSurfaceVariant,
@@ -506,6 +500,7 @@ class _ReflexProfileShareTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final lookup = ReflexTrainerShareLookup(
       subjectProfileId: profile.id,
       trainerId: trainerId,
@@ -520,7 +515,7 @@ class _ReflexProfileShareTile extends ConsumerWidget {
       error: (error, _) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          'Freigabe konnte nicht geladen werden: $error',
+          l10n.accompanimentProfileSharingLoadFailed('$error'),
           style: const TextStyle(color: AppColors.error),
         ),
       ),
@@ -530,8 +525,8 @@ class _ReflexProfileShareTile extends ConsumerWidget {
         title: Text(profile.displayName),
         subtitle: Text(
           isShared
-              ? 'Der verbundene Trainer darf dieses Reflexprofil sehen.'
-              : 'Nicht für den verbundenen Trainer freigegeben.',
+              ? l10n.accompanimentProfileShared
+              : l10n.accompanimentProfileNotShared,
         ),
         onChanged: (enabled) async {
           try {
@@ -554,7 +549,7 @@ class _ReflexProfileShareTile extends ConsumerWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'Reflexprofil-Freigabe konnte nicht gespeichert werden: $e',
+                    l10n.accompanimentProfileSharingSaveFailed('$e'),
                   ),
                 ),
               );
@@ -573,6 +568,7 @@ class _OpenAppointmentProposalsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final proposalsAsync = ref.watch(traineeProposalsProvider);
     final proposals = proposalsAsync.valueOrNull ?? const <Appointment>[];
     if (proposals.isEmpty && !proposalsAsync.isLoading) {
@@ -594,9 +590,7 @@ class _OpenAppointmentProposalsCard extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    proposals.length == 1
-                        ? '1 offener Terminvorschlag'
-                        : '${proposals.length} offene Terminvorschläge',
+                    l10n.accompanimentProposalCount(proposals.length),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
@@ -604,8 +598,8 @@ class _OpenAppointmentProposalsCard extends ConsumerWidget {
                   const SizedBox(height: 4),
                   Text(
                     proposalsAsync.isLoading
-                        ? 'Terminvorschläge werden geladen ...'
-                        : 'Wähle einen passenden Termin direkt in deiner Begleitung aus.',
+                        ? l10n.accompanimentProposalsLoading
+                        : l10n.accompanimentProposalsBody,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: cs.onSurfaceVariant,
                           height: 1.35,
@@ -615,7 +609,7 @@ class _OpenAppointmentProposalsCard extends ConsumerWidget {
                   FilledButton.icon(
                     onPressed: proposalsAsync.isLoading ? null : onOpen,
                     icon: const Icon(Icons.arrow_forward_outlined),
-                    label: const Text('Vorschläge ansehen'),
+                    label: Text(l10n.accompanimentViewProposals),
                   ),
                 ],
               ),
@@ -644,6 +638,7 @@ class _PendingRequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     return Card(
       child: Padding(
@@ -661,7 +656,9 @@ class _PendingRequestCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Anfrage offen bei ${request.displayName}',
+                        l10n.accompanimentPendingRequestTitle(
+                          request.displayName,
+                        ),
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w800,
@@ -670,8 +667,10 @@ class _PendingRequestCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         extraRequestCount > 0
-                            ? '$extraRequestCount weitere Anfrage${extraRequestCount == 1 ? '' : 'n'} offen'
-                            : 'Du wirst informiert, sobald die Anfrage angenommen wurde.',
+                            ? l10n.accompanimentExtraPendingRequests(
+                                extraRequestCount,
+                              )
+                            : l10n.accompanimentPendingRequestAcceptedNotice,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: cs.onSurfaceVariant,
                               height: 1.35,
@@ -690,17 +689,17 @@ class _PendingRequestCard extends StatelessWidget {
                 OutlinedButton.icon(
                   onPressed: onFindMore,
                   icon: const Icon(Icons.person_search_outlined),
-                  label: const Text('Mehr Trainer'),
+                  label: Text(l10n.accompanimentMoreTrainers),
                 ),
                 OutlinedButton.icon(
                   onPressed: onConnectWithLink,
                   icon: const Icon(Icons.link_outlined),
-                  label: const Text('Einladungslink'),
+                  label: Text(l10n.accompanimentInviteLinkShort),
                 ),
                 TextButton.icon(
                   onPressed: onWithdraw,
                   icon: const Icon(Icons.close_outlined),
-                  label: const Text('Anfrage zurückziehen'),
+                  label: Text(l10n.accompanimentWithdrawAction),
                 ),
               ],
             ),
@@ -730,6 +729,7 @@ class _ConnectedTrainerCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     final proposalCount =
         ref.watch(traineeProposalsProvider).valueOrNull?.length ?? 0;
@@ -763,7 +763,7 @@ class _ConnectedTrainerCard extends ConsumerWidget {
                                 ),
                       ),
                       Text(
-                        'Aktive Begleitung',
+                        l10n.accompanimentActiveGuidance,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: cs.onSurfaceVariant,
                             ),
@@ -785,7 +785,7 @@ class _ConnectedTrainerCard extends ConsumerWidget {
                 FilledButton.icon(
                   onPressed: onMessage,
                   icon: const Icon(Icons.chat_bubble_outline),
-                  label: const Text('Nachricht'),
+                  label: Text(l10n.accompanimentMessage),
                 ),
                 Badge(
                   isLabelVisible: proposalCount > 0,
@@ -793,14 +793,14 @@ class _ConnectedTrainerCard extends ConsumerWidget {
                   child: OutlinedButton.icon(
                     onPressed: onAppointments,
                     icon: const Icon(Icons.event_available_outlined),
-                    label: const Text('Terminvorschläge'),
+                    label: Text(l10n.accompanimentAppointmentProposals),
                   ),
                 ),
               ],
             ),
             const Divider(height: 28),
             Text(
-              'Nächste Termine',
+              l10n.accompanimentNextAppointments,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -808,7 +808,7 @@ class _ConnectedTrainerCard extends ConsumerWidget {
             const SizedBox(height: 8),
             if (upcoming.isEmpty)
               Text(
-                'Noch keine geplanten Termine.',
+                l10n.accompanimentNoAppointments,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: cs.onSurfaceVariant,
                     ),
@@ -817,14 +817,14 @@ class _ConnectedTrainerCard extends ConsumerWidget {
               ...upcoming.map((a) => _AppointmentRow(appointment: a)),
             const Divider(height: 28),
             Text(
-              'Begleitung wechseln',
+              l10n.accompanimentSwitchTitle,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
             ),
             const SizedBox(height: 6),
             Text(
-              'Beim Wechsel sieht dein neuer Trainer deinen Verlauf. Dein bisheriger Trainer verliert den Zugriff auf deine Klientenübersicht.',
+              l10n.accompanimentSwitchAccessBody,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: cs.onSurfaceVariant,
                     height: 1.35,
@@ -838,12 +838,12 @@ class _ConnectedTrainerCard extends ConsumerWidget {
                 OutlinedButton.icon(
                   onPressed: onFindAnother,
                   icon: const Icon(Icons.person_search_outlined),
-                  label: const Text('Trainer finden'),
+                  label: Text(l10n.trainingFindTrainer),
                 ),
                 OutlinedButton.icon(
                   onPressed: onSwitchWithCode,
                   icon: const Icon(Icons.key_outlined),
-                  label: const Text('Code eingeben'),
+                  label: Text(l10n.accompanimentEnterCode),
                 ),
               ],
             ),
@@ -861,9 +861,13 @@ class _AppointmentRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     final dt = appointment.scheduledFor!;
-    final dateLabel = DateFormat('EEE, d. MMM · HH:mm', 'de_DE').format(dt);
+    final dateLabel = formatAccompanimentAppointmentDate(
+      dt,
+      Localizations.localeOf(context),
+    );
     final isGespraech = appointment.title.toLowerCase().contains('gespräch') ||
         appointment.title.toLowerCase().contains('gespräch') ||
         appointment.title.toLowerCase().contains('gespraech');
@@ -895,7 +899,7 @@ class _AppointmentRow extends StatelessWidget {
                 ),
                 if (profileLabel != null)
                   Text(
-                    'für $profileLabel',
+                    l10n.accompanimentAppointmentForProfile(profileLabel),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: cs.primary,
                           fontWeight: FontWeight.w600,
@@ -1036,4 +1040,13 @@ String? _extractTrainerInviteCode(String input) {
       .toList();
   if (tokens.length == 1) return tokens.single;
   return null;
+}
+
+String formatAccompanimentAppointmentDate(DateTime value, Locale locale) {
+  final localeName = locale.toLanguageTag();
+  if (locale.languageCode == 'de') {
+    return DateFormat('EEE, d. MMM · HH:mm', localeName).format(value);
+  }
+  return '${DateFormat.MMMEd(localeName).format(value)} · '
+      '${DateFormat.jm(localeName).format(value)}';
 }

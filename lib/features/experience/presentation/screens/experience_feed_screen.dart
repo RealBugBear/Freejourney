@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../chat/domain/models/chat_channel.dart';
 import '../../../profile/presentation/providers/profile_provider.dart';
 import '../../domain/models/experience_share.dart';
@@ -144,6 +145,7 @@ class ExperienceFeedScreen extends ConsumerWidget {
 
   Future<void> _showModeratorPostSheet(
       BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
     final profile = ref.read(profileProvider).valueOrNull;
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return;
@@ -195,7 +197,9 @@ class ExperienceFeedScreen extends ConsumerWidget {
                       .createShare(ExperienceShareInsert(
                         packageId: _packageId,
                         userId: userId,
-                        displayName: profile?.effectiveDisplayName ?? 'Trainer',
+                        displayName:
+                            profile?.effectiveDisplayName(l10n.anonymous) ??
+                                l10n.profileTrainerSection,
                         isAnonymous: false,
                         content: text,
                       ));

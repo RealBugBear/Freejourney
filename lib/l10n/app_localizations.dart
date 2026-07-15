@@ -3746,6 +3746,876 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Noch etwas üben'**
   String get goldenDayPracticeMore;
+
+  /// Generic anonymous display name and option
+  ///
+  /// In de, this message translates to:
+  /// **'Anonym'**
+  String get anonymous;
+
+  /// Generic edit action
+  ///
+  /// In de, this message translates to:
+  /// **'Bearbeiten'**
+  String get edit;
+
+  /// Generic submit action
+  ///
+  /// In de, this message translates to:
+  /// **'Einreichen'**
+  String get submit;
+
+  /// Generic action declining an optional prompt
+  ///
+  /// In de, this message translates to:
+  /// **'Nein danke'**
+  String get noThanks;
+
+  /// Generic continue action
+  ///
+  /// In de, this message translates to:
+  /// **'Weiter'**
+  String get continueAction;
+
+  /// Guidance screen title
+  ///
+  /// In de, this message translates to:
+  /// **'Begleitung'**
+  String get accompanimentTitle;
+
+  /// Instructions for connecting to a trainer by invite link or code
+  ///
+  /// In de, this message translates to:
+  /// **'Füge den Einladungslink oder den 6-stelligen Code ein, den du von deinem Trainer erhalten hast.'**
+  String get accompanimentConnectBody;
+
+  /// Input label for a trainer invite link or code
+  ///
+  /// In de, this message translates to:
+  /// **'Einladungslink oder Code'**
+  String get accompanimentInviteLinkOrCodeLabel;
+
+  /// Example trainer invite code or link
+  ///
+  /// In de, this message translates to:
+  /// **'A1B2C3 oder https://...'**
+  String get accompanimentInviteLinkOrCodeHint;
+
+  /// Validation error for an invalid trainer invite
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte gib einen gültigen 6-stelligen Code oder Einladungslink ein.'**
+  String get accompanimentConnectInvalidInvite;
+
+  /// Error shown when a trainer connection fails
+  ///
+  /// In de, this message translates to:
+  /// **'Verbindung konnte nicht hergestellt werden: {error}'**
+  String accompanimentConnectFailed(String error);
+
+  /// Action connecting to a trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Verbinden'**
+  String get accompanimentConnectAction;
+
+  /// Confirmation after connecting to a trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer wurde verbunden.'**
+  String get accompanimentConnectedSuccess;
+
+  /// Title and section heading for switching trainers
+  ///
+  /// In de, this message translates to:
+  /// **'Begleitung wechseln'**
+  String get accompanimentSwitchTitle;
+
+  /// Dialog explanation before switching trainers
+  ///
+  /// In de, this message translates to:
+  /// **'Nach dem Wechsel erscheint dein Verlauf beim neuen Trainer. Dein bisheriger Trainer sieht dich danach nicht mehr in seiner Klientenübersicht.'**
+  String get accompanimentSwitchBody;
+
+  /// Validation error while switching trainers
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte gib einen gültigen Einladungslink oder Code ein.'**
+  String get accompanimentSwitchInvalidInvite;
+
+  /// Action confirming a trainer switch
+  ///
+  /// In de, this message translates to:
+  /// **'Wechsel bestätigen'**
+  String get accompanimentSwitchConfirm;
+
+  /// Confirmation after switching trainers
+  ///
+  /// In de, this message translates to:
+  /// **'Begleitung wurde aktualisiert.'**
+  String get accompanimentSwitchUpdated;
+
+  /// Error shown when switching trainers fails
+  ///
+  /// In de, this message translates to:
+  /// **'Wechsel konnte nicht gespeichert werden: {error}'**
+  String accompanimentSwitchFailed(String error);
+
+  /// Confirmation title before withdrawing a trainer request
+  ///
+  /// In de, this message translates to:
+  /// **'Anfrage zurückziehen?'**
+  String get accompanimentWithdrawTitle;
+
+  /// Confirmation body before withdrawing a trainer request
+  ///
+  /// In de, this message translates to:
+  /// **'Die Anfrage an {name} wird zurückgezogen. Du kannst später erneut eine passende Begleitung anfragen.'**
+  String accompanimentWithdrawBody(String name);
+
+  /// Action withdrawing a pending trainer request
+  ///
+  /// In de, this message translates to:
+  /// **'Anfrage zurückziehen'**
+  String get accompanimentWithdrawAction;
+
+  /// Confirmation after withdrawing a trainer request
+  ///
+  /// In de, this message translates to:
+  /// **'Anfrage wurde zurückgezogen.'**
+  String get accompanimentWithdrawSuccess;
+
+  /// Error shown when a trainer request cannot be withdrawn
+  ///
+  /// In de, this message translates to:
+  /// **'Anfrage konnte nicht zurückgezogen werden: {error}'**
+  String accompanimentWithdrawFailed(String error);
+
+  /// Title for the shared experiences action card
+  ///
+  /// In de, this message translates to:
+  /// **'Geteilte Erfahrungen'**
+  String get accompanimentSharedExperiencesTitle;
+
+  /// Description of shared package observations
+  ///
+  /// In de, this message translates to:
+  /// **'Moderierte Beobachtungen aus laufenden Paketen ansehen.'**
+  String get accompanimentSharedExperiencesBody;
+
+  /// Action opening shared experiences
+  ///
+  /// In de, this message translates to:
+  /// **'Erfahrungen öffnen'**
+  String get accompanimentSharedExperiencesAction;
+
+  /// Heading explaining professional trainer guidance
+  ///
+  /// In de, this message translates to:
+  /// **'Professionelle Begleitung'**
+  String get accompanimentProfessionalTitle;
+
+  /// Explanation of partner exercises and trainer guidance
+  ///
+  /// In de, this message translates to:
+  /// **'Manche Übungen werden mit einer zweiten Person durchgeführt. Dabei geht es nicht um Krafttraining, sondern um klares Spüren von Richtung, Bewegung und Widerstand. Ein geschulter Trainer kann dich dabei sicher anleiten.'**
+  String get accompanimentProfessionalBody;
+
+  /// Note that trainer guidance is especially relevant early in a package
+  ///
+  /// In de, this message translates to:
+  /// **'Besonders relevant am Anfang eines Pakets.'**
+  String get accompanimentPackageStartNote;
+
+  /// Note that daily rhythmic sessions remain self-guided
+  ///
+  /// In de, this message translates to:
+  /// **'Deine täglichen rhythmischen Einheiten bleiben selbstgeführt.'**
+  String get accompanimentDailySessionsNote;
+
+  /// Heading when no trainer guidance is connected
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine Begleitung verbunden'**
+  String get accompanimentNoTrainerTitle;
+
+  /// Explanation when no trainer is connected
+  ///
+  /// In de, this message translates to:
+  /// **'Du kannst dein Paket weiter selbstgeführt üben und bei Bedarf eine professionelle Begleitung für Partnerübungen oder Gespräche finden.'**
+  String get accompanimentNoTrainerBody;
+
+  /// Action entering a trainer invite link
+  ///
+  /// In de, this message translates to:
+  /// **'Einladungslink eingeben'**
+  String get accompanimentEnterInviteLink;
+
+  /// Action continuing without a trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Ohne Trainer fortfahren'**
+  String get accompanimentContinueWithoutTrainer;
+
+  /// Heading for sharing reflex profiles with a connected trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil-Freigabe'**
+  String get accompanimentProfileSharingTitle;
+
+  /// Explanation of reflex profile sharing with a connected trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Du kannst festlegen, ob der verbundene Trainer die abgeschlossenen Reflexprofile sehen darf. Das gilt nur, solange diese Begleitung aktiv ist.'**
+  String get accompanimentProfileSharingBody;
+
+  /// Error shown when reflex profile sharing cannot be loaded
+  ///
+  /// In de, this message translates to:
+  /// **'Freigabe konnte nicht geladen werden: {error}'**
+  String accompanimentProfileSharingLoadFailed(String error);
+
+  /// Status when a reflex profile is shared with the connected trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Der verbundene Trainer darf dieses Reflexprofil sehen.'**
+  String get accompanimentProfileShared;
+
+  /// Status when a reflex profile is not shared with the connected trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Nicht für den verbundenen Trainer freigegeben.'**
+  String get accompanimentProfileNotShared;
+
+  /// Error shown when reflex profile sharing cannot be saved
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil-Freigabe konnte nicht gespeichert werden: {error}'**
+  String accompanimentProfileSharingSaveFailed(String error);
+
+  /// Number of open appointment proposals
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, one{1 offener Terminvorschlag} other{{count} offene Terminvorschläge}}'**
+  String accompanimentProposalCount(int count);
+
+  /// Status while appointment proposals load
+  ///
+  /// In de, this message translates to:
+  /// **'Terminvorschläge werden geladen ...'**
+  String get accompanimentProposalsLoading;
+
+  /// Prompt to choose an appointment proposal
+  ///
+  /// In de, this message translates to:
+  /// **'Wähle einen passenden Termin direkt in deiner Begleitung aus.'**
+  String get accompanimentProposalsBody;
+
+  /// Action opening appointment proposals
+  ///
+  /// In de, this message translates to:
+  /// **'Vorschläge ansehen'**
+  String get accompanimentViewProposals;
+
+  /// Heading for a pending trainer request
+  ///
+  /// In de, this message translates to:
+  /// **'Anfrage offen bei {name}'**
+  String accompanimentPendingRequestTitle(String name);
+
+  /// Number of additional pending trainer requests
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, one{{count} weitere Anfrage offen} other{{count} weitere Anfragen offen}}'**
+  String accompanimentExtraPendingRequests(int count);
+
+  /// Notice shown while a trainer request is pending
+  ///
+  /// In de, this message translates to:
+  /// **'Du wirst informiert, sobald die Anfrage angenommen wurde.'**
+  String get accompanimentPendingRequestAcceptedNotice;
+
+  /// Action finding additional trainers
+  ///
+  /// In de, this message translates to:
+  /// **'Mehr Trainer'**
+  String get accompanimentMoreTrainers;
+
+  /// Short action label for entering an invite link
+  ///
+  /// In de, this message translates to:
+  /// **'Einladungslink'**
+  String get accompanimentInviteLinkShort;
+
+  /// Status label for an active trainer connection
+  ///
+  /// In de, this message translates to:
+  /// **'Aktive Begleitung'**
+  String get accompanimentActiveGuidance;
+
+  /// Action messaging the connected trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Nachricht'**
+  String get accompanimentMessage;
+
+  /// Action opening appointment proposals
+  ///
+  /// In de, this message translates to:
+  /// **'Terminvorschläge'**
+  String get accompanimentAppointmentProposals;
+
+  /// Heading above upcoming appointments
+  ///
+  /// In de, this message translates to:
+  /// **'Nächste Termine'**
+  String get accompanimentNextAppointments;
+
+  /// Empty state when no upcoming appointments are scheduled
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine geplanten Termine.'**
+  String get accompanimentNoAppointments;
+
+  /// Explanation of trainer access after switching guidance
+  ///
+  /// In de, this message translates to:
+  /// **'Beim Wechsel sieht dein neuer Trainer deinen Verlauf. Dein bisheriger Trainer verliert den Zugriff auf deine Klientenübersicht.'**
+  String get accompanimentSwitchAccessBody;
+
+  /// Action entering a trainer invite code
+  ///
+  /// In de, this message translates to:
+  /// **'Code eingeben'**
+  String get accompanimentEnterCode;
+
+  /// Profile associated with an appointment
+  ///
+  /// In de, this message translates to:
+  /// **'für {profileName}'**
+  String accompanimentAppointmentForProfile(String profileName);
+
+  /// Action and heading for writing a standalone mood note
+  ///
+  /// In de, this message translates to:
+  /// **'Notiz schreiben'**
+  String get moodWriteNote;
+
+  /// Error shown when a mood entry has no active program
+  ///
+  /// In de, this message translates to:
+  /// **'Kein aktives Programm gefunden.'**
+  String get moodNoActiveProgram;
+
+  /// Confirmation title for sharing a mood observation
+  ///
+  /// In de, this message translates to:
+  /// **'Geteilte Erfahrung einreichen?'**
+  String get moodCommunityShareTitle;
+
+  /// Confirmation body for sharing a mood observation
+  ///
+  /// In de, this message translates to:
+  /// **'Möchtest du diese Beobachtung als geteilte Erfahrung einreichen?'**
+  String get moodCommunityShareBody;
+
+  /// Heading for editing a mood entry
+  ///
+  /// In de, this message translates to:
+  /// **'Eintrag bearbeiten'**
+  String get moodEditEntry;
+
+  /// Heading for recording a mood entry
+  ///
+  /// In de, this message translates to:
+  /// **'Stimmung eintragen'**
+  String get moodLogMood;
+
+  /// Label above the subject profile picker in a mood entry
+  ///
+  /// In de, this message translates to:
+  /// **'Für wen?'**
+  String get moodForWhom;
+
+  /// General option in the mood subject profile picker
+  ///
+  /// In de, this message translates to:
+  /// **'Allgemein'**
+  String get moodGeneral;
+
+  /// Hint explaining that mood metrics are optional
+  ///
+  /// In de, this message translates to:
+  /// **'Tippe auf einen Wert, um ihn auszuwählen, oder lass ihn frei.'**
+  String get moodMetricSelectionHint;
+
+  /// Description in the standalone note sheet
+  ///
+  /// In de, this message translates to:
+  /// **'Unabhängig von deiner Stimmung — schreib was dir gerade durch den Kopf geht.'**
+  String get moodNoteBody;
+
+  /// Placeholder for a standalone mood note
+  ///
+  /// In de, this message translates to:
+  /// **'Deine Gedanken...'**
+  String get moodNoteHint;
+
+  /// Error shown when a post-training experience cannot be saved
+  ///
+  /// In de, this message translates to:
+  /// **'Fehler beim Speichern: {error}'**
+  String moodExperienceSaveFailed(String error);
+
+  /// Stored note line containing selected session impressions
+  ///
+  /// In de, this message translates to:
+  /// **'Einheit: {values}'**
+  String moodExperienceSessionNote(String values);
+
+  /// Stored note line containing observations since the previous session
+  ///
+  /// In de, this message translates to:
+  /// **'Seit letzter Einheit: {values}'**
+  String moodExperienceSinceLastSessionNote(String values);
+
+  /// Post-training experience sheet title
+  ///
+  /// In de, this message translates to:
+  /// **'Wie hat sich die Einheit angefühlt?'**
+  String get moodExperienceTitle;
+
+  /// Post-training experience sheet description
+  ///
+  /// In de, this message translates to:
+  /// **'Was hast du während der Einheit oder seit deiner letzten Einheit wahrgenommen?'**
+  String get moodExperienceDescription;
+
+  /// Calm session impression chip
+  ///
+  /// In de, this message translates to:
+  /// **'ruhig'**
+  String get moodExperienceImpressionCalm;
+
+  /// Pleasant session impression chip
+  ///
+  /// In de, this message translates to:
+  /// **'angenehm'**
+  String get moodExperienceImpressionPleasant;
+
+  /// Tired session impression chip
+  ///
+  /// In de, this message translates to:
+  /// **'müde'**
+  String get moodExperienceImpressionTired;
+
+  /// Restless session impression chip
+  ///
+  /// In de, this message translates to:
+  /// **'unruhig'**
+  String get moodExperienceImpressionRestless;
+
+  /// Emotional session impression chip
+  ///
+  /// In de, this message translates to:
+  /// **'emotional'**
+  String get moodExperienceImpressionEmotional;
+
+  /// Physically uncomfortable session impression chip
+  ///
+  /// In de, this message translates to:
+  /// **'körperlich unangenehm'**
+  String get moodExperienceImpressionPhysicallyUncomfortable;
+
+  /// Hard-to-assess session impression chip
+  ///
+  /// In de, this message translates to:
+  /// **'schwer einzuschätzen'**
+  String get moodExperienceImpressionUnsure;
+
+  /// Question about observations since the previous session
+  ///
+  /// In de, this message translates to:
+  /// **'Was ist dir seit der letzten Einheit aufgefallen?'**
+  String get moodExperienceSinceLastTitle;
+
+  /// More calm observation chip
+  ///
+  /// In de, this message translates to:
+  /// **'mehr Ruhe'**
+  String get moodExperienceSinceMoreCalm;
+
+  /// More energy observation chip
+  ///
+  /// In de, this message translates to:
+  /// **'mehr Energie'**
+  String get moodExperienceSinceMoreEnergy;
+
+  /// Less energy observation chip
+  ///
+  /// In de, this message translates to:
+  /// **'weniger Energie'**
+  String get moodExperienceSinceLessEnergy;
+
+  /// Mood fluctuated observation chip
+  ///
+  /// In de, this message translates to:
+  /// **'Stimmung schwankte'**
+  String get moodExperienceSinceMoodChanged;
+
+  /// More emotional observation chip
+  ///
+  /// In de, this message translates to:
+  /// **'emotionaler als sonst'**
+  String get moodExperienceSinceMoreEmotional;
+
+  /// More sensitive observation chip
+  ///
+  /// In de, this message translates to:
+  /// **'reizempfindlicher'**
+  String get moodExperienceSinceMoreSensitive;
+
+  /// Better sleep observation chip
+  ///
+  /// In de, this message translates to:
+  /// **'besserer Schlaf'**
+  String get moodExperienceSinceBetterSleep;
+
+  /// Restless sleep observation chip
+  ///
+  /// In de, this message translates to:
+  /// **'unruhiger Schlaf'**
+  String get moodExperienceSinceRestlessSleep;
+
+  /// Physical tension observation chip
+  ///
+  /// In de, this message translates to:
+  /// **'körperliche Spannung'**
+  String get moodExperienceSinceBodyTension;
+
+  /// Nothing notable observation chip
+  ///
+  /// In de, this message translates to:
+  /// **'keine Besonderheit'**
+  String get moodExperienceSinceNothingNotable;
+
+  /// Placeholder for a custom post-training observation
+  ///
+  /// In de, this message translates to:
+  /// **'Eigene Beobachtung... (optional)'**
+  String get moodExperienceOwnObservationHint;
+
+  /// Option to submit a post-training observation as a shared experience
+  ///
+  /// In de, this message translates to:
+  /// **'Als geteilte Erfahrung einreichen'**
+  String get moodExperienceShare;
+
+  /// Option to share a post-training experience anonymously
+  ///
+  /// In de, this message translates to:
+  /// **'Anonym einreichen'**
+  String get moodExperienceShareAnonymously;
+
+  /// Description of the system theme option
+  ///
+  /// In de, this message translates to:
+  /// **'Folgt den System-Einstellungen'**
+  String get themeSystemDescription;
+
+  /// Description of the light theme option
+  ///
+  /// In de, this message translates to:
+  /// **'Immer helles Design'**
+  String get themeLightDescription;
+
+  /// Description of the dark theme option
+  ///
+  /// In de, this message translates to:
+  /// **'Immer dunkles Design'**
+  String get themeDarkDescription;
+
+  /// Confirmation after changing the app theme
+  ///
+  /// In de, this message translates to:
+  /// **'Theme geändert zu: {title}'**
+  String themeChanged(String title);
+
+  /// Profile screen section for training subject profiles
+  ///
+  /// In de, this message translates to:
+  /// **'Trainingsprofile'**
+  String get profileTrainingProfilesSection;
+
+  /// Profile screen journal navigation item
+  ///
+  /// In de, this message translates to:
+  /// **'Journal'**
+  String get profileJournalItemTitle;
+
+  /// Profile screen journal navigation subtitle
+  ///
+  /// In de, this message translates to:
+  /// **'Deine Einträge und Reflexionen'**
+  String get profileJournalSubtitle;
+
+  /// Profile screen trainer section heading
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer'**
+  String get profileTrainerSection;
+
+  /// Profile screen action for managing guidance
+  ///
+  /// In de, this message translates to:
+  /// **'Begleitung verwalten'**
+  String get profileManageGuidance;
+
+  /// Profile screen subtitle naming the connected trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Aktuell verbunden mit {name}'**
+  String profileConnectedWith(String name);
+
+  /// Profile screen guidance navigation subtitle without a connected trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer finden, Anfragen und Termine verwalten'**
+  String get profileFindManageTrainer;
+
+  /// Profile screen professional workspace section
+  ///
+  /// In de, this message translates to:
+  /// **'Arbeitsbereich'**
+  String get profileWorkspaceSection;
+
+  /// Profile screen admin panel navigation item
+  ///
+  /// In de, this message translates to:
+  /// **'Admin Panel'**
+  String get profileAdminPanel;
+
+  /// Profile screen messages navigation item
+  ///
+  /// In de, this message translates to:
+  /// **'Nachrichten'**
+  String get profileMessages;
+
+  /// Profile screen admin messages subtitle
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer-Bewerbungen und Review-Kanäle'**
+  String get profileReviewChannels;
+
+  /// Profile screen trainer workspace navigation item
+  ///
+  /// In de, this message translates to:
+  /// **'Trainerbereich'**
+  String get profileTrainerArea;
+
+  /// Profile screen professional access section
+  ///
+  /// In de, this message translates to:
+  /// **'Beruflicher Zugang'**
+  String get profileProfessionalAccessSection;
+
+  /// Profile screen action to apply as a trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer werden'**
+  String get profileBecomeTrainer;
+
+  /// Profile screen trainer application subtitle
+  ///
+  /// In de, this message translates to:
+  /// **'Bewerbung einreichen und prüfen lassen'**
+  String get profileApplicationSubtitle;
+
+  /// Profile screen account section
+  ///
+  /// In de, this message translates to:
+  /// **'Account'**
+  String get profileAccountSection;
+
+  /// Error shown when training subject profiles cannot be loaded
+  ///
+  /// In de, this message translates to:
+  /// **'Profile konnten nicht geladen werden: {error}'**
+  String profileSubjectProfilesLoadFailed(String error);
+
+  /// Action creating the first training subject profile
+  ///
+  /// In de, this message translates to:
+  /// **'Erstes Profil anlegen'**
+  String get profileCreateFirst;
+
+  /// Tooltip for editing a training subject profile
+  ///
+  /// In de, this message translates to:
+  /// **'Profil bearbeiten'**
+  String get profileEditTooltip;
+
+  /// Action activating a training subject profile
+  ///
+  /// In de, this message translates to:
+  /// **'Aktivieren'**
+  String get profileActivate;
+
+  /// Action adding a training subject profile
+  ///
+  /// In de, this message translates to:
+  /// **'Profil hinzufügen'**
+  String get profileAdd;
+
+  /// Confirmation after saving a training subject profile
+  ///
+  /// In de, this message translates to:
+  /// **'Profil gespeichert.'**
+  String get profileSaved;
+
+  /// Error shown when a training subject profile cannot be saved
+  ///
+  /// In de, this message translates to:
+  /// **'Profil konnte nicht gespeichert werden: {error}'**
+  String profileSaveFailed(String error);
+
+  /// Adult training subject profile type
+  ///
+  /// In de, this message translates to:
+  /// **'Erwachsenenprofil'**
+  String get profileAdult;
+
+  /// Child training subject profile type
+  ///
+  /// In de, this message translates to:
+  /// **'Kinderprofil'**
+  String get profileChild;
+
+  /// Age of a training subject profile
+  ///
+  /// In de, this message translates to:
+  /// **'{years, plural, one{{years} Jahr} other{{years} Jahre}}'**
+  String profileAgeYears(int years);
+
+  /// Date picker help text for a subject profile birth date
+  ///
+  /// In de, this message translates to:
+  /// **'Geburtsdatum auswählen'**
+  String get profileSelectBirthDateHelp;
+
+  /// Validation error when a subject profile name is empty
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte gib einen Namen an.'**
+  String get profileNameRequired;
+
+  /// Validation error when a child subject profile has no birth date
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte gib ein Geburtsdatum an.'**
+  String get profileBirthDateRequired;
+
+  /// Subject profile edit dialog title
+  ///
+  /// In de, this message translates to:
+  /// **'Profil bearbeiten'**
+  String get profileEditTitle;
+
+  /// Name field label for a child subject profile
+  ///
+  /// In de, this message translates to:
+  /// **'Name oder Spitzname'**
+  String get profileChildNameLabel;
+
+  /// Name field label for an adult subject profile
+  ///
+  /// In de, this message translates to:
+  /// **'Profilname'**
+  String get profileNameLabel;
+
+  /// Subject profile birth date field label
+  ///
+  /// In de, this message translates to:
+  /// **'Geburtsdatum'**
+  String get profileBirthDateLabel;
+
+  /// Prompt to select a subject profile birth date
+  ///
+  /// In de, this message translates to:
+  /// **'Datum auswählen'**
+  String get profileSelectDate;
+
+  /// Profile display name field heading
+  ///
+  /// In de, this message translates to:
+  /// **'Anzeigename'**
+  String get profileDisplayNameLabel;
+
+  /// Explanation of the profile display name when community features are enabled
+  ///
+  /// In de, this message translates to:
+  /// **'Wird im Community-Feed angezeigt, wenn du Erfahrungen teilst.'**
+  String get profileCommunityDisplayNameHint;
+
+  /// Explanation of the profile display name when community features are disabled
+  ///
+  /// In de, this message translates to:
+  /// **'Sichtbar für deinen Trainer, zum Beispiel im Chat.'**
+  String get profileTrainerDisplayNameHint;
+
+  /// Minimum display name length validation
+  ///
+  /// In de, this message translates to:
+  /// **'Mindestens {count} Zeichen'**
+  String profileMinimumCharacters(int count);
+
+  /// Maximum display name length validation
+  ///
+  /// In de, this message translates to:
+  /// **'Maximal {count} Zeichen'**
+  String profileMaximumCharacters(int count);
+
+  /// Validation error when a profile name contains an at sign
+  ///
+  /// In de, this message translates to:
+  /// **'Kein @ erlaubt'**
+  String get profileAtNotAllowed;
+
+  /// Short error shown when a profile display name cannot be saved
+  ///
+  /// In de, this message translates to:
+  /// **'Speichern fehlgeschlagen'**
+  String get profileSaveFailedShort;
+
+  /// Validation error when the initial contact name is empty
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte gib einen Kontaktnamen ein.'**
+  String get profileContactNameRequired;
+
+  /// Initial contact name setup heading
+  ///
+  /// In de, this message translates to:
+  /// **'Wie sollen wir dich nennen?'**
+  String get profileContactNameQuestion;
+
+  /// Initial contact name explanation without community features
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Kontaktname ist sichtbar für Trainer und im Kursbereich.'**
+  String get profileContactNameBody;
+
+  /// Initial contact name explanation with community features
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Kontaktname ist sichtbar für Trainer und im Kursbereich. Er kann sich von deinem Community-Namen unterscheiden.'**
+  String get profileContactNameBodyWithCommunity;
+
+  /// Example initial contact name
+  ///
+  /// In de, this message translates to:
+  /// **'z. B. Maria oder Familie Müller'**
+  String get profileContactNameHint;
 }
 
 class _AppLocalizationsDelegate

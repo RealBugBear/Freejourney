@@ -54,8 +54,8 @@ class _TrainingExperienceSheetState
   int? _energy;
   int? _stress;
   final _noteController = TextEditingController();
-  final Set<String> _unitImpressions = {};
-  final Set<String> _sinceLastUnit = {};
+  final Set<_UnitImpression> _unitImpressions = {};
+  final Set<_SinceLastObservation> _sinceLastUnit = {};
   bool _shareWithCommunity = false;
   bool _anonymous = true;
   bool _saving = false;
@@ -81,10 +81,11 @@ class _TrainingExperienceSheetState
   Future<void> _save() async {
     if (_saving) return;
     setState(() => _saving = true);
+    final l10n = AppLocalizations.of(context);
 
     try {
       final repo = ref.read(moodRepositoryProvider);
-      final note = _composedNote();
+      final note = _composedNote(l10n);
 
       // 1. Save mood checkin.
       await repo.createCheckin(
@@ -99,8 +100,9 @@ class _TrainingExperienceSheetState
       // 2. Optionally share to community feed.
       if (kCommunityEnabled && _shareWithCommunity) {
         final profile = ref.read(profileProvider).valueOrNull;
-        final displayName =
-            _anonymous ? 'Anonym' : profile?.effectiveDisplayName ?? 'Anonym';
+        final displayName = _anonymous
+            ? l10n.anonymous
+            : profile?.effectiveDisplayName(l10n.anonymous) ?? l10n.anonymous;
 
         await ref.read(experienceRepositoryProvider).createShare(
               ExperienceShareInsert(
@@ -125,20 +127,32 @@ class _TrainingExperienceSheetState
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
       if (mounted) {
-        showErrorSnackBar(context, 'Fehler beim Speichern: $e');
+        showErrorSnackBar(context, l10n.moodExperienceSaveFailed('$e'));
       }
     } finally {
       if (mounted) setState(() => _saving = false);
     }
   }
 
-  String? _composedNote() {
+  String? _composedNote(AppLocalizations l10n) {
     final parts = <String>[];
     if (_unitImpressions.isNotEmpty) {
-      parts.add('Einheit: ${_unitImpressions.join(', ')}');
+      parts.add(
+        l10n.moodExperienceSessionNote(
+          _unitImpressions
+              .map((value) => _unitImpressionLabel(l10n, value))
+              .join(', '),
+        ),
+      );
     }
     if (_sinceLastUnit.isNotEmpty) {
-      parts.add('Seit letzter Einheit: ${_sinceLastUnit.join(', ')}');
+      parts.add(
+        l10n.moodExperienceSinceLastSessionNote(
+          _sinceLastUnit
+              .map((value) => _sinceLastObservationLabel(l10n, value))
+              .join(', '),
+        ),
+      );
     }
     final own = _noteController.text.trim();
     if (own.isNotEmpty) parts.add(own);
@@ -148,6 +162,7 @@ class _TrainingExperienceSheetState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
       padding: EdgeInsets.only(
         left: 20,
@@ -160,7 +175,7 @@ class _TrainingExperienceSheetState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Wie hat sich die Einheit angefühlt?',
+            l10n.moodExperienceTitle,
             style: Theme.of(context)
                 .textTheme
                 .titleMedium
@@ -168,7 +183,7 @@ class _TrainingExperienceSheetState
           ),
           const SizedBox(height: 8),
           Text(
-            'Was hast du während der Einheit oder seit deiner letzten Einheit wahrgenommen?',
+            l10n.moodExperienceDescription,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   height: 1.4,
@@ -176,16 +191,9 @@ class _TrainingExperienceSheetState
           ),
           const SizedBox(height: 20),
           _ChipQuestion(
-            options: const [
-              'ruhig',
-              'angenehm',
-              'müde',
-              'unruhig',
-              'emotional',
-              'körperlich unangenehm',
-              'schwer einzuschätzen',
-            ],
+            options: _UnitImpression.values,
             selected: _unitImpressions,
+            labelFor: (value) => _unitImpressionLabel(l10n, value),
             onToggle: (value) => setState(() {
               _unitImpressions.contains(value)
                   ? _unitImpressions.remove(value)
@@ -194,26 +202,16 @@ class _TrainingExperienceSheetState
           ),
           const SizedBox(height: 18),
           Text(
-            'Was ist dir seit der letzten Einheit aufgefallen?',
+            l10n.moodExperienceSinceLastTitle,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
           ),
           const SizedBox(height: 10),
           _ChipQuestion(
-            options: const [
-              'mehr Ruhe',
-              'mehr Energie',
-              'weniger Energie',
-              'Stimmung schwankte',
-              'emotionaler als sonst',
-              'reizempfindlicher',
-              'besserer Schlaf',
-              'unruhiger Schlaf',
-              'körperliche Spannung',
-              'keine Besonderheit',
-            ],
+            options: _SinceLastObservation.values,
             selected: _sinceLastUnit,
+            labelFor: (value) => _sinceLastObservationLabel(l10n, value),
             onToggle: (value) => setState(() {
               _sinceLastUnit.contains(value)
                   ? _sinceLastUnit.remove(value)
@@ -222,32 +220,30 @@ class _TrainingExperienceSheetState
           ),
           const SizedBox(height: 18),
           _MetricRow(
-            label: 'Stimmung',
+            label: l10n.moodLabel,
             color: AppColors.moodRose,
             value: _mood,
             onChanged: (v) => setState(() => _mood = v),
           ),
           const SizedBox(height: 10),
           _MetricRow(
-            label: 'Energie',
+            label: l10n.energyLabel,
             color: AppColors.moodTeal,
             value: _energy,
             onChanged: (v) => setState(() => _energy = v),
           ),
           const SizedBox(height: 10),
           _MetricRow(
-            label: 'Stress',
+            label: l10n.stressLabel,
             color: AppColors.moodGold,
             value: _stress,
             onChanged: (v) => setState(() => _stress = v),
           ),
           const SizedBox(height: 4),
           Text(
-            'Tippe auf einen Wert, um ihn auszuwählen, oder lass ihn frei.',
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+            l10n.moodMetricSelectionHint,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
           const SizedBox(height: 16),
           TextField(
@@ -255,7 +251,7 @@ class _TrainingExperienceSheetState
             minLines: 3,
             maxLines: 6,
             decoration: InputDecoration(
-              hintText: 'Eigene Beobachtung... (optional)',
+              hintText: l10n.moodExperienceOwnObservationHint,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             ),
@@ -264,7 +260,7 @@ class _TrainingExperienceSheetState
           if (kCommunityEnabled) ...[
             CheckboxListTile(
               contentPadding: EdgeInsets.zero,
-              title: const Text('Als geteilte Erfahrung einreichen'),
+              title: Text(l10n.moodExperienceShare),
               value: _shareWithCommunity,
               activeColor: AppColors.primary,
               onChanged: (v) => setState(() {
@@ -277,7 +273,7 @@ class _TrainingExperienceSheetState
                 padding: const EdgeInsets.only(left: 16),
                 child: CheckboxListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text('Anonym einreichen'),
+                  title: Text(l10n.moodExperienceShareAnonymously),
                   value: _anonymous,
                   activeColor: AppColors.primary,
                   onChanged: (v) => setState(() => _anonymous = v ?? false),
@@ -297,7 +293,7 @@ class _TrainingExperienceSheetState
                       height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Text(AppLocalizations.of(context).save),
+                  : Text(l10n.save),
             ),
           ),
         ],
@@ -354,16 +350,18 @@ class _MetricRow extends StatelessWidget {
   }
 }
 
-class _ChipQuestion extends StatelessWidget {
+class _ChipQuestion<T> extends StatelessWidget {
   const _ChipQuestion({
     required this.options,
     required this.selected,
     required this.onToggle,
+    required this.labelFor,
   });
 
-  final List<String> options;
-  final Set<String> selected;
-  final ValueChanged<String> onToggle;
+  final List<T> options;
+  final Set<T> selected;
+  final ValueChanged<T> onToggle;
+  final String Function(T) labelFor;
 
   @override
   Widget build(BuildContext context) {
@@ -373,7 +371,7 @@ class _ChipQuestion extends StatelessWidget {
       children: [
         for (final option in options)
           FilterChip(
-            label: Text(option),
+            label: Text(labelFor(option)),
             selected: selected.contains(option),
             selectedColor: AppColors.primary.withValues(alpha: 0.14),
             checkmarkColor: AppColors.primary,
@@ -383,3 +381,62 @@ class _ChipQuestion extends StatelessWidget {
     );
   }
 }
+
+enum _UnitImpression {
+  calm,
+  pleasant,
+  tired,
+  restless,
+  emotional,
+  physicallyUncomfortable,
+  unsure,
+}
+
+enum _SinceLastObservation {
+  moreCalm,
+  moreEnergy,
+  lessEnergy,
+  moodChanged,
+  moreEmotional,
+  moreSensitive,
+  betterSleep,
+  restlessSleep,
+  bodyTension,
+  nothingNotable,
+}
+
+String _unitImpressionLabel(
+  AppLocalizations l10n,
+  _UnitImpression value,
+) =>
+    switch (value) {
+      _UnitImpression.calm => l10n.moodExperienceImpressionCalm,
+      _UnitImpression.pleasant => l10n.moodExperienceImpressionPleasant,
+      _UnitImpression.tired => l10n.moodExperienceImpressionTired,
+      _UnitImpression.restless => l10n.moodExperienceImpressionRestless,
+      _UnitImpression.emotional => l10n.moodExperienceImpressionEmotional,
+      _UnitImpression.physicallyUncomfortable =>
+        l10n.moodExperienceImpressionPhysicallyUncomfortable,
+      _UnitImpression.unsure => l10n.moodExperienceImpressionUnsure,
+    };
+
+String _sinceLastObservationLabel(
+  AppLocalizations l10n,
+  _SinceLastObservation value,
+) =>
+    switch (value) {
+      _SinceLastObservation.moreCalm => l10n.moodExperienceSinceMoreCalm,
+      _SinceLastObservation.moreEnergy => l10n.moodExperienceSinceMoreEnergy,
+      _SinceLastObservation.lessEnergy => l10n.moodExperienceSinceLessEnergy,
+      _SinceLastObservation.moodChanged => l10n.moodExperienceSinceMoodChanged,
+      _SinceLastObservation.moreEmotional =>
+        l10n.moodExperienceSinceMoreEmotional,
+      _SinceLastObservation.moreSensitive =>
+        l10n.moodExperienceSinceMoreSensitive,
+      _SinceLastObservation.betterSleep => l10n.moodExperienceSinceBetterSleep,
+      _SinceLastObservation.restlessSleep =>
+        l10n.moodExperienceSinceRestlessSleep,
+      _SinceLastObservation.bodyTension => l10n.moodExperienceSinceBodyTension,
+      _SinceLastObservation.nothingNotable =>
+        l10n.moodExperienceSinceNothingNotable,
+    };

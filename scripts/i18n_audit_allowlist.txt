@@ -3,3 +3,4 @@
 *	Reflex Journey
 *	🇩🇪 Deutsch
 *	🇬🇧 English
+lib/features/mood/presentation/widgets/training_experience_sheet.dart	training

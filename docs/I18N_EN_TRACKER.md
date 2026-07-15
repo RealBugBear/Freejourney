@@ -156,18 +156,18 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | assessment | features/assessment/presentation/screens/reflex_profile_result_screen.dart | 40 | 0 | 0  | externalisiert (Fragen/Reflexnamen DE/EN; allgemeine UI noch offen) |
 | assessment | features/assessment/presentation/screens/reflex_profile_screen.dart | 77 | 0 | 0  | externalisiert (Fragen/Module DE/EN; Dialog-/Buttontexte noch offen) |
 | assessment | features/assessment/presentation/widgets/reflex_radar_chart.dart | 15 | 0 | 0  | externalisiert (Reflexlabels DE/EN; Leerzustand noch offen) |
-| accompaniment | features/accompaniment/presentation/screens/accompaniment_screen.dart | 70 | 1 | 1  | offen |
-| mood | features/mood/presentation/widgets/mood_chart_widget.dart | 4 | 0 | 0  | offen |
-| mood | features/mood/presentation/widgets/mood_checkin_sheet.dart | 11 | 0 | 0  | offen |
-| mood | features/mood/presentation/widgets/mood_trend_chart.dart | 1 | 0 | 0  | offen |
-| mood | features/mood/presentation/widgets/note_entry_sheet.dart | 3 | 0 | 0  | offen |
-| mood | features/mood/presentation/widgets/training_experience_sheet.dart | 28 | 0 | 0  | offen |
-| settings | features/settings/presentation/screens/settings_screen.dart | 2 | 0 | 0  | offen |
-| settings | features/settings/presentation/widgets/theme_selector.dart | 7 | 0 | 0  | offen |
-| profile | features/profile/data/repositories/profile_repository.dart | 0 | 3 | 0  | offen |
-| profile | features/profile/domain/models/profile.dart | 1 | 0 | 0  | offen |
-| profile | features/profile/presentation/screens/profile_screen.dart | 47 | 0 | 0  | offen |
-| profile | features/profile/presentation/screens/username_setup_screen.dart | 10 | 0 | 0  | offen |
+| accompaniment | features/accompaniment/presentation/screens/accompaniment_screen.dart | 0 | 0 | 0  | verifiziert (UI/Fehler/Termine DE/EN, Audit 0) |
+| mood | features/mood/presentation/widgets/mood_chart_widget.dart | 0 | 0 | 0  | verifiziert (locale-aware DE `15.7`/EN `7/15`, Audit 0) |
+| mood | features/mood/presentation/widgets/mood_checkin_sheet.dart | 0 | 0 | 0  | verifiziert (DE/EN, Audit 0) |
+| mood | features/mood/presentation/widgets/mood_trend_chart.dart | 0 | 0 | 0  | verifiziert (DE/EN, Audit 0) |
+| mood | features/mood/presentation/widgets/note_entry_sheet.dart | 0 | 0 | 0  | verifiziert (locale-aware Datum, Audit 0) |
+| mood | features/mood/presentation/widgets/training_experience_sheet.dart | 0 | 0 | 1 technischer Identifier | verifiziert (stabile Enums + exakte Audit-Ausnahme `training`) |
+| settings | features/settings/presentation/screens/settings_screen.dart | 0 | 0 | 0  | verifiziert (Sprachnamen + locale-aware Uhrzeit, Audit 0) |
+| settings | features/settings/presentation/widgets/theme_selector.dart | 0 | 0 | 0  | verifiziert (DE/EN, Audit 0) |
+| profile | features/profile/data/repositories/profile_repository.dart | 0 | 3 | 0  | verifiziert (technische Logs bereits EN) |
+| profile | features/profile/domain/models/profile.dart | 0 | 0 | 0  | verifiziert (lokalisierter Fallback durch Consumer) |
+| profile | features/profile/presentation/screens/profile_screen.dart | 0 | 0 | 0  | verifiziert (UI/Fehler/Datum/ICU DE/EN, Audit 0) |
+| profile | features/profile/presentation/screens/username_setup_screen.dart | 0 | 0 | 0  | verifiziert (UI/Validierung DE/EN, Audit 0) |
 | trainer | features/trainer/data/repositories/supabase_trainer_application_repository.dart | 0 | 2 | 0  | offen |
 | trainer | features/trainer/domain/models/appointment.dart | 2 | 0 | 0  | offen |
 | trainer | features/trainer/domain/models/trainer_application.dart | 6 | 0 | 0  | offen |
@@ -240,6 +240,30 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 
 ## Arbeitslog
+
+- **2026-07-15, Begleitung/Mood/Settings/Profil:** 145 semantische Keys ergänzt
+  (**753 DE = 753 EN**, jeweils mit Metadaten). Der scoped Audit meldet in allen
+  zwölf Produktdateien keine nicht erlaubten UI-/Fehler-/Push-Hardcodes und keine
+  festen deutschen Locale-Formate. Der persistierte DB-Identifier `training` ist
+  als eine exakte Pfad+Literal-Ausnahme dokumentiert. Datums-/Zeit-Regressionen
+  sichern DE (`15.07.2026`, `15.7`, `Mi., 15. Juli · 15:30`) und en-US
+  (`7/15/2026`, `7/15`, `Wed, Jul 15 · 3:30 PM`); die Auswahlwerte der
+  Trainingserfahrung verwenden stabile Enums statt übersetzter Zustands-IDs.
+
+- **2026-07-15, EN-Evidenz und Asset-Inventar (`0cfec14`):** Sechs reproduzierbare
+  PNGs belegen First-Launch-Sprachwahl, Login, unmittelbaren Wechsel in Settings,
+  Onboarding, Dashboard und Training in Englisch; der isolierte Harness nutzt
+  lokale Stubs und weder Netzwerk noch Produktionsdaten. Alle 29 Trainingsbilder
+  wurden visuell auf eingebetteten Text geprüft. Separat geflaggt bleiben fehlende
+  EN-Announcement-Audios, elf referenzierte aber nicht vorhandene Übungsbilder,
+  fünf leere Bildfamilien, GPS-Metadaten in sechs JPEGs, Standard-Flutter-Branding
+  auf Desktop/Web sowie nicht geprüfte Remote-Medien.
+
+- **2026-07-15, Audit-Härtung (`c6ce9c4`):** Statement-gebundene Log-/Exception-
+  Klassifizierung und exakte technische Muster reduzieren 44 False Positives,
+  ohne neun echte UI-Funde zu verschlucken. Positive und negative Regressionstests
+  sichern die konservative Klassifizierung; absichtlich sichtbare Wörter wie
+  `Today` und `May` bleiben Audit-Funde.
 
 - **2026-07-15, Packages/Journal/Progress/Golden Day:** 57 semantische Keys ergänzt
   (608 DE = 608 EN, alle mit Metadaten). Die fünf zugehörigen Dateien haben im

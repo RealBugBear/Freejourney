@@ -51,7 +51,10 @@ class _MoodChartWidgetState extends ConsumerState<MoodChartWidget> {
             const Icon(Icons.edit_outlined, size: 18),
             const SizedBox(width: 8),
             Text(
-              DateFormat('dd.MM.yyyy').format(note.recordedAt),
+              formatMoodNoteDate(
+                note.recordedAt,
+                Localizations.localeOf(context),
+              ),
               style: Theme.of(ctx).textTheme.titleSmall,
             ),
           ],
@@ -67,7 +70,7 @@ class _MoodChartWidgetState extends ConsumerState<MoodChartWidget> {
                 onSaved: _invalidateMoodProviders,
               );
             },
-            child: const Text('Bearbeiten'),
+            child: Text(AppLocalizations.of(context).edit),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -92,7 +95,7 @@ class _MoodChartWidgetState extends ConsumerState<MoodChartWidget> {
           children: [
             Flexible(
               child: Text(
-                widget.compactHeader ? 'Stimmung' : l10n.moodCheckIn,
+                widget.compactHeader ? l10n.moodLabel : l10n.moodCheckIn,
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
@@ -112,7 +115,7 @@ class _MoodChartWidgetState extends ConsumerState<MoodChartWidget> {
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                tooltip: 'Notiz schreiben',
+                tooltip: l10n.moodWriteNote,
                 onPressed: () => showNoteEntrySheet(
                   context,
                   enrollmentId: enrollmentId,
@@ -198,7 +201,13 @@ class _RangeChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const options = [30, 90, 365, 0];
-    const labels = ['30d', '90d', '1J', 'All'];
+    final l10n = AppLocalizations.of(context);
+    final labels = [
+      l10n.progressRange30Days,
+      l10n.progressRange90Days,
+      l10n.progressRangeOneYear,
+      l10n.progressRangeAll,
+    ];
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -314,7 +323,10 @@ class _NotesList extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        DateFormat('dd.MM.yyyy').format(entry.recordedAt),
+                        formatMoodNoteDate(
+                          entry.recordedAt,
+                          Localizations.localeOf(context),
+                        ),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -342,4 +354,12 @@ class _NotesList extends StatelessWidget {
       ],
     );
   }
+}
+
+String formatMoodNoteDate(DateTime value, Locale locale) {
+  final localeName = locale.toLanguageTag();
+  if (locale.languageCode == 'de') {
+    return DateFormat('dd.MM.yyyy', localeName).format(value);
+  }
+  return DateFormat.yMd(localeName).format(value);
 }

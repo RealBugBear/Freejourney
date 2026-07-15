@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
 import '../providers/profile_provider.dart';
 
@@ -28,11 +29,12 @@ class _UsernameSetupScreenState extends ConsumerState<UsernameSetupScreen> {
   }
 
   String? _validate(String value) {
+    final l10n = AppLocalizations.of(context);
     final trimmed = value.trim();
-    if (trimmed.isEmpty) return 'Bitte gib einen Kontaktnamen ein.';
-    if (trimmed.length < 2) return 'Mindestens 2 Zeichen';
-    if (trimmed.length > 50) return 'Maximal 50 Zeichen';
-    if (trimmed.contains('@')) return 'Kein @ erlaubt';
+    if (trimmed.isEmpty) return l10n.profileContactNameRequired;
+    if (trimmed.length < 2) return l10n.profileMinimumCharacters(2);
+    if (trimmed.length > 50) return l10n.profileMaximumCharacters(50);
+    if (trimmed.contains('@')) return l10n.profileAtNotAllowed;
     return null;
   }
 
@@ -63,8 +65,7 @@ class _UsernameSetupScreenState extends ConsumerState<UsernameSetupScreen> {
       }
     } catch (_) {
       if (mounted) {
-        setState(
-            () => _error = 'Speichern fehlgeschlagen. Bitte erneut versuchen.');
+        setState(() => _error = AppLocalizations.of(context).errorSaveFailed);
       }
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -73,6 +74,7 @@ class _UsernameSetupScreenState extends ConsumerState<UsernameSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -90,15 +92,16 @@ class _UsernameSetupScreenState extends ConsumerState<UsernameSetupScreen> {
             children: [
               const Spacer(),
               Text(
-                'Wie sollen wir dich nennen?',
+                l10n.profileContactNameQuestion,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w800,
                     ),
               ),
               const SizedBox(height: 10),
               Text(
-                'Dein Kontaktname ist sichtbar für Trainer und im Kursbereich.'
-                '${kCommunityEnabled ? ' Er kann sich von deinem Community-Namen unterscheiden.' : ''}',
+                kCommunityEnabled
+                    ? l10n.profileContactNameBodyWithCommunity
+                    : l10n.profileContactNameBody,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -111,7 +114,7 @@ class _UsernameSetupScreenState extends ConsumerState<UsernameSetupScreen> {
                 onChanged: (_) => setState(() => _error = null),
                 onSubmitted: (_) => _save(),
                 decoration: InputDecoration(
-                  hintText: 'z. B. Maria oder Familie Müller',
+                  hintText: l10n.profileContactNameHint,
                   errorText: _error,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -138,9 +141,9 @@ class _UsernameSetupScreenState extends ConsumerState<UsernameSetupScreen> {
                           child: CircularProgressIndicator(
                               strokeWidth: 2, color: Colors.white),
                         )
-                      : const Text(
-                          'Weiter',
-                          style: TextStyle(
+                      : Text(
+                          l10n.continueAction,
+                          style: const TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 16),
                         ),
                 ),

@@ -9,8 +9,9 @@ class Profile {
     this.isAnonymousDefault = false,
   });
 
-  /// Returns the display name, or 'Anonym' if none is set.
-  String get effectiveDisplayName => displayName ?? 'Anonym';
+  /// Returns the display name, or the caller-provided localized fallback.
+  String effectiveDisplayName(String anonymousLabel) =>
+      displayName ?? anonymousLabel;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
         userId: json['id'] as String,

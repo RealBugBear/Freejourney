@@ -16,19 +16,24 @@ void main() {
     });
 
     test('fromJson handles null display_name', () {
-      final json = {'id': 'abc', 'display_name': null, 'is_anonymous_default': false};
+      final json = {
+        'id': 'abc',
+        'display_name': null,
+        'is_anonymous_default': false
+      };
       final p = Profile.fromJson(json);
       expect(p.displayName, isNull);
-      expect(p.effectiveDisplayName, 'Anonym');
+      expect(p.effectiveDisplayName('Anonymous'), 'Anonymous');
     });
 
     test('effectiveDisplayName returns name when set', () {
       const p = Profile(userId: 'x', displayName: 'Karl');
-      expect(p.effectiveDisplayName, 'Karl');
+      expect(p.effectiveDisplayName('Anonymous'), 'Karl');
     });
 
     test('toJson round-trips', () {
-      const p = Profile(userId: 'x', displayName: 'Tina', isAnonymousDefault: false);
+      const p =
+          Profile(userId: 'x', displayName: 'Tina', isAnonymousDefault: false);
       final json = p.toJson();
       final p2 = Profile.fromJson(json);
       expect(p2.displayName, 'Tina');

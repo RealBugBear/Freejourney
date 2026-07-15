@@ -121,7 +121,9 @@ keine Rechtstexte, Flag bleibt false.
       Module/Hilfen/Trainer-Flags und Reflexlabels nach bilingualem Content-
       Muster umgesetzt und getestet; allgemeine UI sowie PDF-Ausgabe offen.
 - [ ] 9. Begleitung, Mood, Settings, Profil und Trainer-Discovery vollständig
-      externalisieren/übersetzen; Tests in kleinen Feature-Commits.
+      externalisieren/übersetzen; Begleitung, Mood, Settings und Profil sind mit
+      145 Keys, locale-aware Formaten und Audit 0 verifiziert; Trainer-Discovery
+      bleibt im Trainer-Block offen.
 - [ ] 10. Chat, Trainer-Flows und launch-versteckte Community/Experience/Video-
       Flächen externalisieren; Logs Englisch; Tests in Feature-Commits.
 - [ ] 11. Admin, Dev-Tools und Core-Ränder (Router, Onboarding-Hints, Bootstrap,
@@ -138,7 +140,9 @@ keine Rechtstexte, Flag bleibt false.
 - [ ] 14. EN-Qualitätssweep (en-US, Glossar, DE==EN-Entscheidungen,
       Heilversprechen-Check) und offene Recht/DB/Bild/Store-Punkte flaggen.
 - [ ] 15. Visuelle EN-Evidenz für beide Sprachwechsel-Wege und alle
-      Haupt-Screens erzeugen; Layout/Overflow prüfen.
+      Haupt-Screens erzeugen; sechs reproduzierbare PNGs für beide Wechselwege,
+      Login, Onboarding, Dashboard und Training sind geprüft. Verbleibende
+      Haupt-Screens folgen nach deren Externalisierung.
 - [ ] 16. `make release-readiness-mobile`, Prod-Build ohne Codesign und
       Abschlussreport/Tracker finalisieren. Signierte IPA/Upload bleiben ein
       separater gated Release-Schritt und sind nicht Teil des i18n-Prompts.

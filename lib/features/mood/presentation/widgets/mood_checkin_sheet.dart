@@ -86,7 +86,10 @@ class _MoodCheckinSheetState extends ConsumerState<MoodCheckinSheet> {
     final enrollmentId =
         widget.enrollmentId ?? widget.initialEntry?.enrollmentId;
     if (enrollmentId == null) {
-      showErrorSnackBar(context, 'Kein aktives Programm gefunden.');
+      showErrorSnackBar(
+        context,
+        AppLocalizations.of(context).moodNoActiveProgram,
+      );
       return;
     }
 
@@ -159,22 +162,21 @@ class _MoodCheckinSheetState extends ConsumerState<MoodCheckinSheet> {
         .firstOrNull;
     if (communityChannel == null) return;
     if (!rootNavigator.mounted) return;
+    final l10n = AppLocalizations.of(rootNavigator.context);
 
     final share = await showDialog<bool>(
       context: rootNavigator.context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Geteilte Erfahrung einreichen?'),
-        content: const Text(
-          'Möchtest du diese Beobachtung als geteilte Erfahrung einreichen?',
-        ),
+        title: Text(l10n.moodCommunityShareTitle),
+        content: Text(l10n.moodCommunityShareBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Nein danke'),
+            child: Text(l10n.noThanks),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Einreichen'),
+            child: Text(l10n.submit),
           ),
         ],
       ),
@@ -208,7 +210,7 @@ class _MoodCheckinSheetState extends ConsumerState<MoodCheckinSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _isEdit ? 'Eintrag bearbeiten' : 'Stimmung eintragen',
+            _isEdit ? l10n.moodEditEntry : l10n.moodLogMood,
             style: Theme.of(context)
                 .textTheme
                 .titleMedium
@@ -235,7 +237,7 @@ class _MoodCheckinSheetState extends ConsumerState<MoodCheckinSheet> {
                       children: [
                         const SizedBox(height: 12),
                         Text(
-                          'Für wen?',
+                          l10n.moodForWhom,
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: Theme.of(context)
@@ -250,7 +252,7 @@ class _MoodCheckinSheetState extends ConsumerState<MoodCheckinSheet> {
                           child: Row(
                             children: [
                               _ProfileChip(
-                                label: 'Allgemein',
+                                label: l10n.moodGeneral,
                                 selected: _selectedProfileId == null,
                                 onTap: () =>
                                     setState(() => _selectedProfileId = null),
@@ -299,7 +301,7 @@ class _MoodCheckinSheetState extends ConsumerState<MoodCheckinSheet> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Tippe auf einen Wert, um ihn auszuwählen, oder lass ihn frei.',
+            l10n.moodMetricSelectionHint,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),

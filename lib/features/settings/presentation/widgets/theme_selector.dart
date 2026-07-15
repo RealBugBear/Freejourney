@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/theme_provider.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// Widget für Theme-Auswahl
 ///
@@ -11,6 +12,7 @@ class ThemeSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final currentTheme = ref.watch(themeProvider);
 
     return Card(
@@ -22,8 +24,8 @@ class ThemeSelector extends ConsumerWidget {
             mode: ThemeMode.system,
             currentMode: currentTheme,
             icon: Icons.brightness_auto,
-            title: 'System',
-            subtitle: 'Folgt den System-Einstellungen',
+            title: l10n.themeSystem,
+            subtitle: l10n.themeSystemDescription,
           ),
           const Divider(height: 0),
           _buildThemeOption(
@@ -32,8 +34,8 @@ class ThemeSelector extends ConsumerWidget {
             mode: ThemeMode.light,
             currentMode: currentTheme,
             icon: Icons.light_mode,
-            title: 'Hell',
-            subtitle: 'Immer helles Design',
+            title: l10n.themeLight,
+            subtitle: l10n.themeLightDescription,
           ),
           const Divider(height: 0),
           _buildThemeOption(
@@ -42,8 +44,8 @@ class ThemeSelector extends ConsumerWidget {
             mode: ThemeMode.dark,
             currentMode: currentTheme,
             icon: Icons.dark_mode,
-            title: 'Dunkel',
-            subtitle: 'Immer dunkles Design',
+            title: l10n.themeDark,
+            subtitle: l10n.themeDarkDescription,
           ),
         ],
       ),
@@ -90,7 +92,7 @@ class ThemeSelector extends ConsumerWidget {
         // Optional: Feedback für den Nutzer
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Theme geändert zu: $title'),
+            content: Text(AppLocalizations.of(context).themeChanged(title)),
             duration: const Duration(seconds: 1),
           ),
         );

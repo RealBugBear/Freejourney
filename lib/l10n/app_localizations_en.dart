@@ -2126,4 +2126,527 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get goldenDayPracticeMore => 'Practice a Little More';
+
+  @override
+  String get anonymous => 'Anonymous';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get submit => 'Submit';
+
+  @override
+  String get noThanks => 'No, Thanks';
+
+  @override
+  String get continueAction => 'Continue';
+
+  @override
+  String get accompanimentTitle => 'Guidance';
+
+  @override
+  String get accompanimentConnectBody =>
+      'Paste the invite link or enter the 6-character code you received from your trainer.';
+
+  @override
+  String get accompanimentInviteLinkOrCodeLabel => 'Invite Link or Code';
+
+  @override
+  String get accompanimentInviteLinkOrCodeHint => 'A1B2C3 or https://...';
+
+  @override
+  String get accompanimentConnectInvalidInvite =>
+      'Enter a valid 6-character code or invite link.';
+
+  @override
+  String accompanimentConnectFailed(String error) {
+    return 'Could not connect: $error';
+  }
+
+  @override
+  String get accompanimentConnectAction => 'Connect';
+
+  @override
+  String get accompanimentConnectedSuccess =>
+      'You\'re now connected to your trainer.';
+
+  @override
+  String get accompanimentSwitchTitle => 'Switch Trainers';
+
+  @override
+  String get accompanimentSwitchBody =>
+      'After you switch, your new trainer will see your history. Your previous trainer will no longer see you in their client list.';
+
+  @override
+  String get accompanimentSwitchInvalidInvite =>
+      'Enter a valid invite link or code.';
+
+  @override
+  String get accompanimentSwitchConfirm => 'Confirm Switch';
+
+  @override
+  String get accompanimentSwitchUpdated => 'Guidance updated.';
+
+  @override
+  String accompanimentSwitchFailed(String error) {
+    return 'Could not save the change: $error';
+  }
+
+  @override
+  String get accompanimentWithdrawTitle => 'Withdraw Request?';
+
+  @override
+  String accompanimentWithdrawBody(String name) {
+    return 'Your request to $name will be withdrawn. You can request another trainer later.';
+  }
+
+  @override
+  String get accompanimentWithdrawAction => 'Withdraw Request';
+
+  @override
+  String get accompanimentWithdrawSuccess => 'Request withdrawn.';
+
+  @override
+  String accompanimentWithdrawFailed(String error) {
+    return 'Could not withdraw request: $error';
+  }
+
+  @override
+  String get accompanimentSharedExperiencesTitle => 'Shared Experiences';
+
+  @override
+  String get accompanimentSharedExperiencesBody =>
+      'View moderated observations from ongoing packages.';
+
+  @override
+  String get accompanimentSharedExperiencesAction => 'View Experiences';
+
+  @override
+  String get accompanimentProfessionalTitle => 'Professional Guidance';
+
+  @override
+  String get accompanimentProfessionalBody =>
+      'Some exercises are done with a partner. The focus is not strength training, but clearly noticing direction, movement, and resistance. A qualified trainer can guide you through these exercises.';
+
+  @override
+  String get accompanimentPackageStartNote =>
+      'Especially relevant at the start of a package.';
+
+  @override
+  String get accompanimentDailySessionsNote =>
+      'Your daily rhythmic sessions remain self-guided.';
+
+  @override
+  String get accompanimentNoTrainerTitle => 'No Trainer Connected Yet';
+
+  @override
+  String get accompanimentNoTrainerBody =>
+      'You can keep practicing your package on your own and find professional guidance for partner exercises or conversations when you need it.';
+
+  @override
+  String get accompanimentEnterInviteLink => 'Enter Invite Link';
+
+  @override
+  String get accompanimentContinueWithoutTrainer =>
+      'Continue Without a Trainer';
+
+  @override
+  String get accompanimentProfileSharingTitle => 'Reflex Profile Sharing';
+
+  @override
+  String get accompanimentProfileSharingBody =>
+      'You decide whether your connected trainer can see completed reflex profiles. Access lasts only while this guidance connection is active.';
+
+  @override
+  String accompanimentProfileSharingLoadFailed(String error) {
+    return 'Could not load sharing: $error';
+  }
+
+  @override
+  String get accompanimentProfileShared =>
+      'Your connected trainer can see this reflex profile.';
+
+  @override
+  String get accompanimentProfileNotShared =>
+      'Not shared with your connected trainer.';
+
+  @override
+  String accompanimentProfileSharingSaveFailed(String error) {
+    return 'Could not save reflex profile sharing: $error';
+  }
+
+  @override
+  String accompanimentProposalCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Open Appointment Proposals',
+      one: '1 Open Appointment Proposal',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get accompanimentProposalsLoading =>
+      'Loading appointment proposals...';
+
+  @override
+  String get accompanimentProposalsBody => 'Choose a time that works for you.';
+
+  @override
+  String get accompanimentViewProposals => 'View Proposals';
+
+  @override
+  String accompanimentPendingRequestTitle(String name) {
+    return 'Request Pending with $name';
+  }
+
+  @override
+  String accompanimentExtraPendingRequests(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more requests pending',
+      one: '$count more request pending',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get accompanimentPendingRequestAcceptedNotice =>
+      'We\'ll let you know when the request is accepted.';
+
+  @override
+  String get accompanimentMoreTrainers => 'More Trainers';
+
+  @override
+  String get accompanimentInviteLinkShort => 'Invite Link';
+
+  @override
+  String get accompanimentActiveGuidance => 'Active Guidance';
+
+  @override
+  String get accompanimentMessage => 'Message';
+
+  @override
+  String get accompanimentAppointmentProposals => 'Appointment Proposals';
+
+  @override
+  String get accompanimentNextAppointments => 'Upcoming Appointments';
+
+  @override
+  String get accompanimentNoAppointments => 'No appointments scheduled yet.';
+
+  @override
+  String get accompanimentSwitchAccessBody =>
+      'When you switch, your new trainer can see your history. Your previous trainer loses access to your client profile.';
+
+  @override
+  String get accompanimentEnterCode => 'Enter Code';
+
+  @override
+  String accompanimentAppointmentForProfile(String profileName) {
+    return 'for $profileName';
+  }
+
+  @override
+  String get moodWriteNote => 'Write a Note';
+
+  @override
+  String get moodNoActiveProgram => 'No active program found.';
+
+  @override
+  String get moodCommunityShareTitle => 'Submit a Shared Experience?';
+
+  @override
+  String get moodCommunityShareBody =>
+      'Would you like to submit this observation as a shared experience?';
+
+  @override
+  String get moodEditEntry => 'Edit Entry';
+
+  @override
+  String get moodLogMood => 'Log Mood';
+
+  @override
+  String get moodForWhom => 'Who Is This For?';
+
+  @override
+  String get moodGeneral => 'General';
+
+  @override
+  String get moodMetricSelectionHint =>
+      'Tap a value to select it, or leave it blank.';
+
+  @override
+  String get moodNoteBody =>
+      'Whatever your mood, write down what\'s on your mind right now.';
+
+  @override
+  String get moodNoteHint => 'Your thoughts...';
+
+  @override
+  String moodExperienceSaveFailed(String error) {
+    return 'Could not save: $error';
+  }
+
+  @override
+  String moodExperienceSessionNote(String values) {
+    return 'Session: $values';
+  }
+
+  @override
+  String moodExperienceSinceLastSessionNote(String values) {
+    return 'Since the last session: $values';
+  }
+
+  @override
+  String get moodExperienceTitle => 'How Did the Session Feel?';
+
+  @override
+  String get moodExperienceDescription =>
+      'What did you notice during this session or since your last one?';
+
+  @override
+  String get moodExperienceImpressionCalm => 'calm';
+
+  @override
+  String get moodExperienceImpressionPleasant => 'pleasant';
+
+  @override
+  String get moodExperienceImpressionTired => 'tired';
+
+  @override
+  String get moodExperienceImpressionRestless => 'restless';
+
+  @override
+  String get moodExperienceImpressionEmotional => 'emotional';
+
+  @override
+  String get moodExperienceImpressionPhysicallyUncomfortable =>
+      'physically uncomfortable';
+
+  @override
+  String get moodExperienceImpressionUnsure => 'hard to tell';
+
+  @override
+  String get moodExperienceSinceLastTitle =>
+      'What Have You Noticed Since Your Last Session?';
+
+  @override
+  String get moodExperienceSinceMoreCalm => 'calmer';
+
+  @override
+  String get moodExperienceSinceMoreEnergy => 'more energy';
+
+  @override
+  String get moodExperienceSinceLessEnergy => 'less energy';
+
+  @override
+  String get moodExperienceSinceMoodChanged => 'mood fluctuated';
+
+  @override
+  String get moodExperienceSinceMoreEmotional => 'more emotional than usual';
+
+  @override
+  String get moodExperienceSinceMoreSensitive => 'more sensitive to stimuli';
+
+  @override
+  String get moodExperienceSinceBetterSleep => 'better sleep';
+
+  @override
+  String get moodExperienceSinceRestlessSleep => 'restless sleep';
+
+  @override
+  String get moodExperienceSinceBodyTension => 'physical tension';
+
+  @override
+  String get moodExperienceSinceNothingNotable => 'nothing notable';
+
+  @override
+  String get moodExperienceOwnObservationHint =>
+      'Add your own observation... (optional)';
+
+  @override
+  String get moodExperienceShare => 'Submit as a Shared Experience';
+
+  @override
+  String get moodExperienceShareAnonymously => 'Submit Anonymously';
+
+  @override
+  String get themeSystemDescription => 'Follows your system setting';
+
+  @override
+  String get themeLightDescription => 'Always use the light theme';
+
+  @override
+  String get themeDarkDescription => 'Always use the dark theme';
+
+  @override
+  String themeChanged(String title) {
+    return 'Theme changed to “$title”';
+  }
+
+  @override
+  String get profileTrainingProfilesSection => 'Training Profiles';
+
+  @override
+  String get profileJournalItemTitle => 'Journal';
+
+  @override
+  String get profileJournalSubtitle => 'Your entries and reflections';
+
+  @override
+  String get profileTrainerSection => 'Trainer';
+
+  @override
+  String get profileManageGuidance => 'Manage Guidance';
+
+  @override
+  String profileConnectedWith(String name) {
+    return 'Connected to $name';
+  }
+
+  @override
+  String get profileFindManageTrainer =>
+      'Find trainers and manage requests and appointments';
+
+  @override
+  String get profileWorkspaceSection => 'Workspace';
+
+  @override
+  String get profileAdminPanel => 'Admin Panel';
+
+  @override
+  String get profileMessages => 'Messages';
+
+  @override
+  String get profileReviewChannels =>
+      'Trainer applications and review channels';
+
+  @override
+  String get profileTrainerArea => 'Trainer Area';
+
+  @override
+  String get profileProfessionalAccessSection => 'Professional Access';
+
+  @override
+  String get profileBecomeTrainer => 'Become a Trainer';
+
+  @override
+  String get profileApplicationSubtitle => 'Submit your application for review';
+
+  @override
+  String get profileAccountSection => 'Account';
+
+  @override
+  String profileSubjectProfilesLoadFailed(String error) {
+    return 'Could not load profiles: $error';
+  }
+
+  @override
+  String get profileCreateFirst => 'Create Your First Profile';
+
+  @override
+  String get profileEditTooltip => 'Edit Profile';
+
+  @override
+  String get profileActivate => 'Activate';
+
+  @override
+  String get profileAdd => 'Add Profile';
+
+  @override
+  String get profileSaved => 'Profile saved.';
+
+  @override
+  String profileSaveFailed(String error) {
+    return 'Could not save profile: $error';
+  }
+
+  @override
+  String get profileAdult => 'Adult Profile';
+
+  @override
+  String get profileChild => 'Child Profile';
+
+  @override
+  String profileAgeYears(int years) {
+    String _temp0 = intl.Intl.pluralLogic(
+      years,
+      locale: localeName,
+      other: '$years years old',
+      one: '$years year old',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get profileSelectBirthDateHelp => 'Select Date of Birth';
+
+  @override
+  String get profileNameRequired => 'Enter a name.';
+
+  @override
+  String get profileBirthDateRequired => 'Enter a date of birth.';
+
+  @override
+  String get profileEditTitle => 'Edit Profile';
+
+  @override
+  String get profileChildNameLabel => 'Name or Nickname';
+
+  @override
+  String get profileNameLabel => 'Profile Name';
+
+  @override
+  String get profileBirthDateLabel => 'Date of Birth';
+
+  @override
+  String get profileSelectDate => 'Select Date';
+
+  @override
+  String get profileDisplayNameLabel => 'Display Name';
+
+  @override
+  String get profileCommunityDisplayNameHint =>
+      'Shown in the community feed when you share experiences.';
+
+  @override
+  String get profileTrainerDisplayNameHint =>
+      'Visible to your trainer, for example in chat.';
+
+  @override
+  String profileMinimumCharacters(int count) {
+    return 'At least $count characters';
+  }
+
+  @override
+  String profileMaximumCharacters(int count) {
+    return 'No more than $count characters';
+  }
+
+  @override
+  String get profileAtNotAllowed => '@ is not allowed';
+
+  @override
+  String get profileSaveFailedShort => 'Could not save';
+
+  @override
+  String get profileContactNameRequired => 'Enter a contact name.';
+
+  @override
+  String get profileContactNameQuestion => 'What Should We Call You?';
+
+  @override
+  String get profileContactNameBody =>
+      'Your contact name is visible to trainers and in the training area.';
+
+  @override
+  String get profileContactNameBodyWithCommunity =>
+      'Your contact name is visible to trainers and in the training area. It can be different from your community name.';
+
+  @override
+  String get profileContactNameHint => 'e.g., Maria or the Miller family';
 }

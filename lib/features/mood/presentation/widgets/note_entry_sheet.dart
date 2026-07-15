@@ -81,6 +81,7 @@ class _NoteEntrySheetState extends ConsumerState<NoteEntrySheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final isEmpty = _noteController.text.trim().isEmpty;
 
     return Padding(
@@ -95,7 +96,7 @@ class _NoteEntrySheetState extends ConsumerState<NoteEntrySheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Notiz schreiben',
+            l10n.moodWriteNote,
             style: Theme.of(context)
                 .textTheme
                 .titleMedium
@@ -103,11 +104,9 @@ class _NoteEntrySheetState extends ConsumerState<NoteEntrySheet> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Unabhängig von deiner Stimmung — schreib was dir gerade durch den Kopf geht.',
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+            l10n.moodNoteBody,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
           const SizedBox(height: 16),
           TextField(
@@ -117,7 +116,7 @@ class _NoteEntrySheetState extends ConsumerState<NoteEntrySheet> {
             maxLines: 8,
             onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
-              hintText: 'Deine Gedanken...',
+              hintText: l10n.moodNoteHint,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -137,7 +136,7 @@ class _NoteEntrySheetState extends ConsumerState<NoteEntrySheet> {
                       height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Text(AppLocalizations.of(context).save),
+                  : Text(l10n.save),
             ),
           ),
         ],

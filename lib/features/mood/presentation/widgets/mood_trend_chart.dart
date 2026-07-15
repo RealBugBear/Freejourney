@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/database/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/mood_daily_aggregate.dart';
 import '../../domain/models/mood_view_settings.dart';
 
@@ -26,7 +27,7 @@ class MoodTrendChart extends StatelessWidget {
     if (aggregates.isEmpty) {
       return Center(
         child: Text(
-          'Noch keine Einträge im gewählten Zeitraum.',
+          AppLocalizations.of(context).progressWellbeingEmpty,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
@@ -130,7 +131,10 @@ class MoodTrendChart extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      DateFormat('d.M').format(day),
+                      formatMoodChartDate(
+                        day,
+                        Localizations.localeOf(context),
+                      ),
                       style: TextStyle(
                         fontSize: 10,
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -219,4 +223,12 @@ class MoodTrendChart extends StatelessWidget {
       ),
     );
   }
+}
+
+String formatMoodChartDate(DateTime value, Locale locale) {
+  final localeName = locale.toLanguageTag();
+  if (locale.languageCode == 'de') {
+    return DateFormat('d.M', localeName).format(value);
+  }
+  return DateFormat.Md(localeName).format(value);
 }

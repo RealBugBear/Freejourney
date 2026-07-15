@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../config/launch_flags.dart';
@@ -34,7 +35,7 @@ class ProfileScreen extends ConsumerWidget {
           const DirectMessagesAction(),
           IconButton(
             icon: const Icon(Icons.settings_outlined),
-            tooltip: 'Einstellungen',
+            tooltip: l10n.settings,
             onPressed: () => context.push(Routes.settings),
           ),
         ],
@@ -76,52 +77,52 @@ class ProfileScreen extends ConsumerWidget {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: _UsernameSection(),
             ),
-            const _SectionHeader(title: 'Trainingsprofile'),
+            _SectionHeader(title: l10n.profileTrainingProfilesSection),
             const _SubjectProfilesSection(),
             const SizedBox(height: 8),
-            const _SectionHeader(title: 'Tagebuch'),
+            _SectionHeader(title: l10n.journal),
             ListTile(
               leading: const Icon(Icons.menu_book_outlined),
-              title: const Text('Journal'),
-              subtitle: const Text(
-                'Deine Einträge und Reflexionen',
-                style: TextStyle(fontSize: 12),
+              title: Text(l10n.profileJournalItemTitle),
+              subtitle: Text(
+                l10n.profileJournalSubtitle,
+                style: const TextStyle(fontSize: 12),
               ),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => context.push(Routes.journal),
             ),
-            const _SectionHeader(title: 'Trainer'),
+            _SectionHeader(title: l10n.profileTrainerSection),
             ListTile(
               leading: Icon(
                 trainerName != null ? Icons.link : Icons.link_off,
                 color: trainerName != null ? AppColors.success : null,
               ),
-              title: const Text('Begleitung verwalten'),
+              title: Text(l10n.profileManageGuidance),
               subtitle: Text(
                 trainerName != null
-                    ? 'Aktuell verbunden mit $trainerName'
-                    : 'Trainer finden, Anfragen und Termine verwalten',
+                    ? l10n.profileConnectedWith(trainerName)
+                    : l10n.profileFindManageTrainer,
                 style: const TextStyle(fontSize: 12),
               ),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => context.push(Routes.accompaniment),
             ),
             if (role == 'admin' || role == 'trainer') ...[
-              const _SectionHeader(title: 'Arbeitsbereich'),
+              _SectionHeader(title: l10n.profileWorkspaceSection),
               if (role == 'admin')
                 ListTile(
                   leading: const Icon(Icons.admin_panel_settings_outlined),
-                  title: const Text('Admin Panel'),
+                  title: Text(l10n.profileAdminPanel),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => context.push(Routes.adminPanel),
                 ),
               if (role == 'admin')
                 ListTile(
                   leading: const Icon(Icons.chat_bubble_outline),
-                  title: const Text('Nachrichten'),
-                  subtitle: const Text(
-                    'Trainer-Bewerbungen und Review-Kanäle',
-                    style: TextStyle(fontSize: 12),
+                  title: Text(l10n.profileMessages),
+                  subtitle: Text(
+                    l10n.profileReviewChannels,
+                    style: const TextStyle(fontSize: 12),
                   ),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => context.push(Routes.dm),
@@ -129,25 +130,25 @@ class ProfileScreen extends ConsumerWidget {
               if (role == 'trainer')
                 ListTile(
                   leading: const Icon(Icons.group_outlined),
-                  title: const Text('Trainerbereich'),
+                  title: Text(l10n.profileTrainerArea),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => context.push(Routes.trainerDashboard),
                 ),
             ],
             if (role != 'admin' && role != 'trainer') ...[
-              const _SectionHeader(title: 'Beruflicher Zugang'),
+              _SectionHeader(title: l10n.profileProfessionalAccessSection),
               ListTile(
                 leading: const Icon(Icons.verified_user_outlined),
-                title: const Text('Trainer werden'),
-                subtitle: const Text(
-                  'Bewerbung einreichen und prüfen lassen',
-                  style: TextStyle(fontSize: 12),
+                title: Text(l10n.profileBecomeTrainer),
+                subtitle: Text(
+                  l10n.profileApplicationSubtitle,
+                  style: const TextStyle(fontSize: 12),
                 ),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => _openTrainerApplication(context),
               ),
             ],
-            const _SectionHeader(title: 'Account'),
+            _SectionHeader(title: l10n.profileAccountSection),
             ListTile(
               leading: const Icon(Icons.lock_outline),
               title: Text(l10n.profileChangePassword),
@@ -264,7 +265,9 @@ class ProfileScreen extends ConsumerWidget {
         ),
       );
 
-      if (submittedCode == null || submittedCode.trim().isEmpty || !context.mounted) {
+      if (submittedCode == null ||
+          submittedCode.trim().isEmpty ||
+          !context.mounted) {
         return;
       }
 
@@ -279,8 +282,7 @@ class ProfileScreen extends ConsumerWidget {
       if (!context.mounted) return;
       final message = switch (e.error) {
         RedeemAccessCodeError.invalidCode => l10n.redeemAccessCodeErrorInvalid,
-        RedeemAccessCodeError.alreadyRedeemed =>
-          l10n.redeemAccessCodeErrorUsed,
+        RedeemAccessCodeError.alreadyRedeemed => l10n.redeemAccessCodeErrorUsed,
         RedeemAccessCodeError.expired => l10n.redeemAccessCodeErrorExpired,
         RedeemAccessCodeError.unsupported =>
           l10n.redeemAccessCodeErrorUnsupported,
@@ -308,6 +310,7 @@ class _SubjectProfilesSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final profilesAsync = ref.watch(allReflexSubjectProfilesProvider);
     final selected = ref.watch(selectedSubjectProfileProvider);
 
@@ -318,13 +321,13 @@ class _SubjectProfilesSection extends ConsumerWidget {
       ),
       error: (error, _) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Text('Profile konnten nicht geladen werden: $error'),
+        child: Text(l10n.profileSubjectProfilesLoadFailed('$error')),
       ),
       data: (profiles) {
         if (profiles.isEmpty) {
           return ListTile(
             leading: const Icon(Icons.person_add_alt_outlined),
-            title: const Text('Erstes Profil anlegen'),
+            title: Text(l10n.profileCreateFirst),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.push(Routes.onboardingForWhom),
           );
@@ -342,7 +345,7 @@ class _SubjectProfilesSection extends ConsumerWidget {
                 ),
                 title: Text(profile.displayName),
                 subtitle: Text(
-                  _subjectProfileSubtitle(profile),
+                  _subjectProfileSubtitle(profile, l10n),
                   style: const TextStyle(fontSize: 12),
                 ),
                 trailing: Row(
@@ -350,7 +353,7 @@ class _SubjectProfilesSection extends ConsumerWidget {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.edit_outlined),
-                      tooltip: 'Profil bearbeiten',
+                      tooltip: l10n.profileEditTooltip,
                       onPressed: () => _showSubjectProfileEditor(
                         context,
                         ref,
@@ -364,14 +367,14 @@ class _SubjectProfilesSection extends ConsumerWidget {
                         onPressed: () => ref
                             .read(selectedSubjectProfileIdProvider.notifier)
                             .select(profile.id),
-                        child: const Text('Aktivieren'),
+                        child: Text(l10n.profileActivate),
                       ),
                   ],
                 ),
               ),
             ListTile(
               leading: const Icon(Icons.add_circle_outline),
-              title: const Text('Profil hinzufügen'),
+              title: Text(l10n.profileAdd),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => context.push(Routes.onboardingForWhom),
             ),
@@ -386,6 +389,7 @@ class _SubjectProfilesSection extends ConsumerWidget {
     WidgetRef ref,
     ReflexSubjectProfile profile,
   ) async {
+    final l10n = AppLocalizations.of(context);
     final updated = await showDialog<_SubjectProfileEditResult>(
       context: context,
       builder: (ctx) => _SubjectProfileEditDialog(profile: profile),
@@ -401,23 +405,27 @@ class _SubjectProfilesSection extends ConsumerWidget {
       );
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profil gespeichert.')),
+          SnackBar(content: Text(l10n.profileSaved)),
         );
       }
     } catch (error) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('Profil konnte nicht gespeichert werden: $error')),
+          SnackBar(content: Text(l10n.profileSaveFailed('$error'))),
         );
       }
     }
   }
 
-  static String _subjectProfileSubtitle(ReflexSubjectProfile profile) {
-    if (profile.profileType == 'adult_self') return 'Erwachsenenprofil';
-    final parts = <String>['Kinderprofil'];
-    if (profile.ageYears != null) parts.add('${profile.ageYears} Jahre');
+  static String _subjectProfileSubtitle(
+    ReflexSubjectProfile profile,
+    AppLocalizations l10n,
+  ) {
+    if (profile.profileType == 'adult_self') return l10n.profileAdult;
+    final parts = <String>[l10n.profileChild];
+    if (profile.ageYears != null) {
+      parts.add(l10n.profileAgeYears(profile.ageYears!));
+    }
     if (profile.ageGroup != null) parts.add(profile.ageGroup!);
     return parts.join(' · ');
   }
@@ -462,13 +470,14 @@ class _SubjectProfileEditDialogState extends State<_SubjectProfileEditDialog> {
   }
 
   Future<void> _pickBirthDate() async {
+    final l10n = AppLocalizations.of(context);
     final now = DateTime.now();
     final picked = await showDatePicker(
       context: context,
       initialDate: _birthDate ?? DateTime(now.year - 6, now.month, now.day),
       firstDate: DateTime(now.year - 100),
       lastDate: now,
-      helpText: 'Geburtsdatum auswählen',
+      helpText: l10n.profileSelectBirthDateHelp,
     );
     if (picked != null) {
       setState(() {
@@ -479,13 +488,14 @@ class _SubjectProfileEditDialogState extends State<_SubjectProfileEditDialog> {
   }
 
   void _submit() {
+    final l10n = AppLocalizations.of(context);
     final name = _nameController.text.trim();
     if (name.isEmpty) {
-      setState(() => _error = 'Bitte gib einen Namen an.');
+      setState(() => _error = l10n.profileNameRequired);
       return;
     }
     if (widget.profile.profileType == 'child' && _birthDate == null) {
-      setState(() => _error = 'Bitte gib ein Geburtsdatum an.');
+      setState(() => _error = l10n.profileBirthDateRequired);
       return;
     }
     Navigator.pop(
@@ -499,10 +509,11 @@ class _SubjectProfileEditDialogState extends State<_SubjectProfileEditDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final isChild = widget.profile.profileType == 'child';
 
     return AlertDialog(
-      title: const Text('Profil bearbeiten'),
+      title: Text(l10n.profileEditTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -511,7 +522,8 @@ class _SubjectProfileEditDialogState extends State<_SubjectProfileEditDialog> {
             textCapitalization: TextCapitalization.words,
             onChanged: (_) => setState(() => _error = null),
             decoration: InputDecoration(
-              labelText: isChild ? 'Name oder Spitzname' : 'Profilname',
+              labelText:
+                  isChild ? l10n.profileChildNameLabel : l10n.profileNameLabel,
               errorText: _error,
               border: const OutlineInputBorder(),
             ),
@@ -522,17 +534,18 @@ class _SubjectProfileEditDialogState extends State<_SubjectProfileEditDialog> {
               onTap: _pickBirthDate,
               borderRadius: BorderRadius.circular(4),
               child: InputDecorator(
-                decoration: const InputDecoration(
-                  labelText: 'Geburtsdatum',
-                  border: OutlineInputBorder(),
-                  suffixIcon: Icon(Icons.calendar_month_outlined),
+                decoration: InputDecoration(
+                  labelText: l10n.profileBirthDateLabel,
+                  border: const OutlineInputBorder(),
+                  suffixIcon: const Icon(Icons.calendar_month_outlined),
                 ),
                 child: Text(
                   _birthDate == null
-                      ? 'Datum auswählen'
-                      : '${_birthDate!.day.toString().padLeft(2, '0')}.'
-                          '${_birthDate!.month.toString().padLeft(2, '0')}.'
-                          '${_birthDate!.year}',
+                      ? l10n.profileSelectDate
+                      : formatProfileBirthDate(
+                          _birthDate!,
+                          Localizations.localeOf(context),
+                        ),
                 ),
               ),
             ),
@@ -542,11 +555,11 @@ class _SubjectProfileEditDialogState extends State<_SubjectProfileEditDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Abbrechen'),
+          child: Text(l10n.cancel),
         ),
         FilledButton(
           onPressed: _submit,
-          child: const Text('Speichern'),
+          child: Text(l10n.save),
         ),
       ],
     );
@@ -601,6 +614,7 @@ class _UsernameSectionState extends ConsumerState<_UsernameSection> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final profileAsync = ref.watch(profileProvider);
     final displayName = profileAsync.valueOrNull?.displayName ?? '';
 
@@ -612,7 +626,7 @@ class _UsernameSectionState extends ConsumerState<_UsernameSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Anzeigename',
+          l10n.profileDisplayNameLabel,
           style: Theme.of(context)
               .textTheme
               .titleSmall
@@ -627,7 +641,7 @@ class _UsernameSectionState extends ConsumerState<_UsernameSection> {
                 enabled: _editing,
                 onChanged: (_) => setState(() => _error = null),
                 decoration: InputDecoration(
-                  hintText: 'Anonym',
+                  hintText: l10n.anonymous,
                   errorText: _error,
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -638,7 +652,7 @@ class _UsernameSectionState extends ConsumerState<_UsernameSection> {
             if (!_editing)
               TextButton(
                 onPressed: () => setState(() => _editing = true),
-                child: const Text('Bearbeiten'),
+                child: Text(l10n.edit),
               )
             else
               TextButton(
@@ -649,7 +663,7 @@ class _UsernameSectionState extends ConsumerState<_UsernameSection> {
                         height: 16,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Speichern'),
+                    : Text(l10n.save),
               ),
           ],
         ),
@@ -657,8 +671,8 @@ class _UsernameSectionState extends ConsumerState<_UsernameSection> {
           // Ohne Community-Feed (T04) beschreibt der Untertitel nur die
           // verbleibende Verwendung des Anzeigenamens: den Trainer-Chat.
           kCommunityEnabled
-              ? 'Wird im Community-Feed angezeigt, wenn du Erfahrungen teilst.'
-              : 'Sichtbar für deinen Trainer, zum Beispiel im Chat.',
+              ? l10n.profileCommunityDisplayNameHint
+              : l10n.profileTrainerDisplayNameHint,
           style: Theme.of(context)
               .textTheme
               .bodySmall
@@ -669,13 +683,14 @@ class _UsernameSectionState extends ConsumerState<_UsernameSection> {
   }
 
   Future<void> _save() async {
+    final l10n = AppLocalizations.of(context);
     final trimmed = _ctrl.text.trim();
     if (trimmed.isNotEmpty && trimmed.length < 3) {
-      setState(() => _error = 'Mindestens 3 Zeichen');
+      setState(() => _error = l10n.profileMinimumCharacters(3));
       return;
     }
     if (trimmed.contains('@')) {
-      setState(() => _error = 'Kein @ erlaubt');
+      setState(() => _error = l10n.profileAtNotAllowed);
       return;
     }
     setState(() => _saving = true);
@@ -685,9 +700,17 @@ class _UsernameSectionState extends ConsumerState<_UsernameSection> {
           );
       if (mounted) setState(() => _editing = false);
     } catch (_) {
-      if (mounted) setState(() => _error = 'Speichern fehlgeschlagen');
+      if (mounted) setState(() => _error = l10n.profileSaveFailedShort);
     } finally {
       if (mounted) setState(() => _saving = false);
     }
   }
+}
+
+String formatProfileBirthDate(DateTime value, Locale locale) {
+  final localeName = locale.toLanguageTag();
+  if (locale.languageCode == 'de') {
+    return DateFormat('dd.MM.yyyy', localeName).format(value);
+  }
+  return DateFormat.yMd(localeName).format(value);
 }

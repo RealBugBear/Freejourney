@@ -158,7 +158,8 @@ class SettingsScreen extends ConsumerWidget {
             child: _SegmentedRow<String>(
               options: const ['de', 'en'],
               selected: settings.languageCode,
-              label: (code) => code == 'de' ? 'Deutsch' : 'English',
+              label: (code) =>
+                  code == 'de' ? l10n.languageGerman : l10n.languageEnglish,
               onChanged: notifier.setLanguage,
             ),
           ),
@@ -333,8 +334,12 @@ class _TimePickerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatted =
-        '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+    final use24HourFormat =
+        Localizations.localeOf(context).languageCode == 'de';
+    final formatted = MaterialLocalizations.of(context).formatTimeOfDay(
+      time,
+      alwaysUse24HourFormat: use24HourFormat,
+    );
 
     return ListTile(
       title: Text(label),
@@ -344,7 +349,10 @@ class _TimePickerTile extends StatelessWidget {
             context: context,
             initialTime: time,
             builder: (ctx, child) => MediaQuery(
-              data: MediaQuery.of(ctx).copyWith(alwaysUse24HourFormat: true),
+              data: MediaQuery.of(ctx).copyWith(
+                alwaysUse24HourFormat:
+                    Localizations.localeOf(ctx).languageCode == 'de',
+              ),
               child: child!,
             ),
           );
