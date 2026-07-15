@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 /// Animated progress bar with milestone indicators
 /// Shows progress with encouraging visual feedback
 class AnimatedProgressBar extends StatefulWidget {
@@ -79,6 +81,7 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final progress = widget.currentStep / widget.totalSteps;
 
     if (widget.minimal) {
@@ -159,7 +162,7 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar>
           animation: _progressAnimation,
           builder: (context, child) {
             return Text(
-              _getEncouragingMessage(progress),
+              _getEncouragingMessage(progress, l10n),
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: _getProgressColor(progress),
@@ -225,13 +228,18 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '${widget.currentStep} von ${widget.totalSteps}',
+              l10n.trainingProgressStepCounter(
+                widget.currentStep,
+                widget.totalSteps,
+              ),
               style: theme.textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
             Text(
-              '${(progress * 100).toInt()}% geschafft! 🎉',
+              l10n.trainingProgressPercentComplete(
+                (progress * 100).toInt(),
+              ),
               style: theme.textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: _getProgressColor(progress),
@@ -300,11 +308,14 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar>
     return const Color(0xFF9C27B0); // Purple
   }
 
-  String _getEncouragingMessage(double progress) {
-    if (progress >= 0.9) return 'Fantastisch! Fast am Ziel! 🏆';
-    if (progress >= 0.75) return 'Großartig! Du schaffst das! 💪';
-    if (progress >= 0.5) return 'Super! Schon über die Hälfte! 🎯';
-    if (progress >= 0.25) return 'Gut gemacht! Weiter so! ⭐';
-    return 'Los geht\'s! Du packst das! 🚀';
+  String _getEncouragingMessage(
+    double progress,
+    AppLocalizations l10n,
+  ) {
+    if (progress >= 0.9) return l10n.trainingProgressAlmostThere;
+    if (progress >= 0.75) return l10n.trainingProgressGreat;
+    if (progress >= 0.5) return l10n.trainingProgressHalfway;
+    if (progress >= 0.25) return l10n.trainingProgressKeepGoing;
+    return l10n.trainingProgressLetsGo;
   }
 }

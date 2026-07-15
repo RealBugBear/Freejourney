@@ -1545,4 +1545,394 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get trainingAbortConfirm => 'Ja, abbrechen';
+
+  @override
+  String trainingFeedbackModeActivated(String label) {
+    return 'Feedbackmodus $label aktiviert.';
+  }
+
+  @override
+  String get trainingFeedbackVoice => 'Stimme';
+
+  @override
+  String get trainingFeedbackSounds => 'Töne';
+
+  @override
+  String get trainingFeedbackHaptics => 'Haptik';
+
+  @override
+  String get trainingFeedbackSilent => 'Stumm';
+
+  @override
+  String trainingTempoAnnouncement(String seconds) {
+    return 'Tempo $seconds Sekunden.';
+  }
+
+  @override
+  String trainingExerciseDurationSemantics(int seconds, int repetitions) {
+    return 'Übungsdauer $seconds Sekunden, $repetitions Wiederholungen.';
+  }
+
+  @override
+  String trainingRepeatCount(int count) {
+    return '$count× wiederholen';
+  }
+
+  @override
+  String get trainingAnimationSemantics =>
+      'Animationsbereich der Übung. Startet automatisch und kann pausiert oder neu gestartet werden.';
+
+  @override
+  String get trainingAutoplayHint =>
+      'Startet automatisch. Bei Bedarf pausieren.';
+
+  @override
+  String trainingTempoFeedbackSummary(String seconds, String feedback) {
+    return 'Tempo: ${seconds}s  •  Feedback: $feedback';
+  }
+
+  @override
+  String get trainingFastTempoWarning =>
+      'Sehr schnelles Tempo aktiv. Fokus auf saubere Ausführung.';
+
+  @override
+  String get trainingAdaptiveSuggestion => 'Adaptiver Vorschlag aktiv';
+
+  @override
+  String get trainingTempoSlowerSemantics => 'Tempo langsamer';
+
+  @override
+  String get trainingTempoFasterSemantics => 'Tempo schneller';
+
+  @override
+  String trainingSecondsValue(String seconds) {
+    return '$seconds Sekunden';
+  }
+
+  @override
+  String get trainingSlower => 'Langsamer';
+
+  @override
+  String get trainingFaster => 'Schneller';
+
+  @override
+  String get trainingFeedbackChangeSemantics => 'Feedbackmodus wechseln';
+
+  @override
+  String get trainingControlsHint =>
+      'Tempo und Feedback hier direkt mit einem Tap anpassen.';
+
+  @override
+  String get trainingCompleteExercise => 'Übung abschließen';
+
+  @override
+  String get trainingContinueNextExercise => 'Weiter zur nächsten Übung';
+
+  @override
+  String get trainingSwitchCueUpper => 'WECHSEL!';
+
+  @override
+  String get trainingPauseCue => 'Pause...';
+
+  @override
+  String get trainingHoldCueUpper => 'HALTEN';
+
+  @override
+  String trainingExerciseOfTotalCompact(int current, int total) {
+    return 'Übung $current · $total gesamt';
+  }
+
+  @override
+  String get trainingPause => 'Pause';
+
+  @override
+  String get trainingRest => 'Pause';
+
+  @override
+  String get trainingResume => 'Weiter';
+
+  @override
+  String get trainingRestart => 'Neu starten';
+
+  @override
+  String trainingSecondsOf(int count) {
+    return 'von $count Sek.';
+  }
+
+  @override
+  String trainingBeatsOf(int count) {
+    return 'von $count Schlägen';
+  }
+
+  @override
+  String trainingHoldTime(int seconds) {
+    return '${seconds}s Haltezeit';
+  }
+
+  @override
+  String trainingSecondsPerBeat(String seconds) {
+    return '${seconds}s / Schlag';
+  }
+
+  @override
+  String get trainingMusic => 'Musik';
+
+  @override
+  String get trainingMusicOn => 'Musik an';
+
+  @override
+  String get trainingSessionExitUnsaved =>
+      'Deine Einheit wird nicht gespeichert. Wirklich abbrechen?';
+
+  @override
+  String get trainingReminderSessionBody =>
+      'Nimm dir Zeit für deine heutige Reflexintegrations-Einheit.';
+
+  @override
+  String get trainingProfileSkipTitle => 'Reflexprofil überspringen?';
+
+  @override
+  String get trainingProfileSkipBody =>
+      'Ohne persönliches Reflexprofil zur Einschätzung deines Standes fortfahren?';
+
+  @override
+  String get trainingContinue => 'Fortfahren';
+
+  @override
+  String get trainingActiveProfile => 'Aktives Profil';
+
+  @override
+  String get trainingStartPackage => 'Paket starten';
+
+  @override
+  String trainingStartForProfile(String name) {
+    return 'Start für $name';
+  }
+
+  @override
+  String get trainingWarmupBeforeMoroTitle => 'Vorrunde vor Moro';
+
+  @override
+  String get trainingWarmupBeforeMoroBody =>
+      'Die Vorrunde dient dazu, den Körper auf die kommende Integration der Reflexe vorzubereiten. Die rhythmischen Bewegungen geben deinem Gehirn Signale, die es an den Zeitraum erinnern, in dem diese Reflexe sich ursprünglich selbst integrieren sollten.\n\nDiese Übungen kannst du später immer wieder zur Beruhigung und Entspannung nutzen.';
+
+  @override
+  String get trainingStartWarmup => 'Vorrunde starten';
+
+  @override
+  String get trainingContinueWithPackage => 'Direkt mit Paket fortfahren';
+
+  @override
+  String get trainingUseReflexProfile => 'Reflexprofil nutzen';
+
+  @override
+  String trainingReflexProfileMissingBody(String name) {
+    return 'Für $name liegt noch keine abgeschlossene Reflexprofil-Auswertung vor. Mit dem Profil wird die Dauerempfehlung genauer und nachvollziehbarer.';
+  }
+
+  @override
+  String get trainingStartReflexProfile => 'Reflexprofil starten';
+
+  @override
+  String get trainingSkipDeliberately => 'Bewusst überspringen';
+
+  @override
+  String get trainingIsometricPartnerTitle => 'Isometrisches Partnertraining';
+
+  @override
+  String trainingIsometricPartnerQuestion(String name) {
+    return 'Hat $name bereits isometrisches Partnertraining mit einer Fachperson gemacht?';
+  }
+
+  @override
+  String get trainingWarmupStillRunning =>
+      'Die Vorrundenphase läuft noch. Du kannst Moro trotzdem starten; sie ist eine Empfehlung und kein Blocker.';
+
+  @override
+  String get trainingWarmupReady =>
+      'Die Vorrunde ist bereit. Jetzt Moro starten.';
+
+  @override
+  String trainingConnectedWithoutIsometric(String name) {
+    return 'Du bist mit $name verbunden. Ohne isometrisches Partnertraining bleibt die Angabe trotzdem „Nein“.';
+  }
+
+  @override
+  String trainingTrainerRequestPending(String name) {
+    return 'Traineranfrage an $name ist offen.';
+  }
+
+  @override
+  String get trainingFindTrainer => 'Trainer finden';
+
+  @override
+  String get trainingWarmupWhileWaitingBody =>
+      'Während du auf Rückmeldung oder einen Termin wartest, kannst du die Vorrunde nutzen. Sie bereitet rhythmisch vor und ist unabhängig vom isometrischen Partnertraining.';
+
+  @override
+  String get trainingUseWarmup => 'Vorrunde nutzen';
+
+  @override
+  String get trainingBeforeYouStart => 'Bevor du startest';
+
+  @override
+  String get trainingWarmupInterstitialBody =>
+      'Die Vorrunde bereitet deinen Körper auf das Reflex-Training vor. Viele Nutzer erleben deutlich stärkere Ergebnisse.';
+
+  @override
+  String get trainingStartWarmupNow => 'Vorrunde jetzt starten';
+
+  @override
+  String get trainingRecommended => 'empfohlen';
+
+  @override
+  String get trainingWarmupSummary =>
+      '4 Wochen · 6 Übungen täglich · ca. 8 Min.';
+
+  @override
+  String get trainingStartFirstPackageDirectly =>
+      'Direkt mit erstem Paket starten';
+
+  @override
+  String get trainingWarmupAvailableLater =>
+      'Vorrunde kann jederzeit nachgeholt werden.';
+
+  @override
+  String get trainingCongratulations => 'Herzlichen Glückwunsch!';
+
+  @override
+  String get trainingCompletedTodayBody =>
+      'Du hast dein heutiges Training\nerfolgreich abgeschlossen.';
+
+  @override
+  String get trainingCompletedToday => 'Heute abgeschlossen';
+
+  @override
+  String get trainingExercisesLabel => 'Übungen';
+
+  @override
+  String get trainingMinutesLabel => 'Minuten';
+
+  @override
+  String get trainingKeepGoing =>
+      'Weiter so! Regelmäßiges Training führt zum Erfolg.';
+
+  @override
+  String trainingExerciseOfTotal(int current, int total) {
+    return 'Übung $current von $total';
+  }
+
+  @override
+  String trainingProgressStepCounter(int current, int total) {
+    return '$current von $total';
+  }
+
+  @override
+  String trainingProgressPercentComplete(int percent) {
+    return '$percent% geschafft! 🎉';
+  }
+
+  @override
+  String get trainingProgressAlmostThere => 'Fantastisch! Fast am Ziel! 🏆';
+
+  @override
+  String get trainingProgressGreat => 'Großartig! Du schaffst das! 💪';
+
+  @override
+  String get trainingProgressHalfway => 'Super! Schon über die Hälfte! 🎯';
+
+  @override
+  String get trainingProgressKeepGoing => 'Gut gemacht! Weiter so! ⭐';
+
+  @override
+  String get trainingProgressLetsGo => 'Los geht\'s! Du packst das! 🚀';
+
+  @override
+  String get trainingVideo => 'Video';
+
+  @override
+  String trainingRepetitionsAbbreviated(int count) {
+    return '$count× Wdh.';
+  }
+
+  @override
+  String trainingSecondsPerRep(int seconds) {
+    return '$seconds Sek / Rep';
+  }
+
+  @override
+  String get trainingPositionLabel => 'Position';
+
+  @override
+  String trainingStartsInSeconds(int seconds) {
+    return 'Startet in $seconds s';
+  }
+
+  @override
+  String get trainingStartNow => 'Jetzt starten';
+
+  @override
+  String get trainingAnnouncementPlaying => 'Ansage läuft...';
+
+  @override
+  String get trainingVideoPreparing => 'Video wird vorbereitet...';
+
+  @override
+  String get trainingMusicOff => 'Aus';
+
+  @override
+  String get trainingMusicVolume => 'Lautstärke';
+
+  @override
+  String get trainingMusicAmbientFlow => 'Ambient Flow';
+
+  @override
+  String get trainingMusicQuietNature => 'Stille Natur';
+
+  @override
+  String get trainingMusicDeepTones => 'Tiefe Töne';
+
+  @override
+  String get trainingOwnMusicMixNote =>
+      'Eigene Musik (Spotify etc.) läuft weiter - Töne mischen sich darunter.';
+
+  @override
+  String get trainingShortBreak => 'Kurze Pause';
+
+  @override
+  String get trainingNextExercise => 'Nächste Übung:';
+
+  @override
+  String get trainingTutorialSubtitle => 'Mit Anleitung';
+
+  @override
+  String get trainingRoutineSubtitle => 'Hands-free';
+
+  @override
+  String trainingDurationAndRepetitions(int seconds, int repetitions) {
+    return '${seconds}s · ${repetitions}x';
+  }
+
+  @override
+  String trainingCompletedExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Übungen',
+      one: '$count Übungen',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trainingSecondsAbbreviation => 'sec';
+
+  @override
+  String get trainingAndAgain => 'Und wieder';
+
+  @override
+  String get trainingSwitchArmCross => 'Armkreuz wechseln';
+
+  @override
+  String get trainingSwitchCue => 'Wechsel';
 }

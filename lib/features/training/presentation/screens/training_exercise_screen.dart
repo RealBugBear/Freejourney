@@ -8,6 +8,7 @@ import '../../../../core/training/adaptive_tempo_settings.dart';
 import '../../../../core/training/handsfree_setup_settings.dart';
 import '../../../../core/training/training_feedback_settings.dart';
 import '../../../../core/training/training_tempo_defaults.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/exercise.dart';
 import '../widgets/animated_progress_bar.dart';
 import '../widgets/premium_glassmorphic_card.dart';
@@ -115,7 +116,9 @@ class _TrainingExerciseScreenState
       _enableRhythmAudio = mode == TrainingFeedbackMode.voiceAndCues;
     });
     _announceForAccessibility(
-      'Feedbackmodus ${_feedbackLabel(mode)} aktiviert.',
+      AppLocalizations.of(context).trainingFeedbackModeActivated(
+        _feedbackLabel(mode),
+      ),
     );
   }
 
@@ -128,10 +131,11 @@ class _TrainingExerciseScreenState
   }
 
   String _feedbackLabel(TrainingFeedbackMode mode) {
+    final l10n = AppLocalizations.of(context);
     return switch (mode) {
-      TrainingFeedbackMode.voiceAndCues => 'Stimme',
-      TrainingFeedbackMode.hapticOnly => 'Haptik',
-      TrainingFeedbackMode.silent => 'Stumm',
+      TrainingFeedbackMode.voiceAndCues => l10n.trainingFeedbackVoice,
+      TrainingFeedbackMode.hapticOnly => l10n.trainingFeedbackHaptics,
+      TrainingFeedbackMode.silent => l10n.trainingFeedbackSilent,
     };
   }
 
@@ -156,9 +160,15 @@ class _TrainingExerciseScreenState
     });
     HapticFeedback.selectionClick();
     _announceForAccessibility(
-      'Tempo ${_intervalSeconds.toStringAsFixed(_intervalSeconds.truncateToDouble() == _intervalSeconds ? 0 : 1)} Sekunden.',
+      AppLocalizations.of(context).trainingTempoAnnouncement(
+        _formattedTempo,
+      ),
     );
   }
+
+  String get _formattedTempo => _intervalSeconds.toStringAsFixed(
+        _intervalSeconds.truncateToDouble() == _intervalSeconds ? 0 : 1,
+      );
 
   void _announceForAccessibility(String message) {
     if (!mounted) return;
@@ -168,6 +178,7 @@ class _TrainingExerciseScreenState
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final exercise = widget.exercise;
     final isLastExercise = widget.isLastExercise;
     final isRoutineMode = widget.routineMode;
@@ -238,12 +249,14 @@ class _TrainingExerciseScreenState
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).maybePop(),
-          tooltip: 'Zurück',
+          tooltip: l10n.back,
         ),
         // Slim progress bar between back and close buttons
         title: Semantics(
-          label:
-              'Fortschritt ${((exercise.exerciseNumber - 1) * 3 + 3)} von 21 Schritten.',
+          label: l10n.trainingProgressSemantics(
+            (exercise.exerciseNumber - 1) * 3 + 3,
+            21,
+          ),
           child: AnimatedProgressBar(
             currentStep: (exercise.exerciseNumber - 1) * 3 + 3,
             totalSteps: 21,
@@ -255,7 +268,7 @@ class _TrainingExerciseScreenState
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () => _showCancelDialog(context),
-            tooltip: 'Training abbrechen',
+            tooltip: l10n.trainingExitTooltip,
           ),
         ],
         backgroundColor: Colors.transparent,
@@ -285,8 +298,10 @@ class _TrainingExerciseScreenState
                       children: [
                         // Timer Display - Compact and elegant
                         Semantics(
-                          label:
-                              'Übungsdauer ${exercise.durationSeconds} Sekunden, ${exercise.repetitions} Wiederholungen.',
+                          label: l10n.trainingExerciseDurationSemantics(
+                            exercise.durationSeconds,
+                            exercise.repetitions,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -305,7 +320,7 @@ class _TrainingExerciseScreenState
                               ),
                               const SizedBox(width: 16),
                               Text(
-                                '${exercise.repetitions}× wiederholen',
+                                l10n.trainingRepeatCount(exercise.repetitions),
                                 style: theme.textTheme.labelMedium?.copyWith(
                                   color: theme.colorScheme.onSurface
                                       .withOpacity(0.5),
@@ -316,8 +331,7 @@ class _TrainingExerciseScreenState
                         ),
                         const SizedBox(height: 20),
                         Semantics(
-                          label:
-                              'Animationsbereich der Übung. Startet automatisch und kann pausiert oder neu gestartet werden.',
+                          label: l10n.trainingAnimationSemantics,
                           child: PremiumGlassmorphicCard(
                             blur: 18,
                             opacity: 0.10,
@@ -333,13 +347,15 @@ class _TrainingExerciseScreenState
                                     borderRadius: BorderRadius.circular(14),
                                     child: AspectRatio(
                                       aspectRatio: 16 / 9,
-                                      child: ExerciseImageWidget(exercise: exercise, fit: BoxFit.cover),
+                                      child: ExerciseImageWidget(
+                                          exercise: exercise,
+                                          fit: BoxFit.cover),
                                     ),
                                   ),
                                 ] else ...[
                                   const SizedBox(height: 8),
                                   Text(
-                                    'Startet automatisch. Bei Bedarf pausieren.',
+                                    l10n.trainingAutoplayHint,
                                     style: theme.textTheme.labelSmall?.copyWith(
                                       color: theme.colorScheme.onSurface
                                           .withOpacity(0.6),
@@ -347,7 +363,10 @@ class _TrainingExerciseScreenState
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    'Tempo: ${_intervalSeconds.toStringAsFixed(_intervalSeconds.truncateToDouble() == _intervalSeconds ? 0 : 1)}s  •  Feedback: ${_feedbackLabel(_feedbackMode)}',
+                                    l10n.trainingTempoFeedbackSummary(
+                                      _formattedTempo,
+                                      _feedbackLabel(_feedbackMode),
+                                    ),
                                     style:
                                         theme.textTheme.labelMedium?.copyWith(
                                       color: theme.colorScheme.onSurface
@@ -378,7 +397,7 @@ class _TrainingExerciseScreenState
                                         const SizedBox(width: 8),
                                         Expanded(
                                           child: Text(
-                                            'Sehr schnelles Tempo aktiv. Fokus auf saubere Ausführung.',
+                                            l10n.trainingFastTempoWarning,
                                             style: theme.textTheme.labelMedium
                                                 ?.copyWith(
                                               color: Colors.orange[900],
@@ -394,7 +413,7 @@ class _TrainingExerciseScreenState
                                     !isRoutineMode) ...[
                                   const SizedBox(height: 8),
                                   Text(
-                                    'Adaptiver Vorschlag aktiv',
+                                    l10n.trainingAdaptiveSuggestion,
                                     style: theme.textTheme.labelSmall?.copyWith(
                                       color: theme.colorScheme.primary,
                                     ),
@@ -443,9 +462,8 @@ class _TrainingExerciseScreenState
                           height: 66,
                           child: Semantics(
                             button: true,
-                            label: 'Tempo langsamer',
-                            value:
-                                '${_intervalSeconds.toStringAsFixed(_intervalSeconds.truncateToDouble() == _intervalSeconds ? 0 : 1)} Sekunden',
+                            label: l10n.trainingTempoSlowerSemantics,
+                            value: l10n.trainingSecondsValue(_formattedTempo),
                             child: FilledButton.tonalIcon(
                               onPressed: _intervalSeconds >= max
                                   ? null
@@ -455,9 +473,9 @@ class _TrainingExerciseScreenState
                                         max: max,
                                       ),
                               icon: const Icon(Icons.remove, size: 24),
-                              label: const Text(
-                                'Langsamer',
-                                style: TextStyle(
+                              label: Text(
+                                l10n.trainingSlower,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -471,9 +489,8 @@ class _TrainingExerciseScreenState
                           height: 66,
                           child: Semantics(
                             button: true,
-                            label: 'Tempo schneller',
-                            value:
-                                '${_intervalSeconds.toStringAsFixed(_intervalSeconds.truncateToDouble() == _intervalSeconds ? 0 : 1)} Sekunden',
+                            label: l10n.trainingTempoFasterSemantics,
+                            value: l10n.trainingSecondsValue(_formattedTempo),
                             child: FilledButton.tonalIcon(
                               onPressed: _intervalSeconds <= min
                                   ? null
@@ -483,9 +500,9 @@ class _TrainingExerciseScreenState
                                         max: max,
                                       ),
                               icon: const Icon(Icons.add, size: 24),
-                              label: const Text(
-                                'Schneller',
-                                style: TextStyle(
+                              label: Text(
+                                l10n.trainingFaster,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -499,7 +516,7 @@ class _TrainingExerciseScreenState
                           height: 66,
                           child: Semantics(
                             button: true,
-                            label: 'Feedbackmodus wechseln',
+                            label: l10n.trainingFeedbackChangeSemantics,
                             value: _feedbackLabel(_feedbackMode),
                             child: FilledButton.tonalIcon(
                               onPressed: () {
@@ -525,7 +542,7 @@ class _TrainingExerciseScreenState
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Tempo und Feedback hier direkt mit einem Tap anpassen.',
+                  l10n.trainingControlsHint,
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: theme.colorScheme.onSurface.withOpacity(0.62),
                   ),
@@ -538,8 +555,8 @@ class _TrainingExerciseScreenState
                   child: Semantics(
                     button: true,
                     label: isLastExercise
-                        ? 'Übung abschließen'
-                        : 'Weiter zur nächsten Übung',
+                        ? l10n.trainingCompleteExercise
+                        : l10n.trainingContinueNextExercise,
                     child: FilledButton(
                       onPressed:
                           _isCompleting ? null : _completeAndPersistTempo,
@@ -555,10 +572,10 @@ class _TrainingExerciseScreenState
                         fit: BoxFit.scaleDown,
                         child: Text(
                           _isCompleting
-                              ? 'Lädt...'
+                              ? l10n.loading
                               : isLastExercise
-                                  ? 'Übung abschließen'
-                                  : 'Weiter zur nächsten Übung',
+                                  ? l10n.trainingCompleteExercise
+                                  : l10n.trainingContinueNextExercise,
                           style: const TextStyle(
                             fontSize: 23,
                             fontWeight: FontWeight.bold,
@@ -578,17 +595,16 @@ class _TrainingExerciseScreenState
   }
 
   void _showCancelDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Training abbrechen?'),
-        content: const Text(
-          'Möchtest du das Training wirklich abbrechen? Dein Fortschritt geht verloren.',
-        ),
+        title: Text(l10n.trainingAbortTitle),
+        content: Text(l10n.trainingAbortBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Nein, weiter trainieren'),
+            child: Text(l10n.trainingAbortStay),
           ),
           TextButton(
             onPressed: () {
@@ -598,7 +614,7 @@ class _TrainingExerciseScreenState
             style: TextButton.styleFrom(
               foregroundColor: Colors.red,
             ),
-            child: const Text('Ja, abbrechen'),
+            child: Text(l10n.trainingAbortConfirm),
           ),
         ],
       ),

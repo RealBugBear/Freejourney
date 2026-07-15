@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../widgets/animated_trophy.dart';
 import '../widgets/premium_glassmorphic_card.dart';
 
@@ -14,6 +15,7 @@ class TrainingOutroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: Container(
@@ -49,7 +51,7 @@ class TrainingOutroScreen extends StatelessWidget {
 
                         // Title - Bigger and more celebratory
                         Text(
-                          'Herzlichen Glückwunsch!',
+                          l10n.trainingCongratulations,
                           style: theme.textTheme.headlineLarge?.copyWith(
                             color: theme.colorScheme.onPrimaryContainer,
                             fontWeight: FontWeight.bold,
@@ -62,7 +64,7 @@ class TrainingOutroScreen extends StatelessWidget {
 
                         // Description
                         Text(
-                          'Du hast dein heutiges Training\nerfolgreich abgeschlossen.',
+                          l10n.trainingCompletedTodayBody,
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: theme.colorScheme.onPrimaryContainer
                                 .withOpacity(0.9),
@@ -85,7 +87,7 @@ class TrainingOutroScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                'Heute abgeschlossen',
+                                l10n.trainingCompletedToday,
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
@@ -101,7 +103,7 @@ class TrainingOutroScreen extends StatelessWidget {
                                     context,
                                     Icons.check_circle,
                                     '7',
-                                    'Übungen',
+                                    l10n.trainingExercisesLabel,
                                   ),
                                   Container(
                                     width: 1,
@@ -113,7 +115,7 @@ class TrainingOutroScreen extends StatelessWidget {
                                     context,
                                     Icons.timer,
                                     '~15',
-                                    'Minuten',
+                                    l10n.trainingMinutesLabel,
                                   ),
                                 ],
                               ),
@@ -146,7 +148,7 @@ class TrainingOutroScreen extends StatelessWidget {
                               const SizedBox(width: 6),
                               Flexible(
                                 child: Text(
-                                  'Weiter so! Regelmäßiges Training führt zum Erfolg.',
+                                  l10n.trainingKeepGoing,
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color: theme.colorScheme.onPrimaryContainer,
                                     fontWeight: FontWeight.w600,
@@ -167,7 +169,7 @@ class TrainingOutroScreen extends StatelessWidget {
                           height: 54,
                           child: Semantics(
                             button: true,
-                            label: 'Zum Dashboard',
+                            label: l10n.completionBackToDashboard,
                             child: FilledButton(
                               onPressed: onFinish,
                               style: FilledButton.styleFrom(
@@ -178,11 +180,11 @@ class TrainingOutroScreen extends StatelessWidget {
                                 ),
                                 elevation: 4,
                               ),
-                              child: const FittedBox(
+                              child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  'Zum Dashboard',
-                                  style: TextStyle(
+                                  l10n.completionBackToDashboard,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 0.5,

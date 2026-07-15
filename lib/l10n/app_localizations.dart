@@ -2767,6 +2767,642 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Ja, abbrechen'**
   String get trainingAbortConfirm;
+
+  /// Accessibility announcement after changing the training feedback mode
+  ///
+  /// In de, this message translates to:
+  /// **'Feedbackmodus {label} aktiviert.'**
+  String trainingFeedbackModeActivated(String label);
+
+  /// Voice feedback mode label
+  ///
+  /// In de, this message translates to:
+  /// **'Stimme'**
+  String get trainingFeedbackVoice;
+
+  /// Sound feedback mode label in the immersive player
+  ///
+  /// In de, this message translates to:
+  /// **'Töne'**
+  String get trainingFeedbackSounds;
+
+  /// Haptic feedback mode label
+  ///
+  /// In de, this message translates to:
+  /// **'Haptik'**
+  String get trainingFeedbackHaptics;
+
+  /// Silent feedback mode label
+  ///
+  /// In de, this message translates to:
+  /// **'Stumm'**
+  String get trainingFeedbackSilent;
+
+  /// Accessibility announcement after changing exercise tempo
+  ///
+  /// In de, this message translates to:
+  /// **'Tempo {seconds} Sekunden.'**
+  String trainingTempoAnnouncement(String seconds);
+
+  /// Accessibility summary of exercise duration and repetitions
+  ///
+  /// In de, this message translates to:
+  /// **'Übungsdauer {seconds} Sekunden, {repetitions} Wiederholungen.'**
+  String trainingExerciseDurationSemantics(int seconds, int repetitions);
+
+  /// Compact repeat count beside the exercise duration
+  ///
+  /// In de, this message translates to:
+  /// **'{count}× wiederholen'**
+  String trainingRepeatCount(int count);
+
+  /// Accessibility description of the exercise animation controls
+  ///
+  /// In de, this message translates to:
+  /// **'Animationsbereich der Übung. Startet automatisch und kann pausiert oder neu gestartet werden.'**
+  String get trainingAnimationSemantics;
+
+  /// Hint below an automatically starting exercise animation
+  ///
+  /// In de, this message translates to:
+  /// **'Startet automatisch. Bei Bedarf pausieren.'**
+  String get trainingAutoplayHint;
+
+  /// Current tempo and feedback summary
+  ///
+  /// In de, this message translates to:
+  /// **'Tempo: {seconds}s  •  Feedback: {feedback}'**
+  String trainingTempoFeedbackSummary(String seconds, String feedback);
+
+  /// Warning shown when a very fast exercise tempo is selected
+  ///
+  /// In de, this message translates to:
+  /// **'Sehr schnelles Tempo aktiv. Fokus auf saubere Ausführung.'**
+  String get trainingFastTempoWarning;
+
+  /// Note that an adaptively suggested tempo is active
+  ///
+  /// In de, this message translates to:
+  /// **'Adaptiver Vorschlag aktiv'**
+  String get trainingAdaptiveSuggestion;
+
+  /// Accessibility label for slowing the exercise tempo
+  ///
+  /// In de, this message translates to:
+  /// **'Tempo langsamer'**
+  String get trainingTempoSlowerSemantics;
+
+  /// Accessibility label for increasing the exercise tempo
+  ///
+  /// In de, this message translates to:
+  /// **'Tempo schneller'**
+  String get trainingTempoFasterSemantics;
+
+  /// Accessibility value for a duration in seconds
+  ///
+  /// In de, this message translates to:
+  /// **'{seconds} Sekunden'**
+  String trainingSecondsValue(String seconds);
+
+  /// Button that slows the exercise tempo
+  ///
+  /// In de, this message translates to:
+  /// **'Langsamer'**
+  String get trainingSlower;
+
+  /// Button that increases the exercise tempo
+  ///
+  /// In de, this message translates to:
+  /// **'Schneller'**
+  String get trainingFaster;
+
+  /// Accessibility label for cycling through feedback modes
+  ///
+  /// In de, this message translates to:
+  /// **'Feedbackmodus wechseln'**
+  String get trainingFeedbackChangeSemantics;
+
+  /// Hint below the exercise tempo and feedback controls
+  ///
+  /// In de, this message translates to:
+  /// **'Tempo und Feedback hier direkt mit einem Tap anpassen.'**
+  String get trainingControlsHint;
+
+  /// Button and accessibility label for completing the final exercise
+  ///
+  /// In de, this message translates to:
+  /// **'Übung abschließen'**
+  String get trainingCompleteExercise;
+
+  /// Button and accessibility label for continuing to the next exercise
+  ///
+  /// In de, this message translates to:
+  /// **'Weiter zur nächsten Übung'**
+  String get trainingContinueNextExercise;
+
+  /// Large uppercase cue shown when the user should switch sides
+  ///
+  /// In de, this message translates to:
+  /// **'WECHSEL!'**
+  String get trainingSwitchCueUpper;
+
+  /// Large cue shown during the rest between repetitions
+  ///
+  /// In de, this message translates to:
+  /// **'Pause...'**
+  String get trainingPauseCue;
+
+  /// Fallback uppercase hold cue
+  ///
+  /// In de, this message translates to:
+  /// **'HALTEN'**
+  String get trainingHoldCueUpper;
+
+  /// Compact immersive exercise counter
+  ///
+  /// In de, this message translates to:
+  /// **'Übung {current} · {total} gesamt'**
+  String trainingExerciseOfTotalCompact(int current, int total);
+
+  /// Button label for pausing an exercise
+  ///
+  /// In de, this message translates to:
+  /// **'Pause'**
+  String get trainingPause;
+
+  /// Rest phase label between repetitions
+  ///
+  /// In de, this message translates to:
+  /// **'Pause'**
+  String get trainingRest;
+
+  /// Button label for resuming a paused exercise
+  ///
+  /// In de, this message translates to:
+  /// **'Weiter'**
+  String get trainingResume;
+
+  /// Button label for restarting an exercise animation
+  ///
+  /// In de, this message translates to:
+  /// **'Neu starten'**
+  String get trainingRestart;
+
+  /// Seconds total below the current immersive beat
+  ///
+  /// In de, this message translates to:
+  /// **'von {count} Sek.'**
+  String trainingSecondsOf(int count);
+
+  /// Beat total below the current immersive beat
+  ///
+  /// In de, this message translates to:
+  /// **'von {count} Schlägen'**
+  String trainingBeatsOf(int count);
+
+  /// Current hold duration in the immersive exercise controls
+  ///
+  /// In de, this message translates to:
+  /// **'{seconds}s Haltezeit'**
+  String trainingHoldTime(int seconds);
+
+  /// Current seconds per beat in the immersive exercise controls
+  ///
+  /// In de, this message translates to:
+  /// **'{seconds}s / Schlag'**
+  String trainingSecondsPerBeat(String seconds);
+
+  /// Music control and music picker title
+  ///
+  /// In de, this message translates to:
+  /// **'Musik'**
+  String get trainingMusic;
+
+  /// Active music control label
+  ///
+  /// In de, this message translates to:
+  /// **'Musik an'**
+  String get trainingMusicOn;
+
+  /// Confirmation text when leaving an unsaved training session
+  ///
+  /// In de, this message translates to:
+  /// **'Deine Einheit wird nicht gespeichert. Wirklich abbrechen?'**
+  String get trainingSessionExitUnsaved;
+
+  /// Daily reminder body rescheduled after completing a training session
+  ///
+  /// In de, this message translates to:
+  /// **'Nimm dir Zeit für deine heutige Reflexintegrations-Einheit.'**
+  String get trainingReminderSessionBody;
+
+  /// Title of the confirmation dialog for skipping the reflex profile
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil überspringen?'**
+  String get trainingProfileSkipTitle;
+
+  /// Body of the confirmation dialog for skipping the reflex profile
+  ///
+  /// In de, this message translates to:
+  /// **'Ohne persönliches Reflexprofil zur Einschätzung deines Standes fortfahren?'**
+  String get trainingProfileSkipBody;
+
+  /// Button that confirms continuing without a reflex profile
+  ///
+  /// In de, this message translates to:
+  /// **'Fortfahren'**
+  String get trainingContinue;
+
+  /// Fallback name for the currently selected profile
+  ///
+  /// In de, this message translates to:
+  /// **'Aktives Profil'**
+  String get trainingActiveProfile;
+
+  /// Title for the package start flow
+  ///
+  /// In de, this message translates to:
+  /// **'Paket starten'**
+  String get trainingStartPackage;
+
+  /// Header identifying the profile for which a package is being started
+  ///
+  /// In de, this message translates to:
+  /// **'Start für {name}'**
+  String trainingStartForProfile(String name);
+
+  /// Title of the warm-up decision before starting the Moro package
+  ///
+  /// In de, this message translates to:
+  /// **'Vorrunde vor Moro'**
+  String get trainingWarmupBeforeMoroTitle;
+
+  /// Explanation of the optional warm-up round before Moro
+  ///
+  /// In de, this message translates to:
+  /// **'Die Vorrunde dient dazu, den Körper auf die kommende Integration der Reflexe vorzubereiten. Die rhythmischen Bewegungen geben deinem Gehirn Signale, die es an den Zeitraum erinnern, in dem diese Reflexe sich ursprünglich selbst integrieren sollten.\n\nDiese Übungen kannst du später immer wieder zur Beruhigung und Entspannung nutzen.'**
+  String get trainingWarmupBeforeMoroBody;
+
+  /// Button that starts the warm-up round
+  ///
+  /// In de, this message translates to:
+  /// **'Vorrunde starten'**
+  String get trainingStartWarmup;
+
+  /// Button that skips the warm-up and continues with the package
+  ///
+  /// In de, this message translates to:
+  /// **'Direkt mit Paket fortfahren'**
+  String get trainingContinueWithPackage;
+
+  /// Title encouraging the user to complete a reflex profile first
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil nutzen'**
+  String get trainingUseReflexProfile;
+
+  /// Explanation that the selected profile has no completed reflex profile results
+  ///
+  /// In de, this message translates to:
+  /// **'Für {name} liegt noch keine abgeschlossene Reflexprofil-Auswertung vor. Mit dem Profil wird die Dauerempfehlung genauer und nachvollziehbarer.'**
+  String trainingReflexProfileMissingBody(String name);
+
+  /// Button that starts the reflex profile questionnaire
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil starten'**
+  String get trainingStartReflexProfile;
+
+  /// Button that deliberately skips the reflex profile
+  ///
+  /// In de, this message translates to:
+  /// **'Bewusst überspringen'**
+  String get trainingSkipDeliberately;
+
+  /// Title of the isometric partner exercise question
+  ///
+  /// In de, this message translates to:
+  /// **'Isometrisches Partnertraining'**
+  String get trainingIsometricPartnerTitle;
+
+  /// Question about prior isometric partner exercises with a professional
+  ///
+  /// In de, this message translates to:
+  /// **'Hat {name} bereits isometrisches Partnertraining mit einer Fachperson gemacht?'**
+  String trainingIsometricPartnerQuestion(String name);
+
+  /// Information shown while the recommended warm-up phase is still running
+  ///
+  /// In de, this message translates to:
+  /// **'Die Vorrundenphase läuft noch. Du kannst Moro trotzdem starten; sie ist eine Empfehlung und kein Blocker.'**
+  String get trainingWarmupStillRunning;
+
+  /// Information shown when the warm-up phase is ready for Moro
+  ///
+  /// In de, this message translates to:
+  /// **'Die Vorrunde ist bereit. Jetzt Moro starten.'**
+  String get trainingWarmupReady;
+
+  /// Information for a connected trainer when no isometric partner exercises were completed
+  ///
+  /// In de, this message translates to:
+  /// **'Du bist mit {name} verbunden. Ohne isometrisches Partnertraining bleibt die Angabe trotzdem „Nein“.'**
+  String trainingConnectedWithoutIsometric(String name);
+
+  /// Information about a pending trainer connection request
+  ///
+  /// In de, this message translates to:
+  /// **'Traineranfrage an {name} ist offen.'**
+  String trainingTrainerRequestPending(String name);
+
+  /// Button for opening trainer discovery
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer finden'**
+  String get trainingFindTrainer;
+
+  /// Information about using the warm-up while waiting for a trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Während du auf Rückmeldung oder einen Termin wartest, kannst du die Vorrunde nutzen. Sie bereitet rhythmisch vor und ist unabhängig vom isometrischen Partnertraining.'**
+  String get trainingWarmupWhileWaitingBody;
+
+  /// Button that starts the warm-up while waiting for a trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Vorrunde nutzen'**
+  String get trainingUseWarmup;
+
+  /// Eyebrow text on the warm-up interstitial
+  ///
+  /// In de, this message translates to:
+  /// **'Bevor du startest'**
+  String get trainingBeforeYouStart;
+
+  /// Warm-up interstitial description
+  ///
+  /// In de, this message translates to:
+  /// **'Die Vorrunde bereitet deinen Körper auf das Reflex-Training vor. Viele Nutzer erleben deutlich stärkere Ergebnisse.'**
+  String get trainingWarmupInterstitialBody;
+
+  /// Primary action on the warm-up interstitial
+  ///
+  /// In de, this message translates to:
+  /// **'Vorrunde jetzt starten'**
+  String get trainingStartWarmupNow;
+
+  /// Badge marking the warm-up as recommended
+  ///
+  /// In de, this message translates to:
+  /// **'empfohlen'**
+  String get trainingRecommended;
+
+  /// Duration and daily exercise summary for the warm-up round
+  ///
+  /// In de, this message translates to:
+  /// **'4 Wochen · 6 Übungen täglich · ca. 8 Min.'**
+  String get trainingWarmupSummary;
+
+  /// Action that skips the warm-up and starts the first package
+  ///
+  /// In de, this message translates to:
+  /// **'Direkt mit erstem Paket starten'**
+  String get trainingStartFirstPackageDirectly;
+
+  /// Note that the warm-up can be completed later
+  ///
+  /// In de, this message translates to:
+  /// **'Vorrunde kann jederzeit nachgeholt werden.'**
+  String get trainingWarmupAvailableLater;
+
+  /// Celebratory heading after completing a training session
+  ///
+  /// In de, this message translates to:
+  /// **'Herzlichen Glückwunsch!'**
+  String get trainingCongratulations;
+
+  /// Completion message after today's training session
+  ///
+  /// In de, this message translates to:
+  /// **'Du hast dein heutiges Training\nerfolgreich abgeschlossen.'**
+  String get trainingCompletedTodayBody;
+
+  /// Heading above completed-session statistics
+  ///
+  /// In de, this message translates to:
+  /// **'Heute abgeschlossen'**
+  String get trainingCompletedToday;
+
+  /// Standalone exercises statistic label
+  ///
+  /// In de, this message translates to:
+  /// **'Übungen'**
+  String get trainingExercisesLabel;
+
+  /// Standalone minutes statistic label
+  ///
+  /// In de, this message translates to:
+  /// **'Minuten'**
+  String get trainingMinutesLabel;
+
+  /// Encouraging message after completing a session
+  ///
+  /// In de, this message translates to:
+  /// **'Weiter so! Regelmäßiges Training führt zum Erfolg.'**
+  String get trainingKeepGoing;
+
+  /// Exercise position in the current session
+  ///
+  /// In de, this message translates to:
+  /// **'Übung {current} von {total}'**
+  String trainingExerciseOfTotal(int current, int total);
+
+  /// Step counter below the full progress bar
+  ///
+  /// In de, this message translates to:
+  /// **'{current} von {total}'**
+  String trainingProgressStepCounter(int current, int total);
+
+  /// Completed percentage below the full progress bar
+  ///
+  /// In de, this message translates to:
+  /// **'{percent}% geschafft! 🎉'**
+  String trainingProgressPercentComplete(int percent);
+
+  /// Encouragement shown at ninety percent progress
+  ///
+  /// In de, this message translates to:
+  /// **'Fantastisch! Fast am Ziel! 🏆'**
+  String get trainingProgressAlmostThere;
+
+  /// Encouragement shown at seventy-five percent progress
+  ///
+  /// In de, this message translates to:
+  /// **'Großartig! Du schaffst das! 💪'**
+  String get trainingProgressGreat;
+
+  /// Encouragement shown at halfway progress
+  ///
+  /// In de, this message translates to:
+  /// **'Super! Schon über die Hälfte! 🎯'**
+  String get trainingProgressHalfway;
+
+  /// Encouragement shown at twenty-five percent progress
+  ///
+  /// In de, this message translates to:
+  /// **'Gut gemacht! Weiter so! ⭐'**
+  String get trainingProgressKeepGoing;
+
+  /// Encouragement shown near the start of training
+  ///
+  /// In de, this message translates to:
+  /// **'Los geht\'s! Du packst das! 🚀'**
+  String get trainingProgressLetsGo;
+
+  /// Video label and action
+  ///
+  /// In de, this message translates to:
+  /// **'Video'**
+  String get trainingVideo;
+
+  /// Abbreviated repetition count in the exercise transition
+  ///
+  /// In de, this message translates to:
+  /// **'{count}× Wdh.'**
+  String trainingRepetitionsAbbreviated(int count);
+
+  /// Seconds per repetition in the exercise transition
+  ///
+  /// In de, this message translates to:
+  /// **'{seconds} Sek / Rep'**
+  String trainingSecondsPerRep(int seconds);
+
+  /// Short position section heading in the exercise transition
+  ///
+  /// In de, this message translates to:
+  /// **'Position'**
+  String get trainingPositionLabel;
+
+  /// Countdown before an exercise starts
+  ///
+  /// In de, this message translates to:
+  /// **'Startet in {seconds} s'**
+  String trainingStartsInSeconds(int seconds);
+
+  /// Button that starts an exercise immediately
+  ///
+  /// In de, this message translates to:
+  /// **'Jetzt starten'**
+  String get trainingStartNow;
+
+  /// Status while the spoken exercise announcement is playing
+  ///
+  /// In de, this message translates to:
+  /// **'Ansage läuft...'**
+  String get trainingAnnouncementPlaying;
+
+  /// Fallback status while an exercise video is being prepared
+  ///
+  /// In de, this message translates to:
+  /// **'Video wird vorbereitet...'**
+  String get trainingVideoPreparing;
+
+  /// Option that turns in-app music off
+  ///
+  /// In de, this message translates to:
+  /// **'Aus'**
+  String get trainingMusicOff;
+
+  /// In-app music volume control label
+  ///
+  /// In de, this message translates to:
+  /// **'Lautstärke'**
+  String get trainingMusicVolume;
+
+  /// Display name of the Ambient Flow music track
+  ///
+  /// In de, this message translates to:
+  /// **'Ambient Flow'**
+  String get trainingMusicAmbientFlow;
+
+  /// Display name of the Quiet Nature music track
+  ///
+  /// In de, this message translates to:
+  /// **'Stille Natur'**
+  String get trainingMusicQuietNature;
+
+  /// Display name of the Deep Tones music track
+  ///
+  /// In de, this message translates to:
+  /// **'Tiefe Töne'**
+  String get trainingMusicDeepTones;
+
+  /// Note explaining how in-app sounds mix with the user's own music
+  ///
+  /// In de, this message translates to:
+  /// **'Eigene Musik (Spotify etc.) läuft weiter - Töne mischen sich darunter.'**
+  String get trainingOwnMusicMixNote;
+
+  /// Heading during the short break between exercises
+  ///
+  /// In de, this message translates to:
+  /// **'Kurze Pause'**
+  String get trainingShortBreak;
+
+  /// Label introducing the next exercise during a break
+  ///
+  /// In de, this message translates to:
+  /// **'Nächste Übung:'**
+  String get trainingNextExercise;
+
+  /// Subtitle describing tutorial training mode
+  ///
+  /// In de, this message translates to:
+  /// **'Mit Anleitung'**
+  String get trainingTutorialSubtitle;
+
+  /// Subtitle describing routine training mode
+  ///
+  /// In de, this message translates to:
+  /// **'Hands-free'**
+  String get trainingRoutineSubtitle;
+
+  /// Compact exercise duration and repetition summary
+  ///
+  /// In de, this message translates to:
+  /// **'{seconds}s · {repetitions}x'**
+  String trainingDurationAndRepetitions(int seconds, int repetitions);
+
+  /// Number of exercises completed in the session outro
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, one{{count} Übungen} other{{count} Übungen}}'**
+  String trainingCompletedExerciseCount(int count);
+
+  /// Short seconds label inside the exercise timer
+  ///
+  /// In de, this message translates to:
+  /// **'sec'**
+  String get trainingSecondsAbbreviation;
+
+  /// Spoken cue before the next repetition
+  ///
+  /// In de, this message translates to:
+  /// **'Und wieder'**
+  String get trainingAndAgain;
+
+  /// Spoken cue to switch the arm cross midway through an exercise
+  ///
+  /// In de, this message translates to:
+  /// **'Armkreuz wechseln'**
+  String get trainingSwitchArmCross;
+
+  /// Short spoken cue to switch sides
+  ///
+  /// In de, this message translates to:
+  /// **'Wechsel'**
+  String get trainingSwitchCue;
 }
 
 class _AppLocalizationsDelegate

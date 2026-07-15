@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/training/in_app_music_settings.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../services/in_app_music_service.dart';
 
 class MusicPickerSheet extends StatefulWidget {
@@ -56,30 +57,33 @@ class _MusicPickerSheetState extends State<MusicPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Musik',
-            style: TextStyle(
+          Text(
+            l10n.trainingMusic,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w800,
             ),
           ),
           const SizedBox(height: 16),
-          _trackTile(null, 'Aus'),
+          _trackTile(null, l10n.trainingMusicOff),
           const SizedBox(height: 2),
           const Divider(color: Colors.white12),
           const SizedBox(height: 2),
-          ...kInAppTracks.map((track) => _trackTile(track.$1, track.$2)),
+          ...kInAppTracks.map(
+            (track) => _trackTile(track, _trackLabel(l10n, track)),
+          ),
           const SizedBox(height: 12),
           if (_selected != null) ...[
             Text(
-              'Lautstärke',
+              l10n.trainingMusicVolume,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.4),
                 fontSize: 11,
@@ -101,7 +105,7 @@ class _MusicPickerSheetState extends State<MusicPickerSheet> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Eigene Musik (Spotify etc.) läuft weiter - Töne mischen sich darunter.',
+                  l10n.trainingOwnMusicMixNote,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.35),
                     fontSize: 11,
@@ -113,6 +117,15 @@ class _MusicPickerSheetState extends State<MusicPickerSheet> {
         ],
       ),
     );
+  }
+
+  String _trackLabel(AppLocalizations l10n, String assetKey) {
+    return switch (assetKey) {
+      'sounds/music/ambient_flow.mp3' => l10n.trainingMusicAmbientFlow,
+      'sounds/music/stille_natur.mp3' => l10n.trainingMusicQuietNature,
+      'sounds/music/tiefe_toene.mp3' => l10n.trainingMusicDeepTones,
+      _ => assetKey,
+    };
   }
 
   Widget _trackTile(String? assetKey, String label) {

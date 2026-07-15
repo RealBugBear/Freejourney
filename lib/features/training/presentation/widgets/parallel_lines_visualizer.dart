@@ -3,6 +3,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class ParallelLinesVisualizer extends StatefulWidget {
   final Duration moveDuration;
   final Duration holdDuration;
@@ -166,6 +168,7 @@ class _ParallelLinesVisualizerState extends State<ParallelLinesVisualizer>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final isLight = theme.brightness == Brightness.light;
     final lineColor = isLight
         ? theme.colorScheme.primary.withOpacity(0.25)
@@ -206,7 +209,9 @@ class _ParallelLinesVisualizerState extends State<ParallelLinesVisualizer>
             }
           },
           icon: Icon(_running ? Icons.pause : Icons.play_arrow),
-          label: Text(_running ? 'Pause' : 'Neu starten'),
+          label: Text(
+            _running ? l10n.trainingPause : l10n.trainingRestart,
+          ),
         ),
       ],
     );

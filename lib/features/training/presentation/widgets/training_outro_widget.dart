@@ -101,7 +101,7 @@ class _TrainingOutroWidgetState extends State<TrainingOutroWidget>
           ),
           const SizedBox(height: 16),
           Text(
-            '${widget.completedCount} Übungen',
+            l10n.trainingCompletedExerciseCount(widget.completedCount),
             style: TextStyle(
               color: AppColors.primaryLight,
               fontSize: 15,

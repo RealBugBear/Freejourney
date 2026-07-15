@@ -5,6 +5,8 @@ import 'dart:math' as math;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 enum RhythmPattern { v, i }
 
 class RhythmConfig {
@@ -410,6 +412,7 @@ class _RhythmVisualizerState extends State<RhythmVisualizer>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final anchors = _anchorsFor(widget.config.pattern);
     final isLight = theme.brightness == Brightness.light;
     final pathColor = isLight
@@ -520,10 +523,10 @@ class _RhythmVisualizerState extends State<RhythmVisualizer>
           ),
           label: Text(
             _runState == _RunState.running
-                ? 'Pause'
+                ? l10n.trainingPause
                 : _runState == _RunState.paused
-                    ? 'Weiter'
-                    : 'Neu starten',
+                    ? l10n.trainingResume
+                    : l10n.trainingRestart,
           ),
         ),
       ],

@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
 import '../../../premium/domain/entitlement.dart';
 import '../../../premium/presentation/providers/premium_provider.dart';
@@ -81,21 +82,20 @@ class _TrainingStartFlowScreenState
   }
 
   Future<void> _confirmReflexSkip() async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Reflexprofil überspringen?'),
-        content: const Text(
-          'Ohne persönliches Reflexprofil zur Einschätzung deines Standes fortfahren?',
-        ),
+        title: Text(l10n.trainingProfileSkipTitle),
+        content: Text(l10n.trainingProfileSkipBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Zurück'),
+            child: Text(l10n.back),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Fortfahren'),
+            child: Text(l10n.trainingContinue),
           ),
         ],
       ),
@@ -135,6 +135,7 @@ class _TrainingStartFlowScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final profile = ref.watch(selectedSubjectProfileProvider);
     final assessment =
         ref.watch(latestReflexProfileForSelectedSubjectProvider).valueOrNull;
@@ -161,13 +162,13 @@ class _TrainingStartFlowScreenState
       );
     } else if (assessment == null && !_reflexProfileSkipped) {
       body = _ReflexProfileStep(
-        profileName: profile?.displayName ?? 'Aktives Profil',
+        profileName: profile?.displayName ?? l10n.trainingActiveProfile,
         packageId: _packageId,
         onSkip: _confirmReflexSkip,
       );
     } else {
       body = _IsometricStep(
-        profileName: profile?.displayName ?? 'Aktives Profil',
+        profileName: profile?.displayName ?? l10n.trainingActiveProfile,
         packageId: _packageId,
         phase: phase,
         readyForMoro: readyForMoro,
@@ -187,13 +188,14 @@ class _TrainingStartFlowScreenState
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Paket starten')),
+      appBar: AppBar(title: Text(l10n.trainingStartPackage)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
           children: [
             _ProfileHeader(
-                profileName: profile?.displayName ?? 'Aktives Profil'),
+              profileName: profile?.displayName ?? l10n.trainingActiveProfile,
+            ),
             const SizedBox(height: 16),
             body,
           ],
@@ -210,6 +212,7 @@ class _ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -223,7 +226,7 @@ class _ProfileHeader extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Start für $profileName',
+                l10n.trainingStartForProfile(profileName),
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -247,21 +250,21 @@ class _VorrundeDecisionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return _StepCard(
       icon: Icons.self_improvement_outlined,
-      title: 'Vorrunde vor Moro',
-      body:
-          'Die Vorrunde dient dazu, den Körper auf die kommende Integration der Reflexe vorzubereiten. Die rhythmischen Bewegungen geben deinem Gehirn Signale, die es an den Zeitraum erinnern, in dem diese Reflexe sich ursprünglich selbst integrieren sollten.\n\nDiese Übungen kannst du später immer wieder zur Beruhigung und Entspannung nutzen.',
+      title: l10n.trainingWarmupBeforeMoroTitle,
+      body: l10n.trainingWarmupBeforeMoroBody,
       children: [
         FilledButton.icon(
           onPressed: onStart,
           icon: const Icon(Icons.play_arrow_rounded),
-          label: const Text('Vorrunde starten'),
+          label: Text(l10n.trainingStartWarmup),
         ),
         const SizedBox(height: 10),
         TextButton(
           onPressed: onContinue,
-          child: const Text('Direkt mit Paket fortfahren'),
+          child: Text(l10n.trainingContinueWithPackage),
         ),
       ],
     );
@@ -281,21 +284,21 @@ class _ReflexProfileStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return _StepCard(
       icon: Icons.analytics_outlined,
-      title: 'Reflexprofil nutzen',
-      body:
-          'Für $profileName liegt noch keine abgeschlossene Reflexprofil-Auswertung vor. Mit dem Profil wird die Dauerempfehlung genauer und nachvollziehbarer.',
+      title: l10n.trainingUseReflexProfile,
+      body: l10n.trainingReflexProfileMissingBody(profileName),
       children: [
         FilledButton.icon(
           onPressed: () => context.push(Routes.reflexProfile, extra: packageId),
           icon: const Icon(Icons.fact_check_outlined),
-          label: const Text('Reflexprofil starten'),
+          label: Text(l10n.trainingStartReflexProfile),
         ),
         const SizedBox(height: 10),
         TextButton(
           onPressed: onSkip,
-          child: const Text('Bewusst überspringen'),
+          child: Text(l10n.trainingSkipDeliberately),
         ),
       ],
     );
@@ -333,33 +336,29 @@ class _IsometricStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final phaseStarted = phase?.status == VorrundePhaseStatus.started;
     return _StepCard(
       icon: Icons.groups_2_outlined,
-      title: 'Isometrisches Partnertraining',
-      body:
-          'Hat $profileName bereits isometrisches Partnertraining mit einer Fachperson gemacht?',
+      title: l10n.trainingIsometricPartnerTitle,
+      body: l10n.trainingIsometricPartnerQuestion(profileName),
       children: [
         if (phaseStarted && !readyForMoro) ...[
-          const _InlineInfo(
-            text:
-                'Die Vorrundenphase läuft noch. Du kannst Moro trotzdem starten; sie ist eine Empfehlung und kein Blocker.',
-          ),
+          _InlineInfo(text: l10n.trainingWarmupStillRunning),
           const SizedBox(height: 12),
         ],
         if (phaseStarted && readyForMoro) ...[
-          const _InlineInfo(
-              text: 'Die Vorrunde ist bereit. Jetzt Moro starten.'),
+          _InlineInfo(text: l10n.trainingWarmupReady),
           const SizedBox(height: 12),
         ],
         _ChoiceButton(
-          label: 'Ja',
+          label: l10n.yes,
           selected: hadIsometricWithTrainer == true,
           onTap: () => onSelect(true),
         ),
         const SizedBox(height: 10),
         _ChoiceButton(
-          label: 'Nein',
+          label: l10n.no,
           selected: hadIsometricWithTrainer == false,
           onTap: () => onSelect(false),
         ),
@@ -367,36 +366,33 @@ class _IsometricStep extends StatelessWidget {
           const SizedBox(height: 14),
           if (activeTrainerName != null)
             _InlineInfo(
-              text:
-                  'Du bist mit $activeTrainerName verbunden. Ohne isometrisches Partnertraining bleibt die Angabe trotzdem „Nein“.',
+              text: l10n.trainingConnectedWithoutIsometric(activeTrainerName!),
             )
           else if (pendingTrainerName != null)
             _InlineInfo(
-                text: 'Traineranfrage an $pendingTrainerName ist offen.')
+              text: l10n.trainingTrainerRequestPending(pendingTrainerName!),
+            )
           else
             OutlinedButton.icon(
               onPressed: onFindTrainer,
               icon: const Icon(Icons.travel_explore_outlined),
-              label: const Text('Trainer finden'),
+              label: Text(l10n.trainingFindTrainer),
             ),
           if (showTrainerWaitingOption || pendingTrainerName != null) ...[
             const SizedBox(height: 10),
-            const _InlineInfo(
-              text:
-                  'Während du auf Rückmeldung oder einen Termin wartest, kannst du die Vorrunde nutzen. Sie bereitet rhythmisch vor und ist unabhängig vom isometrischen Partnertraining.',
-            ),
+            _InlineInfo(text: l10n.trainingWarmupWhileWaitingBody),
             const SizedBox(height: 8),
             OutlinedButton.icon(
               onPressed: onStartVorrunde,
               icon: const Icon(Icons.self_improvement_outlined),
-              label: const Text('Vorrunde nutzen'),
+              label: Text(l10n.trainingUseWarmup),
             ),
           ],
         ],
         const SizedBox(height: 20),
         FilledButton(
           onPressed: hadIsometricWithTrainer == null ? null : onContinue,
-          child: const Text('Zur Dauerempfehlung'),
+          child: Text(l10n.trainerOnboardingContinueAfterRequest),
         ),
       ],
     );

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/training/vorrunde_status_settings.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class VorrundeInterstitialScreen extends StatelessWidget {
   final VoidCallback onStartVorrunde;
@@ -28,6 +29,7 @@ class VorrundeInterstitialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.backgroundDark,
       body: SafeArea(
@@ -37,28 +39,27 @@ class VorrundeInterstitialScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Spacer(),
-              const Text(
-                'Bevor du startest',
-                style: TextStyle(
+              Text(
+                l10n.trainingBeforeYouStart,
+                style: const TextStyle(
                   color: AppColors.textDisabledDark,
                   fontSize: 13,
                   letterSpacing: 1.2,
                 ),
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Vorrunde',
-                style: TextStyle(
+              Text(
+                l10n.dashboardVorrunde,
+                style: const TextStyle(
                   color: AppColors.textPrimaryDark,
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Die Vorrunde bereitet deinen Körper auf das Reflex-Training vor. '
-                'Viele Nutzer erleben deutlich stärkere Ergebnisse.',
-                style: TextStyle(
+              Text(
+                l10n.trainingWarmupInterstitialBody,
+                style: const TextStyle(
                   color: AppColors.textSecondaryDark,
                   fontSize: 15,
                   height: 1.5,
@@ -79,9 +80,9 @@ class VorrundeInterstitialScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Text(
-                            'Vorrunde jetzt starten',
-                            style: TextStyle(
+                          Text(
+                            l10n.trainingStartWarmupNow,
+                            style: const TextStyle(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
@@ -95,18 +96,18 @@ class VorrundeInterstitialScreen extends StatelessWidget {
                               color: AppColors.primary.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: const Text(
-                              'empfohlen',
-                              style: TextStyle(
+                            child: Text(
+                              l10n.trainingRecommended,
+                              style: const TextStyle(
                                   color: AppColors.primary, fontSize: 11),
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 4),
-                      const Text(
-                        '4 Wochen · 6 Übungen täglich · ca. 8 Min.',
-                        style: TextStyle(
+                      Text(
+                        l10n.trainingWarmupSummary,
+                        style: const TextStyle(
                           color: AppColors.textSecondaryDark,
                           fontSize: 12,
                         ),
@@ -126,21 +127,21 @@ class VorrundeInterstitialScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: AppColors.surfaceDarkElevated),
                   ),
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Direkt mit erstem Paket starten',
-                        style: TextStyle(
+                        l10n.trainingStartFirstPackageDirectly,
+                        style: const TextStyle(
                           color: AppColors.textSecondaryDark,
                           fontWeight: FontWeight.w600,
                           fontSize: 15,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        'Vorrunde kann jederzeit nachgeholt werden.',
-                        style: TextStyle(
+                        l10n.trainingWarmupAvailableLater,
+                        style: const TextStyle(
                           color: AppColors.textDisabledDark,
                           fontSize: 12,
                         ),

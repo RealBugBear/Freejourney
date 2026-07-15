@@ -116,7 +116,7 @@ class _ExerciseVideoWidgetState extends State<ExerciseVideoWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const _StepLabel(label: 'Video'),
+          _StepLabel(label: l10n.trainingVideo),
           const SizedBox(height: 16),
           Text(
             widget.exercise.title(locale),
@@ -220,6 +220,7 @@ class _FallbackImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -231,11 +232,11 @@ class _FallbackImage extends StatelessWidget {
           ),
         ),
         const Icon(Icons.play_circle_outline, color: Colors.white54, size: 64),
-        const Positioned(
+        Positioned(
           bottom: 16,
           child: Text(
-            'Video wird vorbereitet...',
-            style: TextStyle(color: Colors.white70, fontSize: 13),
+            l10n.trainingVideoPreparing,
+            style: const TextStyle(color: Colors.white70, fontSize: 13),
           ),
         ),
       ],

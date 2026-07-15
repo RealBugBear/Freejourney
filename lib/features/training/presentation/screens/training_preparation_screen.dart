@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../widgets/premium_glassmorphic_card.dart';
 
 class TrainingPreparationScreen extends StatelessWidget {
@@ -19,10 +20,11 @@ class TrainingPreparationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Übung $exerciseNumber von 7'),
+        title: Text(l10n.trainingExerciseOfTotal(exerciseNumber, 7)),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -133,9 +135,9 @@ class TrainingPreparationScreen extends StatelessWidget {
                       ),
                       elevation: 2,
                     ),
-                    child: const Text(
-                      'Weiter',
-                      style: TextStyle(
+                    child: Text(
+                      l10n.next,
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 0.5,

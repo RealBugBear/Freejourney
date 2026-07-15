@@ -83,7 +83,10 @@ class TrainingIntroWidget extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '${exercise.durationSeconds}s · ${exercise.repetitions}x',
+            l10n.trainingDurationAndRepetitions(
+              exercise.durationSeconds,
+              exercise.repetitions,
+            ),
             style: const TextStyle(
                 color: AppColors.textSecondaryDark, fontSize: 15),
           ),
@@ -123,9 +126,8 @@ class TrainingIntroWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 2),
-                        // TODO(l10n): add tutorialModeSubtitle key to ARB files
                         Text(
-                          'Mit Anleitung',
+                          l10n.trainingTutorialSubtitle,
                           style: TextStyle(
                             color: mode == TrainingSessionMode.tutorial
                                 ? Colors.white
@@ -169,9 +171,8 @@ class TrainingIntroWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 2),
-                        // TODO(l10n): add routineModeSubtitle key to ARB files
                         Text(
-                          'Hands-free',
+                          l10n.trainingRoutineSubtitle,
                           style: TextStyle(
                             color: mode == TrainingSessionMode.routine
                                 ? Colors.white

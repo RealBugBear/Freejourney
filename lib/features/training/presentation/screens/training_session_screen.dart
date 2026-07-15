@@ -73,6 +73,7 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
   }
 
   Future<void> _handleOutroContinue(TrainingFlowState state) async {
+    final l10n = AppLocalizations.of(context);
     if (widget.packageId == 'vorrunde') {
       await _handleVorrundeOutroContinue(state);
       return;
@@ -141,13 +142,10 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
     // Suppress today's training reminder since the session is done.
     final settings = ref.read(settingsProvider);
     if (settings.remindersEnabled) {
-      final isDE = settings.languageCode == 'de';
       await NotificationService.instance.suppressTodayAndReschedule(
         startMinutes: settings.reminderStartMinutes,
-        titleDe: isDE ? 'Zeit für deine Einheit' : 'Time for your unit',
-        bodyDe: isDE
-            ? 'Nimm dir Zeit für deine heutige Reflexintegrations-Einheit.'
-            : "Take time for today's reflex integration unit.",
+        titleDe: l10n.reminderSessionTitle,
+        bodyDe: l10n.trainingReminderSessionBody,
       );
     }
 
@@ -296,8 +294,7 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l10n.cancel),
-        content: const Text(
-            'Deine Einheit wird nicht gespeichert. Wirklich abbrechen?'),
+        content: Text(l10n.trainingSessionExitUnsaved),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),

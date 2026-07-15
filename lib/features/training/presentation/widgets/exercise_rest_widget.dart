@@ -67,13 +67,13 @@ class _ExerciseRestWidgetState extends State<ExerciseRestWidget> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Kurze Pause',
+            l10n.trainingShortBreak,
             style: TextStyle(color: AppColors.textSecondaryDark, fontSize: 18),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 40),
           Text(
-            'Nächste Übung:',
+            l10n.trainingNextExercise,
             style: TextStyle(color: AppColors.textSecondaryDark, fontSize: 14),
             textAlign: TextAlign.center,
           ),

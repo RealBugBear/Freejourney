@@ -21,7 +21,7 @@ class TrainingFeedbackService {
   }
 
   /// Speak a phrase (no-op — TTS temporarily disabled).
-  Future<void> speak(String de, String en) async {
+  Future<void> speak(String phrase) async {
     // TTS disabled
   }
 

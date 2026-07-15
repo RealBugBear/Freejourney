@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/training/adaptive_tempo_settings.dart';
 import '../../../../core/training/in_app_music_settings.dart';
 import '../../../../core/training/training_feedback_settings.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/exercise.dart';
 import '../../domain/services/audio_announcement_service.dart';
 import '../../domain/services/metronome_service.dart';
@@ -246,6 +247,7 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final ex = widget.exercise;
     final isHoldRest = ex.rhythmType == RhythmType.holdRest;
     final beatsPerRep = isHoldRest ? _holdSecondsOverride : ex.holdSeconds;
@@ -255,10 +257,12 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
         widget.exerciseIndex / widget.totalExercises.toDouble();
     final locale = Localizations.localeOf(context).languageCode;
     final cueWord = _halfwayAnnounce
-        ? (locale == 'de' ? 'WECHSEL!' : 'SWITCH!')
+        ? l10n.trainingSwitchCueUpper
         : _isResting
-            ? 'Pause...'
-            : (ex.holdCueDe.isNotEmpty ? ex.holdCueDe.toUpperCase() : 'HALTEN');
+            ? l10n.trainingPauseCue
+            : ((locale == 'de' ? ex.holdCueDe : ex.holdCueEn).isNotEmpty
+                ? (locale == 'de' ? ex.holdCueDe : ex.holdCueEn).toUpperCase()
+                : l10n.trainingHoldCueUpper);
     final beatInterval = Duration(milliseconds: (_tempoSeconds * 1000).round());
 
     return Scaffold(
@@ -273,7 +277,10 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Übung ${widget.exerciseIndex + 1} · ${widget.totalExercises} gesamt',
+                    l10n.trainingExerciseOfTotalCompact(
+                      widget.exerciseIndex + 1,
+                      widget.totalExercises,
+                    ),
                     style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.3),
                         fontSize: 10,
@@ -290,7 +297,9 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
                               const Color(0xFF6366f1).withValues(alpha: 0.3)),
                     ),
                     child: Text(
-                      widget.isRoutineMode ? 'Routine' : 'Tutorial',
+                      widget.isRoutineMode
+                          ? l10n.routineMode
+                          : l10n.tutorialMode,
                       style: const TextStyle(
                           color: Color(0xFFa5b4fc),
                           fontSize: 9,
@@ -349,10 +358,10 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
                   ),
                   Text(
                     _isResting
-                        ? 'Pause'
+                        ? l10n.trainingRest
                         : isHoldRest
-                            ? 'von $_holdSecondsOverride Sek.'
-                            : 'von ${ex.holdSeconds} Schlägen',
+                            ? l10n.trainingSecondsOf(_holdSecondsOverride)
+                            : l10n.trainingBeatsOf(ex.holdSeconds),
                     style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.25),
                         fontSize: 11),
@@ -426,8 +435,15 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
                           alignment: Alignment.center,
                           child: Text(
                             isHoldRest
-                                ? '${_holdSecondsOverride}s Haltezeit'
-                                : '${_tempoSeconds.toStringAsFixed(_tempoSeconds.truncateToDouble() == _tempoSeconds ? 0 : 1)}s / Schlag',
+                                ? l10n.trainingHoldTime(_holdSecondsOverride)
+                                : l10n.trainingSecondsPerBeat(
+                                    _tempoSeconds.toStringAsFixed(
+                                      _tempoSeconds.truncateToDouble() ==
+                                              _tempoSeconds
+                                          ? 0
+                                          : 1,
+                                    ),
+                                  ),
                             style: const TextStyle(
                                 color: Color(0xFFa5b4fc),
                                 fontSize: 12,
@@ -454,7 +470,9 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
                       Expanded(
                         child: _iconBtn(
                           _musicActive ? '♫' : '♪',
-                          _musicActive ? 'Musik an' : 'Musik',
+                          _musicActive
+                              ? l10n.trainingMusicOn
+                              : l10n.trainingMusic,
                           _openMusicPicker,
                           active: _musicActive,
                         ),
@@ -471,7 +489,7 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
                       Expanded(
                         child: _iconBtn(
                           _isPaused ? '▶' : '⏸',
-                          _isPaused ? 'Weiter' : 'Pause',
+                          _isPaused ? l10n.trainingResume : l10n.trainingPause,
                           _togglePause,
                         ),
                       ),
@@ -537,11 +555,14 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
         ),
       );
 
-  String _feedbackLabel(TrainingFeedbackMode mode) => switch (mode) {
-        TrainingFeedbackMode.voiceAndCues => 'Töne',
-        TrainingFeedbackMode.hapticOnly => 'Haptik',
-        TrainingFeedbackMode.silent => 'Stumm',
-      };
+  String _feedbackLabel(TrainingFeedbackMode mode) {
+    final l10n = AppLocalizations.of(context);
+    return switch (mode) {
+      TrainingFeedbackMode.voiceAndCues => l10n.trainingFeedbackSounds,
+      TrainingFeedbackMode.hapticOnly => l10n.trainingFeedbackHaptics,
+      TrainingFeedbackMode.silent => l10n.trainingFeedbackSilent,
+    };
+  }
 
   String _feedbackIcon(TrainingFeedbackMode mode) => switch (mode) {
         TrainingFeedbackMode.voiceAndCues => '🔊',

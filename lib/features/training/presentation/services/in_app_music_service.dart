@@ -4,11 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/training/in_app_music_settings.dart';
 
-/// Each entry is (assetKey, displayName).
-const List<(String, String)> kInAppTracks = [
-  ('sounds/music/ambient_flow.mp3', 'Ambient Flow'),
-  ('sounds/music/stille_natur.mp3', 'Stille Natur'),
-  ('sounds/music/tiefe_toene.mp3', 'Tiefe Töne'),
+/// Stable asset keys for the music picker. Display names live in the ARBs.
+const List<String> kInAppTracks = [
+  'sounds/music/ambient_flow.mp3',
+  'sounds/music/stille_natur.mp3',
+  'sounds/music/tiefe_toene.mp3',
 ];
 
 class InAppMusicService {

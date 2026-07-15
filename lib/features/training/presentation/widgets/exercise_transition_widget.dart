@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/exercise.dart';
 import 'exercise_image_widget.dart';
 import 'exercise_video_widget.dart';
@@ -93,6 +94,7 @@ class _ExerciseTransitionWidgetState extends State<ExerciseTransitionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final ex = widget.exercise;
     final loc = widget.locale;
     final positionInstructions =
@@ -130,14 +132,18 @@ class _ExerciseTransitionWidgetState extends State<ExerciseTransitionWidget> {
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(color: Colors.white24),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.play_arrow, color: Colors.white70, size: 14),
-                        SizedBox(width: 4),
-                        Text('Video',
-                            style:
-                                TextStyle(color: Colors.white70, fontSize: 12)),
+                        const Icon(
+                          Icons.play_arrow,
+                          color: Colors.white70,
+                          size: 14,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(l10n.trainingVideo,
+                            style: const TextStyle(
+                                color: Colors.white70, fontSize: 12)),
                       ],
                     ),
                   ),
@@ -153,7 +159,10 @@ class _ExerciseTransitionWidgetState extends State<ExerciseTransitionWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Übung ${widget.exerciseIndex + 1} von ${widget.totalExercises}',
+                  l10n.trainingExerciseOfTotal(
+                    widget.exerciseIndex + 1,
+                    widget.totalExercises,
+                  ),
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.4),
                     fontSize: 11,
@@ -173,15 +182,15 @@ class _ExerciseTransitionWidgetState extends State<ExerciseTransitionWidget> {
                 Wrap(
                   spacing: 8,
                   children: [
-                    _chip('${ex.repetitions}× Wdh.'),
-                    _chip('${ex.holdSeconds} Sek / Rep'),
+                    _chip(l10n.trainingRepetitionsAbbreviated(ex.repetitions)),
+                    _chip(l10n.trainingSecondsPerRep(ex.holdSeconds)),
                   ],
                 ),
                 const SizedBox(height: 14),
-                _sectionLabel('Position'),
+                _sectionLabel(l10n.trainingPositionLabel),
                 ...positionInstructions.map(_bullet),
                 const SizedBox(height: 10),
-                _sectionLabel('Bewegung'),
+                _sectionLabel(l10n.exerciseMovement),
                 ...movementInstructions.map(_bullet),
                 const SizedBox(height: 10),
                 Container(
@@ -232,7 +241,7 @@ class _ExerciseTransitionWidgetState extends State<ExerciseTransitionWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Startet in $_countdown s',
+                          l10n.trainingStartsInSeconds(_countdown),
                           style: TextStyle(
                               color: Colors.white.withOpacity(0.5),
                               fontSize: 13),
@@ -244,12 +253,12 @@ class _ExerciseTransitionWidgetState extends State<ExerciseTransitionWidget> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12)),
                           ),
-                          child: const Text('Jetzt starten'),
+                          child: Text(l10n.trainingStartNow),
                         ),
                       ],
                     )
                   : Text(
-                      'Ansage läuft...',
+                      l10n.trainingAnnouncementPlaying,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.5),
@@ -262,10 +271,12 @@ class _ExerciseTransitionWidgetState extends State<ExerciseTransitionWidget> {
                   child: FilledButton.icon(
                     onPressed: _startNow,
                     icon: const Icon(Icons.play_arrow),
-                    label: const Text(
-                      'Übung starten',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    label: Text(
+                      l10n.trainingStartExercise,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     style: FilledButton.styleFrom(
                       backgroundColor: const Color(0xFF6366f1),

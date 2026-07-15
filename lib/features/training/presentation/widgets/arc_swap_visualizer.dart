@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class ArcSwapVisualizer extends StatefulWidget {
   final Duration interval;
   final Duration? holdDuration;
@@ -115,6 +117,7 @@ class _ArcSwapVisualizerState extends State<ArcSwapVisualizer>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final isLight = theme.brightness == Brightness.light;
     final lineColor = isLight
         ? theme.colorScheme.primary.withOpacity(0.25)
@@ -156,7 +159,9 @@ class _ArcSwapVisualizerState extends State<ArcSwapVisualizer>
             }
           },
           icon: Icon(_running ? Icons.pause : Icons.play_arrow),
-          label: Text(_running ? 'Pause' : 'Neu starten'),
+          label: Text(
+            _running ? l10n.trainingPause : l10n.trainingRestart,
+          ),
         ),
       ],
     );

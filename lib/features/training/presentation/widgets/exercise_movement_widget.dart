@@ -89,7 +89,9 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
     } else {
       _phase = _TickPhase.holding;
       setState(() => _secondsLeft = ex.holdSeconds);
-      _feedback.speak(ex.holdCueDe, ex.holdCueEn);
+      _feedback.speak(
+        _feedback.locale == 'de' ? ex.holdCueDe : ex.holdCueEn,
+      );
       _feedback.hapticLight();
       _startTick();
     }
@@ -102,7 +104,7 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
     if (!isFirst || _phaseIndex > 0) {
       // Always announce each phase label
     }
-    _feedback.speak(phase.labelDe, phase.labelEn);
+    _feedback.speak(phase.label(_feedback.locale));
     _feedback.hapticLight();
     _startTick();
   }
@@ -138,7 +140,7 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
         setState(() => _secondsLeft = ex.restSeconds);
         // "Und wieder" announces the next rep coming
         if (_currentRep < ex.repetitions) {
-          _feedback.speak('Und wieder', 'And again');
+          _feedback.speak(AppLocalizations.of(context).trainingAndAgain);
         }
         _feedback.hapticMedium();
         _startTick();
@@ -165,10 +167,10 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
     // Check for halfway switch (e.g. Moro 6+7: "Armkreuz wechseln")
     final halfway = ex.repetitions ~/ 2;
     if (ex.halfwaySwitch && _currentRep == halfway) {
-      _feedback.speak('Armkreuz wechseln', 'Switch arm cross');
+      _feedback.speak(AppLocalizations.of(context).trainingSwitchArmCross);
       _feedback.hapticHeavy();
     } else if (ex.hasRepSwitch) {
-      _feedback.speak('Wechsel', 'Switch');
+      _feedback.speak(AppLocalizations.of(context).trainingSwitchCue);
       _feedback.hapticLight();
     }
 
@@ -194,7 +196,7 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
     final locale = ref.watch(settingsProvider).languageCode;
     final ex = widget.exercise;
 
-    final (label, phaseProgress, ringColor) = _currentDisplay(ex, locale);
+    final (label, phaseProgress, ringColor) = _currentDisplay(ex, locale, l10n);
 
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -280,7 +282,7 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
                             ),
                           ),
                           Text(
-                            'sec',
+                            l10n.trainingSecondsAbbreviation,
                             style: TextStyle(
                               color: AppColors.textSecondaryDark,
                               fontSize: 16,
@@ -332,7 +334,11 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
   }
 
   /// Returns (label, phaseProgress 0..1, ringColor) for the current state.
-  (String, double, Color) _currentDisplay(Exercise ex, String locale) {
+  (String, double, Color) _currentDisplay(
+    Exercise ex,
+    String locale,
+    AppLocalizations l10n,
+  ) {
     if (ex.rhythmType == RhythmType.phased) {
       if (_phaseIndex >= ex.phases.length) {
         return ('', 1.0, AppColors.primary);
@@ -351,8 +357,7 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
     } else {
       // resting
       final progress = 1 - (_secondsLeft / ex.restSeconds).clamp(0.0, 1.0);
-      final label = locale == 'de' ? 'Pause' : 'Rest';
-      return (label, progress, AppColors.textSecondaryDark);
+      return (l10n.trainingRest, progress, AppColors.textSecondaryDark);
     }
   }
 }
