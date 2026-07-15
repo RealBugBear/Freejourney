@@ -130,19 +130,20 @@ void main() {
 
   group('reflexModuleLabel', () {
     test('returns correct German label for every module', () {
-      expect(reflexModuleLabel(ReflexQuestionModule.pregnancyBirth),
+      expect(reflexModuleLabel(ReflexQuestionModule.pregnancyBirth, 'de'),
           'Schwangerschaft & Geburt');
-      expect(reflexModuleLabel(ReflexQuestionModule.posturePerception),
+      expect(reflexModuleLabel(ReflexQuestionModule.posturePerception, 'de'),
           'Haltung & Wahrnehmung');
-      expect(reflexModuleLabel(ReflexQuestionModule.motorSkills), 'Motorik');
-      expect(reflexModuleLabel(ReflexQuestionModule.behaviorEmotion),
+      expect(
+          reflexModuleLabel(ReflexQuestionModule.motorSkills, 'de'), 'Motorik');
+      expect(reflexModuleLabel(ReflexQuestionModule.behaviorEmotion, 'de'),
           'Verhalten & Emotionen');
-      expect(reflexModuleLabel(ReflexQuestionModule.speech), 'Sprache');
-      expect(reflexModuleLabel(ReflexQuestionModule.drawingWriting),
+      expect(reflexModuleLabel(ReflexQuestionModule.speech, 'de'), 'Sprache');
+      expect(reflexModuleLabel(ReflexQuestionModule.drawingWriting, 'de'),
           'Zeichnen & Schreiben');
-      expect(reflexModuleLabel(ReflexQuestionModule.school),
+      expect(reflexModuleLabel(ReflexQuestionModule.school, 'de'),
           'Schule & Konzentration');
-      expect(reflexModuleLabel(ReflexQuestionModule.other),
+      expect(reflexModuleLabel(ReflexQuestionModule.other, 'de'),
           'Weitere Beobachtungen');
     });
   });

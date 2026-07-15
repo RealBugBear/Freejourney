@@ -672,8 +672,9 @@ class _ProfileRadarCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final assessment = summary.latestAssessment;
     final hasAssessment = assessment != null;
+    final locale = Localizations.localeOf(context).languageCode;
     final radarScores = hasAssessment
-        ? radarScoresFromAssessment(assessment.scores)
+        ? radarScoresFromAssessment(assessment.scores, locale)
         : <ReflexRadarScore>[];
 
     return GestureDetector(

@@ -143,6 +143,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
     ReflexQuestion question,
   ) async {
     const messageVersion = 'professional_clearance_v1';
+    final locale = Localizations.localeOf(context).languageCode;
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -157,7 +158,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
             'Mit dem Fortfahren bestätigst du, dass du diese Rücksprache '
             'eigenverantwortlich berücksichtigst und das Training entsprechend '
             'begleitet oder freigegeben durchführst.\n\n'
-            'Frage: ${question.text}',
+            'Frage: ${question.text(locale)}',
           ),
           actions: [
             FilledButton(
@@ -495,6 +496,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   @override
   Widget build(BuildContext context) {
     final profilesAsync = ref.watch(reflexSubjectProfilesProvider);
+    final locale = Localizations.localeOf(context).languageCode;
 
     return PopScope(
       canPop: !_questionnaireStarted,
@@ -503,7 +505,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
         _showExitConfirmation();
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Reflexprofil')),
+        appBar: AppBar(title: Text(_definition.screenTitle(locale))),
         body: SafeArea(
           child: profilesAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
@@ -822,6 +824,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   Widget _buildQuestionnaire() {
+    final locale = Localizations.localeOf(context).languageCode;
     final activeModules = _activeModules;
     final safeIndex = _currentModuleIndex.clamp(0, activeModules.length - 1);
     final currentModule = activeModules[safeIndex];
@@ -882,7 +885,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
               ),
               const SizedBox(height: 4),
               Text(
-                _moduleTitle(currentModule),
+                currentModule.title(locale),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w900,
                     ),
@@ -924,6 +927,8 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   Widget _buildQuestion(ReflexQuestion question) {
+    final locale = Localizations.localeOf(context).languageCode;
+    final helpText = question.helpText(locale);
     final highlighted = _highlightedQuestionIds.contains(question.id);
     return Padding(
       key: _keyFor(question.id),
@@ -950,12 +955,12 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${question.number}. ${question.text}',
+                '${question.number}. ${question.text(locale)}',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
               ),
-              if (question.helpText != null) ...[
+              if (helpText != null) ...[
                 const SizedBox(height: 8),
                 ExpansionTile(
                   tilePadding: EdgeInsets.zero,
@@ -965,7 +970,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        question.helpText!,
+                        helpText,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context)
                                   .colorScheme
@@ -1145,18 +1150,6 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       ],
     );
   }
-
-  String _moduleTitle(ReflexQuestionModule module) => switch (module) {
-        ReflexQuestionModule.pregnancyBirth => 'Schwangerschaft und Geburt',
-        ReflexQuestionModule.posturePerception =>
-          'Körperhaltung und Wahrnehmung',
-        ReflexQuestionModule.motorSkills => 'Motorik',
-        ReflexQuestionModule.behaviorEmotion => 'Verhalten und Gefühle',
-        ReflexQuestionModule.speech => 'Sprache und Sprechen',
-        ReflexQuestionModule.drawingWriting => 'Malen und Schreiben',
-        ReflexQuestionModule.school => 'Schule',
-        ReflexQuestionModule.other => 'Sonstiges',
-      };
 }
 
 /// Answer button with per-answer-type colour + icon — accessible for colour-blind users.

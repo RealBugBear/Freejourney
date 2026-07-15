@@ -187,7 +187,7 @@ List<_PdfScoreRow> _scoreRows(ReflexProfileAssessment assessment) {
 List<_PdfAnswerRow> _answerRows(ReflexProfileAssessment assessment) {
   final questionById = {
     for (final question in childParentQuestionnaireV1.questions)
-      question.id: '${question.number}. ${question.text}',
+      question.id: '${question.number}. ${question.text('de')}',
   };
   return assessment.answers.entries
       .map(

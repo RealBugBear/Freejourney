@@ -87,7 +87,8 @@ class _ResultContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cs = Theme.of(context).colorScheme;
-    final scores = _scoreRows(assessment);
+    final locale = Localizations.localeOf(context).languageCode;
+    final scores = _scoreRows(assessment, locale);
     final topScores = scores.toList();
     final radarScores = topScores
         .map((s) => ReflexRadarScore(
@@ -490,13 +491,14 @@ class _ModuleGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final locale = Localizations.localeOf(context).languageCode;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 6),
           child: Text(
-            reflexModuleLabel(module).toUpperCase(),
+            reflexModuleLabel(module, locale).toUpperCase(),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: cs.primary,
                   fontWeight: FontWeight.w700,
@@ -522,6 +524,7 @@ class _RelevantAnswerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final locale = Localizations.localeOf(context).languageCode;
     final hasFreeText = item.freeText != null;
     final hasMonths = item.months != null;
 
@@ -532,7 +535,7 @@ class _RelevantAnswerCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              item.question.text,
+              item.question.text(locale),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: cs.onSurfaceVariant,
                     height: 1.4,
@@ -595,7 +598,10 @@ class _EmptyResult extends StatelessWidget {
   }
 }
 
-List<_ScoreRow> _scoreRows(ReflexProfileAssessment assessment) {
+List<_ScoreRow> _scoreRows(
+  ReflexProfileAssessment assessment,
+  String locale,
+) {
   final rows = <_ScoreRow>[];
   for (final entry in assessment.scores.entries) {
     final raw = entry.value;
@@ -605,8 +611,8 @@ List<_ScoreRow> _scoreRows(ReflexProfileAssessment assessment) {
     rows.add(
       _ScoreRow(
         reflexKey: entry.key,
-        label: reflexLabel(entry.key),
-        shortLabel: reflexShortLabel(entry.key),
+        label: reflexLabel(entry.key, locale),
+        shortLabel: reflexShortLabel(entry.key, locale),
         percent: percent,
         band: _scoreBandFromName(bandName),
         yesCount: raw['yes_count'] as int? ?? 0,

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../domain/reflex_questionnaire.dart';
 
 /// One axis on the radar chart.
 class ReflexRadarScore {
@@ -217,43 +218,33 @@ class _ReflexRadarPainter extends CustomPainter {
 // Shared label helpers (used in result screen and progress card)
 // ---------------------------------------------------------------------------
 
-String reflexLabel(String key) => switch (key) {
-      'delay' => 'Entwicklungsverzögerung',
-      'flr' => 'FLR',
-      'moro' => 'Moro',
-      'spinalGalant' => 'Spinaler Galant',
-      'tlr' => 'TLR',
-      'atnr' => 'ATNR',
-      'stnr' => 'STNR',
-      'landau' => 'Landau',
-      'babinski' => 'Babinski',
-      'babkin' => 'Babkin',
-      'plantar' => 'Plantar',
-      'palmar' => 'Palmar',
-      'righting' => 'Aufricht',
-      'rootingSucking' => 'Such-Saug',
-      _ => key,
-    };
+String reflexLabel(String key, [String locale = 'de']) {
+  for (final reflex in PrimitiveReflex.values) {
+    if (reflex.name == key) return reflex.label(locale);
+  }
+  return key;
+}
 
-String reflexShortLabel(String key) => switch (key) {
-      'delay' => 'Verzög.',
-      'spinalGalant' => 'Galant',
-      'rootingSucking' => 'Such',
-      'righting' => 'Aufr.',
-      _ => reflexLabel(key),
-    };
+String reflexShortLabel(String key, [String locale = 'de']) {
+  for (final reflex in PrimitiveReflex.values) {
+    if (reflex.name == key) return reflex.shortLabel(locale);
+  }
+  return key;
+}
 
 /// Converts assessment.scores map to a sorted list of [ReflexRadarScore].
 List<ReflexRadarScore> radarScoresFromAssessment(
-    Map<String, dynamic> scores) {
+  Map<String, dynamic> scores, [
+  String locale = 'de',
+]) {
   final rows = <ReflexRadarScore>[];
   for (final entry in scores.entries) {
     final raw = entry.value;
     if (raw is! Map) continue;
     final percent = (raw['percent'] as num?)?.toDouble() ?? 0;
     rows.add(ReflexRadarScore(
-      label: reflexLabel(entry.key),
-      shortLabel: reflexShortLabel(entry.key),
+      label: reflexLabel(entry.key, locale),
+      shortLabel: reflexShortLabel(entry.key, locale),
       percent: percent,
     ));
   }

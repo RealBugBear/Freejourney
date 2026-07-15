@@ -59,10 +59,11 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Supabase.instance.client.auth.currentUser;
+    final locale = Localizations.localeOf(context).languageCode;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reflexprofil Kurztest'),
+        title: Text(_definition.screenTitle(locale)),
         actions: [
           TextButton(
             onPressed: () =>
@@ -122,7 +123,8 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             leading: Icon(Icons.person_outline,
-                color: Theme.of(context).colorScheme.onSurfaceVariant, size: 28),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                size: 28),
             title: Text(
               'Für mich',
               style: TextStyle(
@@ -244,8 +246,9 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
                   child: FilledButton(
                     onPressed: () => context
                         .go(user == null ? Routes.login : Routes.reflexProfile),
-                    child: Text(
-                        user == null ? 'Anmelden oder registrieren' : 'Volltest öffnen'),
+                    child: Text(user == null
+                        ? 'Anmelden oder registrieren'
+                        : 'Volltest öffnen'),
                   ),
                 ),
               ],
@@ -269,6 +272,7 @@ class _DemoResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Supabase.instance.client.auth.currentUser;
+    final locale = Localizations.localeOf(context).languageCode;
     final topScores = scores.take(8).toList();
 
     return Scaffold(
@@ -308,11 +312,14 @@ class _DemoResultScreen extends StatelessWidget {
                               fillColor:
                                   AppColors.primary.withValues(alpha: 0.13),
                               strokeColor: AppColors.primary,
+                              locale: locale,
                               labelStyle: Theme.of(context)
                                   .textTheme
                                   .labelSmall
                                   ?.copyWith(
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
                                     fontWeight: FontWeight.w700,
                                   ),
                             ),
@@ -339,8 +346,7 @@ class _DemoResultScreen extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 10),
-          for (final score in scores)
-            _DemoScoreTile(score: score),
+          for (final score in scores) _DemoScoreTile(score: score),
           const SizedBox(height: 20),
           Card(
             color: AppColors.primary.withValues(alpha: 0.06),
@@ -398,6 +404,7 @@ class _DemoScoreTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = _bandColor(score.band);
+    final locale = Localizations.localeOf(context).languageCode;
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: Padding(
@@ -409,7 +416,7 @@ class _DemoScoreTile extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    _reflexLabel(score.reflex),
+                    score.reflex.label(locale),
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
@@ -456,6 +463,7 @@ class _DemoRadarPainter extends CustomPainter {
     required this.gridColor,
     required this.fillColor,
     required this.strokeColor,
+    required this.locale,
     required this.labelStyle,
   });
 
@@ -463,6 +471,7 @@ class _DemoRadarPainter extends CustomPainter {
   final Color gridColor;
   final Color fillColor;
   final Color strokeColor;
+  final String locale;
   final TextStyle? labelStyle;
 
   @override
@@ -504,8 +513,7 @@ class _DemoRadarPainter extends CustomPainter {
 
     final scorePath = Path();
     for (var i = 0; i < scores.length; i++) {
-      final valueRadius =
-          radius * (scores[i].percent.clamp(0, 100) / 100);
+      final valueRadius = radius * (scores[i].percent.clamp(0, 100) / 100);
       final point = _point(center, valueRadius, i, scores.length);
       if (i == 0) {
         scorePath.moveTo(point.dx, point.dy);
@@ -519,7 +527,7 @@ class _DemoRadarPainter extends CustomPainter {
 
     for (var i = 0; i < scores.length; i++) {
       final labelPoint = _point(center, radius + 30, i, scores.length);
-      final label = _reflexShortLabel(scores[i].reflex);
+      final label = scores[i].reflex.shortLabel(locale);
       final painter = TextPainter(
         text: TextSpan(text: label, style: labelStyle),
         textAlign: TextAlign.center,
@@ -543,7 +551,7 @@ class _DemoRadarPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _DemoRadarPainter oldDelegate) =>
-      oldDelegate.scores != scores;
+      oldDelegate.scores != scores || oldDelegate.locale != locale;
 }
 
 // ---------------------------------------------------------------------------
@@ -563,6 +571,7 @@ class _DemoQuestionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       child: Padding(
@@ -571,7 +580,7 @@ class _DemoQuestionTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              question.text,
+              question.text(locale),
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -626,29 +635,3 @@ String _bandLabel(ReflexScoreBand band) => switch (band) {
       ReflexScoreBand.inconspicuous => 'unauffällig',
       ReflexScoreBand.insufficientData => 'zu wenig Daten',
     };
-
-String _reflexLabel(PrimitiveReflex reflex) => switch (reflex) {
-      PrimitiveReflex.delay => 'Entwicklungsverzögerung',
-      PrimitiveReflex.flr => 'FLR',
-      PrimitiveReflex.moro => 'Moro',
-      PrimitiveReflex.spinalGalant => 'Spinaler Galant',
-      PrimitiveReflex.tlr => 'TLR',
-      PrimitiveReflex.atnr => 'ATNR',
-      PrimitiveReflex.stnr => 'STNR',
-      PrimitiveReflex.landau => 'Landau',
-      PrimitiveReflex.babinski => 'Babinski',
-      PrimitiveReflex.babkin => 'Babkin',
-      PrimitiveReflex.plantar => 'Plantar',
-      PrimitiveReflex.palmar => 'Palmar',
-      PrimitiveReflex.righting => 'Aufricht',
-      PrimitiveReflex.rootingSucking => 'Such-Saug',
-    };
-
-String _reflexShortLabel(PrimitiveReflex reflex) => switch (reflex) {
-      PrimitiveReflex.delay => 'Verzög.',
-      PrimitiveReflex.spinalGalant => 'Galant',
-      PrimitiveReflex.rootingSucking => 'Such',
-      PrimitiveReflex.righting => 'Aufr.',
-      _ => _reflexLabel(reflex),
-    };
-

@@ -87,6 +87,10 @@ Allowlist `scripts/i18n_audit_allowlist.txt` für bewusste Ausnahmen wie „Refl
 - **Systemrand:** iOS-Usage-Descriptions, Android-Ressourcen, client-/serverseitige Push-Copy
   und 17 feste deutsche Locale-Formate sind Phase 4. Ein Edge-Function-Deploy bleibt separat
   Founder-gated; im i18n-Auftrag wird nur lokaler Code vorbereitet und verifiziert.
+- **EN-Audio-Assets:** Das Repository und `pubspec.yaml` enthalten ausschließlich
+  `assets/sounds/announcements/de/`; englische Announcement-MP3s fehlen. Die sichtbaren
+  Trainings-Cues sind lokalisiert, die bestehenden Audio-Pfade bleiben zur Funktionserhaltung
+  unverändert deutsch. Englische Aufnahmen sind ein separater Content-/Asset-Blocker.
 - **🔶 Kalender-/Privacy-Entscheidung vor Release:** Die vorhandene native Integration ist
   plattformübergreifend inkonsistent: iOS ruft ab iOS 17 vollen Kalenderzugriff auf, besitzt
   aber nur `NSCalendarsUsageDescription`; Android fragt `READ_CALENDAR`/`WRITE_CALENDAR` im
@@ -110,31 +114,31 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | auth | features/auth/presentation/screens/login_screen.dart | 14 | 0 | 0  | verifiziert (nur bewusste Sprach-Autonyme) |
 | dashboard | features/dashboard/presentation/screens/dashboard_screen.dart | 76 | 0 | 4  | verifiziert (`2abf16a`, analyze + 245 Tests) |
 | training | features/training/domain/models/exercise.dart | 0 | 0 | 445 bilingual-ok | verifiziert (DE/EN-Feldpaare) |
-| training | features/training/domain/services/audio_announcement_service.dart | 0 | 1 | 0  | offen |
-| training | features/training/presentation/screens/immersive_exercise_screen.dart | 18 | 0 | 0  | offen |
-| training | features/training/presentation/screens/immersive_session_screen.dart | 1 | 0 | 0  | offen |
-| training | features/training/presentation/screens/training_exercise_screen.dart | 32 | 0 | 0  | offen |
+| training | features/training/domain/services/audio_announcement_service.dart | 0 | 1 | 0  | verifiziert (Log EN; fehlende EN-Audioassets separat geflaggt) |
+| training | features/training/presentation/screens/immersive_exercise_screen.dart | 18 | 0 | 0  | verifiziert (sichtbare Cues DE/EN, Audit 0) |
+| training | features/training/presentation/screens/immersive_session_screen.dart | 1 | 0 | 0  | verifiziert (nur technischer `_duo`-Assetsuffix) |
+| training | features/training/presentation/screens/training_exercise_screen.dart | 32 | 0 | 0  | verifiziert (UI/Semantik DE/EN, Audit 0) |
 | training | features/training/presentation/screens/training_intro_screen.dart | 8 | 0 | 0  | verifiziert (Audit 0, 5 DE/EN-Widget-Tests + 250 Tests) |
 | training | features/training/presentation/screens/training_movement_screen.dart | 11 | 0 | 0  | verifiziert (Audit 0, ICU-Plural geprüft, 250 Tests) |
-| training | features/training/presentation/screens/training_outro_screen.dart | 8 | 0 | 0  | offen |
+| training | features/training/presentation/screens/training_outro_screen.dart | 8 | 0 | 0  | verifiziert (DE/EN-Widgettest, Audit 0) |
 | training | features/training/presentation/screens/training_position_screen.dart | 9 | 0 | 0  | verifiziert (Audit 0, Semantik/Dialog DE+EN, 250 Tests) |
-| training | features/training/presentation/screens/training_preparation_screen.dart | 2 | 0 | 0  | offen |
-| training | features/training/presentation/screens/training_session_screen.dart | 1 | 0 | 4  | offen |
-| training | features/training/presentation/screens/training_start_flow_screen.dart | 29 | 0 | 0  | offen |
-| training | features/training/presentation/screens/vorrunde_interstitial_screen.dart | 9 | 0 | 0  | offen |
-| training | features/training/presentation/services/in_app_music_service.dart | 3 | 2 | 0  | offen |
-| training | features/training/presentation/widgets/animated_progress_bar.dart | 7 | 0 | 0  | offen |
-| training | features/training/presentation/widgets/arc_swap_visualizer.dart | 2 | 0 | 0  | offen |
-| training | features/training/presentation/widgets/exercise_movement_widget.dart | 6 | 0 | 2  | offen |
-| training | features/training/presentation/widgets/exercise_rest_widget.dart | 2 | 0 | 0  | offen |
-| training | features/training/presentation/widgets/exercise_transition_widget.dart | 10 | 0 | 0  | offen |
-| training | features/training/presentation/widgets/exercise_video_widget.dart | 2 | 0 | 0  | offen |
-| training | features/training/presentation/widgets/music_picker_sheet.dart | 4 | 0 | 0  | offen |
-| training | features/training/presentation/widgets/parallel_lines_visualizer.dart | 2 | 0 | 0  | offen |
-| training | features/training/presentation/widgets/rhythm_visualizer.dart | 3 | 3 | 0  | offen |
+| training | features/training/presentation/screens/training_preparation_screen.dart | 2 | 0 | 0  | verifiziert (Audit 0) |
+| training | features/training/presentation/screens/training_session_screen.dart | 1 | 0 | 4  | verifiziert (sichtbare Copy DE/EN; Content-Felder bilingual) |
+| training | features/training/presentation/screens/training_start_flow_screen.dart | 29 | 0 | 0  | verifiziert (Dialoge/Fehler DE/EN, Audit 0) |
+| training | features/training/presentation/screens/vorrunde_interstitial_screen.dart | 9 | 0 | 0  | verifiziert (DE/EN-Widgettest, claim-safe EN) |
+| training | features/training/presentation/services/in_app_music_service.dart | 3 | 2 | 0  | verifiziert (Anzeigenamen in ARB; technische Logs EN) |
+| training | features/training/presentation/widgets/animated_progress_bar.dart | 7 | 0 | 0  | verifiziert (Semantik/Status DE/EN) |
+| training | features/training/presentation/widgets/arc_swap_visualizer.dart | 2 | 0 | 0  | verifiziert (Steuerung DE/EN) |
+| training | features/training/presentation/widgets/exercise_movement_widget.dart | 6 | 0 | 2  | verifiziert (Cues locale-aware; Content-Felder bilingual) |
+| training | features/training/presentation/widgets/exercise_rest_widget.dart | 2 | 0 | 0  | verifiziert (Audit 0) |
+| training | features/training/presentation/widgets/exercise_transition_widget.dart | 10 | 0 | 0  | verifiziert (DE/EN-Widgettest, Audit 0) |
+| training | features/training/presentation/widgets/exercise_video_widget.dart | 2 | 0 | 0  | verifiziert (Audit 0) |
+| training | features/training/presentation/widgets/music_picker_sheet.dart | 4 | 0 | 0  | verifiziert (DE/EN-Widgettest, Tracknamen lokalisiert) |
+| training | features/training/presentation/widgets/parallel_lines_visualizer.dart | 2 | 0 | 0  | verifiziert (Steuerung DE/EN) |
+| training | features/training/presentation/widgets/rhythm_visualizer.dart | 3 | 3 | 0  | verifiziert (Steuerung DE/EN; Logs technisch EN) |
 | training | features/training/presentation/widgets/training_disclaimer_dialog.dart | 0 | 0 | 19 e-legal! | geflaggt – Anwalt, nicht frei übersetzen |
-| training | features/training/presentation/widgets/training_intro_widget.dart | 2 | 0 | 0  | offen |
-| training | features/training/presentation/widgets/training_outro_widget.dart | 1 | 0 | 0  | offen |
+| training | features/training/presentation/widgets/training_intro_widget.dart | 2 | 0 | 0  | verifiziert (Modus/Statistik DE/EN) |
+| training | features/training/presentation/widgets/training_outro_widget.dart | 1 | 0 | 0  | verifiziert (ICU-Anzahl DE/EN) |
 | packages | features/packages/presentation/screens/packages_screen.dart | 10 | 0 | 0  | offen |
 | journal | features/journal/presentation/screens/journal_screen.dart | 8 | 0 | 1  | offen |
 | journal | features/journal/presentation/widgets/journal_entry_tile.dart | 10 | 0 | 3  | offen |
@@ -142,16 +146,16 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | golden_day | features/golden_day/presentation/screens/golden_day_screen.dart | 6 | 0 | 0  | offen |
 | assessment | features/assessment/domain/completion_questions.dart | 0 | 0 | 7 bilingual-ok | verifiziert (DE/EN-Feldpaare) |
 | assessment | features/assessment/domain/draft_persistence_service.dart | 0 | 2 | 0  | offen |
-| assessment | features/assessment/domain/reflex_questionnaire_definitions.dart | 134 | 0 | 0  | offen |
+| assessment | features/assessment/domain/reflex_questionnaire_definitions.dart | 134 | 0 | 0  | verifiziert (123 Fragen, 8 Module, 5 Hilfen, 5 Flags als DE/EN-Feldpaare; Audit 0 a/b/c) |
 | assessment | features/assessment/domain/services/reflex_profile_pdf_service.dart | 36 | 0 | 1  | offen |
 | assessment | features/assessment/presentation/providers/reflex_profile_provider.dart | 3 | 6 | 0  | offen |
 | assessment | features/assessment/presentation/screens/analysis_placeholder_screen.dart | 16 | 0 | 0  | offen |
 | assessment | features/assessment/presentation/screens/duration_recommendation_screen.dart | 20 | 0 | 0  | offen |
-| assessment | features/assessment/presentation/screens/reflex_profile_demo_screen.dart | 66 | 0 | 0  | offen |
-| assessment | features/assessment/presentation/screens/reflex_profile_result_helpers.dart | 8 | 0 | 0  | offen |
-| assessment | features/assessment/presentation/screens/reflex_profile_result_screen.dart | 40 | 0 | 0  | offen |
-| assessment | features/assessment/presentation/screens/reflex_profile_screen.dart | 77 | 0 | 0  | offen |
-| assessment | features/assessment/presentation/widgets/reflex_radar_chart.dart | 15 | 0 | 0  | offen |
+| assessment | features/assessment/presentation/screens/reflex_profile_demo_screen.dart | 66 | 0 | 0  | externalisiert (Fragen/Reflexnamen DE/EN; allgemeine UI noch offen) |
+| assessment | features/assessment/presentation/screens/reflex_profile_result_helpers.dart | 8 | 0 | 0  | externalisiert (Modulnamen DE/EN; allgemeine UI noch offen) |
+| assessment | features/assessment/presentation/screens/reflex_profile_result_screen.dart | 40 | 0 | 0  | externalisiert (Fragen/Reflexnamen DE/EN; allgemeine UI noch offen) |
+| assessment | features/assessment/presentation/screens/reflex_profile_screen.dart | 77 | 0 | 0  | externalisiert (Fragen/Module DE/EN; Dialog-/Buttontexte noch offen) |
+| assessment | features/assessment/presentation/widgets/reflex_radar_chart.dart | 15 | 0 | 0  | externalisiert (Reflexlabels DE/EN; Leerzustand noch offen) |
 | accompaniment | features/accompaniment/presentation/screens/accompaniment_screen.dart | 70 | 1 | 1  | offen |
 | mood | features/mood/presentation/widgets/mood_chart_widget.dart | 4 | 0 | 0  | offen |
 | mood | features/mood/presentation/widgets/mood_checkin_sheet.dart | 11 | 0 | 0  | offen |
@@ -273,3 +277,13 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
   Namen bleiben invariant. Android benötigt für die bestehenden Systemdialoge keine zusätzliche
   App-Copy. 5 Plattformtests, `plutil` und Xcode-Projektparser sind grün. Einschränkung: Die
   Flutter-In-App-Sprache steuert iOS-Systemdialoge nicht; iOS nutzt seine App-/Gerätesprache.
+- **2026-07-15, Trainingskern (`96db5e8`):** 20 geänderte Training-Screens/-Widgets/-Services mit 106
+  semantischen Keys lokalisiert; **551/551** DE/EN-Keys, fünf neue bilinguale Widgettests und
+  scoped Audit 0. Das Glossarwort `session` ersetzt alte EN-`unit`-Copy. Sichtbare Cues und
+  Exercise-Feldpaare sind locale-aware. Echte EN-Sprachausgaben bleiben offen, weil nur deutsche
+  Announcement-MP3s vorhanden und gebündelt sind; keine nicht existierenden Assets verdrahtet.
+- **2026-07-15, Fragebogen-Content:** Der reale Bestand ist **109 Vollfragen + 14 Demo = 123**
+  (nicht 129). Alle Fragen, acht Module, fünf Hilfetexte, fünf Trainer-Flags sowie Reflexnamen
+  sind als DE/EN-Feldpaare umgesetzt; DE-Runtime-Copy ist vollständig identisch zum Ausgangsstand,
+  EN nutzt `FPR` statt `FLR`. 32 Assessment-Tests, Claim-/Residue-Prüfung und scoped Analyze sind
+  grün. Allgemeine Assessment-UI und PDF-Rahmentexte bleiben ein eigener ARB-/Formatierungs-Batch.

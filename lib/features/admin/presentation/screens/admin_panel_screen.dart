@@ -747,12 +747,12 @@ class _ReflexAnalyticsSummary {
   ) {
     final questionTextById = {
       for (final question in childParentQuestionnaireV1.questions)
-        question.id: '${question.number}. ${question.text}',
+        question.id: '${question.number}. ${question.text('de')}',
     };
     final safetyFlagLabelById = {
       for (final question in childParentQuestionnaireV1.questions)
-        if (question.trainerFlagLabel != null)
-          question.id: question.trainerFlagLabel!,
+        if (question.trainerFlagLabel('de') case final label?)
+          question.id: label,
     };
     final totalAssessments = rows.fold<int>(
       0,

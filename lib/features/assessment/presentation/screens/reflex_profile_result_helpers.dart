@@ -59,13 +59,5 @@ List<(ReflexQuestionModule, List<RelevantAnswerItem>)> buildRelevanteAngaben(
   ];
 }
 
-String reflexModuleLabel(ReflexQuestionModule module) => switch (module) {
-      ReflexQuestionModule.pregnancyBirth => 'Schwangerschaft & Geburt',
-      ReflexQuestionModule.posturePerception => 'Haltung & Wahrnehmung',
-      ReflexQuestionModule.motorSkills => 'Motorik',
-      ReflexQuestionModule.behaviorEmotion => 'Verhalten & Emotionen',
-      ReflexQuestionModule.speech => 'Sprache',
-      ReflexQuestionModule.drawingWriting => 'Zeichnen & Schreiben',
-      ReflexQuestionModule.school => 'Schule & Konzentration',
-      ReflexQuestionModule.other => 'Weitere Beobachtungen',
-    };
+String reflexModuleLabel(ReflexQuestionModule module, String locale) =>
+    module.resultLabel(locale);
