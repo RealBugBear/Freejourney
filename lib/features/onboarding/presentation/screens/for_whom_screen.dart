@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
 
 class ForWhomScreen extends ConsumerStatefulWidget {
@@ -39,15 +41,15 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Reflexprofil für $profileName anlegen?',
+              AppLocalizations.of(ctx)
+                  .forWhomReflexProfileSheetTitle(profileName),
               style: Theme.of(ctx).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
             ),
             const SizedBox(height: 10),
             Text(
-              'Der Fragebogen dauert ca. 10–15 Minuten und hilft dabei, '
-              'gezielt das passende Training zu empfehlen.',
+              AppLocalizations.of(ctx).forWhomReflexProfileSheetBody,
               style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(ctx).colorScheme.onSurfaceVariant,
                     height: 1.45,
@@ -58,7 +60,7 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
               width: double.infinity,
               child: FilledButton(
                 onPressed: () => Navigator.pop(ctx, true),
-                child: const Text('Jetzt Reflexprofil ausfüllen'),
+                child: Text(AppLocalizations.of(ctx).forWhomStartReflexProfile),
               ),
             ),
             const SizedBox(height: 10),
@@ -66,7 +68,7 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('Später — direkt zum Training'),
+                child: Text(AppLocalizations.of(ctx).forWhomLaterToTraining),
               ),
             ),
           ],
@@ -89,7 +91,9 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Fehler beim Anlegen: $e')),
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context).forWhomCreateError('$e'))),
         );
       }
     } finally {
@@ -102,7 +106,8 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
     final birthDate = _selectedBirthDate;
     if (name.isEmpty || birthDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Bitte Name und Geburtsdatum angeben.')),
+        SnackBar(
+            content: Text(AppLocalizations.of(context).forWhomMissingFields)),
       );
       return;
     }
@@ -117,7 +122,9 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Fehler beim Anlegen: $e')),
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context).forWhomCreateError('$e'))),
         );
       }
     } finally {
@@ -127,6 +134,7 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -144,14 +152,14 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
             children: [
               const SizedBox(height: 16),
               Text(
-                'Für wen trainierst du?',
+                l10n.forWhomTitle,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w800,
                     ),
               ),
               const SizedBox(height: 10),
               Text(
-                'Du kannst später jederzeit weitere Profile hinzufügen.',
+                l10n.forWhomSubtitle,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -159,8 +167,8 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
               const SizedBox(height: 32),
               _OptionCard(
                 icon: Icons.person_outline,
-                title: 'Für mich',
-                subtitle: 'Eigenes Erwachsenenprofil anlegen',
+                title: l10n.forWhomSelfTitle,
+                subtitle: l10n.forWhomSelfSubtitle,
                 expanded: false,
                 enabled: !_saving,
                 onTap: _createSelfProfile,
@@ -175,8 +183,8 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
               const SizedBox(height: 12),
               _OptionCard(
                 icon: Icons.child_care_outlined,
-                title: 'Für mein Kind',
-                subtitle: 'Kinderprofil anlegen',
+                title: l10n.forWhomChildTitle,
+                subtitle: l10n.forWhomChildSubtitle,
                 expanded: _showChildForm,
                 enabled: !_saving,
                 onTap: () => setState(() => _showChildForm = !_showChildForm),
@@ -193,9 +201,9 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
                   controller: _nameController,
                   textCapitalization: TextCapitalization.words,
                   autofocus: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Name oder Spitzname',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.forWhomChildNameLabel,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -208,7 +216,7 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
                           DateTime(now.year - 6, now.month, now.day),
                       firstDate: DateTime(now.year - 100),
                       lastDate: now,
-                      helpText: 'Geburtsdatum auswählen',
+                      helpText: l10n.forWhomBirthDatePickerHelp,
                     );
                     if (picked != null) {
                       setState(() => _selectedBirthDate = picked);
@@ -217,19 +225,19 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
                   borderRadius: BorderRadius.circular(4),
                   child: InputDecorator(
                     decoration: InputDecoration(
-                      labelText: 'Geburtsdatum *',
+                      labelText: l10n.forWhomBirthDateLabel,
                       border: const OutlineInputBorder(),
                       suffixIcon: const Icon(Icons.calendar_month_outlined),
                       helperText: _selectedBirthDate == null
-                          ? 'Pflichtfeld – für die Altersauswertung benötigt'
+                          ? l10n.forWhomBirthDateHelper
                           : null,
                     ),
                     child: Text(
                       _selectedBirthDate == null
-                          ? 'Datum auswählen'
-                          : '${_selectedBirthDate!.day.toString().padLeft(2, '0')}.'
-                              '${_selectedBirthDate!.month.toString().padLeft(2, '0')}.'
-                              '${_selectedBirthDate!.year}',
+                          ? l10n.forWhomSelectDate
+                          : DateFormat.yMd(
+                                  Localizations.localeOf(context).toString())
+                              .format(_selectedBirthDate!),
                       style: _selectedBirthDate == null
                           ? TextStyle(
                               color: Theme.of(context)
@@ -244,8 +252,8 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
                   width: double.infinity,
                   child: FilledButton(
                     onPressed: _saving ? null : _createChildProfile,
-                    child:
-                        Text(_saving ? 'Speichern...' : 'Kinderprofil anlegen'),
+                    child: Text(
+                        _saving ? l10n.saving : l10n.forWhomCreateChildProfile),
                   ),
                 ),
               ],

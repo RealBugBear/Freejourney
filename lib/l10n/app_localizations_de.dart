@@ -1063,4 +1063,174 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get adminTrainerSuspend => 'Sperren';
+
+  @override
+  String get saving => 'Speichern...';
+
+  @override
+  String get entryPointsTitle => 'Viele Wege führen hierher';
+
+  @override
+  String get entryPointsSubtitle =>
+      'Reflexintegration ist für sehr unterschiedliche Menschen relevant. Schau, was für dich klingt.';
+
+  @override
+  String get entryPointsChipQuestion =>
+      'Was klingt für dich vertraut? (optional, Mehrfachauswahl)';
+
+  @override
+  String get entryPointsSelectionNote =>
+      'Deine Auswahl ändert nichts am Training — sie hilft uns zu verstehen, wer die App nutzt.';
+
+  @override
+  String get entryPointsShowMore => 'Mehr';
+
+  @override
+  String get entryPointsShowLess => 'Weniger';
+
+  @override
+  String get entryPointsBodyTitle => 'Körper & Therapie';
+
+  @override
+  String get entryPointsBodyTeaser =>
+      'Verspannungen, Fehlhaltungen, Empfehlung vom Therapeuten';
+
+  @override
+  String get entryPointsBodyDetail =>
+      'Aktive Reflexmuster können zu dauerhafter Muskelanspannung führen — unabhängig von äußeren Auslösern. Physiotherapeut·innen und Ergotherapeut·innen empfehlen Reflexintegration häufig ergänzend, wenn klassische Behandlung nicht vollständig greift.\n\nTypische Hinweise: chronische Rücken- oder Nackenverspannungen, Kieferspannung, Fehlhaltungen die immer wiederkehren.';
+
+  @override
+  String get entryPointsBodyChip => 'Körper';
+
+  @override
+  String get entryPointsBodySource =>
+      'Vgl. Goddard Blythe: (Über)leben mit Reflexen';
+
+  @override
+  String get entryPointsCoordinationTitle => 'Koordination & Leistung';
+
+  @override
+  String get entryPointsCoordinationTeaser =>
+      'Bewegungsqualität, Gleichgewicht, sportliche Koordination';
+
+  @override
+  String get entryPointsCoordinationDetail =>
+      'Unintegrierte Reflexe binden motorische Ressourcen — was sich in eingeschränkter Koordination, verlangsamten Reaktionen oder Gleichgewichtsproblemen zeigen kann. Sportler·innen nutzen Reflexintegration um koordinative Grenzen zu erweitern, die durch klassisches Training nicht erreichbar sind.\n\nTypische Hinweise: Bewegungsabläufe fühlen sich schwerer an als nötig, Asymmetrien, Gleichgewicht unter Druck.';
+
+  @override
+  String get entryPointsCoordinationChip => 'Koordination';
+
+  @override
+  String get entryPointsCoordinationSource =>
+      'Vgl. Blomberg: Bewegungen die heilen';
+
+  @override
+  String get entryPointsEmotionTitle => 'Emotionale Regulation & Innenwelt';
+
+  @override
+  String get entryPointsEmotionTeaser =>
+      'Stressreaktionen, Reizempfindlichkeit, Selbstwahrnehmung';
+
+  @override
+  String get entryPointsEmotionDetail =>
+      'Manche Reflexmuster beeinflussen direkt wie das Nervensystem auf Reize reagiert — Stressempfindlichkeit, emotionale Reaktivität, Reizüberflutung. Rhythmische Bewegung kann helfen, das Nervensystem zu regulieren und Zugang zu inneren Zuständen zu finden.\n\nTypische Hinweise: schnelle emotionale Überflutung, Schwierigkeit zur Ruhe zu kommen, Körperspannung in Stress. Verläuft sehr individuell.';
+
+  @override
+  String get entryPointsEmotionChip => 'Emotionale Regulation';
+
+  @override
+  String get entryPointsEmotionSource => 'Vgl. Blomberg: Bewegungen die heilen';
+
+  @override
+  String get entryPointsChildTitle => 'Mein Kind: Schule & Entwicklung';
+
+  @override
+  String get entryPointsChildTeaser =>
+      'Konzentration, Lernen, Schule — als Elternteil';
+
+  @override
+  String get entryPointsChildDetail =>
+      'Frühkindliche Reflexmuster die nicht vollständig integriert wurden, können sich später in Schwierigkeiten beim Lesen, Schreiben oder Konzentrieren zeigen — oft ohne klare organische Ursache.\n\nTypische Hinweise: Kind kommt in der Schule nicht mit, kann sich schwer fokussieren, ist unruhig im Unterricht, Feinmotorik oder Lesen bereitet Mühe.';
+
+  @override
+  String get entryPointsChildChip => 'Mein Kind';
+
+  @override
+  String get entryPointsChildSource =>
+      'Vgl. Goddard Blythe: (Über)leben mit Reflexen';
+
+  @override
+  String get entryPointsCuriosityTitle => 'Neugierde & Entdeckung';
+
+  @override
+  String get entryPointsCuriosityTeaser =>
+      'Kein konkretes Problem — einfach erkunden';
+
+  @override
+  String get entryPointsCuriosityDetail =>
+      'Manche Menschen kommen ohne konkretes Symptom — sie haben von Reflexintegration gehört und sind neugierig was rhythmische Bewegung über mehrere Wochen verändert. Das ist ein vollständig gültiger Einstieg.\n\nDas Training wirkt unabhängig davon ob man ein \"Problem\" benennen kann oder nicht.';
+
+  @override
+  String get entryPointsCuriosityChip => 'Einfach neugierig';
+
+  @override
+  String get forWhomTitle => 'Für wen trainierst du?';
+
+  @override
+  String get forWhomSubtitle =>
+      'Du kannst später jederzeit weitere Profile hinzufügen.';
+
+  @override
+  String get forWhomSelfTitle => 'Für mich';
+
+  @override
+  String get forWhomSelfSubtitle => 'Eigenes Erwachsenenprofil anlegen';
+
+  @override
+  String get forWhomChildTitle => 'Für mein Kind';
+
+  @override
+  String get forWhomChildSubtitle => 'Kinderprofil anlegen';
+
+  @override
+  String get forWhomChildNameLabel => 'Name oder Spitzname';
+
+  @override
+  String get forWhomBirthDateLabel => 'Geburtsdatum *';
+
+  @override
+  String get forWhomBirthDateHelper =>
+      'Pflichtfeld – für die Altersauswertung benötigt';
+
+  @override
+  String get forWhomBirthDatePickerHelp => 'Geburtsdatum auswählen';
+
+  @override
+  String get forWhomSelectDate => 'Datum auswählen';
+
+  @override
+  String get forWhomCreateChildProfile => 'Kinderprofil anlegen';
+
+  @override
+  String get forWhomMissingFields => 'Bitte Name und Geburtsdatum angeben.';
+
+  @override
+  String forWhomCreateError(String error) {
+    return 'Fehler beim Anlegen: $error';
+  }
+
+  @override
+  String forWhomReflexProfileSheetTitle(String name) {
+    return 'Reflexprofil für $name anlegen?';
+  }
+
+  @override
+  String get forWhomReflexProfileSheetBody =>
+      'Der Fragebogen dauert ca. 10–15 Minuten und hilft dabei, gezielt das passende Training zu empfehlen.';
+
+  @override
+  String get forWhomStartReflexProfile => 'Jetzt Reflexprofil ausfüllen';
+
+  @override
+  String get forWhomLaterToTraining => 'Später — direkt zum Training';
 }

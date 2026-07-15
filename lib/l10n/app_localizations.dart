@@ -1993,6 +1993,300 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Sperren'**
   String get adminTrainerSuspend;
+
+  /// Generic in-progress label while a save operation runs
+  ///
+  /// In de, this message translates to:
+  /// **'Speichern...'**
+  String get saving;
+
+  /// Onboarding entry-points screen: headline
+  ///
+  /// In de, this message translates to:
+  /// **'Viele Wege führen hierher'**
+  String get entryPointsTitle;
+
+  /// Onboarding entry-points screen: intro below headline
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexintegration ist für sehr unterschiedliche Menschen relevant. Schau, was für dich klingt.'**
+  String get entryPointsSubtitle;
+
+  /// Label above the multi-select chips
+  ///
+  /// In de, this message translates to:
+  /// **'Was klingt für dich vertraut? (optional, Mehrfachauswahl)'**
+  String get entryPointsChipQuestion;
+
+  /// Note under the chips explaining the selection has no training effect
+  ///
+  /// In de, this message translates to:
+  /// **'Deine Auswahl ändert nichts am Training — sie hilft uns zu verstehen, wer die App nutzt.'**
+  String get entryPointsSelectionNote;
+
+  /// Expand toggle on an area card (arrow appended in code)
+  ///
+  /// In de, this message translates to:
+  /// **'Mehr'**
+  String get entryPointsShowMore;
+
+  /// Collapse toggle on an area card (arrow appended in code)
+  ///
+  /// In de, this message translates to:
+  /// **'Weniger'**
+  String get entryPointsShowLess;
+
+  /// Area card: body/tension entry point — title
+  ///
+  /// In de, this message translates to:
+  /// **'Körper & Therapie'**
+  String get entryPointsBodyTitle;
+
+  /// Area card: body — one-line teaser
+  ///
+  /// In de, this message translates to:
+  /// **'Verspannungen, Fehlhaltungen, Empfehlung vom Therapeuten'**
+  String get entryPointsBodyTeaser;
+
+  /// Area card: body — expanded detail text
+  ///
+  /// In de, this message translates to:
+  /// **'Aktive Reflexmuster können zu dauerhafter Muskelanspannung führen — unabhängig von äußeren Auslösern. Physiotherapeut·innen und Ergotherapeut·innen empfehlen Reflexintegration häufig ergänzend, wenn klassische Behandlung nicht vollständig greift.\n\nTypische Hinweise: chronische Rücken- oder Nackenverspannungen, Kieferspannung, Fehlhaltungen die immer wiederkehren.'**
+  String get entryPointsBodyDetail;
+
+  /// Area card: body — chip label
+  ///
+  /// In de, this message translates to:
+  /// **'Körper'**
+  String get entryPointsBodyChip;
+
+  /// Area card: body — book citation (published edition titles per language)
+  ///
+  /// In de, this message translates to:
+  /// **'Vgl. Goddard Blythe: (Über)leben mit Reflexen'**
+  String get entryPointsBodySource;
+
+  /// Area card: coordination/performance — title
+  ///
+  /// In de, this message translates to:
+  /// **'Koordination & Leistung'**
+  String get entryPointsCoordinationTitle;
+
+  /// Area card: coordination — one-line teaser
+  ///
+  /// In de, this message translates to:
+  /// **'Bewegungsqualität, Gleichgewicht, sportliche Koordination'**
+  String get entryPointsCoordinationTeaser;
+
+  /// Area card: coordination — expanded detail text
+  ///
+  /// In de, this message translates to:
+  /// **'Unintegrierte Reflexe binden motorische Ressourcen — was sich in eingeschränkter Koordination, verlangsamten Reaktionen oder Gleichgewichtsproblemen zeigen kann. Sportler·innen nutzen Reflexintegration um koordinative Grenzen zu erweitern, die durch klassisches Training nicht erreichbar sind.\n\nTypische Hinweise: Bewegungsabläufe fühlen sich schwerer an als nötig, Asymmetrien, Gleichgewicht unter Druck.'**
+  String get entryPointsCoordinationDetail;
+
+  /// Area card: coordination — chip label
+  ///
+  /// In de, this message translates to:
+  /// **'Koordination'**
+  String get entryPointsCoordinationChip;
+
+  /// Area card: coordination — book citation (published edition titles per language)
+  ///
+  /// In de, this message translates to:
+  /// **'Vgl. Blomberg: Bewegungen die heilen'**
+  String get entryPointsCoordinationSource;
+
+  /// Area card: emotional regulation — title
+  ///
+  /// In de, this message translates to:
+  /// **'Emotionale Regulation & Innenwelt'**
+  String get entryPointsEmotionTitle;
+
+  /// Area card: emotional regulation — one-line teaser
+  ///
+  /// In de, this message translates to:
+  /// **'Stressreaktionen, Reizempfindlichkeit, Selbstwahrnehmung'**
+  String get entryPointsEmotionTeaser;
+
+  /// Area card: emotional regulation — expanded detail text
+  ///
+  /// In de, this message translates to:
+  /// **'Manche Reflexmuster beeinflussen direkt wie das Nervensystem auf Reize reagiert — Stressempfindlichkeit, emotionale Reaktivität, Reizüberflutung. Rhythmische Bewegung kann helfen, das Nervensystem zu regulieren und Zugang zu inneren Zuständen zu finden.\n\nTypische Hinweise: schnelle emotionale Überflutung, Schwierigkeit zur Ruhe zu kommen, Körperspannung in Stress. Verläuft sehr individuell.'**
+  String get entryPointsEmotionDetail;
+
+  /// Area card: emotional regulation — chip label
+  ///
+  /// In de, this message translates to:
+  /// **'Emotionale Regulation'**
+  String get entryPointsEmotionChip;
+
+  /// Area card: emotional regulation — book citation
+  ///
+  /// In de, this message translates to:
+  /// **'Vgl. Blomberg: Bewegungen die heilen'**
+  String get entryPointsEmotionSource;
+
+  /// Area card: my child — title
+  ///
+  /// In de, this message translates to:
+  /// **'Mein Kind: Schule & Entwicklung'**
+  String get entryPointsChildTitle;
+
+  /// Area card: my child — one-line teaser
+  ///
+  /// In de, this message translates to:
+  /// **'Konzentration, Lernen, Schule — als Elternteil'**
+  String get entryPointsChildTeaser;
+
+  /// Area card: my child — expanded detail text
+  ///
+  /// In de, this message translates to:
+  /// **'Frühkindliche Reflexmuster die nicht vollständig integriert wurden, können sich später in Schwierigkeiten beim Lesen, Schreiben oder Konzentrieren zeigen — oft ohne klare organische Ursache.\n\nTypische Hinweise: Kind kommt in der Schule nicht mit, kann sich schwer fokussieren, ist unruhig im Unterricht, Feinmotorik oder Lesen bereitet Mühe.'**
+  String get entryPointsChildDetail;
+
+  /// Area card: my child — chip label
+  ///
+  /// In de, this message translates to:
+  /// **'Mein Kind'**
+  String get entryPointsChildChip;
+
+  /// Area card: my child — book citation
+  ///
+  /// In de, this message translates to:
+  /// **'Vgl. Goddard Blythe: (Über)leben mit Reflexen'**
+  String get entryPointsChildSource;
+
+  /// Area card: curiosity — title
+  ///
+  /// In de, this message translates to:
+  /// **'Neugierde & Entdeckung'**
+  String get entryPointsCuriosityTitle;
+
+  /// Area card: curiosity — one-line teaser
+  ///
+  /// In de, this message translates to:
+  /// **'Kein konkretes Problem — einfach erkunden'**
+  String get entryPointsCuriosityTeaser;
+
+  /// Area card: curiosity — expanded detail text
+  ///
+  /// In de, this message translates to:
+  /// **'Manche Menschen kommen ohne konkretes Symptom — sie haben von Reflexintegration gehört und sind neugierig was rhythmische Bewegung über mehrere Wochen verändert. Das ist ein vollständig gültiger Einstieg.\n\nDas Training wirkt unabhängig davon ob man ein \"Problem\" benennen kann oder nicht.'**
+  String get entryPointsCuriosityDetail;
+
+  /// Area card: curiosity — chip label
+  ///
+  /// In de, this message translates to:
+  /// **'Einfach neugierig'**
+  String get entryPointsCuriosityChip;
+
+  /// Profile choice screen: headline
+  ///
+  /// In de, this message translates to:
+  /// **'Für wen trainierst du?'**
+  String get forWhomTitle;
+
+  /// Profile choice screen: subline
+  ///
+  /// In de, this message translates to:
+  /// **'Du kannst später jederzeit weitere Profile hinzufügen.'**
+  String get forWhomSubtitle;
+
+  /// Option card: train for myself — title
+  ///
+  /// In de, this message translates to:
+  /// **'Für mich'**
+  String get forWhomSelfTitle;
+
+  /// Option card: train for myself — subtitle
+  ///
+  /// In de, this message translates to:
+  /// **'Eigenes Erwachsenenprofil anlegen'**
+  String get forWhomSelfSubtitle;
+
+  /// Option card: train for my child — title
+  ///
+  /// In de, this message translates to:
+  /// **'Für mein Kind'**
+  String get forWhomChildTitle;
+
+  /// Option card: train for my child — subtitle
+  ///
+  /// In de, this message translates to:
+  /// **'Kinderprofil anlegen'**
+  String get forWhomChildSubtitle;
+
+  /// Text field label for the child's name
+  ///
+  /// In de, this message translates to:
+  /// **'Name oder Spitzname'**
+  String get forWhomChildNameLabel;
+
+  /// Birth date field label (asterisk = required)
+  ///
+  /// In de, this message translates to:
+  /// **'Geburtsdatum *'**
+  String get forWhomBirthDateLabel;
+
+  /// Helper text under the birth date field
+  ///
+  /// In de, this message translates to:
+  /// **'Pflichtfeld – für die Altersauswertung benötigt'**
+  String get forWhomBirthDateHelper;
+
+  /// Date picker helpText for the birth date
+  ///
+  /// In de, this message translates to:
+  /// **'Geburtsdatum auswählen'**
+  String get forWhomBirthDatePickerHelp;
+
+  /// Placeholder shown before a date was picked
+  ///
+  /// In de, this message translates to:
+  /// **'Datum auswählen'**
+  String get forWhomSelectDate;
+
+  /// Submit button to create the child profile
+  ///
+  /// In de, this message translates to:
+  /// **'Kinderprofil anlegen'**
+  String get forWhomCreateChildProfile;
+
+  /// Snackbar when name or birth date is missing
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte Name und Geburtsdatum angeben.'**
+  String get forWhomMissingFields;
+
+  /// Snackbar when profile creation fails
+  ///
+  /// In de, this message translates to:
+  /// **'Fehler beim Anlegen: {error}'**
+  String forWhomCreateError(String error);
+
+  /// Bottom sheet title after profile creation
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil für {name} anlegen?'**
+  String forWhomReflexProfileSheetTitle(String name);
+
+  /// Bottom sheet body explaining the questionnaire
+  ///
+  /// In de, this message translates to:
+  /// **'Der Fragebogen dauert ca. 10–15 Minuten und hilft dabei, gezielt das passende Training zu empfehlen.'**
+  String get forWhomReflexProfileSheetBody;
+
+  /// Primary button: start the reflex profile questionnaire now
+  ///
+  /// In de, this message translates to:
+  /// **'Jetzt Reflexprofil ausfüllen'**
+  String get forWhomStartReflexProfile;
+
+  /// Secondary button: skip questionnaire, go to training
+  ///
+  /// In de, this message translates to:
+  /// **'Später — direkt zum Training'**
+  String get forWhomLaterToTraining;
 }
 
 class _AppLocalizationsDelegate

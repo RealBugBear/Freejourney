@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/navigation/app_router.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../providers/entry_points_provider.dart';
 
 class EntryPointsScreen extends ConsumerStatefulWidget {
@@ -22,6 +23,8 @@ class _EntryPointsScreenState extends ConsumerState<EntryPointsScreen> {
   @override
   Widget build(BuildContext context) {
     final selected = ref.watch(entryPointsProvider);
+    final l10n = AppLocalizations.of(context);
+    final areas = _areas(l10n);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -30,7 +33,7 @@ class _EntryPointsScreenState extends ConsumerState<EntryPointsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Viele Wege führen hierher',
+                l10n.entryPointsTitle,
                 style: Theme.of(context)
                     .textTheme
                     .headlineSmall
@@ -38,15 +41,14 @@ class _EntryPointsScreenState extends ConsumerState<EntryPointsScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Reflexintegration ist für sehr unterschiedliche Menschen relevant. '
-                'Schau, was für dich klingt.',
+                l10n.entryPointsSubtitle,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       height: 1.5,
                     ),
               ),
               const SizedBox(height: 20),
-              ..._kAreas.map(
+              ...areas.map(
                 (a) => _AreaCard(
                   area: a,
                   expanded: _expanded.contains(a.key),
@@ -55,7 +57,7 @@ class _EntryPointsScreenState extends ConsumerState<EntryPointsScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Was klingt für dich vertraut? (optional, Mehrfachauswahl)',
+                l10n.entryPointsChipQuestion,
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
@@ -65,7 +67,7 @@ class _EntryPointsScreenState extends ConsumerState<EntryPointsScreen> {
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: _kAreas.map((a) {
+                children: areas.map((a) {
                   return FilterChip(
                     label: Text(a.chipLabel),
                     selected: selected.contains(a.key),
@@ -76,7 +78,7 @@ class _EntryPointsScreenState extends ConsumerState<EntryPointsScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Deine Auswahl ändert nichts am Training — sie hilft uns zu verstehen, wer die App nutzt.',
+                l10n.entryPointsSelectionNote,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontStyle: FontStyle.italic,
@@ -87,7 +89,7 @@ class _EntryPointsScreenState extends ConsumerState<EntryPointsScreen> {
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: () => context.go(Routes.dashboard),
-                  child: const Text('Weiter'),
+                  child: Text(l10n.next),
                 ),
               ),
             ],
@@ -115,70 +117,49 @@ class _AreaData {
   final String? source;
 }
 
-const _kAreas = [
-  _AreaData(
-    key: 'koerper_therapie',
-    title: 'Körper & Therapie',
-    teaser: 'Verspannungen, Fehlhaltungen, Empfehlung vom Therapeuten',
-    detail:
-        'Aktive Reflexmuster können zu dauerhafter Muskelanspannung führen — '
-        'unabhängig von äußeren Auslösern. Physiotherapeut·innen und Ergotherapeut·innen '
-        'empfehlen Reflexintegration häufig ergänzend, wenn klassische Behandlung nicht '
-        'vollständig greift.\n\nTypische Hinweise: chronische Rücken- oder Nackenverspannungen, '
-        'Kieferspannung, Fehlhaltungen die immer wiederkehren.',
-    chipLabel: 'Körper',
-    source: 'Vgl. Goddard Blythe: (Über)leben mit Reflexen',
-  ),
-  _AreaData(
-    key: 'koordination_leistung',
-    title: 'Koordination & Leistung',
-    teaser: 'Bewegungsqualität, Gleichgewicht, sportliche Koordination',
-    detail:
-        'Unintegrierte Reflexe binden motorische Ressourcen — was sich in eingeschränkter '
-        'Koordination, verlangsamten Reaktionen oder Gleichgewichtsproblemen zeigen kann. '
-        'Sportler·innen nutzen Reflexintegration um koordinative Grenzen zu erweitern, '
-        'die durch klassisches Training nicht erreichbar sind.\n\nTypische Hinweise: '
-        'Bewegungsabläufe fühlen sich schwerer an als nötig, Asymmetrien, Gleichgewicht unter Druck.',
-    chipLabel: 'Koordination',
-    source: 'Vgl. Blomberg: Bewegungen die heilen',
-  ),
-  _AreaData(
-    key: 'emotionale_regulation',
-    title: 'Emotionale Regulation & Innenwelt',
-    teaser: 'Stressreaktionen, Reizempfindlichkeit, Selbstwahrnehmung',
-    detail:
-        'Manche Reflexmuster beeinflussen direkt wie das Nervensystem auf Reize reagiert — '
-        'Stressempfindlichkeit, emotionale Reaktivität, Reizüberflutung. Rhythmische Bewegung '
-        'kann helfen, das Nervensystem zu regulieren und Zugang zu inneren Zuständen zu finden.\n\n'
-        'Typische Hinweise: schnelle emotionale Überflutung, Schwierigkeit zur Ruhe zu kommen, '
-        'Körperspannung in Stress. Verläuft sehr individuell.',
-    chipLabel: 'Emotionale Regulation',
-    source: 'Vgl. Blomberg: Bewegungen die heilen',
-  ),
-  _AreaData(
-    key: 'mein_kind',
-    title: 'Mein Kind: Schule & Entwicklung',
-    teaser: 'Konzentration, Lernen, Schule — als Elternteil',
-    detail:
-        'Frühkindliche Reflexmuster die nicht vollständig integriert wurden, können sich später '
-        'in Schwierigkeiten beim Lesen, Schreiben oder Konzentrieren zeigen — oft ohne klare '
-        'organische Ursache.\n\nTypische Hinweise: Kind kommt in der Schule nicht mit, kann sich '
-        'schwer fokussieren, ist unruhig im Unterricht, Feinmotorik oder Lesen bereitet Mühe.',
-    chipLabel: 'Mein Kind',
-    source: 'Vgl. Goddard Blythe: (Über)leben mit Reflexen',
-  ),
-  _AreaData(
-    key: 'neugierde',
-    title: 'Neugierde & Entdeckung',
-    teaser: 'Kein konkretes Problem — einfach erkunden',
-    detail:
-        'Manche Menschen kommen ohne konkretes Symptom — sie haben von Reflexintegration gehört '
-        'und sind neugierig was rhythmische Bewegung über mehrere Wochen verändert. '
-        'Das ist ein vollständig gültiger Einstieg.\n\nDas Training wirkt unabhängig davon ob '
-        'man ein "Problem" benennen kann oder nicht.',
-    chipLabel: 'Einfach neugierig',
-  ),
-];
+/// The five entry-point areas. Keys are stable analytics identifiers and must
+/// not change; all visible text comes from [AppLocalizations].
+List<_AreaData> _areas(AppLocalizations l10n) => [
+      _AreaData(
+        key: 'koerper_therapie',
+        title: l10n.entryPointsBodyTitle,
+        teaser: l10n.entryPointsBodyTeaser,
+        detail: l10n.entryPointsBodyDetail,
+        chipLabel: l10n.entryPointsBodyChip,
+        source: l10n.entryPointsBodySource,
+      ),
+      _AreaData(
+        key: 'koordination_leistung',
+        title: l10n.entryPointsCoordinationTitle,
+        teaser: l10n.entryPointsCoordinationTeaser,
+        detail: l10n.entryPointsCoordinationDetail,
+        chipLabel: l10n.entryPointsCoordinationChip,
+        source: l10n.entryPointsCoordinationSource,
+      ),
+      _AreaData(
+        key: 'emotionale_regulation',
+        title: l10n.entryPointsEmotionTitle,
+        teaser: l10n.entryPointsEmotionTeaser,
+        detail: l10n.entryPointsEmotionDetail,
+        chipLabel: l10n.entryPointsEmotionChip,
+        source: l10n.entryPointsEmotionSource,
+      ),
+      _AreaData(
+        key: 'mein_kind',
+        title: l10n.entryPointsChildTitle,
+        teaser: l10n.entryPointsChildTeaser,
+        detail: l10n.entryPointsChildDetail,
+        chipLabel: l10n.entryPointsChildChip,
+        source: l10n.entryPointsChildSource,
+      ),
+      _AreaData(
+        key: 'neugierde',
+        title: l10n.entryPointsCuriosityTitle,
+        teaser: l10n.entryPointsCuriosityTeaser,
+        detail: l10n.entryPointsCuriosityDetail,
+        chipLabel: l10n.entryPointsCuriosityChip,
+      ),
+    ];
 
 class _AreaCard extends StatelessWidget {
   const _AreaCard({
@@ -231,7 +212,9 @@ class _AreaCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    expanded ? 'Weniger ↑' : 'Mehr ↓',
+                    expanded
+                        ? '${AppLocalizations.of(context).entryPointsShowLess} ↑'
+                        : '${AppLocalizations.of(context).entryPointsShowMore} ↓',
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: cs.primary,
                           fontWeight: FontWeight.w500,

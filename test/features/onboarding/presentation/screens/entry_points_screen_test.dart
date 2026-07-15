@@ -4,9 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:corejourney/features/onboarding/presentation/screens/entry_points_screen.dart';
 import 'package:corejourney/features/onboarding/presentation/providers/entry_points_provider.dart';
+import 'package:corejourney/l10n/app_localizations.dart';
 
 Widget _wrap(Widget child) => ProviderScope(
       child: MaterialApp.router(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('de'),
         routerConfig: GoRouter(
           routes: [
             GoRoute(path: '/', builder: (_, __) => child),
@@ -46,6 +50,9 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: MaterialApp.router(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('de'),
           routerConfig: GoRouter(
             routes: [
               GoRoute(path: '/', builder: (_, __) => const EntryPointsScreen()),

@@ -1047,4 +1047,171 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminTrainerSuspend => 'Suspend';
+
+  @override
+  String get saving => 'Saving…';
+
+  @override
+  String get entryPointsTitle => 'Many Paths Lead Here';
+
+  @override
+  String get entryPointsSubtitle =>
+      'Reflex integration matters to very different people. See what sounds like you.';
+
+  @override
+  String get entryPointsChipQuestion =>
+      'What sounds familiar to you? (optional, choose any)';
+
+  @override
+  String get entryPointsSelectionNote =>
+      'Your selection doesn\'t change your training — it helps us understand who uses the app.';
+
+  @override
+  String get entryPointsShowMore => 'More';
+
+  @override
+  String get entryPointsShowLess => 'Less';
+
+  @override
+  String get entryPointsBodyTitle => 'Body & Tension';
+
+  @override
+  String get entryPointsBodyTeaser =>
+      'Muscle tension, posture patterns, a therapist\'s recommendation';
+
+  @override
+  String get entryPointsBodyDetail =>
+      'Active reflex patterns can keep muscles in constant tension — independent of outside triggers. Physical and occupational therapists often recommend reflex integration exercises alongside their own work when recurring patterns don\'t fully release.\n\nTypical signs: chronic back or neck tension, jaw tension, posture patterns that keep coming back.';
+
+  @override
+  String get entryPointsBodyChip => 'Body';
+
+  @override
+  String get entryPointsBodySource =>
+      'See Goddard Blythe: Reflexes, Learning and Behavior';
+
+  @override
+  String get entryPointsCoordinationTitle => 'Coordination & Performance';
+
+  @override
+  String get entryPointsCoordinationTeaser =>
+      'Movement quality, balance, athletic coordination';
+
+  @override
+  String get entryPointsCoordinationDetail =>
+      'Unintegrated reflexes tie up motor resources — which can show up as limited coordination, slower reactions, or balance difficulties. Athletes use reflex integration to move past coordination limits that regular training alone doesn\'t reach.\n\nTypical signs: movements feel harder than they should, asymmetries, balance under pressure.';
+
+  @override
+  String get entryPointsCoordinationChip => 'Coordination';
+
+  @override
+  String get entryPointsCoordinationSource =>
+      'See Blomberg: Movements That Heal';
+
+  @override
+  String get entryPointsEmotionTitle => 'Emotional Regulation & Inner Life';
+
+  @override
+  String get entryPointsEmotionTeaser =>
+      'Stress responses, sensory sensitivity, self-awareness';
+
+  @override
+  String get entryPointsEmotionDetail =>
+      'Some reflex patterns directly influence how the nervous system responds to stimulation — stress sensitivity, emotional reactivity, sensory overload. Rhythmic movement can help the nervous system settle and open access to inner states.\n\nTypical signs: quick emotional flooding, difficulty winding down, body tension under stress. This varies greatly from person to person.';
+
+  @override
+  String get entryPointsEmotionChip => 'Emotional Regulation';
+
+  @override
+  String get entryPointsEmotionSource => 'See Blomberg: Movements That Heal';
+
+  @override
+  String get entryPointsChildTitle => 'My Child: School & Development';
+
+  @override
+  String get entryPointsChildTeaser => 'Focus, learning, school — as a parent';
+
+  @override
+  String get entryPointsChildDetail =>
+      'Early reflex patterns that were never fully integrated can show up later as difficulties with reading, writing, or concentration — often without a clear physical cause.\n\nTypical signs: your child struggles to keep up at school, finds it hard to focus, is restless in class, or finds fine motor tasks or reading a real effort.';
+
+  @override
+  String get entryPointsChildChip => 'My Child';
+
+  @override
+  String get entryPointsChildSource =>
+      'See Goddard Blythe: Reflexes, Learning and Behavior';
+
+  @override
+  String get entryPointsCuriosityTitle => 'Curiosity & Exploration';
+
+  @override
+  String get entryPointsCuriosityTeaser =>
+      'No specific concern — just exploring';
+
+  @override
+  String get entryPointsCuriosityDetail =>
+      'Some people arrive without a specific symptom — they\'ve heard about reflex integration and are curious what several weeks of rhythmic movement will change. That is a completely valid way to start.\n\nYou don\'t need to name a \"problem\" to begin the training.';
+
+  @override
+  String get entryPointsCuriosityChip => 'Just Curious';
+
+  @override
+  String get forWhomTitle => 'Who Are You Training For?';
+
+  @override
+  String get forWhomSubtitle => 'You can add more profiles at any time.';
+
+  @override
+  String get forWhomSelfTitle => 'For Myself';
+
+  @override
+  String get forWhomSelfSubtitle => 'Create your own adult profile';
+
+  @override
+  String get forWhomChildTitle => 'For My Child';
+
+  @override
+  String get forWhomChildSubtitle => 'Create a child profile';
+
+  @override
+  String get forWhomChildNameLabel => 'Name or nickname';
+
+  @override
+  String get forWhomBirthDateLabel => 'Date of birth *';
+
+  @override
+  String get forWhomBirthDateHelper => 'Required — used for age-based results';
+
+  @override
+  String get forWhomBirthDatePickerHelp => 'Select date of birth';
+
+  @override
+  String get forWhomSelectDate => 'Select date';
+
+  @override
+  String get forWhomCreateChildProfile => 'Create Child Profile';
+
+  @override
+  String get forWhomMissingFields => 'Please enter a name and date of birth.';
+
+  @override
+  String forWhomCreateError(String error) {
+    return 'Could not create the profile: $error';
+  }
+
+  @override
+  String forWhomReflexProfileSheetTitle(String name) {
+    return 'Create a reflex profile for $name?';
+  }
+
+  @override
+  String get forWhomReflexProfileSheetBody =>
+      'The questionnaire takes about 10–15 minutes and helps us recommend the right training.';
+
+  @override
+  String get forWhomStartReflexProfile => 'Start the Reflex Profile Now';
+
+  @override
+  String get forWhomLaterToTraining => 'Later — Straight to Training';
 }
