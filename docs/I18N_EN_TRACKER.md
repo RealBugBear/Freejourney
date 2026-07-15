@@ -254,3 +254,8 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
   Gate ist als `make i18n-check` in `release-readiness-mobile` eingebunden; 14 Python-Tests
   und der reale Katalog mit **445/445 Keys** sind grün. Das Hardcode-Gate wird bewusst erst
   bei Audit 0 aktiviert und bleibt Teil der offenen Phase 5.
+- **2026-07-15, Profil-Locale-Sync:** Die authentifizierte Sprachwahl wird best-effort in
+  `profiles.locale` geschrieben. `SettingsNotifier` synchronisiert nach einem expliziten
+  Sprachwechsel und beim Neuaufbau nach bestehender Session, Sign-in oder Token-Refresh;
+  lokale Auswahl/App-Start werden bei einem Netzwerkfehler nie blockiert. Kein Schema-Change
+  und kein Prod-Zugriff. Zwei neue Unit-Tests decken Wechsel und Session-Restore ab.

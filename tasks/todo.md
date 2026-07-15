@@ -123,9 +123,9 @@ keine Rechtstexte, Flag bleibt false.
       Flächen externalisieren; Logs Englisch; Tests in Feature-Commits.
 - [ ] 11. Admin, Dev-Tools und Core-Ränder (Router, Onboarding-Hints, Bootstrap,
       DB-/Sync-/Fehlerpfade) externalisieren; technische Logs Englisch.
-- [ ] 12. Systemebene: locale-aware Datum/Zahl, App-Locale in `profiles.locale`,
-      client- und serverseitige Push-Copy, iOS InfoPlist.strings de/en,
-      Android-Ressourcen; Deploy/Live-Änderungen nur nach Founder-Go.
+- [ ] 12. Systemebene: `profiles.locale`-Sync lokal umgesetzt; locale-aware
+      Datum/Zahl, client-/serverseitige Push-Copy, iOS InfoPlist.strings de/en
+      und Android-Ressourcen verbleiben; Deploy/Live-Änderungen nur nach Founder-Go.
 - [ ] 13. Dauerhafte Gates: ARB-Key-/Placeholder-Parität, Leerwerte und
       EN-Umlautprüfung sind als `make i18n-check` in Release-Readiness aktiv;
       Hardcode-Audit erst bei Endstand 0 aktivieren.

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/training/domain/models/training_session.dart';
+import 'profile_locale_sync_service.dart';
 
 // ── Keys ─────────────────────────────────────────────────────────────────────
 
@@ -95,8 +98,14 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
 class SettingsNotifier extends StateNotifier<AppSettings> {
   final SharedPreferences _prefs;
   final String? _userId;
+  final ProfileLocaleSyncService? _profileLocaleSyncService;
 
-  SettingsNotifier(this._prefs, this._userId) : super(_load(_prefs, _userId));
+  SettingsNotifier(
+    this._prefs,
+    this._userId, {
+    ProfileLocaleSyncService? profileLocaleSyncService,
+  })  : _profileLocaleSyncService = profileLocaleSyncService,
+        super(_load(_prefs, _userId));
 
   static AppSettings _load(SharedPreferences prefs, String? userId) {
     final modeIndex = prefs.getInt(_kFeedbackMode) ?? 1;
@@ -144,6 +153,18 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
   Future<void> setLanguage(String code) async {
     state = state.copyWith(languageCode: code, hasSelectedLanguage: true);
     await _prefs.setString(languagePreferenceKey, code);
+    await syncCurrentLanguage();
+  }
+
+  Future<void> syncCurrentLanguage() async {
+    final userId = _userId;
+    final service = _profileLocaleSyncService;
+    if (userId == null || service == null) return;
+
+    await service.syncLocale(
+      userId: userId,
+      languageCode: state.languageCode,
+    );
   }
 
   void setThemeMode(ThemeMode mode) {
@@ -187,7 +208,17 @@ final settingsProvider =
   // loading the correct user-scoped theme key each time.
   final userId = ref.watch(authStateProvider).valueOrNull?.session?.user.id ??
       Supabase.instance.client.auth.currentUser?.id;
-  return SettingsNotifier(prefs, userId);
+  final notifier = SettingsNotifier(
+    prefs,
+    userId,
+    profileLocaleSyncService: ref.watch(profileLocaleSyncServiceProvider),
+  );
+  if (userId != null) {
+    // Covers persisted sessions, sign-in and token refresh. This is deliberately
+    // best-effort and must not delay provider creation or app startup.
+    unawaited(notifier.syncCurrentLanguage());
+  }
+  return notifier;
 });
 
 final hasSelectedLanguageProvider = Provider<bool>((ref) {

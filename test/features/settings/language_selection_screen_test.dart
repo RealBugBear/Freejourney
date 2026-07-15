@@ -1,3 +1,4 @@
+import 'package:corejourney/core/settings/profile_locale_sync_service.dart';
 import 'package:corejourney/core/settings/settings_provider.dart';
 import 'package:corejourney/features/settings/presentation/screens/language_selection_screen.dart';
 import 'package:corejourney/l10n/app_localizations.dart';
@@ -5,6 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+class _RecordingLocaleSyncService implements ProfileLocaleSyncService {
+  final calls = <({String userId, String languageCode})>[];
+
+  @override
+  Future<void> syncLocale({
+    required String userId,
+    required String languageCode,
+  }) async {
+    calls.add((userId: userId, languageCode: languageCode));
+  }
+}
 
 void main() {
   test('settings language change updates state and persists', () async {
@@ -18,6 +31,42 @@ void main() {
     expect(notifier.state.hasSelectedLanguage, isTrue);
     expect(prefs.getString(languagePreferenceKey), 'en');
     expect(SettingsNotifier(prefs, null).state.languageCode, 'en');
+  });
+
+  test('authenticated language change syncs profiles.locale', () async {
+    SharedPreferences.setMockInitialValues({languagePreferenceKey: 'de'});
+    final prefs = await SharedPreferences.getInstance();
+    final syncService = _RecordingLocaleSyncService();
+    final notifier = SettingsNotifier(
+      prefs,
+      'user-123',
+      profileLocaleSyncService: syncService,
+    );
+
+    await notifier.setLanguage('en');
+
+    expect(
+      syncService.calls,
+      [(userId: 'user-123', languageCode: 'en')],
+    );
+  });
+
+  test('authenticated restore syncs the persisted language', () async {
+    SharedPreferences.setMockInitialValues({languagePreferenceKey: 'en'});
+    final prefs = await SharedPreferences.getInstance();
+    final syncService = _RecordingLocaleSyncService();
+    final notifier = SettingsNotifier(
+      prefs,
+      'user-123',
+      profileLocaleSyncService: syncService,
+    );
+
+    await notifier.syncCurrentLanguage();
+
+    expect(
+      syncService.calls,
+      [(userId: 'user-123', languageCode: 'en')],
+    );
   });
 
   testWidgets('previews English before login without saving prematurely',
