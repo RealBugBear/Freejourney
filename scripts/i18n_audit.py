@@ -162,17 +162,39 @@ def extract_strings(src: str):
 TECH_PATTERNS = [
     re.compile(r"^(https?|mailto|tel|sms|package|dart|file)[:/]"),
     re.compile(r"^assets?/"),
-    re.compile(r".*\.(png|jpe?g|svg|gif|webp|json|arb|ttf|otf|mp3|wav|mp4|mov|riv|pdf|html?|css|js|dart|sql|yaml|env)$", re.I),
+    re.compile(r".*\.(png|jpe?g|svg|gif|webp|json|arb|ttf|otf|mp3|wav|mp4|mov|riv|pdf|html?|css|js|dart|sql|yaml|env|txt|log)$", re.I),
     re.compile(r"^/[A-Za-z0-9_\-/:.⟦…⟧]*$"),             # route paths (incl. interp)
     re.compile(r"^:[A-Za-z][A-Za-z0-9_]*$"),            # named route parameter
     re.compile(r"^__[a-z0-9_]+$"),                       # internal sentinel value
+    re.compile(r"^_[a-z0-9_]+$"),                        # internal suffix/sentinel
+    re.compile(r"^-(wal|shm)$"),                          # SQLite sidecar suffixes
+    re.compile(r"^@[a-z][a-z0-9_]+/[a-z0-9_./\-]+$"),   # Android resource ID
+    re.compile(r"^corejourney/(timezone|calendar)$"),          # platform channel namespace
+    re.compile(
+        r"^(typing|presence:typing|trainer_alert):"
+        r"[a-z0-9_.⟦…⟧\-]+(:[a-z0-9_.⟦…⟧\-]+)*$"
+    ),
+    re.compile(r"^calshow:[0-9⟦…⟧]+$"),                  # iOS calendar URL
+    re.compile(r"^\.env(\.[A-Za-z0-9_\-]+)?$"),        # dotenv file name
+    re.compile(r"^reflexjourney@(?:unknown|⟦…⟧\+⟦…⟧)$"), # Sentry release ID
+    re.compile(r"^vm:entry-point$"),                           # Dart VM pragma option
+    re.compile(
+        r"^reflexjourney-⟦…⟧-⟦…⟧@reflexjourney\.app$"
+    ),  # generated iCalendar UID
+    re.compile(r"^(?:⟦…⟧){3}T(?:⟦…⟧){3}Z$"),          # iCalendar UTC value
+    re.compile(r"^[a-z_][a-z0-9_]*=⟦…⟧$"),              # structured log fragment
+    re.compile(r"^Bearer\s+⟦…⟧$"),                      # HTTP auth value
+    re.compile(r"^settings\.[A-Za-z0-9_.\-]*⟦…⟧$"),    # scoped preference key
     re.compile(r"^[a-z0-9⟦…⟧]+(?:[_.\-][a-z0-9⟦…⟧]+)+$"),  # snake.case keys, table names
     re.compile(r"^[a-z]+[A-Z][A-Za-z0-9]*$"),            # camelCase identifier
     re.compile(r"^[A-Z0-9_]{2,}$"),                      # SCREAMING_SNAKE / env names
     re.compile(r"^#?[0-9a-fA-F]{6,8}$"),                 # hex colors
     re.compile(r"^[\d\s.,:;+\-*/%()\[\]{}<>=!?|&^~#@'\"´`§$€⟦…⟧°]*$"),  # no real words
     re.compile(r"^(select|insert|update|delete|create|alter|drop|grant|with)\s", re.I),  # SQL
-    re.compile(r"^[dMyHhmsEQL]{1,6}([.,:\-/\s]+[dMyHhmsEQL]{1,6})*$"),  # DateFormat patterns
+    re.compile(
+        r"^[dMyHhmsEQLcaZzXx]{1,16}"
+        r"(?:[.,:\-_/·–\s]+[dMyHhmsEQLcaZzXx]{1,16})+$"
+    ),  # DateFormat patterns without rendered words
     re.compile(r"^(application|text|image|audio|video|multipart)/[a-z0-9.+\-]+$"),  # MIME
     re.compile(
         r"^(BEGIN|END|VERSION|PRODID|CALSCALE|METHOD|UID|DTSTAMP|DTSTART|"
@@ -202,6 +224,9 @@ DETECTION_PREFIX = re.compile(
     r"(?:==|!=)\s*$|"
     r"\bcase\s*$"
 )
+
+QUERY_PROJECTION_PREFIX = re.compile(r"\.select\s*\(\s*$")
+REGEXP_PREFIX = re.compile(r"\bRegExp\s*\(\s*$")
 
 # Single capitalized ASCII token that is NOT a known German word => class name etc.
 SINGLE_TOKEN = re.compile(r"^[A-Za-z][A-Za-z0-9]*$")
@@ -275,7 +300,15 @@ def is_german(text: str) -> bool:
     return len(weak) >= 2
 
 
-CTX_LOG = re.compile(r"appLogger|logger\.|\blog\.|debugPrint|\bprint\s*\(|Sentry|breadcrumb|\.severe\(|\.warning\(|\.info\(|\.fine\(|\.\b[diwef]\(", re.I)
+CTX_LOG = re.compile(
+    r"appLogger|logger\.|\blog\.|dev\.log|\b_dbg\s*\(|debugPrint|"
+    r"_debugFile[^;]*writeAsString|\bprint\s*\(|"
+    r"Sentry(?:Flutter)?\.(?:capture\w*|addBreadcrumb|init)|"
+    r"SentryService\.captureException|\bBreadcrumb\s*\(|"
+    r"NotificationService\.instance\.disable\s*\(|"
+    r"\.severe\(|\.warning\(|\.info\(|\.fine\(|\.\b[diwef]\(",
+    re.I,
+)
 CTX_THROW = re.compile(r"\bthrow\b|Exception\(|StateError\(|ArgumentError\(|UnsupportedError\(|FormatException\(|assert\(")
 CTX_PUSH = re.compile(r"Notification|notification|NotificationDetails|AndroidNotification|flutterLocalNotifications")
 CTX_ERROR = re.compile(r"SnackBar|showSnack|showError|AlertDialog|showDialog|errorMessage|failureMessage|\berror\b|\bfehler\b", re.I)
@@ -290,21 +323,29 @@ PUSH_PATH = re.compile(r"notification|push|fcm|reminder")
 # under a `...De:` / `...En:` field or `_defaultDe =`-style assignment is part of
 # a DE/EN pair and rendered locale-aware — not a hardcoding finding.
 BILINGUAL_FIELD = re.compile(r"\b[A-Za-z_]*(De|En)\s*[:=]")
+BARE_LOG_CALL = re.compile(r"\b(debug|info|warning|error|fatal)\s*\(")
 
 
-def categorize(rel_path: str, ctx: str, back_lines: list[str]) -> str:
+def categorize(
+    rel_path: str,
+    ctx: str,
+    back_lines: list[str],
+    *,
+    log_literal: bool = False,
+    exception_literal: bool = False,
+) -> str:
     p = rel_path.lower()
     if LEGAL_PATH.search(p):
         return "e-legal"
     for bl in reversed(back_lines):
         if BILINGUAL_FIELD.search(bl):
             return "ok-bilingual"
-    if CTX_LOG.search(ctx):
+    if log_literal:
+        return "d-log"
+    if exception_literal:
         return "d-log"
     if PUSH_PATH.search(p) or CTX_PUSH.search(ctx):
         return "c-push"
-    if CTX_THROW.search(ctx):
-        return "d-log"
     if CTX_ERROR.search(ctx):
         return "b-error"
     return "a-ui"
@@ -314,6 +355,47 @@ def is_detection_literal(src: str, start_offset: int) -> bool:
     """Return true only when this literal is comparison/matching input."""
     literal_prefix = src[max(0, start_offset - 120) : start_offset]
     return DETECTION_PREFIX.search(literal_prefix) is not None
+
+
+def _statement_prefix(src: str, start_offset: int) -> str:
+    """Return the current Dart statement up to a literal.
+
+    Logger and throw calls end in semicolons. Restricting classification to the
+    current statement prevents a nearby log call from hiding subsequent UI.
+    """
+    statement_start = src.rfind(";", 0, start_offset) + 1
+    return src[max(statement_start, start_offset - 4000) : start_offset]
+
+
+def is_log_literal(src: str, start_offset: int, rel_path: str = "") -> bool:
+    statement = _statement_prefix(src, start_offset)
+    if CTX_LOG.search(statement) is not None:
+        return True
+    return (
+        rel_path.endswith("core/logging/logger_service.dart")
+        and BARE_LOG_CALL.search(statement) is not None
+    )
+
+
+def is_exception_literal(src: str, start_offset: int) -> bool:
+    return CTX_THROW.search(_statement_prefix(src, start_offset)) is not None
+
+
+def is_query_projection_literal(src: str, start_offset: int) -> bool:
+    prefix = src[max(0, start_offset - 160) : start_offset]
+    return QUERY_PROJECTION_PREFIX.search(prefix) is not None
+
+
+def is_regexp_literal(src: str, start_offset: int) -> bool:
+    prefix = src[max(0, start_offset - 80) : start_offset]
+    return REGEXP_PREFIX.search(prefix) is not None
+
+
+def is_http_header_literal(text: str, src: str, start_offset: int) -> bool:
+    if text not in {"Authorization", "Content-Type", "Accept"}:
+        return False
+    statement = _statement_prefix(src, start_offset)
+    return re.search(r"\bheaders\s*:\s*\{", statement) is not None
 
 
 # hardcoded German locale in formatting code
@@ -343,14 +425,25 @@ def audit(gate: bool, tsv_path: str | None):
             src_line = lines[ln - 1].lstrip() if ln <= len(lines) else ""
             if src_line.startswith(("import ", "export ", "part ")):
                 continue
-            if is_detection_literal(src, start_offset):
+            if (
+                is_detection_literal(src, start_offset)
+                or is_query_projection_literal(src, start_offset)
+                or is_regexp_literal(src, start_offset)
+                or is_http_header_literal(text, src, start_offset)
+            ):
                 continue
             if is_technical(text):
                 continue
             german = is_german(text)
             back = lines[max(0, ln - 8) : ln]
             ctx = " ".join(lines[max(0, ln - 4) : ln])
-            cat = categorize(rel, ctx, back)
+            cat = categorize(
+                rel,
+                ctx,
+                back,
+                log_literal=is_log_literal(src, start_offset, rel),
+                exception_literal=is_exception_literal(src, start_offset),
+            )
             allowed = (rel, text) in allow or ("*", text) in allow
             findings.append(
                 {"file": rel, "line": ln, "cat": cat, "german": german,
