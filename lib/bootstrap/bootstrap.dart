@@ -58,9 +58,9 @@ class Bootstrap {
     _dbg('ensureInitialized OK');
 
     // Load environment variables
-    _dbg('loading $envFile');
+    _dbg('Loading environment file: $envFile');
     await dotenv.load(fileName: envFile);
-    _dbg('dotenv loaded');
+    _dbg('Environment file loaded');
 
     final config = AppConfig(
       environment: environment,
@@ -71,14 +71,17 @@ class Bootstrap {
       googleWebClientId: dotenv.env['GOOGLE_WEB_CLIENT_ID'] ?? '',
       googleIosClientId: dotenv.env['GOOGLE_IOS_CLIENT_ID'] ?? '',
     );
-    _dbg('AppConfig created, url=${config.supabaseUrl}');
+    _dbg('AppConfig created (Supabase URL=${config.supabaseUrl})');
 
     // Crash-Reporting (T15): no-op ohne SENTRY_DSN in der Env-Datei.
     // Früh initialisieren, damit Fehler der folgenden Init-Schritte
     // mitgemeldet werden; darf den Start selbst nie blockieren.
-    _dbg('SentryService.init start');
+    _dbg('SentryService initialization started');
     await SentryService.init(environment: environment);
-    _dbg('SentryService.init done (active=${SentryService.isActive})');
+    _dbg(
+      'SentryService initialization completed '
+      '(active=${SentryService.isActive})',
+    );
 
     // Initialize Supabase with file-based session storage.
     //
@@ -86,7 +89,7 @@ class Bootstrap {
     // getApplicationSupportDirectory() — fully persistent across launches on
     // all platforms, with zero dependency on SharedPreferences or
     // platform-specific UserDefaults channels.
-    _dbg('Supabase.initialize start');
+    _dbg('Supabase initialization started');
     final disableDeeplinkSessionDetection =
         Platform.isIOS && environment == AppEnvironment.development;
     await Supabase.initialize(
@@ -97,21 +100,21 @@ class Bootstrap {
         localStorage: FileLocalStorage(),
       ),
     );
-    _dbg('Supabase.initialize done');
+    _dbg('Supabase initialization completed');
 
     // Initialize local database.
     //
     // AppDatabase.open() uses getApplicationSupportDirectory() — the correct
     // location for app data on all platforms. Falls back to in-memory only if
     // the directory truly cannot be obtained (should never happen in production).
-    _dbg('AppDatabase.open() start');
+    _dbg('AppDatabase opening started');
     final database = await AppDatabase.open();
-    _dbg('AppDatabase.open() done');
+    _dbg('AppDatabase opening completed');
 
     // Initialize sync service
-    _dbg('SyncService()');
+    _dbg('SyncService construction started');
     final syncService = SyncService(database);
-    _dbg('SyncService() done');
+    _dbg('SyncService construction completed');
 
     // Initialize SharedPreferences.
     //
@@ -123,23 +126,25 @@ class Bootstrap {
     // On iOS, if the UserDefaults channel is still unavailable, fall back to an
     // in-memory stub — settings will reset per launch but no data is lost and
     // the user stays logged in.
-    _dbg('SharedPreferences.getInstance');
+    _dbg('SharedPreferences initialization started');
     SharedPreferences prefs;
     try {
       prefs = await SharedPreferences.getInstance();
-      _dbg('SharedPreferences: real instance obtained');
+      _dbg('SharedPreferences instance obtained');
     } catch (e) {
       _dbg(
-          'SharedPreferences: channel error ($e) — falling back to in-memory stub');
+        'SharedPreferences channel error ($e) — '
+        'falling back to in-memory stub',
+      );
       appLogger.w('SharedPreferences: using in-memory stub ($e)');
       // ignore: invalid_use_of_visible_for_testing_member
       SharedPreferences.setMockInitialValues({});
       prefs = await SharedPreferences.getInstance();
     }
-    _dbg('SharedPreferences done');
+    _dbg('SharedPreferences initialization completed');
 
     // Initialize local notifications
-    _dbg('NotificationService.initialize start');
+    _dbg('NotificationService initialization started');
     final enableIosProfileNotifications =
         dotenv.env['ENABLE_IOS_PROFILE_NOTIFICATIONS'] == 'true';
     final skipNotificationInit =
@@ -149,32 +154,35 @@ class Bootstrap {
         'safe mode on iOS profile build '
         '(set ENABLE_IOS_PROFILE_NOTIFICATIONS=true to override)',
       );
-      _dbg('NotificationService.initialize skipped for iOS/profile safe mode');
+      _dbg(
+        'NotificationService initialization skipped for '
+        'iOS profile safe mode',
+      );
     } else {
       try {
         await NotificationService.instance.initialize();
-        _dbg('NotificationService.initialize done');
+        _dbg('NotificationService initialization completed');
       } catch (e) {
-        _dbg('NotificationService.initialize FAILED: $e');
-        appLogger.w('NotificationService init skipped: $e');
+        _dbg('NotificationService initialization failed: $e');
+        appLogger.w('NotificationService initialization skipped: $e');
       }
     }
 
     // Initialize remote push notifications. Token registration is retried after
     // sign-in from app.dart, because auth may not be ready during cold start.
-    _dbg('PushNotificationService.initialize start');
+    _dbg('PushNotificationService initialization started');
     try {
       await PushNotificationService.instance.initialize(
         environment: environment,
       );
-      _dbg('PushNotificationService.initialize done');
+      _dbg('PushNotificationService initialization completed');
     } catch (e) {
-      _dbg('PushNotificationService.initialize FAILED: $e');
-      appLogger.w('Push notification init skipped: $e');
+      _dbg('PushNotificationService initialization failed: $e');
+      appLogger.w('Push notification initialization skipped: $e');
     }
 
     appLogger.i('Bootstrap complete [${config.envLabel}]');
-    _dbg('BOOTSTRAP COMPLETE');
+    _dbg('Bootstrap completed');
 
     return Bootstrap._(
       config: config,

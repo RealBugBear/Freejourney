@@ -24,8 +24,8 @@ void _dbg(String msg) {
 void main() {
   _dbg('main() entered');
   runZonedGuarded(_main, (error, stack) {
-    _dbg('ZONE ERROR: $error');
-    debugPrint('ZONE ERROR: $error\n$stack');
+    _dbg('Unhandled zone error: $error');
+    debugPrint('Unhandled zone error: $error\n$stack');
   });
 }
 
@@ -57,8 +57,8 @@ Future<void> _main() async {
   // Catch ALL unhandled Dart exceptions (including async, provider init, etc.)
   // that would otherwise silently kill the isolate and show a blank screen.
   PlatformDispatcher.instance.onError = (error, stack) {
-    dev.log('PLATFORM ERROR: $error\n$stack', name: 'cj');
-    debugPrint('FATAL UNHANDLED: $error\n$stack');
+    dev.log('Unhandled platform error: $error\n$stack', name: 'cj');
+    debugPrint('Unhandled platform error: $error\n$stack');
     return true; // handled — prevents OS crash dialog
   };
 
@@ -86,30 +86,30 @@ class _DevelopmentBootstrapAppState extends State<_DevelopmentBootstrapApp> {
 
   Future<void> _bootstrap() async {
     try {
-      _dbg('[_bootstrap] start');
+      _dbg('[DevelopmentBootstrap] initialization started');
       _setStatus('Loading .env.dev');
-      _dbg('[_bootstrap] calling Bootstrap.initialize');
+      _dbg('[DevelopmentBootstrap] calling Bootstrap.initialize');
       final bootstrap = await Bootstrap.initialize(
         envFile: '.env.dev',
         environment: AppEnvironment.development,
       );
-      _dbg('[_bootstrap] Bootstrap.initialize returned');
+      _dbg('[DevelopmentBootstrap] Bootstrap.initialize completed');
 
       _setStatus('Starting sync service');
       bootstrap.syncService.start();
-      _dbg('[_bootstrap] syncService started');
+      _dbg('[DevelopmentBootstrap] SyncService started');
 
       if (!mounted) return;
-      _dbg('[_bootstrap] about to setState with CoreJourneyApp');
+      _dbg('[DevelopmentBootstrap] mounting CoreJourneyApp');
       setState(() {
         _app = ProviderScope(
           overrides: bootstrapOverrides(bootstrap),
           child: const CoreJourneyApp(),
         );
       });
-      _dbg('[_bootstrap] COMPLETE - app is running');
+      _dbg('[DevelopmentBootstrap] app is running');
     } catch (e, st) {
-      _dbg('[_bootstrap] CAUGHT ERROR: $e');
+      _dbg('[DevelopmentBootstrap] initialization failed: $e');
       debugPrint('Bootstrap failed: $e\n$st');
       if (!mounted) return;
       setState(() {

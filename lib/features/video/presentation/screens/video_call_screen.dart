@@ -111,7 +111,7 @@ class _VideoCallScreenState extends ConsumerState<VideoCallScreen> {
     }
 
     appLogger
-        .d('VideoCallScreen: permissions granted, initialising Agora engine');
+        .d('VideoCallScreen: permissions granted, initializing Agora engine');
     try {
       final engine = createAgoraRtcEngine();
       setState(() => _statusText = 'Video-Engine wird gestartet ...');
@@ -119,7 +119,7 @@ class _VideoCallScreenState extends ConsumerState<VideoCallScreen> {
         appId: appId,
         channelProfile: ChannelProfileType.channelProfileCommunication,
       ));
-      appLogger.d('VideoCallScreen: engine initialised');
+      appLogger.d('VideoCallScreen: engine initialized');
       if (mounted) setState(() => _engine = engine);
 
       engine.registerEventHandler(RtcEngineEventHandler(

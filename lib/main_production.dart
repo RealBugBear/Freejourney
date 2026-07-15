@@ -14,7 +14,7 @@ void main() {
     // No stack traces exposed to the user; Sentry (falls aktiv, T15)
     // bekommt Fehlerobjekt + Stacktrace — sonst no-op.
     SentryService.captureException(error, stack);
-    debugPrint('Zone error: $error');
+    debugPrint('Unhandled zone error: $error');
   });
 }
 

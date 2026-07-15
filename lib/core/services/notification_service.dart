@@ -314,7 +314,7 @@ class NotificationService {
   Future<void> cancelDailyRepeatingReminders() async {
     await flutterLocalNotificationsPlugin.cancel(dailyReminderId);
     debugPrint(
-      '[NotificationService] Cancelled daily reminder id $dailyReminderId',
+      '[NotificationService] Canceled daily reminder id $dailyReminderId',
     );
   }
 

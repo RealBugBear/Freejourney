@@ -10,7 +10,7 @@ import 'config/app_config.dart';
 
 void main() {
   runZonedGuarded(_main, (error, stack) {
-    debugPrint('Zone error: $error');
+    debugPrint('Unhandled zone error: $error');
   });
 }
 

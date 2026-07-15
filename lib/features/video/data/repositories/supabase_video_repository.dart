@@ -100,7 +100,9 @@ class SupabaseVideoRepository implements VideoRepository {
       return token;
     } catch (e) {
       if (!allowEmptyDevToken) rethrow;
-      debugPrint('getAgoraToken error in DEV (using empty token): $e');
+      debugPrint(
+        'getAgoraToken failed in development mode; using empty token: $e',
+      );
       return '';
     }
   }

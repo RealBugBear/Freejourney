@@ -54,7 +54,7 @@ class SentryService {
       _active = true;
     } catch (e) {
       // Crash-Reporting darf den App-Start nie gefährden.
-      appLogger.w('Sentry init failed: $e');
+      appLogger.w('Sentry initialization failed: $e');
     }
   }
 

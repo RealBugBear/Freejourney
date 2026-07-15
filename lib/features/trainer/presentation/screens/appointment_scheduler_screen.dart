@@ -66,7 +66,7 @@ class _AppointmentSchedulerScreenState
       final slots = _buildSuggestedSlots(DateTime.now());
       if (mounted) setState(() => _freeSlots = slots);
     } catch (e) {
-      appLogger.e('Error loading free slots', error: e);
+      appLogger.e('Failed to load available appointment slots', error: e);
     } finally {
       if (mounted) setState(() => _loadingSlots = false);
     }
@@ -181,7 +181,7 @@ class _AppointmentSchedulerScreenState
 
       if (mounted) setState(() => _sent = true);
     } catch (e) {
-      appLogger.e('Error proposing appointment', error: e);
+      appLogger.e('Failed to propose appointment', error: e);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.toString())),
