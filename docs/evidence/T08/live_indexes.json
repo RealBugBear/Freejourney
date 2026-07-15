@@ -1,0 +1,1 @@
+[{"indexname":"experience_shares_pkey","indexdef":"CREATE UNIQUE INDEX experience_shares_pkey ON public.experience_shares USING btree (id)"}]

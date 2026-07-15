@@ -1,4 +1,13 @@
-# Trainer-Werkzeug-Abo „Trainer Studio“ — Planung (T27)
+# Trainer-Werkzeug-Abo „Trainer Studio” — Planung (T27)
+
+> **⚠️ ARCHIVIERTE VORARBEIT.** Verbindlich ist jetzt die am 2026-07-09
+> überprüfte
+> Spec `docs/superpowers/specs/2026-07-08-trainer-studio-design.md` + der
+> Planning-Prompt `docs/TRAINER_STUDIO_PROMPT.md`. Die Stripe- und IAP-Aussagen
+> unten sind historische Optionen, keine gültige Kaufweg-Entscheidung. Aktuelle
+> Präferenz ist ein iOS-IAP-Pilot via RevenueCat; Plattform, Gründerpreis und
+> Store-Mechanik haben vor dem Build eigene Gates. Bitte dieses Dokument nicht
+> als Ausführungsanweisung verwenden.
 
 Stand: 2026-07-07. Kontext: Mit **D5** (Trainer-Abrechnung direkt
 Trainer↔Klient, keine Provision) ist das Werkzeug-Abo das **einzige**
@@ -47,6 +56,11 @@ Eintrag/Sichtbarkeit betrifft) und ein starkes Akquise-Argument im Pilot:
 halben Preis.“ Preisvalidierung in Phase 1 (Interviews), nicht raten.
 
 ## 4. Kaufweg (wichtigste Architektur-Entscheidung)
+
+> **⚠️ VERWORFEN 2026-07-08:** Der Founder hat sich für **ein** Bezahlsystem
+> entschieden — Apple IAP via RevenueCat, wie die Nutzer-Abos. Der folgende
+> Stripe-Web-Checkout-Vorschlag ist dokumentarisch (Rückweg-Option, falls das
+> Studio je > ~150 zahlende Trainer erreicht — siehe Spec §5).
 
 **Empfehlung: Web-Checkout auf reflexjourney.app (Stripe Billing, B2B) —
 Entitlement wird server-seitig in `trainer_profiles` gesetzt, die App

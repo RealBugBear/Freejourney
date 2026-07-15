@@ -1,271 +1,662 @@
-# Payments Master Plan — alle Strukturen, Apple + Android
+# Payments Master Plan — Premium + Codes + Trainer Studio, Apple + Android
 
-**Stand:** 2026-07-10 · **Anlass:** Founder-Anfrage 2026-07-10 („fully flesh out
-payment on all my structures as well as all devices apple and android")
-**Verwandt:** `docs/MONETARISIERUNG_EVALUATION.md` (Entscheidungen D4/D5) ·
-`docs/superpowers/specs/2026-05-28-monetization-design.md` (Datenmodell, teilverworfen) ·
-`docs/superpowers/specs/2026-07-08-trainer-studio-design.md` (Studio) ·
-`docs/TRAINER_STUDIO_BUILD_PROMPTS.md` (Studio-Build-Prompts)
+**Stand:** 2026-07-10
+**Status:** Founder-Review ausstehend — ausführungsreife Planung, kein aktueller
+Build-Auftrag
+**Gilt für:** iPhone, iPad, Android-Smartphone und Android-Tablet
+**Nicht im Scope:** macOS, Windows, Web-Checkout und Trainer↔Klient-Zahlungen
+**Orchestrierung:** `docs/MONETIZATION_STUDIO_MASTER_PROMPT.md`
 
-Dieses Dokument bündelt ALLE Zahlungsstrukturen der App auf BEIDEN Plattformen
-in einen ausführbaren Plan. Es erfindet keine neuen Geschäftsentscheidungen:
-D4 (Trio, Struktur vor Aktivierung), D5 (keine Session-Provision) und
-„ein Bezahlsystem: Store-IAP via RevenueCat" (2026-07-08) gelten unverändert.
-Store-/Preis-/Rechtsaussagen sind Hypothesen und werden bei Ausführung gegen
-aktuelle Primärquellen geprüft (Standing Rule).
+Dieser Plan ersetzt die erste Fassung vom 2026-07-10. Er bewahrt Claudes gute
+Grundentscheidung — RevenueCat als gemeinsame Store-Abstraktion — korrigiert
+aber das Entitlement-Modell, die RevenueCat-Identität, Google-Play-Produkte,
+Gebühren, Kill-Switch-Semantik und Lifecycle-Lücken.
 
----
+## 0. Review der ersten Fassung
 
-## 1. Zahlungs-Inventar — was es gibt, was fehlt
+### Richtig und beibehalten
 
-| Struktur | Zweck | iOS | Android | Server |
-|---|---|---|---|---|
-| **Nutzer-Premium** (Trio B: Monat 12,99 € / Jahr 89,99 € ★ / Lifetime 149 €) | Zugang Paket 2+ | T23 ✅ UI+Modell, T25 ⛔ IAP fehlt | ❌ komplett offen | ✅ `profiles`-Entitlement + Schutz-Trigger live |
-| **Freischalt-Codes** (Gründungsnutzer) | Premium per Code, ohne Kauf | ✅ T24 live | ✅ T24 live (plattformneutral) | ✅ `access_codes` + RPC + Edge Function |
-| **Trainer Studio** (Abo 14,99 €/Monat / 119,99 €/Jahr, Hypothese) | Trainer-Werkzeuge | ⏸ T27 Planung | ⏸ T27 Planung | ❌ Entitlement fehlt (T27.1) |
-| ~~Session-Provision~~ | — | — | — | **gestrichen (D5)** — Trainer↔Klient rechnen direkt ab |
+- Nutzer-Premium und Trainer Studio werden als digitale App-Funktionen über
+  Apple IAP bzw. Google Play Billing verkauft.
+- RevenueCat verbindet beide Stores mit einem gemeinsamen App-Account.
+- Storepreise und Trial-Berechtigung kommen zur Laufzeit aus dem Store.
+- Premium und Studio sind getrennte Entitlements; Trainer↔Klient-Zahlungen
+  bleiben vollständig außerhalb der Plattform.
+- Der Gründer-Startpreis kann für aktive Abonnenten erhalten werden.
+- Store-, RevenueCat- und Live-Backend-Aktionen bleiben Founder-gated.
 
-Erkenntnis aus der Bestandsaufnahme: **Android ist in allen bisherigen
-Payment-Dokumenten ein blinder Fleck.** Die App baut und läuft auf Android
-(Flavors, Bundle-IDs, Asset Links ✅), aber es existiert kein Play-Console-Konto,
-kein Play-Billing-Plan und keine Android-Zeile in der Monetarisierungs-Evaluation.
-Dieser Plan schließt die Lücke.
+### Korrigiert
 
-## 2. Ziel-Architektur — ein Muster für alles
+1. **Ein Feld wie `premium_type` oder `studio_source` reicht nicht.** Ein Konto
+   kann gleichzeitig Code + Store-Abo oder Lifetime + alte Store-Events haben.
+   Store-Ablauf darf einen anderen gültigen Grant nie löschen.
+2. **RevenueCat ist Purchase-Status-Quelle; Supabase ist Autorisierungs-
+   projektion.** Storetransaktionen sind die zugrunde liegende Autorität.
+   `profiles.is_premium` bleibt vorerst eine Legacy-Projektion, nicht das
+   vollständige Ledger.
+3. **Kein `Purchases.logOut()` beim App-Logout.** RevenueCat erzeugt sonst eine
+   anonyme ID. Da die App Login voraussetzt, wird das SDK nur mit der
+   Supabase-UID konfiguriert; bei Accountwechsel wird direkt `logIn(neueUid)`
+   genutzt. Im ausgeloggten Zustand gibt es keine Kaufoberfläche.
+4. **Webhook-Events werden nicht als geordnete Wahrheit interpretiert.** Sie
+   können doppelt oder verzögert eintreffen. Ein Event löst eine
+   Reconciliation des aktuellen RevenueCat-Kundenstatus aus.
+5. **Compile-Flags sind kein operativer Kill Switch.** Sie benötigen ein
+   Store-Update. Serverseitig werden Verkaufs-Rollout und Feature-Zugang
+   getrennt; Compile-Flags bleiben nur zusätzliche Release-Sicherung.
+6. **Google-Produkte brauchen Subscription + Base Plans.** Monat/Jahr sind auf
+   Google in diesem Plan Base Plans eines Premium- bzw. Studio-Abos; RevenueCat
+   referenziert Subscription-ID plus Base-Plan-ID.
+7. **Google-Gebühren sind regions-/zeitabhängig.** Seit 2026-06-30 weist Google
+   für EWR/UK/USA bei Auto-Renew-Abos 10 % Service Fee + 5 % Billing Fee aus;
+   Lifetime und andere Einmalkäufe folgen anderen Regeln.
+8. **„Organisation“ ist kein kostenloser Shortcut.** Ein Google-
+   Organisationskonto benötigt u. a. eine D-U-N-S-Nummer. Das richtige Konto
+   richtet sich nach der realen Unternehmensidentität, nicht nur nach dem
+   Wunsch, das Personal-Account-Testgate zu vermeiden.
+9. **Family Sharing, Doppelkauf, Accountlöschung, Planwechsel, Lifetime bei
+   aktivem Abo, Grace Period und Restore brauchen explizite Regeln.** Sie sind
+   jetzt unten festgelegt.
 
-**RevenueCat ist die einzige Kauf-Schicht, für beide Plattformen und beide
-Abo-Strukturen (Premium + Studio).** Begründung:
+## 1. Zahlungsinventar
 
-- Ein SDK (`purchases_flutter`), ein Entitlement-Modell, eine Webhook-Quelle —
-  statt StoreKit- und Play-Billing-Sonderwege.
-- Cross-Plattform von Haus aus: Kauf auf dem iPhone, Nutzung auf dem
-  Android-Gerät desselben Kontos funktioniert, weil RevenueCat Entitlements am
-  App-User-ID (= Supabase-UID) führt, nicht am Gerät.
-- Der T23-`PurchaseService` wurde genau dafür als abstrakte Schnittstelle
-  gebaut — die Paywall-UI und ihre Tests bleiben unverändert.
+| Struktur | Produkt | Kaufweg | Entitlement |
+|---|---|---|---|
+| Nutzer Premium Monat | wiederkehrend | Apple/Google via RevenueCat | `premium` |
+| Nutzer Premium Jahr | wiederkehrend | Apple/Google via RevenueCat | `premium` |
+| Nutzer Premium Lifetime | einmalig, non-consumable/one-time | Apple/Google via RevenueCat | `premium` |
+| Gründungsnutzer-Code | interner dauerhafter Grant | vorhandene sichere Code-Einlösung | `premium` |
+| Freunde-/Familiencode | interner befristeter oder dauerhafter Grant | Benefit-Code-System | `premium` oder `studio` |
+| Studio Monat | wiederkehrend | Apple/Google via RevenueCat | `studio` |
+| Studio Jahr | wiederkehrend | Apple/Google via RevenueCat | `studio` |
+| Studio Free-MVP-Pilot | befristeter interner Grant | Pilotkampagne/Code/Allowlist | `studio` |
+| Studio-Test-/Reviewzugang | befristeter interner Grant | Review-/Admin-Runbook | `studio` |
+| Trainer-Sitzung | direkte Zahlung Trainer↔Klient | außerhalb der App/Plattform | keines |
+
+Kein Einzelpaket-Verkauf und kein Studio-Lifetime zum Start.
+
+## 2. Verbindliche Produktentscheidungen
+
+### PM-D1 — Storestrategie
+
+**Empfehlung:** Apple IAP auf iOS/iPadOS und Google Play Billing auf Android,
+beides via RevenueCat. Keine alternative Android-Abrechnung und kein externer
+Checkout in Phase 1. Die seit 2026 möglichen regionalen Alternativen erhöhen
+Steuer-, Verbraucherrechts-, Support- und Abrechnungsaufwand und widersprechen
+dem Ziel eines einfachen Solo-Founder-Betriebs.
+
+### PM-D2 — Plattform- und Accountzugang
+
+Ein Kauf entsperrt das jeweilige Entitlement für denselben angemeldeten
+Supabase-Account auf iPhone, iPad und Android. Kauf vor Login ist verboten.
+Kinderprofile besitzen keine eigenen Käufe; der Grant gilt für alle Profile
+unter dem Eltern-/Hauptkonto.
+
+### PM-D3 — Family Sharing
+
+**Empfehlung: AUS.** Reflex Journey hat bereits Familienprofile innerhalb eines
+Accounts. Apple Family Sharing würde bis zu fünf weitere Apple-Accounts mit
+eigenen App-Accounts einbeziehen und Support/Datenschutz/Restore unnötig
+verkomplizieren. Apple weist darauf hin, dass aktiviertes Family Sharing für
+ein IAP nicht wieder deaktiviert werden kann. Google teilt In-App-Käufe ohnehin
+nicht über die Family Library.
+
+### PM-D4 — Premium-Preisleiter
+
+Research-/Launch-Hypothese:
+
+| Produkt | Deutschland/EUR |
+|---|---:|
+| Premium Monat | 12,99 € |
+| Premium Jahr | 89,99 € |
+| Premium Lifetime | 149,00 € |
+
+Kein zusätzlicher Premium-Trial: Paket 1 ist der reale Produkttest. Alle
+Storefront-Preise werden im Store gepflegt und in der App lokalisiert angezeigt.
+
+### PM-D5 — Studio-Preisleiter
+
+Standardhypothese: 14,99 €/Monat und 119,99 €/Jahr, 14 Tage Trial für
+store-berechtigte Neukunden. Final nach Trainer-Research.
+
+Gründungsmechanik: Das Studio startet für Gründungs-Trainer zu einem niedrigeren
+Basispreis, z. B. 7,99 €/Monat und 69,99 €/Jahr. Beim allgemeinen Launch wird
+dasselbe Produkt erhöht; aktive Bestandsabonnenten bleiben bewusst in der
+erhaltenen Apple- bzw. Google-Preiskohorte.
+
+Zulässige Copy:
+
+> „Als Gründungs-Trainer behältst du deinen Startpreis, solange dein Abo aktiv
+> bleibt.“
+
+Nicht versprechen: „50 % für immer“. Nach Kündigung/Wiederabschluss gelten die
+jeweiligen Store-Regeln; Apple nennt für erhaltene Preise eine mögliche
+60-Tage-Wiederanmeldung, Google arbeitet mit Legacy-Preiskohorten. Die App
+garantiert darüber hinaus nichts.
+
+### PM-D6 — Planwechsel
+
+- Monat → Jahr und Jahr → Monat laufen über Store-Planwechsel, nicht über
+  eigene Proration.
+- Die UI zeigt nur storeseitig zulässige Wechsel und erklärt, wann sie wirksam
+  werden.
+- Premium ↔ Studio ist niemals ein Wechsel; beide können gleichzeitig aktiv
+  sein.
+- Ein Nutzer mit aktivem Premium-Abo bekommt Lifetime nicht als einfachen
+  Kaufbutton angeboten. Erst Abo verwalten/kündigen; Lifetime wird nach Ablauf
+  angeboten. So entsteht keine versehentliche Doppelzahlung.
+
+### PM-D7 — Cross-Store-Doppelkauf
+
+Ist `premium` oder `studio` bereits über den anderen Store aktiv, zeigt die App
+„Über Apple/Google aktiv“ und keinen zweiten Kaufbutton. Verwaltung führt zum
+ursprünglichen Store. Ein zweites paralleles Abo wird aktiv verhindert, soweit
+der synchronisierte RevenueCat-Status vorliegt.
+
+### PM-D8 — Restore und Accountwechsel
+
+RevenueCat Restore Behavior: **Transfer to new App User ID** als empfohlener
+Startwert. Ein Storekauf kann dadurch nach Accountlöschung/-neuanlage dem
+aktuell angemeldeten Konto zugeordnet werden; die Übertragung wird auditiert.
+Vor Produktion wird dieser Flow mit zwei Testkonten geprüft.
+
+Interne Code-Grants sind nicht im Store und daher nicht automatisch restorable.
+Bei Accountlöschung wird klar gewarnt: Storekäufe sind wiederherstellbar,
+Codezugänge nicht automatisch. Support kann nach Prüfung des ursprünglichen
+Codes einen alten Code sperren und einen Ersatzcode ausstellen. Keine
+personenbezogene Schattenakte nur für Restore anlegen.
+
+### PM-D9 — Grace, Retry, Pause, Refund
+
+- `CANCELLATION` bedeutet nur Auto-Renew aus; Zugriff bleibt bis Ablauf.
+- Billing Issue entzieht nicht automatisch. Während aktiver Store-Grace-Period
+  bleibt Zugriff bestehen.
+- Entzug erfolgt beim aktuell reconcilierten inaktiven/abgelaufenen Status.
+- Google-Pause entzieht erst beim tatsächlichen Ablauf/Pausebeginn gemäß
+  aktuellem Entitlement.
+- Refund/Revocation wird durch Reconciliation wirksam; ein separater gültiger
+  Code- oder Lifetime-Grant bleibt davon unberührt.
+- Apple Billing Grace Period wird bewusst konfiguriert (Empfehlung 16 Tage,
+  Paid-to-Paid; final vor Launch), Google-Grace analog bewusst festlegen.
+
+### PM-D10 — Offline
+
+- Gratisumfang funktioniert offline wie bisher.
+- Letzter serververifizierter Store-/Code-Status darf bis zum früheren von
+  `expires_at` oder 72 Stunden offline gecacht werden.
+- Permanent Grants dürfen offline gecacht werden, werden aber beim nächsten
+  Netzstart erneut geprüft.
+- SharedPreferences ist Komfortcache, keine Sicherheitsgrenze. Server-RPCs und
+  Studio-Daten prüfen immer das effektive serverseitige Entitlement.
+
+### PM-D11 — Freunde, Familie, Founder und Pilot-Codes
+
+**Empfehlung:** Ein allgemeines Benefit-System für Nutzer **und** Trainer,
+nicht weitere Sonderfelder pro Kampagne.
+
+Es trennt zwei grundverschiedene Vorteile:
+
+1. **Interner Freizugang:** Reflex Journey vergibt ohne Kauf einen `premium`-
+   oder `studio`-Grant. Möglich sind permanent, X Tage/Monate oder bis zu einem
+   festen Datum. Kein Abo, keine automatische Verlängerung, keine spätere
+   Belastung.
+2. **Store-Rabatt:** Der eigentliche Kauf bleibt beim Store. Apple nutzt
+   Subscription Offer Codes; Google nutzt Base-Plan-Offers bzw. Promo Codes.
+   Eine interne Kampagne kann auf die jeweilige Storeaktion verweisen, setzt
+   aber niemals selbst einen billigeren Kaufpreis.
+
+Damit sind dauerhaft möglich:
+
+- permanente Gründungsnutzer-Freischaltung;
+- befristeter kostenloser Freunde-/Familienzugang;
+- permanenter persönlicher Comp-Zugang;
+- kostenloser Trainer-MVP für eine geschlossene Kohorte;
+- Support-/Kulanzverlängerung;
+- zeitlich begrenzter Apple-/Google-Aborabatt.
+
+Ein Rabattcode kann storebedingt nicht auf beiden Plattformen exakt dieselbe
+Mechanik oder Eligibility garantieren. Die App zeigt deshalb nach Plattform
+den passenden Store-Offer-Flow. Für garantiert identisches Cross-Platform-
+Verhalten ist ein interner Freizugangs-Grant die einfachere Variante.
+
+#### Benefit-Datenmodell
+
+`benefit_campaigns`:
+
+- `id`, interner Name und Zweck (`founder_user`, `friends_family`,
+  `trainer_free_mvp`, `support`, frei erweiterbar);
+- `entitlement_key` (`premium|studio`);
+- `benefit_kind` (`internal_grant|store_offer`);
+- bei intern: `permanent|duration_days|fixed_end`, Wert/Enddatum;
+- Zielgruppe/Rolle (`user|trainer|both`) und optionale Eligibility-Regeln;
+- Start/Ende, Gesamtlimit, Pro-Account-Limit, aktiv/widerrufen;
+- bei Store-Offer: Apple-Offer-Referenz und Google-Offer-/Promo-Referenz;
+- auditierbare, nicht öffentliche Beschreibung.
+
+`benefit_codes`:
+
+- Campaign-Bezug, `single_use|multi_use`, Redemption-Limit;
+- Code nie im Klartext speichern: keyed HMAC mit Server-Secret + kurze
+  Anzeige-Hilfe; ausreichend lange zufällige Codes;
+- aktiv/widerrufen/ablaufend.
+
+`benefit_redemptions`:
+
+- Code/Campaign/User, Zeitpunkt, Ergebnis/Grant-ID, Plattform;
+- unique pro Campaign+User, soweit Kampagne nichts anderes erlaubt;
+- atomare Limitprüfung; keine Race-Doppel-Einlösung.
+
+Ein eingelöster interner Code erzeugt einen normalen `entitlement_grants`-
+Datensatz mit `source=benefit_code` oder `source=pilot`. Kampagnenstopp sperrt
+neue Einlösungen; bereits gewährte Grants werden nur durch eine getrennte,
+auditierte Revocation geändert.
+
+## 3. Zielarchitektur
 
 ```text
-                 ┌────────────── App Store (IAP) ─────────────┐
-Nutzer/Trainer → │                                            │
-                 └────────────── Play Store (Billing) ────────┘
-                                   │ Käufe
-                                   ▼
-                             RevenueCat
-                    Entitlements: `premium` · `studio`
-                    appUserID = Supabase auth.uid
-                       │                        │
-         CustomerInfo (SDK, sofort)     Webhook (signiert)
-                       ▼                        ▼
-                 Flutter-App          Edge Function `revenuecat-webhook`
-                 (optimistisches            (service_role)
-                  Freischalten)               │
-                                              ▼
-                                   profiles.is_premium/… (Nutzer)
-                                   trainer_profiles.studio_… (Trainer, T27.1)
+Apple IAP ─┐
+           ├─> RevenueCat Customer/Entitlements ──> Webhook + REST-Reconcile
+Google Play┘              │                                  │
+                          │ CustomerInfo                     ▼
+                          ▼                         entitlement_grants
+                    Flutter Purchase UI            + effective_entitlements
+                                                          │
+Access Code ───────────── secure server grant ─────────────┤
+Review/Test grant ─────── admin/runbook grant ─────────────┘
+                                                          │
+                                                          ▼
+                                           legacy profile projections
+                                           + server authorization
 ```
 
-**Verbindliche Regeln (aus dem Bestand abgeleitet):**
+Autoritätskette:
 
-1. **Server bleibt Quelle der Wahrheit.** `profiles.is_premium` &
-   `trainer_profiles.studio_*` werden ausschließlich per service_role gesetzt
-   (Schutz-Trigger existieren bzw. werden gespiegelt). Das SDK-CustomerInfo
-   dient nur dem sofortigen Freischalten nach Kauf, bis der Webhook greift.
-2. **Der Webhook darf Code-Entitlements nie zerstören.** `premium_type='code'`
-   (T24) und `'lifetime'` werden von EXPIRATION/CANCELLATION-Events nicht
-   angefasst. Sonderfall: Code-Nutzer kauft zusätzlich ein Abo und lässt es
-   auslaufen → beim Ablauf wird gegen `access_codes.redeemed_by` re-derived
-   und ggf. `premium_type='code'` wiederhergestellt statt `is_premium=false`.
-3. **Preise kommen zur Laufzeit aus dem Store** (lokalisiert, inkl.
-   Trial-Berechtigung). `paywall_products.dart` liefert nach T25 nur noch
-   Identität + Reihenfolge — steht dort schon so im Doc-Kommentar.
-4. **Ein Abo deckt alle Profile des Kontos** (Kinderprofile) — kein
-   Pro-Profil-Kauf, keine Änderung nötig.
-5. **Idempotenz:** verarbeitete RevenueCat-Event-IDs werden in einer kleinen
-   Tabelle protokolliert; doppelte Zustellung ist ein No-op.
-6. `profiles.stripe_customer_id` ist toter Bestand (Stripe komplett
-   gestrichen). Bleibt stehen (harmlos, Migration live), wird nirgends gelesen.
+1. Apple/Google autorisieren die Storetransaktion.
+2. RevenueCat normalisiert Storestatus und ist Purchase-Status-Quelle.
+3. Supabase führt Store- und interne Grants zusammen und ist Quelle für
+   serverseitige App-Autorisierung.
+4. `profiles.is_premium` und spätere Studio-Kurzfelder sind abgeleitete
+   Kompatibilitätsprojektionen.
 
-## 3. Produkte & Preise (beide Stores)
+## 4. Entitlement-Ledger
 
-| Produkt | Typ | iOS (Vorschlag) | Android (Vorschlag) | Entitlement |
-|---|---|---|---|---|
-| Premium Monat 12,99 € | Auto-renewable, Gruppe „premium" | `rj_premium_monthly` | `rj-premium-monthly` | `premium` |
-| Premium Jahr 89,99 € ★ | Auto-renewable, Gruppe „premium" | `rj_premium_yearly` | `rj-premium-yearly` | `premium` |
-| Premium Lifetime 149 € | Non-consumable / einmalig | `rj_premium_lifetime` | `rj-premium-lifetime` | `premium` |
-| Studio Monat 14,99 € (Hypothese TS-10) | Auto-renewable, **eigene Gruppe „studio"** | `rj_studio_monthly` | `rj-studio-monthly` | `studio` |
-| Studio Jahr 119,99 € (Hypothese TS-10) | Auto-renewable, Gruppe „studio" | `rj_studio_yearly` | `rj-studio-yearly` | `studio` |
+### 4.1 Additive Tabelle `entitlement_grants`
 
-- **Getrennte Subscription-Gruppen** für Premium und Studio sind Pflicht:
-  sonst behandelt Apple einen Wechsel Nutzer-Abo↔Studio-Abo als Up-/Downgrade
-  innerhalb einer Gruppe.
-- Produktnamen können in Store-/Abo-Oberflächen sichtbar werden — neutral
-  benennen („Reflex Journey Premium — Jahr"), keine internen Codenamen.
-- Kein Einzelpaket-Produkt (D4). Wochenabo bleibt unverbaut.
+Planfelder:
 
-## 4. Founder-Setup — der externe kritische Pfad
+- `id uuid`
+- `user_id uuid`
+- `entitlement_key text CHECK IN ('premium','studio')`
+- `source text CHECK IN ('revenuecat','benefit_code','pilot','review','admin')`
+- `source_ref text` — stabiler, nicht geheimer externer/interner Schlüssel
+- `status text CHECK IN ('active','grace','expired','revoked')`
+- `store text NULL CHECK IN ('app_store','play_store','promotional')`
+- `product_id text NULL`
+- `starts_at`, `expires_at`, `revoked_at`, `updated_at`
+- `is_permanent boolean`
+- minimale technische `metadata jsonb` ohne E-Mail, Namen oder Notiztexte
 
-Alles Code-seitige ist von genau diesen Konten/Records blockiert. Reihenfolge
-und realistische Dauer:
+Eindeutigkeit: `(source, source_ref, entitlement_key)`. Clients erhalten keinen
+direkten Schreibzugriff.
 
-### 4.1 Apple (entsperrt T25.1) — ~30–45 Min. Founder-Zeit
+### 4.2 Effektiver Status
 
-1. **ASC-App-Record anlegen (= offene Empfehlung R4)** — Bundle-ID
-   `de.reflexjourney.app` ist seit 2026-07-03 registriert, nur der Record fehlt.
-   Gemeinsame Browser-Sitzung wie in R4 beschrieben.
-2. **Small Business Program beantragen** (15 % statt 30 %) — direkt nach
-   Record-Anlage, Wirkung ab Folgemonat der Genehmigung.
-3. IAP-Produkte (3× Premium) in ASC anlegen — kann Claude in gemeinsamer
-   Sitzung vorbereiten; Freigabe je Produkt durch Apple-Review beim ersten
-   App-Review mit IAP.
-4. **Banking/Tax/Verträge in ASC ausfüllen** („Agreements, Tax, Banking") —
-   ohne unterschriebenen Paid-Apps-Vertrag keine IAP-Tests.
+Ein Entitlement ist aktiv, wenn mindestens ein nicht widerrufener Grant aktiv
+ist und entweder permanent ist oder `expires_at > now()` gilt. Grace zählt nur,
+wenn RevenueCat den Storezugriff aktuell als berechtigt meldet.
 
-### 4.2 RevenueCat (entsperrt T25.1–T25.2) — ~20 Min. Founder-Zeit
+Mehrere Grants sind erlaubt:
 
-1. Konto anlegen (Founder-E-Mail), Projekt „Reflex Journey".
-2. iOS-App mit ASC-App-Specific-Shared-Secret bzw. In-App-Purchase-Key
-   verbinden; später Android-App mit Play-Service-Credentials.
-3. Entitlement `premium` + Offering `default` mit den 3 Produkten anlegen.
-4. Webhook-URL + Authorization-Secret konfigurieren (Wert kommt aus T25.2;
-   Secret landet in Supabase Secrets, nie im Repo).
-5. Kostenmodell notieren: RevenueCat ist bis zu einer Umsatzschwelle
-   kostenlos (Schwelle bei Ausführung auf revenuecat.com/pricing verifizieren
-   — ändert sich; für die Startgrößenordnung hier ist „kostenlos" die
-   realistische Annahme).
+```text
+Code aktiv + Store abgelaufen       => premium aktiv
+Lifetime aktiv + Refund altes Abo   => premium aktiv
+Studio Reviewgrant abgelaufen       => studio inaktiv, außer Storegrant aktiv
+Premium aktiv                       => sagt nichts über studio aus
+```
 
-### 4.3 Google (entsperrt T25.3) — ~1–2 h Founder-Zeit + Wartezeit
+### 4.3 Legacy-Projektion
 
-1. **Play-Console-Entwicklerkonto anlegen** (25 $ einmalig).
-   **Empfehlung: als Organisation (Kleingewerbe) registrieren, nicht als
-   Privatperson** — für private Neukonten verlangt Google vor dem
-   Produktions-Release einen geschlossenen Test mit ~12 Testern über 14 Tage;
-   Organisationskonten sind davon ausgenommen (Regel bei Anmeldung
-   verifizieren). Identitäts-/Gewerbe-Verifikation kann mehrere Tage dauern
-   → **früh starten, auch wenn Android nach iOS launcht.**
-2. App-Record `de.reflexjourney.app` anlegen; Data-Safety-Formular aus
-   `docs/PRIVACY_LABELS_DRAFT.md` befüllen (+ RevenueCat als Verarbeiter —
-   Nachtrag ist im T25-Prompt verankert).
-3. **15-%-Gebührenstufe aktivieren** (Play Media Experience/Service-Fee-
-   Programm für Umsatz bis 1 Mio $ — Anmeldung in der Console nötig, nicht
-   automatisch).
-4. Abo-Produkte + Lifetime anlegen; Lizenz-Tester für Testkäufe eintragen;
-   Internal-Testing-Track als Sandbox.
-5. Google-Cloud-Service-Account für RevenueCat erzeugen und in RevenueCat
-   hinterlegen (RevenueCat-Doku-Schritte, bei Ausführung prüfen).
+Eine serverseitige Funktion aktualisiert die bestehenden
+`profiles.is_premium/premium_type/premium_valid_until` aus dem Ledger, damit
+T23-Code zunächst weiterarbeitet. `premium_type` zeigt nur den wirksamen
+Anzeigegrund mit Priorität `code > lifetime > yearly > monthly`; es löscht
+keine Grants. Später kann der Client direkt den effektiven Status lesen.
 
-## 5. Build-Prompts T25.1–T25.4
+T24-Backfill: Für jeden erfolgreich eingelösten Code entsteht genau ein
+permanenter `benefit_code`-Grant. Bestehende kurze Klartextcodes werden vor
+neuer Ausgabe in das HMAC-basierte System migriert oder ersetzt. Erst danach
+darf der Webhook live gehen.
 
-Hausregeln gelten für jeden Prompt: CLAUDE.md lesen; Arbeit hinter
-`kPaywallEnabled=false` (Flag-aus = heutiges Verhalten, per Test belegt);
-keine Live-DDL/Deploys ohne Founder-Go; `make release-readiness-mobile` grün;
-DE+EN l10n; Evidenz nach `docs/evidence/T25/`.
+## 5. RevenueCat-Identität
 
-### T25.1 — RevenueCat-SDK + iOS-Kaufweg *(Gate: ASC-Record + Produkte + RC-Konto)*
+- App User ID ist exakt die Supabase `auth.uid()`.
+- SDK erst konfigurieren, wenn eine authentifizierte UID vorliegt.
+- Keine anonymen Käufe.
+- Bei Wechsel von Account A zu B direkt `Purchases.logIn(B)`; nicht vorher
+  `logOut()` aufrufen.
+- Nach App-Logout: Kauf-UI unzugänglich, lokale CustomerInfo nicht als Status
+  eines späteren Nutzers anzeigen.
+- Derselbe RevenueCat-Project-Container enthält die iOS- und Android-App, damit
+  Entitlements projektweit geteilt werden.
+- Restore-/Transfer-Ereignisse werden für alte und neue App User IDs
+  reconciliert.
+- Supportscreen zeigt eine kopierbare technische Account-ID, keine Secrets.
 
-**Rolle:** Flutter-Entwickler:in mit IAP-Erfahrung.
-**Lies zuerst:** `lib/features/premium/` komplett, `docs/MONETARISIERUNG_EVALUATION.md` §4, diesen Plan §2–3.
-**Scope:**
-1. `purchases_flutter` einbinden (iOS-Mindestversionen prüfen; Podfile).
-2. `RevenueCatPurchaseService implements PurchaseService` — Kauf, Restore,
-   Fehler-Mapping auf `PurchaseOutcome`; Stub bleibt für Tests/Dev-Flavor
-   ohne RC-Keys.
-3. Identität: `Purchases.logIn(supabaseUid)` nach Sign-in,
-   `Purchases.logOut()` bei Sign-out (Bootstrap-/Auth-Provider-Anbindung).
-4. Paywall zeigt lokalisierten Store-Preis + Intro-/Trial-Status aus dem
-   Offering; `paywall_products.dart` nur noch Identität/Reihenfolge/Fallback.
-5. Optimistisches Freischalten: nach `success` CustomerInfo-Entitlement
-   lokal respektieren, bis Server-Profil nachzieht (fail-closed bleibt).
-**Akzeptanz:** Sandbox-Kauf aller 3 Produkte + Restore auf physischem Gerät
-belegt (redigierte Screenshots); Flag-aus-Regression; API-Keys via
-`--dart-define`/Env, nie im Repo; Suite grün.
-**Nicht-Ziele:** kein Webhook (T25.2), kein Android (T25.3), keine Aktivierung.
+## 6. Webhook und Reconciliation
 
-### T25.2 — Server-Entitlement-Sync (Webhook) *(Gate: RC-Konto; Deploy = Founder-Go)*
+### Eingangsschutz
 
-**Rolle:** Supabase-/Deno-Entwickler:in.
-**Lies zuerst:** `supabase/migrations/2026070701_premium_entitlements.sql`,
-`2026070802_access_codes_redeem.sql`, Cron-Secret-Muster bestehender Functions.
-**Scope:**
-1. Migration: Tabelle `revenuecat_events` (event_id PK, processed_at) für
-   Idempotenz; lokal replay-grün.
-2. Edge Function `revenuecat-webhook`: Authorization-Header gegen Secret
-   (fail-closed wenn unkonfiguriert); Events mindestens
-   INITIAL_PURCHASE/RENEWAL/UNCANCELLATION/PRODUCT_CHANGE (→ setzen),
-   CANCELLATION (No-op bis Ablauf), BILLING_ISSUE (No-op + Log; Grace
-   respektieren), EXPIRATION (→ löschen, mit Code-/Lifetime-Schutz und
-   `access_codes`-Re-Derivation nach §2 Regel 2), TRANSFER; unbekannte
-   Events: loggen + 200.
-3. Entitlement-Mapping tabellengetrieben: `premium` → `profiles`,
-   `studio` → `trainer_profiles` (Spalten kommen mit T27.1; bis dahin
-   sauber ignorieren + loggen).
-4. Kein PII-Logging (Event-Typ + gekürzte IDs, nie E-Mail/Empfänger).
-**Akzeptanz:** Unit-/Integrationstests der Event-Verarbeitung inkl.
-Code-Schutz-Fällen; `deno check`; unauth Smoke → 401/403; Live-Deploy nur
-per Founder-Go mit Evidenz wie T24.
-**Nicht-Ziele:** keine Client-Änderungen; kein Studio-Schema.
+- eigener Production- und Sandbox-Webhook;
+- Authorization Header **und** RevenueCat-HMAC aktivieren/verifizieren;
+- Payload-Größenlimit, JSON-Schema-Basisprüfung, keine PII-Logs;
+- Event-ID idempotent in `revenuecat_events` speichern;
+- Eventtyp, Umgebung, Empfangs-/Verarbeitungsstatus, Versuchszahl und
+  redigierter Fehler — kein kompletter Payload-Dump.
 
-### T25.3 — Android: Play Billing über dieselbe Schicht *(Gate: Play-Konto + Produkte + RC-Play-App)*
+### Verarbeitung
 
-**Rolle:** Flutter-/Android-Entwickler:in.
-**Lies zuerst:** T25.1-Ergebnis, `android/app/build.gradle*` (Flavors!),
-Mistake #1 (Stale-APK — nur `make run-android`).
-**Scope:**
-1. RC-Android-Konfiguration (Play-API-Key via Env je Flavor); gleiche
-   `RevenueCatPurchaseService`-Implementierung, keine Fork-Logik.
-2. Billing-Permission/Manifest prüfen; ProGuard/R8-Regeln falls nötig.
-3. Paywall-UI auf Android verifizieren (Preisformatierung, Back-Verhalten,
-   Dark Mode, 150 % Schrift).
-4. Play-Data-Safety-Delta dokumentieren (RevenueCat als Verarbeiter,
-   Käufe-Datenkategorie) → Nachtrag zu `docs/PRIVACY_LABELS_DRAFT.md`.
-**Akzeptanz:** Testkauf + Restore mit Lizenz-Tester auf physischem
-Android-Gerät belegt; Kauf auf iOS → Entitlement auf Android desselben
-Kontos sichtbar (Cross-Plattform-Beleg); Flag-aus-Regression beide
-Plattformen; Suite grün.
-**Nicht-Ziele:** kein Play-Store-Listing/Release (eigener Launch-Track).
+Ein Webhook ist ein Reconcile-Trigger:
 
-### T25.4 — E2E-Evidenz + Review-Unterlagen *(Gate: T25.1–T25.3)*
+1. Event authentifizieren und idempotent registrieren.
+2. Betroffene App User ID(s), einschließlich Aliases/Transfer-Seiten,
+   bestimmen.
+3. Aktuellen Customer-/Entitlement-Status serverseitig von RevenueCat lesen.
+4. `revenuecat`-Grants transaktional upserten/ablaufen lassen.
+5. effektiven Status/Legacy-Projektion neu berechnen.
+6. Erfolg markieren; bei temporärem Fehler non-2xx für RevenueCat-Retry.
 
-**Scope:** Sandbox-E2E beider Plattformen dokumentieren (Kauf, Restore,
-Kündigung→Ablauf, Billing-Retry soweit simulierbar); App-Review-Notes für
-IAP (Demo-Konto, Paywall-Fundort, „Aktivierung per Flag" erklären);
-`docs/RELEASE_READINESS_CHECKLIST.md` um IAP-Zeilen ergänzen.
-**Akzeptanz:** Evidenz-Ordner vollständig; Tracker/Backlog fortgeschrieben.
+Unbekannte Eventtypen werden gespeichert, alarmiert und mit 200 quittiert,
+wenn kein Reconcile nötig ist. Ein täglicher Reconciliation-Job prüft kürzlich
+aktive Storekunden, damit ein endgültig verlorener Webhook keinen dauerhaften
+Fehlstatus erzeugt.
 
-## 6. Aktivierung (bleibt eigener Founder-Go, unverändert R8)
+### Client nach Kauf
 
-Aktiviert wird erst wenn ALLE erfüllt: Launch stabil + Nutzer erreichen
-Paket 2 (R8-Trigger) · AGB/Widerruf vom Anwalt (Baustein 8) · T25.4-Evidenz ·
-Bestandsschutz kommuniziert. **Vorformulierte Bestandsschutz-Formel zur
-Freigabe (R8):**
+RevenueCat CustomerInfo darf sofort einen UI-Erfolg anzeigen. Für
+servergeschützte Studio-Funktionen wartet die App auf die Backend-Projektion
+und zeigt kurz „Zugang wird aktiviert“ mit Retry; sie umgeht nie serverseitige
+RLS/RPC-Prüfungen.
 
-> „Wer sich vor Aktivierung der Paywall registriert hat, behält Paket 1
-> dauerhaft kostenlos — daran ändert sich nichts. Gründungsnutzer-Codes
-> gelten unverändert weiter."
+## 7. Storekatalog
 
-Aktivierungsschritte: `kPaywallEnabled=true` → Prod-Build → Store-Review
-(beide Stores) → Release. Kill Switch = Flag zurück + Store-Update (Käufe
-bleiben gültig; Entitlements bleiben serverseitig bestehen).
+### Apple
 
-## 7. Kostenbild (ehrlich, je getrennt ausgewiesen)
-
-| Posten | iOS | Android |
+| Gruppe/Typ | Product ID (Vorschlag) | RevenueCat Package |
 |---|---|---|
-| Store-Provision | 15 % (Small Business Program, beantragen!) | 15 % (Stufe aktivieren!) |
-| USt | Apple ist Händler → führt EU-USt ab | Google desgl. |
-| RevenueCat | voraussichtlich 0 € zum Start (Schwelle verifizieren) | dito |
-| Fixkosten | Apple Developer 99 €/Jahr (läuft) | Play Console 25 $ einmalig |
-| § 19 UStG / Auszahlungs-Verbuchung | → Steuerberater (offen, wie in Eval §Offene) | dito |
+| Premium Monat | `rj_premium_monthly` | `$rc_monthly` |
+| Premium Jahr | `rj_premium_yearly` | `$rc_annual` |
+| Premium Lifetime (non-consumable) | `rj_premium_lifetime` | `$rc_lifetime` |
+| Studio Monat, eigene Gruppe | `rj_studio_monthly` | `$rc_monthly` im Studio-Offering |
+| Studio Jahr, eigene Gruppe | `rj_studio_yearly` | `$rc_annual` im Studio-Offering |
 
-Keine „15 % vs. 4 %"-Vergleiche mehr — Stripe ist vollständig gestrichen.
+Premium und Studio sind getrennte Subscription Groups. Lifetime gehört keiner
+Abo-Gruppe an. Family Sharing nicht aktivieren.
 
-## 8. Offene Founder-Entscheidungen aus DIESEM Plan
+### Google Play
 
-| ID | Entscheidung | Empfehlung | Fällig |
-|---|---|---|---|
-| PM-1 | Play-Konto: Organisation (Kleingewerbe) vs. privat | **Organisation** (kein 12-Tester-Gate, seriöser Auftritt) | vor T25.3, früh wegen Verifikationsdauer |
-| PM-2 | Android-Nutzer-Abo: gleicher Launch wie iOS oder Fast-Follow? | **Fast-Follow** (iOS-Launch nicht an Play-Verifikation ketten; Code ist ab T25.3 identisch) | vor Launch-Kommunikation |
-| PM-3 | R8-Bestandsschutz-Wortlaut (Entwurf oben) | Entwurf freigeben | vor erster Launch-Kommunikation |
-| PM-4 | Termin für gemeinsame ASC-Sitzung (R4 + Produkte + SBP) | sofort terminieren — Wurzel-Blocker von allem | jetzt |
+| Subscription/Produkt | Base Plan | RevenueCat-Referenz |
+|---|---|---|
+| `rj_premium` | `monthly` | Subscription + Base Plan |
+| `rj_premium` | `yearly` | Subscription + Base Plan |
+| `rj_premium_lifetime` (one-time) | — | One-time Product |
+| `rj_studio` | `monthly` | Subscription + Base Plan |
+| `rj_studio` | `yearly` | Subscription + Base Plan |
 
-Studio-spezifische Entscheidungen (TS-6/TS-7/TS-10) stehen mit Empfehlungen
-in `docs/TRAINER_STUDIO_BUILD_PROMPTS.md`.
+Trials sind Offers auf den Studio-Base-Plans, keine separaten Produkte.
+RevenueCat Offerings `premium` und `studio` mappen pro Package das jeweilige
+Apple- und Google-Produkt.
+
+## 8. Gebühren und Steuer — Stand 2026-07-10
+
+Keine globale Pauschale in Umsatzprognosen. Storefront, Installationsdatum,
+Produkttyp und Programmanmeldung beeinflussen die Gebühr.
+
+### Apple
+
+- 15 % bei angenommener Teilnahme am Small Business Program; Teilnahme und
+  $1M-Grenze verifizieren.
+- Ohne Teilnahme/außerhalb der Voraussetzungen gelten Apples aktuelle
+  Standardregeln.
+
+### Google Play
+
+- EWR/UK/USA seit 2026-06-30: Auto-Renew-Abos über Play Billing laut Google
+  10 % Service Fee + 5 % Billing Fee.
+- Andere Transaktionen, insbesondere Lifetime, unterscheiden sich nach neuer/
+  bestehender Installation und Programmen; im ersten-$1M-Modell über Play
+  Billing ergibt sich laut aktueller Tabelle 10 % + 5 %, sofern die
+  Voraussetzungen erfüllt sind.
+- Noch nicht umgestellte Märkte folgen bis zu ihrem Rollout den dort genannten
+  bisherigen Regeln.
+
+RevenueCat-Gebühr und Schwelle werden beim Accountsetup aus der aktuellen
+Preisseite übernommen. Steuerliche Einordnung, §19 UStG, Belege und
+Auszahlungsverbuchung gehen vor Aktivierung zum Steuerberater. Nicht pauschal
+„Apple/Google ist Händler und alles erledigt“ in Rechts- oder Buchhaltungsdoku
+schreiben.
+
+## 9. Externe Founder-Checkliste
+
+### Apple
+
+1. App-Store-Connect-App-Record für `de.reflexjourney.app`.
+2. Paid Apps Agreement, Banking und Tax vollständig.
+3. Small Business Program beantragen/Status dokumentieren.
+4. Premium-Produkte erst nach finaler ID-/Preisprüfung anlegen.
+5. Studio-Produkte erst vor T27-Pilot anlegen.
+6. Billing Grace Period und Family Sharing bewusst konfigurieren.
+7. Sandbox-Tester und Review-Demo-Account vorbereiten.
+
+### RevenueCat
+
+1. Ein Projekt, Apps für iOS Production und Android Production; Test Store für
+   frühe Integrationstests.
+2. Entitlements `premium` und `studio`; Offerings getrennt.
+3. Aktuelle Apple In-App-Purchase-Key-/ASC-Verbindung nach RevenueCat-Doku;
+   keine veraltete Shared-Secret-Anleitung blind übernehmen.
+4. Restore Behavior PM-D8 setzen und screenshotten.
+5. Sandbox-/Production-Webhooks getrennt, Authorization + HMAC.
+6. Secret/API-Keys nur in Supabase Secrets bzw. Build-Secret-Konfiguration.
+
+### Google
+
+1. Accounttyp ehrlich wählen:
+   - Organisation, wenn das reale Unternehmen verifiziert werden kann und eine
+     D-U-N-S-Nummer vorhanden/beschaffbar ist;
+   - Personal sonst, inklusive 12-Tester-/14-Tage-Produktionsgate für neue
+     persönliche Konten.
+2. Developer-/Payments-Profil und öffentliche Angaben prüfen.
+3. App-Record, Signing, Internal/Closed Test Tracks.
+4. Play-Billing-Produkte/Base Plans/Offers.
+5. Service Account/API-Zugriff für RevenueCat nach aktueller Anleitung.
+6. Gebührenprogramm/-status anhand der dann sichtbaren Console und Region
+   dokumentieren; nicht „Play Media Experience“ als Standardweg verwenden.
+7. License Tester, Testkarten und Subscription-Testzeiten vorbereiten.
+
+## 10. Pflicht-Testmatrix
+
+### Kauf und Restore
+
+- Premium Monat/Jahr/Lifetime je Store;
+- Studio Monat/Jahr + Trial eligible/ineligible je Store;
+- Kaufabbruch, Storefehler, Netzwerkverlust, Pending Purchase;
+- Restore nach Neuinstallation;
+- iOS-Kauf → Android-Zugriff und Android-Kauf → iOS-Zugriff;
+- zwei App-Accounts auf einem Gerät, Restore-Transfer PM-D8;
+- Kauf bei aktivem Entitlement des anderen Stores verhindert.
+
+### Lifecycle
+
+- freiwillige Kündigung: Zugriff bis Ablauf;
+- Renewal, Uncancellation, Product Change;
+- Billing Issue ohne/mit Grace, Recovery und endgültiger Ablauf;
+- Google Pause/Resume;
+- Refund/Revocation;
+- doppelte und absichtlich vertauschte Webhook-Events;
+- verlorener Webhook, durch täglichen Reconcile geheilt.
+
+### Grant-Kombinationen
+
+- Code + ablaufendes Monatsabo;
+- Code + Refund;
+- Lifetime + altes Aboevent;
+- Reviewgrant + Storegrant;
+- Premium + Studio gleichzeitig;
+- Accountlöschung: Store-Restore vs. interner Codehinweis.
+
+### Benefit-/Rabattcodes
+
+- interner Premium- und Studio-Code, permanent/duration/fixed-end;
+- Single-use, Multi-use, Gesamtlimit und Pro-Account-Limit unter Konkurrenz;
+- falsche Rolle, abgelaufene/widerrufene Kampagne, bereits eingelöst;
+- Kampagnenstopp lässt bestehende Grants unangetastet; gezielte Revocation
+  separat;
+- Apple Offer Code: new/active/expired Eligibility und Auto-Renew-Copy;
+- Google Base-Plan-Offer/Promo: Eligibility, Offer-Tags und richtige Auswahl;
+- gleicher interne Freizugangscode funktioniert accountgebunden auf Apple und
+  Android; Store-Rabatte dürfen plattformspezifisch abweichen.
+
+### UX/Compliance
+
+- lokalisierter Preis/Zeitraum/Verlängerung;
+- Trial nur bei Eligibility;
+- Restore und Aboverwaltung auffindbar;
+- Terms/Privacy/Support/Refund-Hinweise;
+- DE/EN, Light/Dark, iPhone/iPad, Android Phone/Tablet, 150 % Text;
+- Gratisumfang bleibt nach Ablauf und bei Storeausfall nutzbar.
+
+## 11. Build-Reihenfolge und ausführbare Tasks
+
+### T25.0 — Multi-Grant- und Benefit-Code-Fundament
+
+**Gate:** Founder bestätigt PM-D1–D12.
+**Ergebnis:** `entitlement_grants`, Benefit-Kampagnen/-Codes/-Redemptions,
+effektive Statusfunktion, Legacy-Projektion, T24-Code-Backfill,
+RLS/Trigger/Negativtests. Alles additiv; Live-DDL separat Founder-gated.
+
+### T25.1 — RevenueCat Core + Test Store
+
+**Gate:** RevenueCat-Projekt.
+**Ergebnis:** `purchases_flutter`, authentifizierte UID-Initialisierung ohne
+anonyme IDs/Logout, Offerings/Produkte/Eligibility-Abstraktion, Test-Store-E2E,
+kein echter Store nötig.
+
+### T25.2 — Webhook + Reconciliation
+
+**Gate:** T25.0 + RevenueCat Server-Zugang.
+**Ergebnis:** Event-Inbox, Authorization/HMAC, Customer-Reconcile, Ledger-
+Upsert, Transfer/Alias, Retry, täglicher Repair-Job, Tests. Deploy separat
+Founder-gated.
+
+### T25.3 — Apple IAP Production Wiring
+
+**Gate:** ASC Record + Agreements + Produkte.
+**Ergebnis:** iPhone/iPad Sandbox-Käufe, Restore, Planwechsel, Grace/Refund-
+Tests, Review Notes, Family Sharing aus, redigierte Evidenz.
+
+### T25.4 — Google Play Billing Production Wiring
+
+**Gate:** Play Account + App + Produkte/Base Plans + RevenueCat-Verbindung.
+**Ergebnis:** Android Phone/Tablet License-Testkäufe, Restore, Planwechsel,
+Pause/Grace/Refund, Cross-Platform-E2E, Data-Safety-Delta.
+
+### T25.5 — Operations + Aktivierungs-Readiness
+
+**Gate:** T25.0–T25.4.
+**Ergebnis:** Support-/Refund-/Transfer-/Accountlöschungs-Runbook, Monitoring,
+Reconciliation-Audit, Kill-Switch-Test, vollständige Testmatrix,
+GO/NO-GO-Bericht. Aktivierung bleibt eigener Founder-Go nach R8/Legal.
+
+Kopierfertige Session-Prompts: `docs/PAYMENTS_BUILD_PROMPTS.md`. Der
+Orchestrator gibt sie exakt in dieser Reihenfolge aus; eine Session bearbeitet
+immer nur einen Task.
+
+## 12. Aktivierung, Sales-Rollout und Incident-Schalter
+
+Zwei serverseitig getrennte Zustände plus Release-Sicherung:
+
+1. Compile-Flag schützt unreife UI vor dem ersten Release.
+2. `sales_rollout = off | internal | cohort | public` steuert neue
+   Kaufoberflächen je Entitlement/Plattform.
+3. `feature_rollout = internal | cohort | public | incident_disabled` steuert
+   die freigegebene Zielgruppe. `incident_disabled` ist nur für belegte
+   Sicherheits-/Datenintegritätsvorfälle mit Incident-Runbook, Kommunikation
+   und Wiederherstellungsplan.
+
+`sales_rollout=off` verhindert neue Käufe, entzieht aber keinen gültigen Zugang
+und löscht keine Grants. Nach öffentlichem bezahltem Launch bleibt
+`feature_rollout=public`, außer ein echter Incident rechtfertigt die separate
+Notabschaltung. Das Runbook unterscheidet immer „Verkauf stoppen“ von
+„Leistung vorübergehend deaktivieren“.
+
+### PM-D12 — Abweichung von der „No Remote Config“-Regel *(Review-Nachtrag 2026-07-10)*
+
+Serverseitige Rollout-Zustände sind Remote-Konfiguration und weichen damit
+bewusst von CLAUDE.md §4 („compile-time `const bool` only. No remote config",
+Founder-Entscheidung D1/D2 2026-07-06) ab. Begründung: Ein Compile-Flag kann
+laufende Verkäufe nicht ohne Store-Review-Zyklus stoppen; für bezahlte
+Funktionen ist das operativ unzureichend.
+
+**Empfehlung:** Abweichung genehmigen, aber eng begrenzt:
+
+- Rollout-Zustände gelten ausschließlich für Verkaufs-/Paid-Flächen
+  (`premium`, `studio`) — keine allgemeine Feature-Flag-Infrastruktur;
+- Schreibzugriff nur service_role (Schutz-Trigger wie beim Entitlement),
+  Clients lesen nur; unkonfiguriert/nicht erreichbar = fail-closed auf den
+  jeweils sicheren Zustand (Verkauf aus, Feature-Zugang unverändert);
+- Compile-Flags bleiben für alles Übrige die einzige Gate-Mechanik.
+
+Bei GO werden CLAUDE.md §4 und der Doc-Kommentar in
+`lib/config/launch_flags.dart` in T25.0 entsprechend ergänzt, damit Regel
+und Realität nicht auseinanderlaufen. Bei NO-GO entfallen die Rollout-Tabellen
+und der Kill Switch bleibt Compile-Flag + Store-Update (bewusst langsamer).
+
+## 13. Founder-Entscheidungspaket
+
+Ein Satz genügt:
+
+> „GO PM-D1 bis PM-D12 wie empfohlen; Preise bleiben Hypothesen bis zu den
+> jeweiligen Validierungsgates.“
+
+Einzelne Abweichungen können mit ID genannt werden. Unabhängig davon bleiben
+Live-DDL, Deploys, Store-Anlage, externe Kommunikation und Aktivierung separat
+gated.
+
+## 14. Aktuelle Primärquellen
+
+- Apple App Review Guidelines:
+  <https://developer.apple.com/app-store/review/guidelines/>
+- Apple IAP-Konfiguration und Paid Apps Agreement:
+  <https://developer.apple.com/help/app-store-connect/configure-in-app-purchase-settings/overview-for-configuring-in-app-purchases/>
+- Apple Preisbestandsschutz:
+  <https://developer.apple.com/help/app-store-connect/manage-subscriptions/manage-pricing-for-auto-renewable-subscriptions/>
+- Apple Family Sharing:
+  <https://developer.apple.com/help/app-store-connect/configure-in-app-purchase-settings/turn-on-family-sharing-for-in-app-purchases/>
+- Apple Billing Grace Period:
+  <https://developer.apple.com/help/app-store-connect/manage-subscriptions/enable-billing-grace-period-for-auto-renewable-subscriptions/>
+- Google Accounttypen/D-U-N-S:
+  <https://support.google.com/android-developer-console/answer/16641046>
+- Google Testgate für neue persönliche Konten:
+  <https://support.google.com/googleplay/android-developer/answer/14151465>
+- Google Gebühren ab 2026-06-30:
+  <https://support.google.com/googleplay/android-developer/answer/112622>
+- Google Subscriptions/Base Plans:
+  <https://developer.android.com/google/play/billing/subscriptions>
+- Google Legacy-Preiskohorten:
+  <https://developer.android.com/google/play/billing/price-changes>
+- RevenueCat Identität:
+  <https://www.revenuecat.com/docs/customers/identifying-customers>
+- RevenueCat Restore Behavior:
+  <https://www.revenuecat.com/docs/projects/restore-behavior>
+- RevenueCat Webhooks/Eventtypen:
+  <https://www.revenuecat.com/docs/integrations/webhooks> ·
+  <https://www.revenuecat.com/docs/integrations/webhooks/event-types-and-fields>
+- RevenueCat Google Product + Base Plan IDs:
+  <https://www.revenuecat.com/docs/offerings/products-overview>
+- Apple Subscription Offer Codes:
+  <https://developer.apple.com/help/app-store-connect/manage-subscriptions/set-up-subscription-offer-codes/>
+- Google Play Offers und Promo Codes:
+  <https://support.google.com/googleplay/android-developer/answer/140504> ·
+  <https://support.google.com/googleplay/android-developer/answer/6321495>
+
+Alle Store-/Gebührenangaben werden in T25.5 vor Aktivierung erneut geprüft.

@@ -64,6 +64,10 @@
 	<string>Reflex Journey benötigt Mikrofon-Zugriff für Video-Calls mit deinem Trainer.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Reflex Journey benötigt deinen Standort, um Trainer in deiner Nähe anzuzeigen.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Reflex Journey benötigt deinen Standort, um Trainer in deiner Nähe anzuzeigen, wenn du standortbasierte Trainer-Suche und zugehörige Funktionen nutzt.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Reflex Journey benötigt Zugriff auf deinen Kalender, damit du Trainingstermine mit deinem Trainer direkt als Kalendereintrag speichern kannst.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>

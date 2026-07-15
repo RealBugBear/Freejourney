@@ -1,0 +1,1 @@
+[{"indexname":"access_codes_code_key","indexdef":"CREATE UNIQUE INDEX access_codes_code_key ON public.access_codes USING btree (code)"},{"indexname":"access_codes_pkey","indexdef":"CREATE UNIQUE INDEX access_codes_pkey ON public.access_codes USING btree (id)"}]

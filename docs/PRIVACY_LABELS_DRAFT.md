@@ -16,7 +16,7 @@ kein Ad-SDK — Beleg: pubspec ohne Ads/Analytics-SDKs).
 | Apple-Datentyp | Erhoben? | Verknüpft? | Tracking | Zweck | Beleg |
 |---|---|---|---|---|---|
 | Contact Info → Email Address | Ja | Ja | Nein | App-Funktionalität (Konto) | Supabase Auth; `profiles` |
-| Contact Info → Name | Ja | Ja | Nein | App-Funktionalität | `profiles.display_name` (Anzeigename), `reflex_subject_profiles` (Kinderprofil-Name, vom Kontoinhaber angelegt) |
+| Contact Info → Name | Ja | Ja | Nein | App-Funktionalität | `profiles.display_name` (Anzeigename), `reflex_subject_profiles` (Kinderprofil-Name, vom Kontoinhaber angelegt), optionale Erstübermittlung über Apple/Google-Login (T26) |
 | Health & Fitness → Health | Ja | Ja | Nein | App-Funktionalität | `training_sessions`, `progress_entries`, `intake`/`reflex_profile_assessments`, `mood_checkins` — reflexbezogene Trainings-/Befindlichkeitsdaten |
 | User Content → Other User-Generated Content | Ja | Ja | Nein | App-Funktionalität | `journal_entries`, `chat_messages` (Trainer-1:1), `experience_shares` (UI versteckt D1=A, Tabelle bleibt beschreibbar über Alt-Clients → deklarieren) |
 | Identifiers → User ID | Ja | Ja | Nein | App-Funktionalität | Supabase-UUID in allen nutzerbezogenen Tabellen |
@@ -45,7 +45,7 @@ finale Einordnung mit Anwalt (P0.6) gegenlesen.
 
 | Kategorie | Erhoben | Geteilt | Verarbeitung | Löschbar | Beleg |
 |---|---|---|---|---|---|
-| Persönliche Daten → E-Mail, Name | Ja | Nein | verschlüsselt übertragen, Konto-gebunden | Ja (In-App-Kontolöschung) | wie oben |
+| Persönliche Daten → E-Mail, Name | Ja | Nein | verschlüsselt übertragen, Konto-gebunden; optionale Erstübermittlung über Apple/Google-Login (T26), danach Supabase-Konto | Ja (In-App-Kontolöschung) | wie oben |
 | Gesundheit & Fitness → Gesundheitsdaten | Ja | Nein | verschlüsselt, Konto-gebunden | Ja | wie oben |
 | Nachrichten → Sonstige In-App-Nachrichten | Ja | Nein | Trainer-1:1-Chat | Ja | `chat_messages` |
 | App-Aktivität → Von Nutzern generierte Inhalte | Ja | Nein | Journal/Erfahrungen | Ja | `journal_entries`, `experience_shares` |

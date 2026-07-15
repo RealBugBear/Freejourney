@@ -21,6 +21,41 @@ class AppLocalizationsDe extends AppLocalizations {
   String get signOut => 'Abmelden';
 
   @override
+  String get languageSelectionTitle => 'Sprache wählen';
+
+  @override
+  String get languageSelectionSubtitle =>
+      'Du kannst sie später in den Einstellungen ändern.';
+
+  @override
+  String get languageGerman => 'Deutsch';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageContinue => 'Weiter';
+
+  @override
+  String get tryShortAssessment => 'Kurztest ohne Konto ausprobieren';
+
+  @override
+  String get signInWithAlternativeDivider => 'oder';
+
+  @override
+  String get signInWithApple => 'Mit Apple fortfahren';
+
+  @override
+  String get signInWithGoogle => 'Mit Google fortfahren';
+
+  @override
+  String get authErrorSocialConfiguration =>
+      'Social Login ist noch nicht korrekt konfiguriert. Bitte Support kontaktieren.';
+
+  @override
+  String get authErrorSocialCancelled => 'Anmeldung wurde abgebrochen.';
+
+  @override
   String get email => 'E-Mail';
 
   @override
@@ -604,6 +639,24 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsDataSync => 'Daten & Sync';
 
   @override
+  String get settingsTrainingModeDescription =>
+      'Tutorial ist für den Einstieg. Routine ist kompakter.';
+
+  @override
+  String get settingsAdvanced => 'Erweitert';
+
+  @override
+  String get settingsResetIntroductions => 'Einführungen erneut anzeigen';
+
+  @override
+  String get settingsResetIntroductionsDescription =>
+      'Zeigt die kurzen Hinweise auf Heute, Verlauf, Begleitung und Profil wieder an.';
+
+  @override
+  String get settingsResetIntroductionsSuccess =>
+      'Einführungen werden wieder angezeigt.';
+
+  @override
   String get syncStatusOk => 'Alles synchronisiert';
 
   @override
@@ -700,6 +753,45 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get profileDeleteAccountError =>
       'Konto konnte nicht gelöscht werden. Bitte kontaktiere den Support.';
+
+  @override
+  String get redeemAccessCodeTitle => 'Gründungscode einlösen';
+
+  @override
+  String get redeemAccessCodeSubtitle =>
+      'Schalte mit deinem Code alle kostenpflichtigen Pakete frei.';
+
+  @override
+  String get redeemAccessCodeHint => 'Code eingeben';
+
+  @override
+  String get redeemAccessCodeAction => 'Einlösen';
+
+  @override
+  String get redeemAccessCodeSuccess =>
+      'Code eingelöst. Premium-Zugang ist aktiv.';
+
+  @override
+  String get redeemAccessCodeErrorInvalid => 'Dieser Code ist ungültig.';
+
+  @override
+  String get redeemAccessCodeErrorUsed =>
+      'Dieser Code wurde bereits eingelöst.';
+
+  @override
+  String get redeemAccessCodeErrorExpired => 'Dieser Code ist abgelaufen.';
+
+  @override
+  String get redeemAccessCodeErrorUnsupported =>
+      'Dieser Code-Typ wird noch nicht unterstützt.';
+
+  @override
+  String get redeemAccessCodeErrorUnauthorized =>
+      'Bitte melde dich erneut an und versuche es noch einmal.';
+
+  @override
+  String get redeemAccessCodeErrorUnknown =>
+      'Code konnte nicht eingelöst werden. Bitte erneut versuchen.';
 
   @override
   String get trainerDashboard => 'Trainer-Dashboard';

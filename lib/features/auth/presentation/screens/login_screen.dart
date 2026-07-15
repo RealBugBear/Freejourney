@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/settings/settings_provider.dart';
@@ -96,8 +97,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:
-                Text(AppLocalizations.of(context).signUpConfirmEmailSent),
+            content: Text(AppLocalizations.of(context).signUpConfirmEmailSent),
           ),
         );
         return;
@@ -132,6 +132,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(AppLocalizations.of(context).passwordResetSent)),
     );
+  }
+
+  Future<void> _signInWithApple() async {
+    final notifier = ref.read(authNotifierProvider.notifier);
+    await notifier.signInWithApple();
+    if (!mounted) return;
+    if (!ref.read(authNotifierProvider).hasError) {
+      ref.invalidate(hasConsentedProvider);
+      context.go(Routes.dashboard);
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    final notifier = ref.read(authNotifierProvider.notifier);
+    await notifier.signInWithGoogle();
+    if (!mounted) return;
+    if (!ref.read(authNotifierProvider).hasError) {
+      ref.invalidate(hasConsentedProvider);
+      context.go(Routes.dashboard);
+    }
   }
 
   void _clearErrorAndRebuild() {
@@ -293,6 +313,37 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
 
+                if (!_showPasswordReset && !_isSignUp) ...[
+                  Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          l10n.signInWithAlternativeDivider,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ),
+                      const Expanded(child: Divider()),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  SignInWithAppleButton(
+                    onPressed: isLoading ? null : _signInWithApple,
+                    style: Theme.of(context).brightness == Brightness.dark
+                        ? SignInWithAppleButtonStyle.whiteOutlined
+                        : SignInWithAppleButtonStyle.black,
+                    text: l10n.signInWithApple,
+                  ),
+                  const SizedBox(height: 12),
+                  OutlinedButton.icon(
+                    onPressed: isLoading ? null : _signInWithGoogle,
+                    icon: const Icon(Icons.login),
+                    label: Text(l10n.signInWithGoogle),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+
                 // Toggle sign in / sign up
                 if (!_showPasswordReset)
                   TextButton(
@@ -314,7 +365,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   OutlinedButton.icon(
                     onPressed: () => context.go(Routes.reflexProfileDemo),
                     icon: const Icon(Icons.radar_outlined),
-                    label: const Text('Kurztest ohne Konto'),
+                    label: Text(l10n.tryShortAssessment),
                   ),
 
                 // Forgot password toggle
@@ -360,6 +411,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   String _localizeAuthError(String error, AppLocalizations l10n) {
     final normalized = error.toLowerCase();
+    if (normalized.contains('auth_canceled')) {
+      return l10n.authErrorSocialCancelled;
+    }
+    if (normalized.contains('google_config_missing') ||
+        normalized.contains('provider is not enabled') ||
+        normalized.contains('unsupported provider') ||
+        normalized.contains('oauth')) {
+      return l10n.authErrorSocialConfiguration;
+    }
     if (error.contains('TimeoutException') || error.contains('timed out')) {
       return l10n.errorGeneric;
     }

@@ -1,0 +1,5 @@
+{
+  "external_apple_enabled": true,
+  "external_apple_client_id": "de.reflexjourney.app.dev,de.reflexjourney.app,de.reflexjourney.app.staging",
+  "external_google_enabled": false
+}

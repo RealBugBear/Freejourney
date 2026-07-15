@@ -1,235 +1,301 @@
-# Trainer Studio — ausführbare Build-Prompts (T27.1–T27.6)
+# Trainer Studio — ausführbare Build-Prompts T27.1–T27.6B
 
-**Stand:** 2026-07-10 · **Anlass:** Founder-Anfrage 2026-07-10 („finished plan
-to just prompt and build trainer studio")
-**Product Source of Truth:** `docs/superpowers/specs/2026-07-08-trainer-studio-design.md`
-**Prozess-Rahmen:** `docs/TRAINER_STUDIO_PROMPT.md` (P0–P4-Gates) ·
-Kaufweg/Plattform: `docs/PAYMENTS_MASTER_PLAN.md`
+**Stand:** 2026-07-10
+**Status:** Prompts fertig; Ausführung wartet auf P4A-/P4B-Go und jeweilige Gates
+**Product Source of Truth:**
+`docs/superpowers/specs/2026-07-08-trainer-studio-design.md`
+**Discovery/Gates:** `docs/TRAINER_STUDIO_PROMPT.md`
+**Payments/Entitlements:** `docs/PAYMENTS_MASTER_PLAN.md`
+**Orchestrator:** `docs/MONETIZATION_STUDIO_MASTER_PROMPT.md`
 
-> **Einordnung — ehrlich gesagt:** Der Planning-Prompt sieht vor, Build-Prompts
-> erst nach P4-GO auszuarbeiten. Der Founder hat am 2026-07-10 ausdrücklich
-> die fertige Build-Fassung angefordert — deshalb existiert diese Datei jetzt.
-> Die Gates selbst sind damit NICHT aufgehoben: jeder Prompt nennt sein Gate,
-> und die Ausführung setzt den dokumentierten Founder-Go voraus (oder dessen
-> ausdrücklichen Verzicht — das ist allein Founder-Sache). Empfehlung zur
-> Gate-Kompression steht in §2.
+Die Prompts existieren jetzt vollständig, damit nach einem Gate keine neue
+Planungsrunde nötig ist. Ihre Existenz hebt kein Gate auf. Insbesondere werden
+P1–P3B nicht in einen Build-Task verschoben: P4A braucht Research,
+Konzepttest, Datenvertrag und Recht; P4B zusätzlich Store/Pricing.
 
-## 1. Founder-Entscheidungspaket — eine Nachricht genügt
+## 1. Founder-Entscheidungspaket
 
-Damit „nur noch prompten" real wird, braucht es genau diese Entscheidungen.
-Jede hat eine Empfehlung; ein „Go TS-6/7/10 wie empfohlen" reicht als Antwort.
+### TS-6 — Gründer-Vorteil
 
-### TS-7 — Plattform: **Empfehlung: plattformneutral bauen, iOS-first pilotieren**
+**Empfehlung:** Startpreis-Grandfathering gemäß Payments Plan PM-D5. Copy nur:
 
-Der Code ist via RevenueCat ohnehin für beide Plattformen identisch
-(`PAYMENTS_MASTER_PLAN.md` §2). Es gibt keinen technischen Grund, Android
-auszuschließen — nur den betrieblichen, den Pilot klein zu halten. Konkret:
-alle T27-Workstreams plattformneutral; Pilot-Kohorte startet auf iOS; Android
-wird freigeschaltet, sobald T25.3 (Play Billing fürs Nutzer-Abo) bewährt ist.
-Das erfüllt „alle Geräte" ohne den Pilot zu verzögern.
+> „Als Gründungs-Trainer behältst du deinen Startpreis, solange dein Abo aktiv
+> bleibt.“
 
-### TS-6 — Gründer-Vorteil: **Empfehlung: Preis-Grandfathering statt „50 % für immer"**
+Kein Prozent- oder Wiederanmeldeversprechen.
 
-„Dauerhaft 50 %" ist mit Store-Mechanik nicht sauber garantierbar (Spec §8.3).
-Robust und ehrlich ist: **Studio startet für Gründungs-Trainer zum
-Pilot-Preis (z. B. 7,99 €/Monat / 69,99 €/Jahr); spätere Preiserhöhungen
-gelten nur für Neu-Abonnenten — Bestandsabos behalten ihren Preis** (Standard-
-Grandfathering beider Stores; Mechanik bei T27.6 gegen aktuelle Store-Doku
-verifizieren). Kommunizierbares Versprechen: *„Als Gründungs-Trainer behältst
-du dauerhaft deinen Startpreis, solange dein Abo aktiv bleibt."* Kein
-Prozentversprechen, keine separaten Rabatt-Produkte, keine Offer-Code-Grenzen.
+### TS-7 — Plattformen
 
-### TS-10 — Preis/Trial: **Empfehlung: Hypothese 14,99 €/Monat · 119,99 €/Jahr · 14 Tage Trial beibehalten**
+**Empfehlung:** Eine plattformneutrale Codebasis für iPhone, iPad, Android Phone
+und Tablet. Bezahlter Pilot startet iOS-first; Android folgt unmittelbar nach
+T25.4-E2E. GA erst, wenn beide Plattformen die jeweilige Store-Testmatrix
+erfüllen, sofern der Founder Android nicht ausdrücklich als Fast-Follow
+kommuniziert.
 
-Endgültig erst nach den Preisfragen aus den Interviews (Spec §10, vier
-Preisfragen) und vor T27.6. Preise erscheinen in der App ausschließlich aus
-dem Store (lokalisiert, Trial-Berechtigung via StoreKit/Play).
+### TS-8 — v1-Scope
 
-### TS-8/TS-9 — v1-Scope und Sitzungsprotokolle
+Vorläufig: Klienten-Briefing + Termin-Automation. Final nach P1/P2. Die
+Arbeitsübersicht ist Einstieg/Komposition, kein drittes Premium-Feature.
 
-TS-8 (finaler v1-Scope) fällt nach dem Konzepttest; bis dahin gilt der
-Spec-Scope: **Klienten-Briefing + Termin-Automation, sonst nichts.**
-TS-9 (Sitzungsprotokolle) bleibt hinter dem vollen Legal-/Security-Go —
-T27.5 wird ohne dieses Go nicht ausgeführt, Studio v1 ist auch ohne
-Protokolle vollständig.
+### TS-9 — Sitzungsprotokolle
 
-## 2. Empfohlene Gate-Kompression (Founder entscheidet)
+Separater optionaler Workstream. Kein Build und keine Sichtbarkeit ohne das
+vollständige Legal-/Security-Gate aus der Spec.
 
-Die P1/P2-Research-Gates schützen vor dem teuersten Fehler (das falsche
-Briefing bauen) — und kosten **keine Kalenderzeit**, wenn sie parallel zur
-ohnehin bestehenden Wartezeit laufen (T25 ist extern blockiert, Build-Trigger
-verlangt ohnehin „Launch ≥ 4 Wochen stabil + T25 bewährt + 8–10 aktive
-Trainer"). Empfehlung:
+### TS-10 — Preis/Trial
 
-- **Jetzt:** Founder-Go zu diesem Dokument (ersetzt P0) + Entscheidungen §1.
-- **Parallel zur Launch-/T25-Phase:** P1 komprimiert (5 Interviews à 25 Min.,
-  Leitfaden liegt in Spec §10) + P2 als Low-Fi-Test mit denselben Trainern.
-- **P3:** Datenvertragsmatrix entsteht als Teil von T27.3 (Prompt unten
-  erzwingt sie); Anwalts-Teil läuft über das bestehende Briefing
-  (`trainer_notes`/`mood_checkins` sind dort schon als Launch-Thema markiert).
-- **P4:** bleibt als 30-Minuten-GO/NO-GO-Check vor dem ersten Build-Prompt.
+Standard 14,99 €/Monat, 119,99 €/Jahr, 14-Tage-Trial; Gründer-Startpreis z. B.
+7,99 €/Monat, 69,99 €/Jahr. Alles Research-Hypothesen bis P1 und Storeprüfung.
 
-Wer schneller will, kann P1/P2 streichen — dann ist das Risiko dokumentiert
-(Spec §0 Punkt 7, §12 Stoppbedingungen) und bewusst getragen.
+### TS-11 — Kostenloser erster MVP
 
-## 3. Gemeinsame Hausregeln aller Build-Prompts
+**Empfehlung:** 3–5 Trainer starten 6–8 Wochen kostenlos über befristete
+`pilot`-Grants. Festes Enddatum, keine Zahlungsdaten, kein Auto-Abo. Danach
+separater aktiver Opt-in in den bezahlten Founding-Pilot.
 
-Für jeden Prompt gelten zusätzlich zu CLAUDE.md:
+Freigabesatz:
 
-- Arbeit vollständig hinter neuem Compile-Flag `kTrainerStudioEnabled=false`
-  (Muster + Doku-Pflichten aus `lib/config/launch_flags.dart`; Skill
-  `feature-gate` verwenden). Flag-aus = exakt heutiges Verhalten, per Test belegt.
-- Kostenlos Bestehendes bleibt kostenlos (Spec §6) — kein Entzug, keine
-  Locked-States auf heutigen Funktionen.
-- Sprache neutral: keine Scores/Risiko-/Wirkaussagen; „Erinnerung geplant",
-  nie „zugestellt" (Spec §5.3).
-- Berechtigung serverseitig aus aktiver Trainer-Klient-Beziehung + Freigabe
-  (RLS), nie nur UI (Spec §7).
-- DE+EN l10n, Dark Mode, 150 % Schrift, 44-pt-Touchziele, Empty/Loading/
-  Offline/Error/Locked/„Freigabe beendet" gestaltet (Spec §13).
-- Live-DDL/Deploys/Store-Änderungen nur mit Founder-Go; Evidenz redigiert
-  nach `docs/evidence/T27/<workstream>/`.
+> „GO TS-6 bis TS-11 wie empfohlen; TS-8/TS-10/TS-11-Details bleiben bis
+> Research bzw. Pilotplanung final offen.“
 
-## 4. Die Build-Prompts
+## 2. Voraussetzungen vor dem kostenlosen MVP-Build
 
-### T27.1 — Studio-Entitlement + Rollout-Fundament *(Gate: P4-GO + T25.2 existiert)*
+- P0–P2 und P3A in `TRAINER_STUDIO_PROMPT.md` abgeschlossen;
+- P4A = dokumentiertes Free-MVP-Build-GO;
+- T25.0 abgeschlossen, insbesondere Multi-Grant-/Benefit-Code-Fundament;
+- mindestens 3–5 erreichbare Design-/Pilottrainer;
+- Datenvertragsmatrix durch Founder geprüft;
+- bestehendes `trainer_notes`/`mood_checkins` rechtlich eingeordnet;
+- TS-6/7/8/10/11 dokumentiert;
+- T27.5 zusätzlich TS-9 + volles Legal-/Security-Go.
 
-**Rolle:** Backend-orientierte:r Flutter-/Supabase-Entwickler:in.
-**Lies zuerst:** `supabase/migrations/2026070701_premium_entitlements.sql`
-(Schutz-Trigger-Muster), `lib/features/premium/domain/entitlement.dart`,
-`PAYMENTS_MASTER_PLAN.md` §2, Spec §11.
-**Scope:**
-1. Migration (lokal, Live-Apply gated): `trainer_profiles` +
-   `studio_active boolean NOT NULL DEFAULT false`,
-   `studio_valid_until timestamptz`, `studio_source text CHECK (IN
-   ('store','pilot'))`; Schutz-Trigger nach T23-Muster (nur service_role).
-2. Pilot-Allowlist: `studio_source='pilot'` wird per Admin-/Runbook-Weg
-   gesetzt (Runbook analog `ACCESS_CODES_RUNBOOK.md`), damit der Pilot ohne
-   Käufe starten kann.
-3. `revenuecat-webhook` (T25.2) um das `studio`-Entitlement-Mapping →
-   `trainer_profiles` erweitern (inkl. Ablauf-/Schutzlogik analog Premium).
-4. Flutter: `StudioEntitlement`-Modell + Repository (Offline-Cache,
-   fail-closed) + Riverpod-Provider nach Premium-Vorbild; Flag
-   `kTrainerStudioEnabled` anlegen.
-5. Kill-Switch-Semantik dokumentieren: Flag aus → Studio-UI weg, Entitlements
-   bleiben serverseitig unangetastet.
-**Akzeptanz:** `supabase db reset --local` grün; Trigger-Negativtest (Client
-kann sich nicht selbst freischalten); Webhook-Tests für Studio-Fälle; Suite
-grün; keine UI-Änderung sichtbar.
-**Nicht-Ziele:** keine Screens, keine Store-Produkte, kein Live-Apply ohne Go.
+Apple-/Google-Produkte, RevenueCat-Webhooks und T25.5 sind **nicht** nötig, um
+das Studio für eine kostenlose geschlossene Kohorte zu bauen/testen. Sie sind
+Voraussetzung für T27.6B, den bezahlten Founding-Pilot.
 
-### T27.2 — Studio-Einstieg, Locked Preview, Paywall *(Gate: P4-GO + T27.1 + P2-Konzepttest bestanden)*
+## 3. Gemeinsame Regeln aller Prompts
 
-**Rolle:** Flutter-UI-Entwickler:in mit Gespür für ruhige Oberflächen.
-**Lies zuerst:** Spec §4–§5 (IA + Blueprints — verbindlich), §13;
-`trainer_dashboard_screen.dart`, `paywall_screen.dart` (Muster).
-**Scope:**
-1. „Heute"-Arbeitsüberblick als verbesserte Einstiegsschicht im Klienten-Tab
-   (Spec §5.1): Termine heute, max. 3 Aufmerksamkeits-Hinweise, Klientenliste.
-   Kostenlose Bestandteile bleiben frei; nur neue Automatik-/Verlaufssignale
-   tragen Studio-Kennzeichnung.
-2. Locked Preview: ehrlich (zeigt Struktur, keine fingierten Daten),
-   eine primäre Aktion → Studio-Paywall.
-3. Studio-Paywall: Store-Preise lokalisiert via RevenueCat-Offering `studio`,
-   Trial nur bei Store-Berechtigung, Restore, Link Abo-Verwaltung; Preis,
-   Zeitraum, Verlängerung, Kündigung vor Kauf klar (Spec §13); Organisation
-   statt Wirkung verkaufen — kein ROI-Satz ohne Interview-Beleg (Spec §1.3).
-4. „Studio-Einstellungen / Abo verwalten" unter Begleitung-Root (Spec §4).
-**Akzeptanz:** Screenshots aller Zustände (locked/aktiv/abgelaufen, DE+EN,
-Light/Dark) in Evidenz; abgelaufenes Abo lässt Gratis-Funktionen + eigenen
-Datenzugang unangetastet (Test); Flag-aus-Regression; Suite grün.
-**Nicht-Ziele:** keine Briefing-Daten (T27.3), keine Terminserien (T27.4).
+1. Eine Session bearbeitet genau einen Task.
+2. Vor Arbeit: `CLAUDE.md`, `docs/LAUNCH_MASTER_PROMPT.md`, relevante Spec-
+   Abschnitte und aktuellen Taskstatus lesen.
+3. Keine Live-DDL, Deploys, Store-/RevenueCat-Änderungen, Aktivierung,
+   Kommunikation oder `git push` ohne jeweiliges Founder-Go.
+4. Zwei Gates:
+   - Compile-Flag als Release-Sicherung;
+   - getrennte serverseitige `sales_rollout`-/`feature_rollout`-Zustände aus
+     dem Payments Plan.
+5. Vor öffentlichem Launch bedeutet Feature-Rollout aus heutiges Verhalten.
+   Nach bezahltem Launch stoppt `sales_rollout=off` nur neue Käufe; gültige
+   Käufe/Grants bleiben zugänglich. Incident-Abschaltung ist separat.
+6. Bestehendes Kostenloses bleibt kostenlos.
+7. Studio-RPCs prüfen `effective_entitlements('studio')` serverseitig;
+   RevenueCat CustomerInfo allein autorisiert keine sensiblen Daten.
+8. Keine Wirk-, Diagnose-, Risiko-, ROI- oder Zustellgarantie-Aussagen.
+9. DE/EN, Light/Dark, 150 % Text, 44-pt-Ziele und Empty/Loading/Offline/Error/
+   Locked/Freigabe-beendet/abgelaufen gestalten.
+10. Keine echten Personen-/Klientendaten in Evidenz. Suite, relevante
+    RLS-Negativtests und Prod-Build vor ✅.
 
-### T27.3 — Klienten-Briefing + belastbare Datenverträge *(Gate: P4-GO + T27.1; Consent-/RLS-Review im Prompt enthalten)*
+## 4. Kopierfertige Prompts
 
-**Rolle:** Fullstack (Supabase RPC + Flutter); höchste Sorgfalt — hier liegen
-Gesundheits- und Kinderdaten-Nähe.
-**Lies zuerst:** Spec §5.2 + §7 (Datenvertragsmatrix — Pflicht),
-`get_client_sessions`-Definition, Mood-Query im Trainer-Feature,
-`2026042503_harden_trainer_client_relationships.sql`.
-**Scope:**
-1. **Zuerst die Datenvertragsmatrix ausfüllen** (`docs/evidence/T27/planning/
-   data_contract_matrix.md`): je Anzeige Quelle, Zeitraum, Freigabe, RLS,
-   Entzug, Offline, Löschung. Code-Ist belegen (30-Tage-Limit, Notizfilter +
-   Limit 20). Erst nach Founder-Sichtung der Matrix weiterbauen.
-2. Neue/erweiterte RPCs: Trainingsrhythmus 8 Wochen (Wochen-Buckets,
-   SECURITY DEFINER mit Beziehungs+Freigabe-Prüfung wie Bestand),
-   Befindenstrend 8 Wochen (nur geteilte Check-ins, getrennte neutrale Reihen
-   Stimmung/Energie/Stress, KEINE Notiztexte, kein synthetischer Score),
-   „Seit letztem Termin" (Definition: letzter Termin mit Status confirmed in
-   der Vergangenheit, Zeitzonen-fest, getestet).
-3. Briefing-Screen nach Spec §5.2: Above-the-fold Identität/Stand/2 Aktionen;
-   Charts sekundär, < 2 Datenpunkte → Textzusammenfassung statt Chart; jede
-   Kachel zeigt Quelle + Aktualität.
-4. Beziehungsende/Freigabe-Entzug: Zugriff endet sofort (RLS-Negativtest).
-**Akzeptanz:** RLS-Negativtests (fremder Trainer, beendete Beziehung,
-entzogene Freigabe → leer/Fehler, nie Daten); Chart-Zusatztext (a11y);
-Matrix committed; Suite grün; redigierte Screenshots.
-**Nicht-Ziele:** keine Notizen (T27.5), keine KI-Zusammenfassungen, keine
-neuen Datenkategorien ohne Matrix-Eintrag.
-
-### T27.4 — Termin-Automation *(Gate: P4-GO + T27.1)*
-
-**Rolle:** Flutter + Edge-Function-Entwickler:in (Push-Infrastruktur).
-**Lies zuerst:** Spec §5.3, `2026042401_trainer_appointments.sql`,
-bestehende Reminder-/Push-Infrastruktur (`push_notifications_setup.md`),
-Cron-Function-Muster (`x-cron-secret`, fail-closed).
-**Scope:**
-1. Terminserien: wöchentlich/zweiwöchentlich, Pflicht-Enddatum, Vorschau
-   aller erzeugten Termine + Zeitzone vor dem Speichern; Einzeltermin bleibt
-   der kostenlose Standardfluss.
-2. Erinnerungen: idempotente Planung (Reminder-Job je Termin genau einmal,
-   Re-Run erzeugt keine Duplikate), Klienten-Opt-out getrennt von
-   Trainings-Erinnerungen, Quiet Hours + Push-Permission respektiert;
-   Status-Sprache „geplant"/„nicht geplant".
-3. `.ics`-Export je Termin/Serie (ohne `device_calendar` — bleibt disabled,
-   Mistake #18; reine Datei-Generierung + Share-Sheet).
-4. Push-Ablehnung blockiert Terminverwaltung nicht (Spec §13).
-**Akzeptanz:** Idempotenz-Test (doppelter Scheduler-Lauf), Zeitzonen-Test
-(DST-Wechsel), Opt-out-Test, `.ics` validiert in Apple/Google Kalender-Import
-(Evidenz); Flag-aus-Regression; Suite grün.
-**Nicht-Ziele:** keine Kalender-Schreibsync, keine Zustell-Garantie-Aussagen.
-
-### T27.5 — Sitzungsprotokolle *(Gate: TS-9 + volles Legal-/Security-Go — OHNE dieses Go nicht ausführen)*
-
-Erst konkretisieren, wenn das Go dokumentiert vorliegt (Spec §9
-Aktivierungs-Gate: freigegebene Texte, Rollen/AVV, Sicherheitsreview,
-RLS-Negativtests, Export/Löschung, Klienten-Transparenz). Rahmen aus Spec
-§5.4: strukturierte Felder vor Freitext, Sichtbarkeits-Hinweis, Autosave-
-Status, Export/Berichtigung/Löschung, keine Diagnosen/ICD/KI-Auswertung.
-
-### T27.6 — Store-Setup, Sandbox-E2E, Pilot *(Gate: T27.1–T27.4 + TS-6/TS-10 entschieden; Store-Anlage = Founder-Sitzung)*
-
-**Rolle:** Release-Engineer:in.
-**Lies zuerst:** `PAYMENTS_MASTER_PLAN.md` §3–§5, T25.4-Evidenzmuster.
-**Scope:**
-1. Founder-Sitzung: Studio-Produkte (eigene Subscription-Gruppe!) in ASC
-   (+ Play, falls TS-7-Android schon frei) anlegen; RevenueCat-Entitlement
-   `studio` + Offering `studio` konfigurieren; Grandfathering-Mechanik (TS-6)
-   gegen aktuelle Store-Doku verifizieren und dokumentieren.
-2. Sandbox-E2E: Kauf, Trial, Restore, Kündigung→Ablauf, abgelaufen→
-   Gratis-Zustand; auf iOS (und ggf. Android) belegt.
-3. App-Review-Vorbereitung: Trainer-Demo-Konto mit fiktiven Klientendaten,
-   Review Notes (Trainerrolle erklären, Studio-Fundort, Flag-Status).
-4. Pilot-Runbook: 5–10 Trainer-Allowlist (`studio_source='pilot'`),
-   Messplan nach Spec §12 (absolute Zahlen!), Supportweg, wöchentliche
-   Check-ins, Kill-Switch-Probe dokumentiert.
-**Akzeptanz:** E2E-Evidenz vollständig; Pilot-Go bleibt eigener Founder-Go;
-GA-Entscheid nach Spec §12-Logik (Weiter/Überarbeiten/Stoppen).
-**Nicht-Ziele:** keine öffentliche Kommunikation, kein GA-Rollout.
-
-## 5. Reihenfolge auf einen Blick
+### T27.1 — Studio-Entitlement und Rollout
 
 ```text
-JETZT (Founder):   Go zu diesem Doc + TS-6/7/10 + PM-1..4 (Payments-Plan §8)
-                   ASC-Sitzung (R4) → entsperrt T25 → entsperrt alles
-PARALLEL:          P1-Interviews (5×25 Min.) + P2-Low-Fi — während Launch/T25 ohnehin läuft
-NACH T25 + Launch stabil + P4-GO:
-                   T27.1 → T27.2 + T27.3 + T27.4 (parallelisierbar) → T27.6 → Pilot
-SEPARAT GATED:     T27.5 (Notizen) nur nach Legal-/Security-Go
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+
+Task: T27.1 — Studio-Entitlement und Rollout. Lies zuerst CLAUDE.md,
+docs/LAUNCH_MASTER_PROMPT.md, docs/TRAINER_STUDIO_BUILD_PROMPTS.md §2–§4,
+docs/PAYMENTS_MASTER_PLAN.md §3–§6 und §12 sowie die Premium-
+Entitlement-Implementierung aus T25.0. Verifiziere P4A-GO und T25.0; sonst liefere
+NO-GO und ändere nichts.
+
+Baue Studio auf dem bestehenden Multi-Grant-Ledger auf; erfinde keine parallelen
+studio_active/studio_source-Wahrheiten. Ergänze Entitlement-Key/Projektion nur,
+falls T25 sie noch nicht vollständig liefert. Implementiere Flutter-Modell,
+Repository und Provider für den effektiven serververifizierten Studio-Status
+mit begrenztem Offline-Cache. Ergänze Compile-Release-Sicherung und getrennten
+sales_rollout/feature_rollout für studio. Servergeschützte Studio-RPCs müssen
+später denselben effektiven Status prüfen können.
+
+Teste: kein Grant; aktives/abgelaufenes RevenueCat-Grant; befristeter
+Reviewgrant; mehrere Grants; Sales-/Feature-Rollout; fremder Client
+kann keinen Grant oder Rollout ändern; Compile-Flag aus = keine sichtbare
+Änderung. Dokumentiere Kill-Switch-Semantik und Rollback. Live-DDL nur nach
+separatem Founder-Go. Keine UI, keine Storeprodukte.
 ```
 
-Damit ist der Zustand erreicht, den der Founder angefordert hat: jede
-verbleibende Arbeit ist entweder ein fertiger Prompt in dieser Datei, ein
-Prompt in `PAYMENTS_MASTER_PLAN.md` §5, oder eine klar benannte
-Founder-Handlung mit Empfehlung.
+### T27.2 — Studio-Einstieg und kostenlose Kohorten-UX
+
+```text
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+
+Task: T27.2 — Studio-Einstieg und kostenlose Kohorten-UX. Lies zuerst
+CLAUDE.md, docs/LAUNCH_MASTER_PROMPT.md, die Spec §3–§6 und §13, P2-
+Konzepttest-Evidenz, T27.1-Ergebnis sowie den Payments Plan PM-D5–PM-D10.
+Verifiziere P4A-GO, T27.1 und bestandenen P2-Test; sonst NO-GO.
+
+Setze exakt die getestete IA um: Arbeitsüberblick als Einstiegsschicht im
+bestehenden Klienten-Tab, maximal drei neue Studio-Signale, kostenlose
+Bestandsfunktionen frei. Bei feature_rollout=cohort sehen ausschließlich
+Pilottrainer mit aktivem befristetem Grant die Studio-Einstiege; alle anderen
+sehen exakt die bisherige UI, keine Paywall und kein „bald kostenpflichtig“.
+Pilotstatus zeigt transparent „Kostenloser MVP bis <Datum> · keine automatische
+Verlängerung“ sowie Feedback-/Supportweg. Kein künstlicher Countdown.
+
+Teste Pilotgrant aktiv/abgelaufen/widerrufen, Kohorte/fremde Kohorte,
+Sales-Rollout off, Feature-Rollout, Flag-aus-Regression, Gratisumfang nach Ablauf,
+DE/EN, Light/Dark, iPhone/iPad/Android Phone/Tablet und Accessibility.
+Keine Paywall/Storepreise, Briefing-Daten oder Termin-Automation bauen.
+```
+
+### T27.3 — Klienten-Briefing
+
+```text
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+
+Task: T27.3 — Klienten-Briefing. Lies zuerst CLAUDE.md,
+docs/LAUNCH_MASTER_PROMPT.md, Spec §5.2/§7/§13, die in P3A freigegebene
+data_contract_matrix.md, get_client_sessions, aktuelle Trainer-Mood-Queries,
+Relationship-/Share-RLS und T27.1. Fehlt Matrix/Founder-Sichtung/Legal-
+Einordnung, melde NO-GO; verschiebe das Gate nicht in den Build.
+
+Implementiere nur die freigegebenen Verträge. Serverseitige RPCs prüfen aktive
+Trainer-Klient-Beziehung, konkrete Freigabe und effektives Studio-Entitlement.
+Liefer „Seit dem letzten Termin“, 8-Wochen-Trainingsrhythmus und nur die
+freigegebenen neutralen Befindensreihen. Keine Notiztexte in Trend-RPCs, kein
+synthetischer Score, keine Prognose. Paketverlauf nur, wenn die Matrix eine
+historisch belastbare Quelle bestätigt.
+
+UI gemäß Spec: Identität/Stand/zwei Aktionen oberhalb des Folds, „seit letztem
+Termin“ vor Charts, Quelle + Aktualität, <2 Datenpunkte als ehrlicher Empty-
+State/Text statt Chart, Chart-Inhalt zusätzlich semantisch als Text. Bei
+Beziehungs-/Freigabeende sofort kein Zugriff.
+
+Pflichttests: fremder Trainer, beendete Beziehung, entzogenes Share, kein
+Studio, abgelaufenes Studio, zwei Subjektprofile unter einem Elternkonto,
+Zeitzone/letzter Termin, leere/lückenhafte Daten, Accessibility. Keine Notizen,
+KI oder neue Datenkategorie außerhalb der Matrix.
+```
+
+### T27.4 — Termin-Automation
+
+```text
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+
+Task: T27.4 — Termin-Automation. Lies zuerst CLAUDE.md,
+docs/LAUNCH_MASTER_PROMPT.md, Spec §5.3/§7/§13, T27.1, appointment-Migrationen,
+appointment_subject_profiles sowie die vorhandenen Tabellen/Functions
+user_reminder_preferences, notification_jobs, schedule-training-reminders und
+send-notification-jobs. Verifiziere P4A-GO und T27.1.
+
+Erweitere die bestehende Reminder-Pipeline statt eines zweiten Push-Systems.
+Plane die Migration bewusst: notification_jobs hat heute einen Type-CHECK und
+einen Unique-Index (user_id,type,local_date), der mehrere Termin-Erinnerungen am
+selben Tag blockieren würde. Passe das Modell additiv/sicher an (z. B. alter
+Training-Dedupe als Partial Index; Appointment-Dedupe über stabilen
+idempotency_key + appointment_id). Dokumentiere die konkrete Wahl.
+
+Baue Serien wöchentlich/zweiwöchentlich mit Pflicht-Enddatum, Vorschau,
+Zeitzone, gemeinsamer Serien-ID und klaren Regeln für „diesen Termin“ vs.
+„diesen und folgende“. Bestehender Einzeltermin bleibt gratis. Reminder werden
+nur für bestätigte zukünftige Termine, aktives Studio und Klienten-Opt-in
+geplant; Termin-Opt-out getrennt von Trainingsremindern, Quiet Hours und
+Push-Berechtigung respektieren. Änderungen/Absagen invalidieren alte Jobs
+idempotent. Status nur geplant/nicht geplant/gesendet fehlgeschlagen, nie
+zugestellt behaupten. .ics lokal via Share Sheet, kein device_calendar.
+
+Teste doppelte Schedulerläufe, zwei Termine eines Nutzers am selben Tag,
+Terminänderung/Absage, Serienänderung, DST, verschiedene Trainer-/Klienten-
+Zeitzonen, Push aus, Quiet Hours, abgelaufenes Studio und Flag/Rollout aus.
+Validiere .ics in Apple und Google Calendar. Deploy/Cron-Änderung separat
+Founder-gated.
+```
+
+### T27.5 — Sitzungsprotokolle, optional
+
+```text
+Task T27.5 darf erst konkretisiert werden, wenn TS-9 und das vollständige
+Legal-/Security-Go schriftlich vorliegen: Rollen/Verträge, Art.-9-/Kinderdaten,
+Transparenztext, Retention, harte Löschung, Export/Berichtigung, Supportzugriff,
+Security Review und DSFA-Entscheid. Fehlt ein Punkt: NO-GO, kein Schema und
+keine UI.
+
+Nach Go erstellt eine eigene Planning-Session zuerst einen Detailprompt aus der
+anwaltlich freigegebenen Datenmatrix. Mindestprodukt: strukturierte Felder vor
+Freitext, Sichtbarkeitshinweis, Autosave-Status, Export/Berichtigung/Löschung,
+RLS-Negativtests. Keine Diagnose/ICD/KI. Ein Feature-Flag allein ist kein
+Schutzkonzept.
+```
+
+### T27.6A — Kostenlosen MVP-Pilot vorbereiten/aktivieren
+
+```text
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+
+Task: T27.6A — kostenloser Studio-MVP-Pilot. Lies CLAUDE.md,
+docs/LAUNCH_MASTER_PROMPT.md, Spec §11–§12, Payments Plan PM-D11 und Evidenz
+T27.1–T27.4. Gate: Free-MVP-Aktivierungs-Go, stabiler Core-Launch, freigegebene
+Pilottexte, 3–5 Trainer; keine Store-/Payment-Voraussetzung.
+
+Erstelle eine trainer_free_mvp-Benefitkampagne mit festem Start/Enddatum,
+studio-Entitlement, single-use Codes oder expliziter Allowlist, Pro-Account-
+Limit 1. Founder erzeugt/verteilt Codes über sicheres Runbook; keine Codes in
+Repo/Chat. sales_rollout=off, feature_rollout=cohort. Keine Zahlungsdaten,
+Storeprodukte, Trial- oder Auto-Renew-Sprache.
+
+Pilotkommunikation muss sagen: kostenlos bis Datum X, keine automatische
+Verlängerung/Belastung, heutige Gratisfunktionen bleiben, Feedback erwünscht,
+späteres Bezahlangebot separat. Founder gibt Wortlaut und Versand einzeln frei.
+Teste Grant/Expiry/Revoke/Kampagnenlimit und dass Ablauf nur Studio-MVP-Zugang,
+nicht Gratisfunktionen oder Daten, betrifft. Messplan erfasst reale wiederholte
+Nutzung und Arbeitsnutzen, nicht Zahlungsconversion. Aktivierung und Versand
+separat Founder-gated.
+```
+
+### T27.6B — Store-Paywall, E2E und bezahlter Founding-Pilot
+
+```text
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+
+Task: T27.6B — Storekatalog, Paywall, E2E und bezahlter Founding-Pilot. Lies zuerst CLAUDE.md,
+docs/LAUNCH_MASTER_PROMPT.md, Payments Plan §7–§10/§12, Spec §8/§12,
+T25.5-Evidenz, Auswertung T27.6A und T27.1–T27.4. Verifiziere
+TS-6/7/8/10/11, Paid-Pilot-Go und alle Gates.
+
+Erstelle zunächst die Studio-Paywall aus dem getesteten Design: lokalisierte
+Storepreise, Trial-Eligibility, Restore, Aboverwaltung, anderer Store ohne
+Doppelkauf, Terms/Privacy; bestehendes Gratisprodukt bleibt frei. Danach eine
+Founder-Klickcheckliste; Founder führt ASC/Play/RC-
+Mutationen aus. Lege Studio-Produkte/Base Plans/Offers exakt nach finaler
+Preisentscheidung an: eigene Apple Subscription Group, Google Subscription
+mit monthly/yearly Base Plans, RevenueCat studio-Offering, Trial-Eligibility,
+Family Sharing aus. Dokumentiere Gründer-Startpreis und spätere Preserve-/
+Legacy-Cohort-Schritte, ohne die Preiserhöhung jetzt auszuführen.
+
+Führe Sandbox/License-E2E aus: Monat/Jahr, Trial eligible/ineligible, Restore,
+Kündigung bis Ablauf, Grace/Recovery, Refund soweit testbar, iOS↔Android,
+anderer Store ohne Doppelkauf, Backend-Aktivierungswartezeit. App Review erhält
+ein Demo-Konto mit ausschließlich fiktiven Klientendaten und präzise Review
+Notes.
+
+Bezahlter Pilot: 5–10 Trainer, 4–6 Wochen, bewusster neuer Opt-in per
+Storekauf/Trial; kein automatischer Übergang aus T27.6A. Interne Reviewgrants
+nur für Review/Test, nicht als Ersatz. Supportweg, Messplan mit absoluten Zahlen,
+Kill-Switch-Probe und Weiter/Überarbeiten/Stoppen-Entscheid dokumentieren.
+Kein Versand, keine Aktivierung und kein GA ohne separates Founder-Go.
+```
+
+## 5. Reihenfolge
+
+```text
+JETZT:       Founder-Entscheide PM-D1–D11 + TS-6–TS-11
+FOUNDATION:  T25.0 Multi-Grant + Benefit-Codes
+DISCOVERY:   P1 → P2 → P3A → P4A Free-MVP-GO
+FREE MVP:    T27.1 → T27.2 + T27.3 + T27.4 → T27.6A → Auswertung
+PAYMENTS:    P3B + T25.1 → T25.2 → T25.3 + T25.4 → T25.5 (parallel)
+PAID PILOT:  P4B-GO → T27.6B → Auswertung → GA-Entscheid
+SEPARAT:     T27.5 nur nach vollem Legal-/Security-Go
+```
+
+Parallelisierung ist erst erlaubt, wenn Abhängigkeiten erfüllt sind. Die
+Orchestrator-Datei gibt immer nur den nächsten tatsächlich fälligen Prompt aus.

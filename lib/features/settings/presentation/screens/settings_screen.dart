@@ -76,7 +76,7 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.only(bottom: 32),
         children: [
-          const _SectionHeader(title: 'Training'),
+          _SectionHeader(title: l10n.settingsTraining),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Card(
@@ -86,14 +86,14 @@ class SettingsScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Wie viel Begleitung möchtest du im Training?',
+                      l10n.trainingMode,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.w700,
                           ),
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Tutorial ist für den Einstieg. Routine ist kompakter.',
+                      l10n.settingsTrainingModeDescription,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: cs.onSurfaceVariant,
                           ),
@@ -133,7 +133,7 @@ class SettingsScreen extends ConsumerWidget {
               onChanged: notifier.setFeedbackMode,
             ),
           ),
-          const _SectionHeader(title: 'Erinnerungen'),
+          _SectionHeader(title: l10n.settingsReminders),
           SwitchListTile(
             title: Text(l10n.reminderEnabled),
             value: settings.remindersEnabled,
@@ -152,7 +152,7 @@ class SettingsScreen extends ConsumerWidget {
               onChanged: notifier.setReminderEnd,
             ),
           ],
-          const _SectionHeader(title: 'Darstellung'),
+          _SectionHeader(title: l10n.settingsTheme),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: _SegmentedRow<String>(
@@ -179,21 +179,19 @@ class SettingsScreen extends ConsumerWidget {
               onChanged: notifier.setThemeMode,
             ),
           ),
-          const _SectionHeader(title: 'Erweitert'),
+          _SectionHeader(title: l10n.settingsAdvanced),
           ListTile(
             leading: const Icon(Icons.help_outline),
-            title: const Text('Einführungen erneut anzeigen'),
-            subtitle: const Text(
-              'Zeigt die kurzen Hinweise auf Heute, Verlauf, Begleitung und Profil wieder an.',
-            ),
+            title: Text(l10n.settingsResetIntroductions),
+            subtitle: Text(l10n.settingsResetIntroductionsDescription),
             onTap: () async {
               await ref
                   .read(onboardingHintControllerProvider.notifier)
                   .resetAll();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Einführungen werden wieder angezeigt.'),
+                  SnackBar(
+                    content: Text(l10n.settingsResetIntroductionsSuccess),
                   ),
                 );
               }

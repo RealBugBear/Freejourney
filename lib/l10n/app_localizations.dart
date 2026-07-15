@@ -122,6 +122,72 @@ abstract class AppLocalizations {
   /// **'Abmelden'**
   String get signOut;
 
+  /// No description provided for @languageSelectionTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Sprache wählen'**
+  String get languageSelectionTitle;
+
+  /// No description provided for @languageSelectionSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Du kannst sie später in den Einstellungen ändern.'**
+  String get languageSelectionSubtitle;
+
+  /// No description provided for @languageGerman.
+  ///
+  /// In de, this message translates to:
+  /// **'Deutsch'**
+  String get languageGerman;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In de, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// No description provided for @languageContinue.
+  ///
+  /// In de, this message translates to:
+  /// **'Weiter'**
+  String get languageContinue;
+
+  /// No description provided for @tryShortAssessment.
+  ///
+  /// In de, this message translates to:
+  /// **'Kurztest ohne Konto ausprobieren'**
+  String get tryShortAssessment;
+
+  /// No description provided for @signInWithAlternativeDivider.
+  ///
+  /// In de, this message translates to:
+  /// **'oder'**
+  String get signInWithAlternativeDivider;
+
+  /// No description provided for @signInWithApple.
+  ///
+  /// In de, this message translates to:
+  /// **'Mit Apple fortfahren'**
+  String get signInWithApple;
+
+  /// No description provided for @signInWithGoogle.
+  ///
+  /// In de, this message translates to:
+  /// **'Mit Google fortfahren'**
+  String get signInWithGoogle;
+
+  /// No description provided for @authErrorSocialConfiguration.
+  ///
+  /// In de, this message translates to:
+  /// **'Social Login ist noch nicht korrekt konfiguriert. Bitte Support kontaktieren.'**
+  String get authErrorSocialConfiguration;
+
+  /// No description provided for @authErrorSocialCancelled.
+  ///
+  /// In de, this message translates to:
+  /// **'Anmeldung wurde abgebrochen.'**
+  String get authErrorSocialCancelled;
+
   /// No description provided for @email.
   ///
   /// In de, this message translates to:
@@ -1166,6 +1232,36 @@ abstract class AppLocalizations {
   /// **'Daten & Sync'**
   String get settingsDataSync;
 
+  /// No description provided for @settingsTrainingModeDescription.
+  ///
+  /// In de, this message translates to:
+  /// **'Tutorial ist für den Einstieg. Routine ist kompakter.'**
+  String get settingsTrainingModeDescription;
+
+  /// No description provided for @settingsAdvanced.
+  ///
+  /// In de, this message translates to:
+  /// **'Erweitert'**
+  String get settingsAdvanced;
+
+  /// No description provided for @settingsResetIntroductions.
+  ///
+  /// In de, this message translates to:
+  /// **'Einführungen erneut anzeigen'**
+  String get settingsResetIntroductions;
+
+  /// No description provided for @settingsResetIntroductionsDescription.
+  ///
+  /// In de, this message translates to:
+  /// **'Zeigt die kurzen Hinweise auf Heute, Verlauf, Begleitung und Profil wieder an.'**
+  String get settingsResetIntroductionsDescription;
+
+  /// No description provided for @settingsResetIntroductionsSuccess.
+  ///
+  /// In de, this message translates to:
+  /// **'Einführungen werden wieder angezeigt.'**
+  String get settingsResetIntroductionsSuccess;
+
   /// No description provided for @syncStatusOk.
   ///
   /// In de, this message translates to:
@@ -1333,6 +1429,72 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Konto konnte nicht gelöscht werden. Bitte kontaktiere den Support.'**
   String get profileDeleteAccountError;
+
+  /// No description provided for @redeemAccessCodeTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Gründungscode einlösen'**
+  String get redeemAccessCodeTitle;
+
+  /// No description provided for @redeemAccessCodeSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Schalte mit deinem Code alle kostenpflichtigen Pakete frei.'**
+  String get redeemAccessCodeSubtitle;
+
+  /// No description provided for @redeemAccessCodeHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Code eingeben'**
+  String get redeemAccessCodeHint;
+
+  /// No description provided for @redeemAccessCodeAction.
+  ///
+  /// In de, this message translates to:
+  /// **'Einlösen'**
+  String get redeemAccessCodeAction;
+
+  /// No description provided for @redeemAccessCodeSuccess.
+  ///
+  /// In de, this message translates to:
+  /// **'Code eingelöst. Premium-Zugang ist aktiv.'**
+  String get redeemAccessCodeSuccess;
+
+  /// No description provided for @redeemAccessCodeErrorInvalid.
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Code ist ungültig.'**
+  String get redeemAccessCodeErrorInvalid;
+
+  /// No description provided for @redeemAccessCodeErrorUsed.
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Code wurde bereits eingelöst.'**
+  String get redeemAccessCodeErrorUsed;
+
+  /// No description provided for @redeemAccessCodeErrorExpired.
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Code ist abgelaufen.'**
+  String get redeemAccessCodeErrorExpired;
+
+  /// No description provided for @redeemAccessCodeErrorUnsupported.
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Code-Typ wird noch nicht unterstützt.'**
+  String get redeemAccessCodeErrorUnsupported;
+
+  /// No description provided for @redeemAccessCodeErrorUnauthorized.
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte melde dich erneut an und versuche es noch einmal.'**
+  String get redeemAccessCodeErrorUnauthorized;
+
+  /// No description provided for @redeemAccessCodeErrorUnknown.
+  ///
+  /// In de, this message translates to:
+  /// **'Code konnte nicht eingelöst werden. Bitte erneut versuchen.'**
+  String get redeemAccessCodeErrorUnknown;
 
   /// No description provided for @trainerDashboard.
   ///

@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class LanguageSelectionScreen extends ConsumerStatefulWidget {
   const LanguageSelectionScreen({super.key});
@@ -35,6 +36,10 @@ class _LanguageSelectionScreenState
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    // Preview the highlighted language immediately without persisting it until
+    // Continue is tapped (persisting earlier would make the router leave this
+    // first-launch screen before the user confirms their choice).
+    final l10n = lookupAppLocalizations(Locale(_selectedCode));
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -53,7 +58,7 @@ class _LanguageSelectionScreenState
               ),
               const SizedBox(height: 28),
               Text(
-                'Sprache wählen',
+                l10n.languageSelectionTitle,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -61,7 +66,7 @@ class _LanguageSelectionScreenState
               ),
               const SizedBox(height: 6),
               Text(
-                'Choose your language',
+                l10n.languageSelectionSubtitle,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: cs.onSurfaceVariant,
                     ),
@@ -69,13 +74,13 @@ class _LanguageSelectionScreenState
               ),
               const SizedBox(height: 36),
               _LanguageButton(
-                label: 'Deutsch',
+                label: l10n.languageGerman,
                 selected: _selectedCode == 'de',
                 onPressed: () => setState(() => _selectedCode = 'de'),
               ),
               const SizedBox(height: 12),
               _LanguageButton(
-                label: 'English',
+                label: l10n.languageEnglish,
                 selected: _selectedCode == 'en',
                 onPressed: () => setState(() => _selectedCode = 'en'),
               ),
@@ -88,9 +93,12 @@ class _LanguageSelectionScreenState
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'Starten / Continue',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+                child: Text(
+                  l10n.languageContinue,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],

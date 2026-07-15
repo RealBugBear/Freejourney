@@ -59,7 +59,10 @@
    Gestaltungen (separate Nummer, c/o-/Büroservice-Adresse) sind zulässig?
 4. **In-App-Einwilligung (Consent-Screen):** Juristische Prüfung/
    Überarbeitung unserer vorbereiteten Entwurfsfassung (Anlage 1). Die App
-   hat eine funktionierende Re-Consent-Mechanik (Versions-Bump).
+   hat eine funktionierende Re-Consent-Mechanik (Versions-Bump). Bitte dabei
+   ausdrücklich auch die bereits heute vorhandenen Trainer-Datenflüsse aus
+   Abschnitt 3 einordnen: privates Trainer-Freitextfeld und Zugriff auf
+   gesundheitsnahe Beobachtungen verbundener Klienten.
 5. **Verarbeiter-/AVV-Check:** Kurzprüfung der Liste in Abschnitt 5
    (Standard-DPAs der Anbieter; Drittlandtransfers/SCCs wo relevant) +
    Hinweis, was ins Verarbeitungsverzeichnis gehört.
@@ -83,10 +86,12 @@
 
 | Datenart | Inhalt | Anmerkung |
 |---|---|---|
-| Konto | E-Mail, Passwort | Supabase Auth; E-Mail-Bestätigung aktiv |
+| Konto | E-Mail, Passwort; optional Apple-/Google-Login | Supabase Auth; E-Mail-Bestätigung aktiv; Social Login (T26) optional |
 | Gesundheitsnahe Daten | Trainingsfortschritt, Einstiegs-/Reflexfragebogen, Stimmungs-Check-ins, Journal-Freitexte | Kern der App; besondere Sensibilität bekannt |
 | Kinderprofile | Name, Geburtsdatum, Fortschritt | nur durch erziehungsberechtigten Kontoinhaber angelegt/verwaltet |
 | Kommunikation | 1:1-Chat Nutzer ↔ Trainer | kein öffentlicher Feed zum Launch (Community-Funktionen deaktiviert) |
+| Trainer-Notiz (Ist-Zustand) | freies Textfeld `trainer_notes` je aktiver Trainer-Klient-Beziehung; nur der Trainer bearbeitet es | kann gesundheitsbezogene Angaben und Kinderdaten enthalten; Rollen, Rechtsgrundlage, Transparenz, Aufbewahrung und Löschung bitte bereits für den Launch prüfen |
+| Trainerzugriff auf Beobachtungen (Ist-Zustand) | verbundene Trainer können geteilte Stimmungs-/Energie-/Stresswerte und optionale Notiztexte aus `mood_checkins` sehen | bitte Umfang der wirksamen Freigabe, Zweckbindung, Eltern-/Kindertransparenz und Zugriffsende bei Beziehungsende prüfen |
 | Push | FCM-Geräte-Token | für Erinnerungen/Trainer-Nachrichten |
 | Standort (Nutzer) | nur auf aktive Nutzer-Anfrage in der Trainer-Suche; **transient, wird nicht gespeichert** | technischer Nachweis: Anlage 2 |
 | Standort (Trainer) | vom Trainer selbst gesetzter Praxis-Standort; veröffentlicht nur serverseitig verrauscht (~1 km) | B2B-Daten |
@@ -98,6 +103,14 @@ Irland)**; lokale Offline-Datenbank app-privat, von Geräte-Backups
 ausgeschlossen; **In-App-Kontolöschung** löscht Server- und lokale Daten;
 **kein Tracking, keine Werbung, keine Analytics-SDKs**; Absturzberichte
 (Sentry) anonymisiert und ohne Inhaltsdaten, EU-Datenhaltung.
+
+**Konkrete Zusatzfrage zu den Trainer-Datenflüssen:** Welche Rollen nimmt der
+Betreiber je Verarbeitung tatsächlich ein (Verantwortlicher,
+Auftragsverarbeiter des Trainers oder ggf. gemeinsame Verantwortlichkeit), und
+welche Verträge/Informationen/Einwilligungen bzw. sonstigen Rechtsgrundlagen
+sind dafür erforderlich? Wir möchten die Rollen nicht durch die technische
+Ausgestaltung vorwegnehmen. Falls der heutige Ist-Zustand vor Launch
+eingeschränkt werden sollte, bitten wir um eine klare Priorisierung.
 
 ## 4. Bekannte Abweichung (bitte im Zuge von Leistung 4 heilen)
 

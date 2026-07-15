@@ -5,6 +5,30 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../domain/entitlement.dart';
 
+enum RedeemAccessCodeError {
+  invalidCode,
+  alreadyRedeemed,
+  expired,
+  unsupported,
+  unauthorized,
+  unknown,
+}
+
+RedeemAccessCodeError mapRedeemAccessCodeError(String? code) => switch (code) {
+      'invalid_code' => RedeemAccessCodeError.invalidCode,
+      'already_redeemed' => RedeemAccessCodeError.alreadyRedeemed,
+      'expired_code' => RedeemAccessCodeError.expired,
+      'unsupported_code_type' => RedeemAccessCodeError.unsupported,
+      'unauthorized' => RedeemAccessCodeError.unauthorized,
+      _ => RedeemAccessCodeError.unknown,
+    };
+
+class RedeemAccessCodeException implements Exception {
+  RedeemAccessCodeException(this.error);
+
+  final RedeemAccessCodeError error;
+}
+
 /// Liest den Premium-Status aus `profiles` — mit SharedPreferences-Cache,
 /// damit die Offline-first-App auch ohne Netz einen letzten bekannten
 /// Stand hat. Default ist immer [Entitlement.none] (fail-closed: im
@@ -49,6 +73,34 @@ class PremiumRepository {
       );
     } catch (_) {
       return null;
+    }
+  }
+
+  Future<void> redeemAccessCode(String code) async {
+    final userId = _client.auth.currentUser?.id;
+    if (userId == null) {
+      throw RedeemAccessCodeException(RedeemAccessCodeError.unauthorized);
+    }
+
+    final normalized = code.trim().toUpperCase();
+    if (normalized.isEmpty) {
+      throw RedeemAccessCodeException(RedeemAccessCodeError.invalidCode);
+    }
+
+    final session = _client.auth.currentSession;
+    final response = await _client.functions.invoke(
+      'redeem-access-code',
+      body: {'code': normalized},
+      headers: {
+        if (session != null) 'Authorization': 'Bearer ${session.accessToken}',
+      },
+    );
+
+    if (response.status >= 400) {
+      final data = response.data;
+      final errorCode =
+          data is Map ? data['error']?.toString() : response.status.toString();
+      throw RedeemAccessCodeException(mapRedeemAccessCodeError(errorCode));
     }
   }
 }

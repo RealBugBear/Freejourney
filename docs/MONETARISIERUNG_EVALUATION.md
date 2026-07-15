@@ -1,5 +1,11 @@
 # Monetarisierung — realistische Evaluation (2026-07-07)
 
+> **Stand 2026-07-10:** Die Geschäftsmodellbewertung bleibt gültige
+> Entscheidungsbegründung. Die damalige Apple-only Zahlungsarchitektur und
+> Gebührenannahmen sind durch den Cross-Platform-Plan
+> `docs/PAYMENTS_MASTER_PLAN.md` ersetzt. Aktuelle Ausführungsreihenfolge:
+> `docs/MONETIZATION_STUDIO_MASTER_PROMPT.md`.
+
 Auftrag: Founder-Anfrage, die Geldverdien-Optionen ganzheitlich zu bewerten
 (logisch, psychologisch, käuferpsychologisch, rechtlich). Baut auf dem
 freigegebenen Design `docs/superpowers/specs/2026-05-28-monetization-design.md`
@@ -18,7 +24,7 @@ kostenlos versprochen (8.7) — nicht mehr.
 
 - **Logik:** Höchster Lebenszeitwert pro Nutzer, planbarer Umsatz, passt zu
   laufendem Wert (Tracking, Erinnerungen, Trainer-Anbindung, künftige
-  Inhalte). Apple wickelt Zahlung/Kündigung/Erstattung ab.
+  Inhalte). Apple bzw. Google wickeln den jeweiligen Storekauf ab.
 - **Psychologie:** Deutsche Nutzer sind abo-müde. Kritisch: Die App ist ein
   **Programm mit absehbarem Ende** (Pakete à 4 Wochen). „Miete für endlichen
   Content“ fühlt sich unfair an → Kündigungswelle nach Programmende ist
@@ -155,7 +161,7 @@ Zahlungsbereitschaft, aber **Vertrauensmarkt**. Konsequenzen:
 
 | Thema | Status |
 |---|---|
-| IAP-Pflicht für digitale Inhalte (Apple 3.1.1); Stripe-Checkout fürs Abo im App Store unzulässig | bekannt, Roadmap §4; EU-Alternativen (DMA-Link-out) für Solo-Gründer unverhältnismäßig — bleibt so |
+| Storezahlung für digitale Inhalte | iOS/iPadOS: Apple IAP; Android: Google Play Billing; regionale Alternativen werden wegen Solo-Founder-Komplexität zunächst nicht genutzt. Aktueller Stand im Payments Master Plan. |
 | Trainer-Sessions: seit D5 komplett außerhalb der Plattform (direkte Abrechnung Trainer↔Klient) — kein Apple-Thema, kein Zahlungsrecht | D5 2026-07-07 |
 | AGB + Widerrufsbelehrung (digitale Inhalte, § 356 Abs. 5 BGB-Mechanik via Apple) | im Anwalts-Briefing als **Baustein 8 (optional)** angefragt ✓ |
 | Gewährleistung digitale Produkte (§§ 327 ff. BGB), Preisangaben | ins AGB-Paket (Anwalt) |
@@ -164,21 +170,24 @@ Zahlungsbereitschaft, aber **Vertrauensmarkt**. Konsequenzen:
 | Keine Heilversprechen in Paywall-/Verkaufs-Copy (UWG/HWG-Nähe) | Standing Rule des Projekts, gilt auch hier |
 | Bestandsschutz-Kommunikation vor Paywall-Live | R8-Formel, Founder-Freigabe nötig |
 
-## 4. Empfohlene Ziel-Architektur (für die R8-Design-Session)
+## 4. Historische D4-Zielarchitektur (Zahlungsdetails seit 2026-07-10 ersetzt)
 
 1. **Phase 2 (erste Monetarisierung, nach R8-Trigger):** Paywall am Übergang
    zu Paket 2 mit **genau drei Optionen**: Monat 12,99 € · **Jahr 89,99 €
    (hervorgehoben)** · Lifetime 149 € (Anker). Paket 1 dauerhaft frei.
    Freischalt-Codes (access_codes) von Tag 1 im Entitlement-Modell.
-   RevenueCat + Apple IAP; Small Business Program beantragen.
+   RevenueCat + jeweiliger Storekauf; aktuelle Produkt-/Entitlement-Architektur
+   steht im Payments Master Plan.
 2. **Kein Einzelpaket-Verkauf zum Start**; später als Exit-Offer testen,
    wenn Paywall-Absprungdaten es rechtfertigen.
 3. **Phase 3 (Trainer-Seite) — Stand D5 2026-07-07:** KEINE Session-Provision
    (Abrechnung direkt Trainer↔Klient, Plattform außen vor). Einziges
    künftiges Trainer-Modell: **Werkzeug-Abo** (eigene Design-Session
    post-launch; P2B-Frage + Haftungs-Abgrenzung dann zum Anwalt).
-4. **Stripe entfällt komplett** (D5 + Launch-kostenlos): Nutzer-Käufe laufen
-   über Apple IAP (T25), Trainer-Zahlungen existieren plattformseitig nicht.
+4. **Stripe entfällt komplett** (D5 + Launch-kostenlos): digitale Käufe laufen
+   auf iOS/iPadOS über Apple IAP und auf Android über Google Play Billing,
+   gemeinsam via RevenueCat (T25); Trainer-Sitzungszahlungen existieren
+   plattformseitig nicht.
 
 ## Founder-Entscheidung D4 (2026-07-07) — Update
 
@@ -200,9 +209,9 @@ post-launch). Neue Fakten aus der Praxis:
 
 Umsetzung: Tasks **T23** (Entitlement-Modell + Paket-Gating + Paywall-UI,
 alles hinter `kPaywallEnabled=false`), **T24** (Freischalt-Codes für
-Gründungsnutzer über `access_codes`), **T25** (RevenueCat/IAP-Verkabelung,
-⛔ bis ASC-Record + Produkte + RevenueCat-Konto existieren) — Prompts im
-Tracker.
+Gründungsnutzer über `access_codes`), **T25.0–T25.5** (Multi-Grant-Ledger,
+RevenueCat, Apple IAP, Google Play Billing, Operations) — aktueller Plan in
+`docs/PAYMENTS_MASTER_PLAN.md`.
 
 ## Offene Founder-Entscheidungen (bei Aktivierung der Paywall)
 
@@ -211,5 +220,5 @@ Tracker.
 - Aktivierungs-Trigger bestätigen (Launch stabil + Nutzer erreichen Paket 2).
 - AGB/Widerruf beim Anwalt beauftragen (Briefing-Baustein 8 → Festpreis
   liegt dann schon vor).
-- Trainer-Monetarisierung (Phase 3): nur Provision vs. Provision +
-  Werkzeug-Abo; § 19 UStG mit Steuerberater.
+- Trainer-Monetarisierung (Phase 3): ausschließlich optionales Werkzeug-Abo;
+  keine Session-Provision (D5). § 19 UStG/Store-Auszahlungen mit Steuerberater.

@@ -8,7 +8,12 @@ import '../../data/repositories/supabase_auth_repository.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  return SupabaseAuthRepository(Supabase.instance.client);
+  final appConfig = ref.watch(appConfigProvider);
+  return SupabaseAuthRepository(
+    Supabase.instance.client,
+    googleWebClientId: appConfig.googleWebClientId,
+    googleIosClientId: appConfig.googleIosClientId,
+  );
 });
 
 final authStateProvider = StreamProvider<AuthState>((ref) {
@@ -35,6 +40,30 @@ class AuthNotifier extends StateNotifier<AsyncValue<void>> {
     state = await AsyncValue.guard(
       () => _repo.signInWithEmail(email: email, password: password),
     );
+  }
+
+  Future<void> signInWithApple() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      try {
+        await _repo.signInWithApple();
+      } on AuthException catch (e) {
+        if (e.statusCode == 'auth_canceled') return;
+        rethrow;
+      }
+    });
+  }
+
+  Future<void> signInWithGoogle() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      try {
+        await _repo.signInWithGoogle();
+      } on AuthException catch (e) {
+        if (e.statusCode == 'auth_canceled') return;
+        rethrow;
+      }
+    });
   }
 
   /// Returns true when email confirmation is still pending (no session yet).

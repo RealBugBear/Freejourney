@@ -68,6 +68,8 @@ class Bootstrap {
       supabaseAnonKey: dotenv.env['SUPABASE_ANON_KEY']!,
       revenueCatApiKey: dotenv.env['REVENUECAT_API_KEY'] ?? '',
       agoraAppId: dotenv.env['AGORA_APP_ID'] ?? '',
+      googleWebClientId: dotenv.env['GOOGLE_WEB_CLIENT_ID'] ?? '',
+      googleIosClientId: dotenv.env['GOOGLE_IOS_CLIENT_ID'] ?? '',
     );
     _dbg('AppConfig created, url=${config.supabaseUrl}');
 

@@ -1,0 +1,3 @@
+[{"policyname":"shares_delete_own","permissive":"PERMISSIVE","cmd":"DELETE","qual":"(auth.uid() = user_id)","with_check":null}, 
+ {"policyname":"shares_insert","permissive":"PERMISSIVE","cmd":"INSERT","qual":null,"with_check":"(auth.uid() = user_id)"}, 
+ {"policyname":"shares_read","permissive":"PERMISSIVE","cmd":"SELECT","qual":"(auth.uid() IS NOT NULL)","with_check":null}]

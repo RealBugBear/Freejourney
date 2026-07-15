@@ -1,7 +1,7 @@
 name: corejourney
 description: Reflex Journey — Nervous System Training
 publish_to: none
-version: 1.0.5+2026051001
+version: 1.0.5+2026071403
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -82,6 +82,8 @@ dependencies:
   url_launcher: ^6.2.5
   app_links: ^7.0.0
   sentry_flutter: ^8.14.2
+  sign_in_with_apple: ^7.0.1
+  google_sign_in: ^7.2.0
 
 dependency_overrides:
   # device_calendar requires timezone ^0.9.0 but this project uses ^0.10.1.

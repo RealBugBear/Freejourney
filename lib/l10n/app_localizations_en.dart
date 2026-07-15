@@ -21,6 +21,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signOut => 'Sign Out';
 
   @override
+  String get languageSelectionTitle => 'Choose your language';
+
+  @override
+  String get languageSelectionSubtitle =>
+      'You can change this later in Settings.';
+
+  @override
+  String get languageGerman => 'Deutsch';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageContinue => 'Continue';
+
+  @override
+  String get tryShortAssessment =>
+      'Try the short assessment without an account';
+
+  @override
+  String get signInWithAlternativeDivider => 'or';
+
+  @override
+  String get signInWithApple => 'Continue with Apple';
+
+  @override
+  String get signInWithGoogle => 'Continue with Google';
+
+  @override
+  String get authErrorSocialConfiguration =>
+      'Social login is not configured correctly yet. Please contact support.';
+
+  @override
+  String get authErrorSocialCancelled => 'Sign-in was cancelled.';
+
+  @override
   String get email => 'Email';
 
   @override
@@ -593,6 +629,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsDataSync => 'Data & Sync';
 
   @override
+  String get settingsTrainingModeDescription =>
+      'Tutorial is ideal when you\'re getting started. Routine is more compact.';
+
+  @override
+  String get settingsAdvanced => 'Advanced';
+
+  @override
+  String get settingsResetIntroductions => 'Show introductions again';
+
+  @override
+  String get settingsResetIntroductionsDescription =>
+      'Shows the short tips for Today, Progress, Guidance, and Profile again.';
+
+  @override
+  String get settingsResetIntroductionsSuccess =>
+      'Introductions will be shown again.';
+
+  @override
   String get syncStatusOk => 'All synced';
 
   @override
@@ -686,6 +740,45 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profileDeleteAccountError =>
       'Could not delete account. Please contact support.';
+
+  @override
+  String get redeemAccessCodeTitle => 'Redeem founding code';
+
+  @override
+  String get redeemAccessCodeSubtitle =>
+      'Unlock all paid packages with your code.';
+
+  @override
+  String get redeemAccessCodeHint => 'Enter code';
+
+  @override
+  String get redeemAccessCodeAction => 'Redeem';
+
+  @override
+  String get redeemAccessCodeSuccess =>
+      'Code redeemed. Premium access is now active.';
+
+  @override
+  String get redeemAccessCodeErrorInvalid => 'This code is invalid.';
+
+  @override
+  String get redeemAccessCodeErrorUsed =>
+      'This code has already been redeemed.';
+
+  @override
+  String get redeemAccessCodeErrorExpired => 'This code has expired.';
+
+  @override
+  String get redeemAccessCodeErrorUnsupported =>
+      'This code type is not supported yet.';
+
+  @override
+  String get redeemAccessCodeErrorUnauthorized =>
+      'Please sign in again and try once more.';
+
+  @override
+  String get redeemAccessCodeErrorUnknown =>
+      'Code redemption failed. Please try again.';
 
   @override
   String get trainerDashboard => 'Trainer Dashboard';

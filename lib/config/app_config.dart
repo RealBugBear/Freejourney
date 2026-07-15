@@ -8,6 +8,8 @@ class AppConfig {
   final String supabaseAnonKey;
   final String revenueCatApiKey;
   final String agoraAppId;
+  final String googleWebClientId;
+  final String googleIosClientId;
 
   const AppConfig({
     required this.environment,
@@ -15,6 +17,8 @@ class AppConfig {
     required this.supabaseAnonKey,
     required this.revenueCatApiKey,
     this.agoraAppId = '',
+    this.googleWebClientId = '',
+    this.googleIosClientId = '',
   });
 
   bool get isDevelopment => environment == AppEnvironment.development;

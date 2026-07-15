@@ -11,6 +11,8 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../features/assessment/presentation/providers/reflex_profile_provider.dart';
 import '../../../../features/auth/presentation/providers/auth_provider.dart';
 import '../../../../features/chat/presentation/widgets/direct_messages_action.dart';
+import '../../../../features/premium/data/premium_repository.dart';
+import '../../../../features/premium/presentation/providers/premium_provider.dart';
 import '../../../../features/trainer/presentation/providers/trainer_provider.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../providers/profile_provider.dart';
@@ -153,6 +155,16 @@ class ProfileScreen extends ConsumerWidget {
               onTap: () => context.push(Routes.changePassword),
             ),
             ListTile(
+              leading: const Icon(Icons.redeem_outlined),
+              title: Text(l10n.redeemAccessCodeTitle),
+              subtitle: Text(
+                l10n.redeemAccessCodeSubtitle,
+                style: const TextStyle(fontSize: 12),
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => _showRedeemAccessCodeDialog(context, ref),
+            ),
+            ListTile(
               leading: const Icon(Icons.logout),
               title: Text(l10n.signOut),
               trailing: const Icon(Icons.chevron_right),
@@ -216,6 +228,77 @@ class ProfileScreen extends ConsumerWidget {
           SnackBar(content: Text(l10n.profileDeleteAccountError)),
         );
       }
+    }
+  }
+
+  Future<void> _showRedeemAccessCodeDialog(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final l10n = AppLocalizations.of(context);
+    final controller = TextEditingController();
+    try {
+      final submittedCode = await showDialog<String>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(l10n.redeemAccessCodeTitle),
+          content: TextField(
+            controller: controller,
+            textCapitalization: TextCapitalization.characters,
+            autocorrect: false,
+            enableSuggestions: false,
+            decoration: InputDecoration(
+              labelText: l10n.redeemAccessCodeHint,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, controller.text),
+              child: Text(l10n.redeemAccessCodeAction),
+            ),
+          ],
+        ),
+      );
+
+      if (submittedCode == null || submittedCode.trim().isEmpty || !context.mounted) {
+        return;
+      }
+
+      await ref.read(premiumRepositoryProvider).redeemAccessCode(submittedCode);
+      ref.invalidate(entitlementProvider);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.redeemAccessCodeSuccess)),
+        );
+      }
+    } on RedeemAccessCodeException catch (e) {
+      if (!context.mounted) return;
+      final message = switch (e.error) {
+        RedeemAccessCodeError.invalidCode => l10n.redeemAccessCodeErrorInvalid,
+        RedeemAccessCodeError.alreadyRedeemed =>
+          l10n.redeemAccessCodeErrorUsed,
+        RedeemAccessCodeError.expired => l10n.redeemAccessCodeErrorExpired,
+        RedeemAccessCodeError.unsupported =>
+          l10n.redeemAccessCodeErrorUnsupported,
+        RedeemAccessCodeError.unauthorized =>
+          l10n.redeemAccessCodeErrorUnauthorized,
+        RedeemAccessCodeError.unknown => l10n.redeemAccessCodeErrorUnknown,
+      };
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.redeemAccessCodeErrorUnknown)),
+        );
+      }
+    } finally {
+      controller.dispose();
     }
   }
 }
