@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../../core/time/app_clock_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/error_retry_widget.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../mood/presentation/providers/mood_provider.dart';
 import '../../../mood/presentation/widgets/mood_checkin_sheet.dart';
 import '../../../mood/presentation/widgets/note_entry_sheet.dart';
@@ -17,6 +18,7 @@ class JournalScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final state = ref.watch(journalProvider);
     final enrollmentId = ref.watch(activeEnrollmentProvider).valueOrNull?.id;
     final now = ref.watch(appClockProvider).now();
@@ -25,7 +27,7 @@ class JournalScreen extends ConsumerWidget {
         state.entries.where((entry) => entry.createdAt.isAfter(cutoff)).length;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Tagebuch')),
+      appBar: AppBar(title: Text(l10n.journal)),
       floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -45,7 +47,7 @@ class JournalScreen extends ConsumerWidget {
             backgroundColor: AppColors.primary,
             foregroundColor: AppColors.textPrimary,
             icon: const Icon(Icons.mood),
-            label: const Text('Stimmung + Eintrag'),
+            label: Text(l10n.journalMoodAndEntry),
           ),
           const SizedBox(height: 10),
           // Option 2: Plain text note, no mood required
@@ -61,7 +63,7 @@ class JournalScreen extends ConsumerWidget {
             backgroundColor: AppColors.primary.withValues(alpha: 0.75),
             foregroundColor: AppColors.textPrimary,
             icon: const Icon(Icons.edit_note),
-            label: const Text('Nur Eintrag'),
+            label: Text(l10n.journalEntryOnly),
           ),
         ],
       ),
@@ -69,7 +71,7 @@ class JournalScreen extends ConsumerWidget {
           ? const Center(child: CircularProgressIndicator())
           : state.error != null
               ? ErrorRetryWidget(
-                  message: 'Einträge konnten nicht geladen werden.',
+                  message: l10n.journalLoadFailed,
                   onRetry: () => ref.read(journalProvider.notifier).load(),
                 )
               : RefreshIndicator(
@@ -80,7 +82,9 @@ class JournalScreen extends ConsumerWidget {
                       _JournalTopBar(
                         entryCount: state.entries.length,
                         entriesThisWeek: entriesThisWeek,
-                        monthLabel: DateFormat('MMM yyyy', 'de').format(now),
+                        monthLabel: DateFormat.yMMM(
+                          Localizations.localeOf(context).toLanguageTag(),
+                        ).format(now),
                       ),
                       const SizedBox(height: 6),
                       if (state.entries.isEmpty)
@@ -119,6 +123,7 @@ class _JournalTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -128,13 +133,13 @@ class _JournalTopBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Einträge',
+                l10n.journalEntriesHeading,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w800,
                     ),
               ),
               Text(
-                '$entryCount gesamt · $entriesThisWeek Woche',
+                l10n.journalEntrySummary(entryCount, entriesThisWeek),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: cs.onSurfaceVariant,
                     ),
@@ -161,6 +166,7 @@ class _EmptyJournalState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(16),
@@ -171,14 +177,14 @@ class _EmptyJournalState extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Noch keine Einträge',
+            l10n.journalTimelineEmptyTitle,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
           ),
           const SizedBox(height: 8),
           Text(
-            'Deine Notizen erscheinen hier als kompakte Timeline. Der Verlauf bleibt im Dashboard.',
+            l10n.journalTimelineEmptyBody,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: cs.onSurfaceVariant,

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/database/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../mood/presentation/widgets/mood_checkin_sheet.dart';
 import '../providers/journal_provider.dart';
 
@@ -27,19 +28,20 @@ class _JournalEntryTileState extends ConsumerState<JournalEntryTile> {
   bool _expanded = false;
 
   Future<bool> _confirmDelete() async {
+    final l10n = AppLocalizations.of(context);
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Eintrag löschen?'),
-        content: const Text('Dieser Eintrag wird dauerhaft entfernt.'),
+        title: Text(l10n.journalDeleteEntryTitle),
+        content: Text(l10n.journalDeleteEntryBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Abbrechen'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Löschen'),
+            child: Text(l10n.delete),
           ),
         ],
       ),
@@ -67,11 +69,13 @@ class _JournalEntryTileState extends ConsumerState<JournalEntryTile> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     final entry = widget.entry;
-    final dayText = DateFormat('dd', 'de').format(entry.createdAt);
-    final monthText = DateFormat('MMM', 'de').format(entry.createdAt);
-    final timeText = DateFormat('HH:mm', 'de').format(entry.createdAt);
+    final localeName = Localizations.localeOf(context).toLanguageTag();
+    final dayText = DateFormat('dd', localeName).format(entry.createdAt);
+    final monthText = DateFormat.MMM(localeName).format(entry.createdAt);
+    final timeText = DateFormat.jm(localeName).format(entry.createdAt);
     final content = entry.content.trim();
     final hasLongText = content.length > 180;
     final shownText =
@@ -176,7 +180,7 @@ class _JournalEntryTileState extends ConsumerState<JournalEntryTile> {
                               ),
                             const Spacer(),
                             Text(
-                              'Notiz',
+                              l10n.journalEntryTypeNote,
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
@@ -190,12 +194,9 @@ class _JournalEntryTileState extends ConsumerState<JournalEntryTile> {
                           spacing: 6,
                           runSpacing: 6,
                           children: [
-                            _metricChip(
-                                '😊', 'Mood', entry.mood, AppColors.moodRose),
-                            _metricChip('⚡', 'Energy', entry.energy,
-                                AppColors.moodTeal),
-                            _metricChip('😤', 'Stress', entry.stress,
-                                AppColors.moodGold),
+                            _metricChip('😊', entry.mood, AppColors.moodRose),
+                            _metricChip('⚡', entry.energy, AppColors.moodTeal),
+                            _metricChip('😤', entry.stress, AppColors.moodGold),
                           ].whereType<Widget>().toList(),
                         ),
                         if (content.isNotEmpty) ...[
@@ -222,8 +223,8 @@ class _JournalEntryTileState extends ConsumerState<JournalEntryTile> {
                               ),
                               child: Text(
                                 _expanded
-                                    ? 'Weniger anzeigen'
-                                    : 'Mehr anzeigen',
+                                    ? l10n.journalShowLess
+                                    : l10n.journalShowMore,
                               ),
                             ),
                           ],
@@ -240,7 +241,7 @@ class _JournalEntryTileState extends ConsumerState<JournalEntryTile> {
     );
   }
 
-  Widget? _metricChip(String emoji, String label, int? value, Color color) {
+  Widget? _metricChip(String emoji, int? value, Color color) {
     if (value == null) return null;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),

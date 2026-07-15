@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class GoldenDayScreen extends ConsumerWidget {
   const GoldenDayScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Golden Day 🎉'),
+        title: Text(l10n.goldenDayTitle),
         backgroundColor: Colors.amber,
       ),
       body: Container(
@@ -37,7 +40,7 @@ class GoldenDayScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 32),
                 Text(
-                  'Glückwunsch!',
+                  l10n.goldenDayCongratulations,
                   style: theme.textTheme.displayMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.amber.shade900,
@@ -45,7 +48,7 @@ class GoldenDayScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Du hast das 4-Wochen-Training erfolgreich abgeschlossen!',
+                  l10n.goldenDayCompletionMessage,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.titleLarge?.copyWith(
                     color: Colors.amber.shade800,
@@ -58,7 +61,7 @@ class GoldenDayScreen extends ConsumerWidget {
                     child: Column(
                       children: [
                         Text(
-                          'Wie fühlst du dich?',
+                          l10n.goldenDayFeelingPrompt,
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -73,9 +76,9 @@ class GoldenDayScreen extends ConsumerWidget {
                             foregroundColor: Colors.white,
                             minimumSize: const Size(double.infinity, 56),
                           ),
-                          child: const Text(
-                            'Bereit für mehr!',
-                            style: TextStyle(
+                          child: Text(
+                            l10n.goldenDayReadyForMore,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -89,9 +92,9 @@ class GoldenDayScreen extends ConsumerWidget {
                           style: OutlinedButton.styleFrom(
                             minimumSize: const Size(double.infinity, 56),
                           ),
-                          child: const Text(
-                            'Noch etwas üben',
-                            style: TextStyle(fontSize: 16),
+                          child: Text(
+                            l10n.goldenDayPracticeMore,
+                            style: const TextStyle(fontSize: 16),
                           ),
                         ),
                       ],

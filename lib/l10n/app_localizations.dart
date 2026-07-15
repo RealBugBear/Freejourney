@@ -3403,6 +3403,349 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Wechsel'**
   String get trainingSwitchCue;
+
+  /// Generic delete action
+  ///
+  /// In de, this message translates to:
+  /// **'Löschen'**
+  String get delete;
+
+  /// Full Moro package name in the package sequence
+  ///
+  /// In de, this message translates to:
+  /// **'Moro Reflex'**
+  String get packagesNameMoro;
+
+  /// Full spinal Galant package name in the package sequence
+  ///
+  /// In de, this message translates to:
+  /// **'Spinaler Galant + Amphibien'**
+  String get packagesNameSpinalGalant;
+
+  /// Full tonic labyrinthine reflex package name in the package sequence
+  ///
+  /// In de, this message translates to:
+  /// **'Tonischer Labirint Reflex (TLR)'**
+  String get packagesNameTlr;
+
+  /// Full Babkin package name in the package sequence
+  ///
+  /// In de, this message translates to:
+  /// **'Babkin + Plantar + Greifen'**
+  String get packagesNameBabkin;
+
+  /// Full rooting-sucking package name in the package sequence
+  ///
+  /// In de, this message translates to:
+  /// **'Such-Saug Reflex'**
+  String get packagesNameSuchSaug;
+
+  /// Full ATNR package name in the package sequence
+  ///
+  /// In de, this message translates to:
+  /// **'ATNR'**
+  String get packagesNameAtnr;
+
+  /// Full STNR package name in the package sequence
+  ///
+  /// In de, this message translates to:
+  /// **'STNR'**
+  String get packagesNameStnr;
+
+  /// Full Babinski package name in the package sequence
+  ///
+  /// In de, this message translates to:
+  /// **'Babinski Reflex'**
+  String get packagesNameBabinski;
+
+  /// Full Landau package name in the package sequence
+  ///
+  /// In de, this message translates to:
+  /// **'Landau Reflex'**
+  String get packagesNameLandau;
+
+  /// Package subtitle shown when developer package switching is available
+  ///
+  /// In de, this message translates to:
+  /// **'Dev-Auswahl verfügbar'**
+  String get packagesDevSelectionAvailable;
+
+  /// Package subtitle for an available package in the fixed sequence
+  ///
+  /// In de, this message translates to:
+  /// **'Im festen Paketverlauf'**
+  String get packagesFixedSequenceStatus;
+
+  /// Journal action for recording mood and an entry
+  ///
+  /// In de, this message translates to:
+  /// **'Stimmung + Eintrag'**
+  String get journalMoodAndEntry;
+
+  /// Journal action for recording an entry without mood
+  ///
+  /// In de, this message translates to:
+  /// **'Nur Eintrag'**
+  String get journalEntryOnly;
+
+  /// Heading above the journal timeline
+  ///
+  /// In de, this message translates to:
+  /// **'Einträge'**
+  String get journalEntriesHeading;
+
+  /// Journal entry total and entries recorded during the last week
+  ///
+  /// In de, this message translates to:
+  /// **'{entryCount} gesamt · {entriesThisWeek, plural, one{{entriesThisWeek} Woche} other{{entriesThisWeek} Woche}}'**
+  String journalEntrySummary(int entryCount, int entriesThisWeek);
+
+  /// Empty journal timeline title
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine Einträge'**
+  String get journalTimelineEmptyTitle;
+
+  /// Empty journal timeline explanation
+  ///
+  /// In de, this message translates to:
+  /// **'Deine Notizen erscheinen hier als kompakte Timeline. Der Verlauf bleibt im Dashboard.'**
+  String get journalTimelineEmptyBody;
+
+  /// Confirmation dialog title before deleting a journal entry
+  ///
+  /// In de, this message translates to:
+  /// **'Eintrag löschen?'**
+  String get journalDeleteEntryTitle;
+
+  /// Confirmation dialog body before deleting a journal entry
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Eintrag wird dauerhaft entfernt.'**
+  String get journalDeleteEntryBody;
+
+  /// Type label shown on a journal note
+  ///
+  /// In de, this message translates to:
+  /// **'Notiz'**
+  String get journalEntryTypeNote;
+
+  /// Action that collapses a long journal entry
+  ///
+  /// In de, this message translates to:
+  /// **'Weniger anzeigen'**
+  String get journalShowLess;
+
+  /// Action that expands a long journal entry
+  ///
+  /// In de, this message translates to:
+  /// **'Mehr anzeigen'**
+  String get journalShowMore;
+
+  /// Progress history screen title
+  ///
+  /// In de, this message translates to:
+  /// **'Verlauf'**
+  String get progressTitle;
+
+  /// Error shown when the progress history cannot be loaded
+  ///
+  /// In de, this message translates to:
+  /// **'Verlauf konnte nicht geladen werden.'**
+  String get progressLoadFailed;
+
+  /// Button for recording a new observation
+  ///
+  /// In de, this message translates to:
+  /// **'Beobachtung eintragen'**
+  String get progressAddObservation;
+
+  /// Title above the wellbeing history chart
+  ///
+  /// In de, this message translates to:
+  /// **'Befinden im Verlauf'**
+  String get progressWellbeingTitle;
+
+  /// Description below the wellbeing history title
+  ///
+  /// In de, this message translates to:
+  /// **'Stimmung, Energie und Stress als ruhige Orientierung.'**
+  String get progressWellbeingDescription;
+
+  /// Default wellbeing chart series label when no profiles exist
+  ///
+  /// In de, this message translates to:
+  /// **'Befinden'**
+  String get progressWellbeingSeries;
+
+  /// Empty state inside the wellbeing history chart
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine Einträge im gewählten Zeitraum.'**
+  String get progressWellbeingEmpty;
+
+  /// Thirty-day range filter label
+  ///
+  /// In de, this message translates to:
+  /// **'30d'**
+  String get progressRange30Days;
+
+  /// Ninety-day range filter label
+  ///
+  /// In de, this message translates to:
+  /// **'90d'**
+  String get progressRange90Days;
+
+  /// One-year range filter label
+  ///
+  /// In de, this message translates to:
+  /// **'1J'**
+  String get progressRangeOneYear;
+
+  /// All-time range filter label
+  ///
+  /// In de, this message translates to:
+  /// **'All'**
+  String get progressRangeAll;
+
+  /// Heading above reflex profile cards
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofile'**
+  String get progressReflexProfilesTitle;
+
+  /// Error shown when reflex profiles cannot be loaded
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofile konnten nicht geladen werden: {error}'**
+  String progressReflexProfilesLoadFailed(String error);
+
+  /// Explanation shown when no reflex profile exists
+  ///
+  /// In de, this message translates to:
+  /// **'Noch kein Reflexprofil vorhanden. Es zeigt Hinweistärken, keine Diagnose.'**
+  String get progressNoReflexProfileBody;
+
+  /// Button that starts a reflex profile
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil starten'**
+  String get progressStartReflexProfile;
+
+  /// Action label on a reflex profile card with results
+  ///
+  /// In de, this message translates to:
+  /// **'Details'**
+  String get progressProfileDetails;
+
+  /// Age shown on a reflex profile card
+  ///
+  /// In de, this message translates to:
+  /// **'{years, plural, one{{years} Jahr} other{{years} Jahre}}'**
+  String progressProfileAgeYears(int years);
+
+  /// Placeholder inside a profile card without an assessment
+  ///
+  /// In de, this message translates to:
+  /// **'Noch kein\nProfil'**
+  String get progressNoAssessmentProfile;
+
+  /// Card for adding another reflex profile
+  ///
+  /// In de, this message translates to:
+  /// **'Weiteres\nProfil'**
+  String get progressAddAnotherProfile;
+
+  /// Heading above current package progress
+  ///
+  /// In de, this message translates to:
+  /// **'Aktuelles Paket'**
+  String get progressCurrentPackageTitle;
+
+  /// Current package name and day progress
+  ///
+  /// In de, this message translates to:
+  /// **'{packageName} · Tag {currentDay} von {totalDays}'**
+  String progressCurrentPackageDay(
+      String packageName, int currentDay, int totalDays);
+
+  /// Message when the current package is last in the fixed sequence
+  ///
+  /// In de, this message translates to:
+  /// **'Nach diesem Paket folgt kein weiteres festes Paket.'**
+  String get progressNoNextFixedPackage;
+
+  /// Name of the next package in the fixed sequence
+  ///
+  /// In de, this message translates to:
+  /// **'Nächstes festes Paket: {packageName}'**
+  String progressNextFixedPackage(String packageName);
+
+  /// Button that opens the package sequence
+  ///
+  /// In de, this message translates to:
+  /// **'Paketverlauf ansehen'**
+  String get progressViewPackageSequence;
+
+  /// Heading above recent observations
+  ///
+  /// In de, this message translates to:
+  /// **'Beobachtungen'**
+  String get progressObservationsTitle;
+
+  /// Summary shown when there are no observations
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine Beobachtungen festgehalten.'**
+  String get progressObservationsEmptySummary;
+
+  /// Number of observation entries in the current period
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, one{{count} Einträge im aktuellen Zeitraum} other{{count} Einträge im aktuellen Zeitraum}}'**
+  String progressObservationCount(int count);
+
+  /// Explanation shown when no observations have been recorded
+  ///
+  /// In de, this message translates to:
+  /// **'Nach einer Einheit oder zwischendurch kannst du Beobachtungen zu Körper, Stimmung, Energie und Schlaf eintragen.'**
+  String get progressObservationsEmptyBody;
+
+  /// Golden Day screen title
+  ///
+  /// In de, this message translates to:
+  /// **'Golden Day 🎉'**
+  String get goldenDayTitle;
+
+  /// Golden Day congratulatory heading
+  ///
+  /// In de, this message translates to:
+  /// **'Glückwunsch!'**
+  String get goldenDayCongratulations;
+
+  /// Message shown after completing four weeks of training
+  ///
+  /// In de, this message translates to:
+  /// **'Du hast das 4-Wochen-Training erfolgreich abgeschlossen!'**
+  String get goldenDayCompletionMessage;
+
+  /// Golden Day prompt asking how the user feels
+  ///
+  /// In de, this message translates to:
+  /// **'Wie fühlst du dich?'**
+  String get goldenDayFeelingPrompt;
+
+  /// Golden Day action to continue with more training
+  ///
+  /// In de, this message translates to:
+  /// **'Bereit für mehr!'**
+  String get goldenDayReadyForMore;
+
+  /// Golden Day action to keep practicing the current track
+  ///
+  /// In de, this message translates to:
+  /// **'Noch etwas üben'**
+  String get goldenDayPracticeMore;
 }
 
 class _AppLocalizationsDelegate

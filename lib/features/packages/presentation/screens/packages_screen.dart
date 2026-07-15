@@ -15,20 +15,33 @@ import '../../../progress/presentation/providers/progress_provider.dart';
 import '../../../training/presentation/screens/training_session_screen.dart';
 import '../../../training/presentation/screens/vorrunde_interstitial_screen.dart';
 
-// Anzeige-Namen; die Reihenfolge/IDs sind identisch mit [packageOrder]
-// (progress_provider) — die Freischalt-Logik kommt zentral aus
-// isPackageUnlocked (T23), nicht mehr aus lokalen Index-Konstanten.
-const _packages = [
-  ('moro', 'Moro Reflex'),
-  ('spinal_galant', 'Spinaler Galant + Amphibien'),
-  ('tlr', 'Tonischer Labirint Reflex (TLR)'),
-  ('babkin', 'Babkin + Plantar + Greifen'),
-  ('such_saug', 'Such-Saug Reflex'),
-  ('atnr', 'ATNR'),
-  ('stnr', 'STNR'),
-  ('babinski', 'Babinski Reflex'),
-  ('landau', 'Landau Reflex'),
+// Die Reihenfolge/IDs sind identisch mit [packageOrder] (progress_provider) —
+// die Freischalt-Logik kommt zentral aus isPackageUnlocked (T23), nicht mehr
+// aus lokalen Index-Konstanten.
+const _packageIds = [
+  'moro',
+  'spinal_galant',
+  'tlr',
+  'babkin',
+  'such_saug',
+  'atnr',
+  'stnr',
+  'babinski',
+  'landau',
 ];
+
+String _packageName(AppLocalizations l10n, String packageId) =>
+    switch (packageId) {
+      'spinal_galant' => l10n.packagesNameSpinalGalant,
+      'tlr' => l10n.packagesNameTlr,
+      'babkin' => l10n.packagesNameBabkin,
+      'such_saug' => l10n.packagesNameSuchSaug,
+      'atnr' => l10n.packagesNameAtnr,
+      'stnr' => l10n.packagesNameStnr,
+      'babinski' => l10n.packagesNameBabinski,
+      'landau' => l10n.packagesNameLandau,
+      _ => l10n.packagesNameMoro,
+    };
 
 class PackagesScreen extends ConsumerStatefulWidget {
   const PackagesScreen({super.key});
@@ -98,10 +111,11 @@ class _PackagesScreenState extends ConsumerState<PackagesScreen> {
       appBar: AppBar(title: Text(l10n.packages)),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
-        itemCount: _packages.length,
+        itemCount: _packageIds.length,
         separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemBuilder: (context, index) {
-          final (packageId, packageName) = _packages[index];
+          final packageId = _packageIds[index];
+          final packageName = _packageName(l10n, packageId);
           final isSelected = packageId == selectedPackageId;
           final isLocked = !isPackageUnlocked(
             packageId,
@@ -170,7 +184,7 @@ class _PackagesScreenState extends ConsumerState<PackagesScreen> {
                     )
                   : allowDevPackageSwitch
                       ? Text(
-                          'Dev-Auswahl verfügbar',
+                          l10n.packagesDevSelectionAvailable,
                           style: TextStyle(
                               color: Theme.of(context)
                                   .colorScheme
@@ -190,7 +204,7 @@ class _PackagesScreenState extends ConsumerState<PackagesScreen> {
                                       color: AppColors.success, fontSize: 12),
                                 )
                               : Text(
-                                  'Im festen Paketverlauf',
+                                  l10n.packagesFixedSequenceStatus,
                                   style: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme

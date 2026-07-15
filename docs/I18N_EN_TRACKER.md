@@ -139,11 +139,11 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | training | features/training/presentation/widgets/training_disclaimer_dialog.dart | 0 | 0 | 19 e-legal! | geflaggt – Anwalt, nicht frei übersetzen |
 | training | features/training/presentation/widgets/training_intro_widget.dart | 2 | 0 | 0  | verifiziert (Modus/Statistik DE/EN) |
 | training | features/training/presentation/widgets/training_outro_widget.dart | 1 | 0 | 0  | verifiziert (ICU-Anzahl DE/EN) |
-| packages | features/packages/presentation/screens/packages_screen.dart | 10 | 0 | 0  | offen |
-| journal | features/journal/presentation/screens/journal_screen.dart | 8 | 0 | 1  | offen |
-| journal | features/journal/presentation/widgets/journal_entry_tile.dart | 10 | 0 | 3  | offen |
-| progress | features/progress/presentation/screens/progress_overview_screen.dart | 36 | 0 | 0  | offen |
-| golden_day | features/golden_day/presentation/screens/golden_day_screen.dart | 6 | 0 | 0  | offen |
+| packages | features/packages/presentation/screens/packages_screen.dart | 0 | 0 | 0  | verifiziert (DE/EN-Paketnamen, Audit 0, 608-Key-Gate + Suite grün) |
+| journal | features/journal/presentation/screens/journal_screen.dart | 0 | 0 | 0  | verifiziert (UI + aktives Monatsformat, Audit 0) |
+| journal | features/journal/presentation/widgets/journal_entry_tile.dart | 0 | 0 | 0  | verifiziert (Dialoge/Timeline + locale-aware Datum/Uhrzeit, Audit 0) |
+| progress | features/progress/presentation/screens/progress_overview_screen.dart | 0 | 0 | 0  | verifiziert (UI/ICU + DE `15.7`/EN `7/15`, Audit 0) |
+| golden_day | features/golden_day/presentation/screens/golden_day_screen.dart | 0 | 0 | 0  | verifiziert (DE/EN-Widgettest, Audit 0) |
 | assessment | features/assessment/domain/completion_questions.dart | 0 | 0 | 7 bilingual-ok | verifiziert (DE/EN-Feldpaare) |
 | assessment | features/assessment/domain/draft_persistence_service.dart | 0 | 2 | 0  | offen |
 | assessment | features/assessment/domain/reflex_questionnaire_definitions.dart | 134 | 0 | 0  | verifiziert (123 Fragen, 8 Module, 5 Hilfen, 5 Flags als DE/EN-Feldpaare; Audit 0 a/b/c) |
@@ -240,6 +240,14 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 
 ## Arbeitslog
+
+- **2026-07-15, Packages/Journal/Progress/Golden Day:** 57 semantische Keys ergänzt
+  (608 DE = 608 EN, alle mit Metadaten). Die fünf zugehörigen Dateien haben im
+  scoped Audit keine Hardcodes oder festen deutschen Locale-Formate mehr. Datum
+  und Uhrzeit folgen der aktiven Sprache; Tests sichern die unveränderte deutsche
+  Ausgabe (`09:05`, `15.7`) und en-US (`9:05 AM`, `7/15`). Drei fokussierte
+  Lokalisierungstests, Analyse ohne Fehler/Warnungen und die reguläre Gesamtsuite
+  sind grün.
 
 - **2026-07-15:** Session-Start. Baseline-Commit `178d4bc` (In-flight-Arbeit gesichert),
   Branch `i18n/english-localization` angelegt, Tracker erstellt. Phase 1 (Audit) durchgeführt:

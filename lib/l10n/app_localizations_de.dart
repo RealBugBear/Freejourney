@@ -1935,4 +1935,215 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get trainingSwitchCue => 'Wechsel';
+
+  @override
+  String get delete => 'Löschen';
+
+  @override
+  String get packagesNameMoro => 'Moro Reflex';
+
+  @override
+  String get packagesNameSpinalGalant => 'Spinaler Galant + Amphibien';
+
+  @override
+  String get packagesNameTlr => 'Tonischer Labirint Reflex (TLR)';
+
+  @override
+  String get packagesNameBabkin => 'Babkin + Plantar + Greifen';
+
+  @override
+  String get packagesNameSuchSaug => 'Such-Saug Reflex';
+
+  @override
+  String get packagesNameAtnr => 'ATNR';
+
+  @override
+  String get packagesNameStnr => 'STNR';
+
+  @override
+  String get packagesNameBabinski => 'Babinski Reflex';
+
+  @override
+  String get packagesNameLandau => 'Landau Reflex';
+
+  @override
+  String get packagesDevSelectionAvailable => 'Dev-Auswahl verfügbar';
+
+  @override
+  String get packagesFixedSequenceStatus => 'Im festen Paketverlauf';
+
+  @override
+  String get journalMoodAndEntry => 'Stimmung + Eintrag';
+
+  @override
+  String get journalEntryOnly => 'Nur Eintrag';
+
+  @override
+  String get journalEntriesHeading => 'Einträge';
+
+  @override
+  String journalEntrySummary(int entryCount, int entriesThisWeek) {
+    String _temp0 = intl.Intl.pluralLogic(
+      entriesThisWeek,
+      locale: localeName,
+      other: '$entriesThisWeek Woche',
+      one: '$entriesThisWeek Woche',
+    );
+    return '$entryCount gesamt · $_temp0';
+  }
+
+  @override
+  String get journalTimelineEmptyTitle => 'Noch keine Einträge';
+
+  @override
+  String get journalTimelineEmptyBody =>
+      'Deine Notizen erscheinen hier als kompakte Timeline. Der Verlauf bleibt im Dashboard.';
+
+  @override
+  String get journalDeleteEntryTitle => 'Eintrag löschen?';
+
+  @override
+  String get journalDeleteEntryBody =>
+      'Dieser Eintrag wird dauerhaft entfernt.';
+
+  @override
+  String get journalEntryTypeNote => 'Notiz';
+
+  @override
+  String get journalShowLess => 'Weniger anzeigen';
+
+  @override
+  String get journalShowMore => 'Mehr anzeigen';
+
+  @override
+  String get progressTitle => 'Verlauf';
+
+  @override
+  String get progressLoadFailed => 'Verlauf konnte nicht geladen werden.';
+
+  @override
+  String get progressAddObservation => 'Beobachtung eintragen';
+
+  @override
+  String get progressWellbeingTitle => 'Befinden im Verlauf';
+
+  @override
+  String get progressWellbeingDescription =>
+      'Stimmung, Energie und Stress als ruhige Orientierung.';
+
+  @override
+  String get progressWellbeingSeries => 'Befinden';
+
+  @override
+  String get progressWellbeingEmpty =>
+      'Noch keine Einträge im gewählten Zeitraum.';
+
+  @override
+  String get progressRange30Days => '30d';
+
+  @override
+  String get progressRange90Days => '90d';
+
+  @override
+  String get progressRangeOneYear => '1J';
+
+  @override
+  String get progressRangeAll => 'All';
+
+  @override
+  String get progressReflexProfilesTitle => 'Reflexprofile';
+
+  @override
+  String progressReflexProfilesLoadFailed(String error) {
+    return 'Reflexprofile konnten nicht geladen werden: $error';
+  }
+
+  @override
+  String get progressNoReflexProfileBody =>
+      'Noch kein Reflexprofil vorhanden. Es zeigt Hinweistärken, keine Diagnose.';
+
+  @override
+  String get progressStartReflexProfile => 'Reflexprofil starten';
+
+  @override
+  String get progressProfileDetails => 'Details';
+
+  @override
+  String progressProfileAgeYears(int years) {
+    String _temp0 = intl.Intl.pluralLogic(
+      years,
+      locale: localeName,
+      other: '$years Jahre',
+      one: '$years Jahr',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get progressNoAssessmentProfile => 'Noch kein\nProfil';
+
+  @override
+  String get progressAddAnotherProfile => 'Weiteres\nProfil';
+
+  @override
+  String get progressCurrentPackageTitle => 'Aktuelles Paket';
+
+  @override
+  String progressCurrentPackageDay(
+      String packageName, int currentDay, int totalDays) {
+    return '$packageName · Tag $currentDay von $totalDays';
+  }
+
+  @override
+  String get progressNoNextFixedPackage =>
+      'Nach diesem Paket folgt kein weiteres festes Paket.';
+
+  @override
+  String progressNextFixedPackage(String packageName) {
+    return 'Nächstes festes Paket: $packageName';
+  }
+
+  @override
+  String get progressViewPackageSequence => 'Paketverlauf ansehen';
+
+  @override
+  String get progressObservationsTitle => 'Beobachtungen';
+
+  @override
+  String get progressObservationsEmptySummary =>
+      'Noch keine Beobachtungen festgehalten.';
+
+  @override
+  String progressObservationCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Einträge im aktuellen Zeitraum',
+      one: '$count Einträge im aktuellen Zeitraum',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get progressObservationsEmptyBody =>
+      'Nach einer Einheit oder zwischendurch kannst du Beobachtungen zu Körper, Stimmung, Energie und Schlaf eintragen.';
+
+  @override
+  String get goldenDayTitle => 'Golden Day 🎉';
+
+  @override
+  String get goldenDayCongratulations => 'Glückwunsch!';
+
+  @override
+  String get goldenDayCompletionMessage =>
+      'Du hast das 4-Wochen-Training erfolgreich abgeschlossen!';
+
+  @override
+  String get goldenDayFeelingPrompt => 'Wie fühlst du dich?';
+
+  @override
+  String get goldenDayReadyForMore => 'Bereit für mehr!';
+
+  @override
+  String get goldenDayPracticeMore => 'Noch etwas üben';
 }

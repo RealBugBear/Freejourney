@@ -111,12 +111,12 @@ keine Rechtstexte, Flag bleibt false.
       `make release-readiness-mobile`, 245/245 Tests).
 - [x] 5. Auth-Handoff geprüft: keine unallowlisteten UI-/Fehler-Hardcodes;
       technische Repository-Meldungen bereits Englisch. Kein Code-Commit nötig.
-- [ ] 6. Trainingskern vollständig externalisiert/übersetzt (106 Keys, 5 neue
-      DE/EN-Widgettests, Audit 0); Packages und verbleibende Locale-Fallbacks
-      sind offen (Training-Commit `96db5e8`). EN-Announcement-MP3s fehlen und
-      sind als Asset-Blocker erfasst.
-- [ ] 7. Journal, Progress und Golden Day externalisieren/übersetzen; Tests
-      und eigener Commit.
+- [x] 6. Trainingskern vollständig externalisiert/übersetzt (106 Keys, 5 neue
+      DE/EN-Widgettests, Audit 0); Packages ist ebenfalls lokalisiert. Die
+      fehlenden EN-/DE-Announcement-MP3s bleiben als Asset-Blocker erfasst
+      (Training-Commit `96db5e8`).
+- [x] 7. Journal, Progress und Golden Day externalisiert/übersetzt; aktive
+      Datums-/Zeit-Locale und DE/EN-Regressionschecks verifiziert (608 Keys).
 - [ ] 8. Reflexprofil/Assessment: tatsächliche 123 Fragen (109 + 14 Demo),
       Module/Hilfen/Trainer-Flags und Reflexlabels nach bilingualem Content-
       Muster umgesetzt und getestet; allgemeine UI sowie PDF-Ausgabe offen.

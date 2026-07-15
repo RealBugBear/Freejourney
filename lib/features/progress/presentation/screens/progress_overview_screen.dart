@@ -10,6 +10,7 @@ import '../../../../core/onboarding/onboarding_hint_gate.dart';
 import '../../../../core/onboarding/onboarding_hint_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/error_retry_widget.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../chat/presentation/widgets/direct_messages_action.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
 import '../../../assessment/presentation/widgets/reflex_radar_chart.dart';
@@ -20,11 +21,21 @@ import '../../../journal/presentation/providers/journal_provider.dart';
 import '../../../journal/presentation/widgets/journal_entry_tile.dart';
 import '../providers/progress_provider.dart';
 
+@visibleForTesting
+String formatProgressChartDate(DateTime date, Locale locale) {
+  final localeName = locale.toLanguageTag();
+  final format = locale.languageCode == 'de'
+      ? DateFormat('d.M', localeName)
+      : DateFormat.Md(localeName);
+  return format.format(date);
+}
+
 class ProgressOverviewScreen extends ConsumerWidget {
   const ProgressOverviewScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final journal = ref.watch(journalProvider);
     final enrollment = ref.watch(activeEnrollmentProvider).valueOrNull;
     final progress = ref.watch(activeProgressProvider).valueOrNull;
@@ -46,12 +57,12 @@ class ProgressOverviewScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Verlauf'),
+        title: Text(l10n.progressTitle),
         actions: [
           const DirectMessagesAction(),
           IconButton(
             icon: const Icon(Icons.settings_outlined),
-            tooltip: 'Einstellungen',
+            tooltip: l10n.settings,
             onPressed: () => context.push(Routes.settings),
           ),
         ],
@@ -70,7 +81,7 @@ class ProgressOverviewScreen extends ConsumerWidget {
               ? const Center(child: CircularProgressIndicator())
               : journal.error != null
                   ? ErrorRetryWidget(
-                      message: 'Verlauf konnte nicht geladen werden.',
+                      message: l10n.progressLoadFailed,
                       onRetry: () => ref.read(journalProvider.notifier).load(),
                     )
                   : ListView(
@@ -111,12 +122,13 @@ class _NewEntryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SizedBox(
       width: double.infinity,
       child: FilledButton.tonalIcon(
         onPressed: onPressed,
         icon: const Icon(Icons.add_comment_outlined, size: 18),
-        label: const Text('Beobachtung eintragen'),
+        label: Text(l10n.progressAddObservation),
         style: FilledButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape:
@@ -168,10 +180,10 @@ class _WellbeingSectionState extends ConsumerState<_WellbeingSection> {
   // 0=mood 1=energy 2=stress
   int _metric = 0;
 
-  static const _metrics = ['Stimmung', 'Energie', 'Stress'];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final metrics = [l10n.moodLabel, l10n.energyLabel, l10n.stressLabel];
     final profilesAsync = ref.watch(reflexSubjectProfilesProvider);
 
     return Card(
@@ -185,7 +197,7 @@ class _WellbeingSectionState extends ConsumerState<_WellbeingSection> {
               children: [
                 Expanded(
                   child: Text(
-                    'Befinden im Verlauf',
+                    l10n.progressWellbeingTitle,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
@@ -199,7 +211,7 @@ class _WellbeingSectionState extends ConsumerState<_WellbeingSection> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Stimmung, Energie und Stress als ruhige Orientierung.',
+              l10n.progressWellbeingDescription,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -207,7 +219,7 @@ class _WellbeingSectionState extends ConsumerState<_WellbeingSection> {
             const SizedBox(height: 10),
             // Metric toggle
             Row(
-              children: List.generate(_metrics.length, (i) {
+              children: List.generate(metrics.length, (i) {
                 final sel = _metric == i;
                 return Padding(
                   padding: const EdgeInsets.only(right: 6),
@@ -223,7 +235,7 @@ class _WellbeingSectionState extends ConsumerState<_WellbeingSection> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        _metrics[i],
+                        metrics[i],
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
@@ -269,6 +281,7 @@ class _ProfileOverlayChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     // Load aggregates for each profile + one enrollment-wide (null profile)
     final allSeries = <_ChartSeries>[];
 
@@ -283,7 +296,7 @@ class _ProfileOverlayChart extends ConsumerWidget {
           context,
           [
             _ChartSeries(
-                name: 'Befinden',
+                name: l10n.progressWellbeingSeries,
                 style: _profileStyles[0],
                 aggregates: aggregates)
           ],
@@ -326,12 +339,14 @@ class _ProfileOverlayChart extends ConsumerWidget {
   }
 
   Widget _buildChart(BuildContext context, List<_ChartSeries> series) {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context);
     if (series.isEmpty || series.every((s) => s.aggregates.isEmpty)) {
       return SizedBox(
         height: 200,
         child: Center(
           child: Text(
-            'Noch keine Einträge im gewählten Zeitraum.',
+            l10n.progressWellbeingEmpty,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -440,7 +455,7 @@ class _ProfileOverlayChart extends ConsumerWidget {
                             DateTime(1970).add(Duration(days: allDayKeys[idx]));
                         return Padding(
                           padding: const EdgeInsets.only(top: 4),
-                          child: Text(DateFormat('d.M').format(day),
+                          child: Text(formatProgressChartDate(day, locale),
                               style: TextStyle(
                                   fontSize: 10,
                                   color: Theme.of(context)
@@ -510,8 +525,14 @@ class _RangeChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     const options = [30, 90, 365, 0];
-    const labels = ['30d', '90d', '1J', 'All'];
+    final labels = [
+      l10n.progressRange30Days,
+      l10n.progressRange90Days,
+      l10n.progressRangeOneYear,
+      l10n.progressRangeAll,
+    ];
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: List.generate(options.length, (i) {
@@ -555,6 +576,7 @@ class _ReflexProfileCard extends ConsumerStatefulWidget {
 class _ReflexProfileCardState extends ConsumerState<_ReflexProfileCard> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final selectedProfile = ref.watch(selectedSubjectProfileProvider);
     final summariesAsync = ref.watch(profilesWithAssessmentsProvider);
 
@@ -565,7 +587,7 @@ class _ReflexProfileCardState extends ConsumerState<_ReflexProfileCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Reflexprofile',
+              l10n.progressReflexProfilesTitle,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -574,7 +596,7 @@ class _ReflexProfileCardState extends ConsumerState<_ReflexProfileCard> {
             summariesAsync.when(
               loading: () => const LinearProgressIndicator(),
               error: (e, _) => Text(
-                'Reflexprofile konnten nicht geladen werden: $e',
+                l10n.progressReflexProfilesLoadFailed(e.toString()),
                 style: const TextStyle(color: AppColors.error),
               ),
               data: (summaries) =>
@@ -636,11 +658,12 @@ class _NoProfilesState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Noch kein Reflexprofil vorhanden. Es zeigt Hinweistärken, keine Diagnose.',
+          l10n.progressNoReflexProfileBody,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 height: 1.35,
@@ -650,7 +673,7 @@ class _NoProfilesState extends StatelessWidget {
         OutlinedButton.icon(
           onPressed: onStart,
           icon: const Icon(Icons.assignment_outlined),
-          label: const Text('Reflexprofil starten'),
+          label: Text(l10n.progressStartReflexProfile),
         ),
       ],
     );
@@ -670,6 +693,7 @@ class _ProfileRadarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final assessment = summary.latestAssessment;
     final hasAssessment = assessment != null;
     final locale = Localizations.localeOf(context).languageCode;
@@ -708,7 +732,7 @@ class _ProfileRadarCard extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                _ageLabel(summary.profile),
+                _ageLabel(l10n, summary.profile),
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -722,7 +746,7 @@ class _ProfileRadarCard extends StatelessWidget {
               const SizedBox(height: 8),
               if (hasAssessment) ...[
                 Text(
-                  _dateLabel(assessment.completedAt),
+                  _dateLabel(context, assessment.completedAt),
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -733,7 +757,7 @@ class _ProfileRadarCard extends StatelessWidget {
                     const Icon(Icons.bar_chart_outlined, size: 14),
                     const SizedBox(width: 4),
                     Text(
-                      'Details',
+                      l10n.progressProfileDetails,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w700,
@@ -749,15 +773,20 @@ class _ProfileRadarCard extends StatelessWidget {
     );
   }
 
-  String _ageLabel(ReflexSubjectProfile profile) {
+  String _ageLabel(
+    AppLocalizations l10n,
+    ReflexSubjectProfile profile,
+  ) {
     final years = profile.ageYears;
     if (years == null) return '';
-    return '$years Jahr${years == 1 ? '' : 'e'}';
+    return l10n.progressProfileAgeYears(years);
   }
 
-  String _dateLabel(DateTime? dt) {
+  String _dateLabel(BuildContext context, DateTime? dt) {
     if (dt == null) return '';
-    return '${dt.day}.${dt.month}.${dt.year}';
+    return DateFormat.yMd(
+      Localizations.localeOf(context).toLanguageTag(),
+    ).format(dt);
   }
 }
 
@@ -767,6 +796,7 @@ class _NoAssessmentPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -781,7 +811,7 @@ class _NoAssessmentPlaceholder extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'Noch kein\nProfil',
+            l10n.progressNoAssessmentProfile,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -799,6 +829,7 @@ class _AddProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -821,7 +852,7 @@ class _AddProfileCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Weiteres\nProfil',
+              l10n.progressAddAnotherProfile,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
                     color: AppColors.primary,
@@ -848,6 +879,7 @@ class _PackageStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final totalDays =
         ((enrollment?.assignedDurationWeeks ?? 8) * 7).clamp(1, 3650);
     final nextPackage = nextPackageIdAfter(packageId);
@@ -860,7 +892,7 @@ class _PackageStatusCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Aktuelles Paket',
+              l10n.progressCurrentPackageTitle,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -868,8 +900,12 @@ class _PackageStatusCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               enrollment == null
-                  ? 'Noch kein aktives Paket'
-                  : '${_packageName(packageId)} · Tag $currentDay von $totalDays',
+                  ? l10n.dashboardNoActivePackage
+                  : l10n.progressCurrentPackageDay(
+                      _packageName(l10n, packageId),
+                      currentDay,
+                      totalDays,
+                    ),
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -887,8 +923,10 @@ class _PackageStatusCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               nextPackage == null
-                  ? 'Nach diesem Paket folgt kein weiteres festes Paket.'
-                  : 'Nächstes festes Paket: ${_packageName(nextPackage)}',
+                  ? l10n.progressNoNextFixedPackage
+                  : l10n.progressNextFixedPackage(
+                      _packageName(l10n, nextPackage),
+                    ),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -897,7 +935,7 @@ class _PackageStatusCard extends StatelessWidget {
             OutlinedButton.icon(
               onPressed: () => context.push(Routes.packages),
               icon: const Icon(Icons.inventory_2_outlined),
-              label: const Text('Paketverlauf ansehen'),
+              label: Text(l10n.progressViewPackageSequence),
             ),
           ],
         ),
@@ -905,27 +943,27 @@ class _PackageStatusCard extends StatelessWidget {
     );
   }
 
-  static String _packageName(String packageId) {
+  static String _packageName(AppLocalizations l10n, String packageId) {
     switch (packageId) {
       case 'spinal_galant':
-        return 'Spinaler Galant';
+        return l10n.packageShortSpinalGalant;
       case 'tlr':
-        return 'TLR';
+        return l10n.packageShortTlr;
       case 'babkin':
-        return 'Babkin';
+        return l10n.packageShortBabkin;
       case 'such_saug':
-        return 'Such-Saug';
+        return l10n.packageShortSuchSaug;
       case 'atnr':
-        return 'ATNR';
+        return l10n.packageShortAtnr;
       case 'stnr':
-        return 'STNR';
+        return l10n.packageShortStnr;
       case 'babinski':
-        return 'Babinski';
+        return l10n.packageShortBabinski;
       case 'landau':
-        return 'Landau';
+        return l10n.packageShortLandau;
       case 'moro':
       default:
-        return 'Moro';
+        return l10n.packageShortMoro;
     }
   }
 }
@@ -943,6 +981,7 @@ class _ObservationTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -950,7 +989,7 @@ class _ObservationTimeline extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Beobachtungen',
+              l10n.progressObservationsTitle,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -958,8 +997,8 @@ class _ObservationTimeline extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               entries.isEmpty
-                  ? 'Noch keine Beobachtungen festgehalten.'
-                  : '${entries.length} Einträge im aktuellen Zeitraum',
+                  ? l10n.progressObservationsEmptySummary
+                  : l10n.progressObservationCount(entries.length),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -987,6 +1026,7 @@ class _EmptyObservationState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -995,7 +1035,7 @@ class _EmptyObservationState extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Text(
-          'Nach einer Einheit oder zwischendurch kannst du Beobachtungen zu Körper, Stimmung, Energie und Schlaf eintragen.',
+          l10n.progressObservationsEmptyBody,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 height: 1.35,
