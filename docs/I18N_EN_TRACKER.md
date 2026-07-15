@@ -248,3 +248,9 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
   Fünf Widget-Tests prüfen natürliche EN-Copy, Tooltips, Fortschritts-Semantik, Dialoge,
   Singular/Plural und DE-Parität. Vollcheck: Analyze 0 Fehler/0 Warnungen (bekannte Infos),
   **250/250 Tests grün**.
+- **2026-07-15, dauerhaftes Paritäts-Gate:** `scripts/i18n_check.py` prüft DE/EN-Message-
+  und Metadaten-Key-Parität, Leer-/Nicht-String-Werte, ICU-Platzhalter gegen `@`-Metadaten,
+  identische Placeholder-Definitionen sowie deutsche Umlaute/`ß` in EN-Werten. Das schnelle
+  Gate ist als `make i18n-check` in `release-readiness-mobile` eingebunden; 14 Python-Tests
+  und der reale Katalog mit **445/445 Keys** sind grün. Das Hardcode-Gate wird bewusst erst
+  bei Audit 0 aktiviert und bleibt Teil der offenen Phase 5.

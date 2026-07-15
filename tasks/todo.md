@@ -126,8 +126,9 @@ keine Rechtstexte, Flag bleibt false.
 - [ ] 12. Systemebene: locale-aware Datum/Zahl, App-Locale in `profiles.locale`,
       client- und serverseitige Push-Copy, iOS InfoPlist.strings de/en,
       Android-Ressourcen; Deploy/Live-Änderungen nur nach Founder-Go.
-- [ ] 13. Dauerhafte Gates: ARB-Key-/Placeholder-Parität, Leerwerte,
-      EN-Umlautprüfung und Hardcode-Audit als Make-Target; Gate muss 0 melden.
+- [ ] 13. Dauerhafte Gates: ARB-Key-/Placeholder-Parität, Leerwerte und
+      EN-Umlautprüfung sind als `make i18n-check` in Release-Readiness aktiv;
+      Hardcode-Audit erst bei Endstand 0 aktivieren.
 - [ ] 14. EN-Qualitätssweep (en-US, Glossar, DE==EN-Entscheidungen,
       Heilversprechen-Check) und offene Recht/DB/Bild/Store-Punkte flaggen.
 - [ ] 15. Visuelle EN-Evidenz für beide Sprachwechsel-Wege und alle

@@ -21,7 +21,7 @@ ANDROID_DIST_APK := build/app/outputs/flutter-apk/app-$(ANDROID_DIST_FLAVOR)-rel
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null || echo local)
 GIT_SHA := $(shell git rev-parse --short HEAD 2>/dev/null || echo local)
 
-.PHONY: run run-sim run-android release release-readiness-mobile testflight android-testers clean bump-build bump-patch
+.PHONY: run run-sim run-android i18n-check release release-readiness-mobile testflight android-testers clean bump-build bump-patch
 
 # NOTE: Profile mode is the ONLY stable mode on physical iPhone with iOS 26.2.1 beta.
 # Debug mode fails to establish the Xcode debug proxy.
@@ -44,11 +44,15 @@ run-sim:
 run-android:
 	flutter run -d $(ANDROID_ID) --flavor development -t $(ENTRY)
 
+## Verify DE/EN ARB parity, values, placeholders, and EN umlauts.
+i18n-check:
+	python3 scripts/i18n_check.py
+
 ## Automated release-readiness checks (docs/RELEASE_READINESS_CHECKLIST.md):
 ## static analysis must be free of errors and warnings (infos = pending
 ## deprecation cleanups, tracked but not release-blocking) and the full test
 ## suite must pass (includes the streak-logic test the checklist names).
-release-readiness-mobile:
+release-readiness-mobile: i18n-check
 	flutter analyze --no-fatal-infos
 	flutter test
 	@echo ""
