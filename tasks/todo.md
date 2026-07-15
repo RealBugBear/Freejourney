@@ -99,19 +99,38 @@ keine Rechtstexte, Flag bleibt false.
 
 ## Schritte
 
-- [ ] 1. Bestehende DE/EN-ARB-Dateien, First-Launch-Sprachauswahl und alle
-      nutzerseitigen Hardcodes vollständig auditieren; bestehende Dirty-Diffs
-      getrennt halten.
-- [ ] 2. Sprachauswahl vor Login vollständig lokalisieren und den gespeicherten
-      Wechsel zu Englisch per Widget-/Provider-Test absichern.
-- [ ] 3. Alle launch-relevanten Nutzer-, Trainer- und gemeinsamen Flows auf
-      `AppLocalizations` umstellen; natürliche DE/EN-Texte ergänzen und
-      generierte Lokalisierungen neu erzeugen.
-- [ ] 4. Statische Prüfungen für ARB-Key-Parität und verbleibende deutsche
-      UI-Hardcodes ergänzen; gezielte UI-Tests und vollständige Mobile-Suite
-      ausführen.
-- [ ] 5. Produktions-Build ohne Codesign prüfen, Buildnummer verpflichtend
-      erhöhen, signierte IPA erstellen und Inhalt/Signatur validieren.
-- [ ] 6. Mit dem im Nutzerauftrag enthaltenen Store-Upload-Go die validierte
-      IPA zu App Store Connect/TestFlight hochladen und Apples Ergebnis
-      dokumentieren.
+- [x] 1. Phase 0/1: Ausgangsarbeit getrennt sichern, Feature-Branch anlegen,
+      Audit-Skript + Tracker erstellen und Architektur-/System-/DB-Befunde
+      dokumentieren (Commits `178d4bc`, `f853d1f`, `c996e06`).
+- [x] 2. Onboarding/First-Launch-Sprachwahl externalisieren und natürliches
+      DE/EN-Glossar anlegen; Widget-Test ergänzen (Commit `0705c7c`).
+- [x] 3. Dashboard vollständig externalisieren, ICU-Plurale und locale-aware
+      Wochentage einsetzen; Suite grün (Commit `2abf16a`).
+- [ ] 4. Handoff bereinigen: begonnenes Audit-Gate/Allowlist prüfen und separat
+      committen; Tracker-Zeilen auf den realen Stand bringen.
+- [x] 5. Auth-Handoff geprüft: keine unallowlisteten UI-/Fehler-Hardcodes;
+      technische Repository-Meldungen bereits Englisch. Kein Code-Commit nötig.
+- [ ] 6. Home-/Trainingskern + Packages externalisieren/übersetzen; alle
+      Datums-/Locale-Fallbacks korrigieren; Tests und eigener Commit.
+- [ ] 7. Journal, Progress und Golden Day externalisieren/übersetzen; Tests
+      und eigener Commit.
+- [ ] 8. Reflexprofil/Assessment inklusive 129 Fragen und PDF-Ausgabe nach dem
+      vorhandenen bilingualen Content-Muster lokalisieren; Tests/Commit.
+- [ ] 9. Begleitung, Mood, Settings, Profil und Trainer-Discovery vollständig
+      externalisieren/übersetzen; Tests in kleinen Feature-Commits.
+- [ ] 10. Chat, Trainer-Flows und launch-versteckte Community/Experience/Video-
+      Flächen externalisieren; Logs Englisch; Tests in Feature-Commits.
+- [ ] 11. Admin, Dev-Tools und Core-Ränder (Router, Onboarding-Hints, Bootstrap,
+      DB-/Sync-/Fehlerpfade) externalisieren; technische Logs Englisch.
+- [ ] 12. Systemebene: locale-aware Datum/Zahl, App-Locale in `profiles.locale`,
+      client- und serverseitige Push-Copy, iOS InfoPlist.strings de/en,
+      Android-Ressourcen; Deploy/Live-Änderungen nur nach Founder-Go.
+- [ ] 13. Dauerhafte Gates: ARB-Key-/Placeholder-Parität, Leerwerte,
+      EN-Umlautprüfung und Hardcode-Audit als Make-Target; Gate muss 0 melden.
+- [ ] 14. EN-Qualitätssweep (en-US, Glossar, DE==EN-Entscheidungen,
+      Heilversprechen-Check) und offene Recht/DB/Bild/Store-Punkte flaggen.
+- [ ] 15. Visuelle EN-Evidenz für beide Sprachwechsel-Wege und alle
+      Haupt-Screens erzeugen; Layout/Overflow prüfen.
+- [ ] 16. `make release-readiness-mobile`, Prod-Build ohne Codesign und
+      Abschlussreport/Tracker finalisieren. Signierte IPA/Upload bleiben ein
+      separater gated Release-Schritt und sind nicht Teil des i18n-Prompts.

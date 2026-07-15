@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""i18n audit: find hardcoded (German) user-visible strings in lib/**.
+"""i18n audit: find hardcoded user-visible strings in lib/**.
 
 Extracts every string literal from the Dart sources (comment-aware, handles
 raw/triple-quoted strings and ${...} interpolation), filters out technical
@@ -16,9 +16,8 @@ text, and categorizes each finding:
 Usage:
   python3 scripts/i18n_audit.py                     # summary to stdout
   python3 scripts/i18n_audit.py --tsv out.tsv       # full detail dump
-  python3 scripts/i18n_audit.py --gate              # exit 1 if user-visible
-                                                    # German strings remain
-                                                    # (categories a/b/c)
+  python3 scripts/i18n_audit.py --gate              # exit 1 if any user-visible
+                                                    # hardcodes remain (a/b/c)
 
 Allowlist (for deliberate exceptions, e.g. proper nouns): each line of
 scripts/i18n_audit_allowlist.txt is TAB-separated `<path-or-*>\t<exact string>`.
@@ -43,7 +42,8 @@ INTERP_MARK = "⟦…⟧"  # ⟦…⟧ placeholder for ${...} / $ident
 
 
 # --------------------------------------------------------------------------
-# Dart tokenizer: yields (line_number, literal_text_with_interp_placeholders)
+# Dart tokenizer: yields
+# (line_number, literal_text_with_interp_placeholders, literal_start_offset)
 # --------------------------------------------------------------------------
 
 def extract_strings(src: str):
@@ -91,6 +91,7 @@ def extract_strings(src: str):
                 continue
             # string start (with optional r prefix)
             raw = False
+            literal_start = i
             qpos = i
             if ch == "r" and peek(1) in ("'", '"'):
                 raw = True
@@ -99,7 +100,9 @@ def extract_strings(src: str):
                 quote = src[qpos]
                 triple = src[qpos : qpos + 3] == quote * 3
                 i = qpos + (3 if triple else 1)
-                stack.append(["str", quote, triple, raw, [], line])
+                stack.append(
+                    ["str", quote, triple, raw, [], line, literal_start]
+                )
                 continue
             # interpolation close?
             if ch == "}" and len(stack) > 1:
@@ -115,12 +118,12 @@ def extract_strings(src: str):
             continue
 
         # ---- inside a string ----
-        _, quote, triple, raw, buf, start_line = top
+        _, quote, triple, raw, buf, start_line, literal_start = top
         closer = quote * 3 if triple else quote
         if src.startswith(closer, i):
             text = "".join(buf)
             stack.pop()
-            results.append((top[5], text))
+            results.append((top[5], text, top[6]))
             i += len(closer)
             continue
         if not raw:
@@ -144,7 +147,7 @@ def extract_strings(src: str):
         if not triple and ch == "\n":
             # unterminated single-line string (syntax error in source) — bail out
             stack.pop()
-            results.append((top[5], "".join(buf)))
+            results.append((top[5], "".join(buf), top[6]))
             continue
         buf.append(ch)
         i += 1
@@ -161,6 +164,8 @@ TECH_PATTERNS = [
     re.compile(r"^assets?/"),
     re.compile(r".*\.(png|jpe?g|svg|gif|webp|json|arb|ttf|otf|mp3|wav|mp4|mov|riv|pdf|html?|css|js|dart|sql|yaml|env)$", re.I),
     re.compile(r"^/[A-Za-z0-9_\-/:.⟦…⟧]*$"),             # route paths (incl. interp)
+    re.compile(r"^:[A-Za-z][A-Za-z0-9_]*$"),            # named route parameter
+    re.compile(r"^__[a-z0-9_]+$"),                       # internal sentinel value
     re.compile(r"^[a-z0-9⟦…⟧]+(?:[_.\-][a-z0-9⟦…⟧]+)+$"),  # snake.case keys, table names
     re.compile(r"^[a-z]+[A-Z][A-Za-z0-9]*$"),            # camelCase identifier
     re.compile(r"^[A-Z0-9_]{2,}$"),                      # SCREAMING_SNAKE / env names
@@ -169,6 +174,11 @@ TECH_PATTERNS = [
     re.compile(r"^(select|insert|update|delete|create|alter|drop|grant|with)\s", re.I),  # SQL
     re.compile(r"^[dMyHhmsEQL]{1,6}([.,:\-/\s]+[dMyHhmsEQL]{1,6})*$"),  # DateFormat patterns
     re.compile(r"^(application|text|image|audio|video|multipart)/[a-z0-9.+\-]+$"),  # MIME
+    re.compile(
+        r"^(BEGIN|END|VERSION|PRODID|CALSCALE|METHOD|UID|DTSTAMP|DTSTART|"
+        r"DTEND|SUMMARY|DESCRIPTION|LOCATION|STATUS|SEQUENCE|TRANSP|"
+        r"ORGANIZER|ATTENDEE|RRULE|EXDATE|RDATE)(;[^:]*)?:"
+    ),  # iCalendar field syntax
     re.compile(r"^[A-Za-z0-9+/=_\-]{24,}$"),             # tokens/base64-ish
     re.compile(r"^\w+(\.\w+)+$"),                        # dotted identifiers
 ]
@@ -180,7 +190,18 @@ LOWER_TOKEN = re.compile(r"^[a-z][a-z0-9_\-]*$")
 TECH_EXTRA = [
     re.compile(r"^[a-z_]+(\s*,\s*[a-z_]+)+$"),           # SQL column lists
     re.compile(r"^[a-z]{2}([_-][A-Z]{2})?$"),            # locale codes de, de_DE
+    re.compile(r"^\^.*\$$"),                             # anchored regex patterns
+    re.compile(r".*\[[0-9a-zA-Z]+-[0-9a-zA-Z]+\]"),      # regex char classes
 ]
+
+# A literal used to *detect* an error/state (matching, not display).  Match the
+# syntax immediately before this specific literal; never skip the whole line,
+# because a ternary can contain both a technical comparison and visible copy.
+DETECTION_PREFIX = re.compile(
+    r"(?:\.contains|\.startsWith|\.endsWith)\s*\(\s*$|"
+    r"(?:==|!=)\s*$|"
+    r"\bcase\s*$"
+)
 
 # Single capitalized ASCII token that is NOT a known German word => class name etc.
 SINGLE_TOKEN = re.compile(r"^[A-Za-z][A-Za-z0-9]*$")
@@ -260,7 +281,9 @@ CTX_PUSH = re.compile(r"Notification|notification|NotificationDetails|AndroidNot
 CTX_ERROR = re.compile(r"SnackBar|showSnack|showError|AlertDialog|showDialog|errorMessage|failureMessage|\berror\b|\bfehler\b", re.I)
 CTX_SEMANTICS = re.compile(r"[Ss]emantic|tooltip|Tooltip|hintText|labelText|helperText")
 
-LEGAL_PATH = re.compile(r"consent|legal|privacy|datenschutz|impressum|terms|agb")
+LEGAL_PATH = re.compile(
+    r"consent|disclaimer|legal|privacy|datenschutz|impressum|terms|agb"
+)
 PUSH_PATH = re.compile(r"notification|push|fcm|reminder")
 
 # bilingual-by-design content fields (exercise.dart pattern): a literal that sits
@@ -287,6 +310,12 @@ def categorize(rel_path: str, ctx: str, back_lines: list[str]) -> str:
     return "a-ui"
 
 
+def is_detection_literal(src: str, start_offset: int) -> bool:
+    """Return true only when this literal is comparison/matching input."""
+    literal_prefix = src[max(0, start_offset - 120) : start_offset]
+    return DETECTION_PREFIX.search(literal_prefix) is not None
+
+
 # hardcoded German locale in formatting code
 FORMAT_LOCALE = re.compile(r"DateFormat\s*(\.\w+\s*)?\([^)]*['\"]de(_DE)?['\"]|Intl\.defaultLocale|initializeDateFormatting\(\s*['\"]de", )
 
@@ -310,9 +339,11 @@ def audit(gate: bool, tsv_path: str | None):
             ln = src.count("\n", 0, m.start()) + 1
             format_findings.append((rel, ln, lines[ln - 1].strip()))
 
-        for ln, text in extract_strings(src):
+        for ln, text, start_offset in extract_strings(src):
             src_line = lines[ln - 1].lstrip() if ln <= len(lines) else ""
             if src_line.startswith(("import ", "export ", "part ")):
+                continue
+            if is_detection_literal(src, start_offset):
                 continue
             if is_technical(text):
                 continue
@@ -384,7 +415,11 @@ def audit(gate: bool, tsv_path: str | None):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--tsv", help="write full findings dump to this TSV file")
-    ap.add_argument("--gate", action="store_true", help="exit 1 if user-visible German strings remain")
+    ap.add_argument(
+        "--gate",
+        action="store_true",
+        help="exit 1 if any user-visible hardcoded strings remain",
+    )
     args = ap.parse_args()
     sys.exit(audit(args.gate, args.tsv))
 

@@ -1,0 +1,5 @@
+# Bewusste Ausnahmen für scripts/i18n_audit.py (TAB-getrennt: Pfad-oder-* <TAB> exakter String).
+# Nur Strings eintragen, die absichtlich NICHT über ARB laufen (Markennamen, Autonyme).
+*	Reflex Journey
+*	🇩🇪 Deutsch
+*	🇬🇧 English

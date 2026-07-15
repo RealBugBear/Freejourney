@@ -6,8 +6,8 @@
 
 ## Phasen-Checkliste
 
-- [ ] **Phase 0 — Einstieg:** Branch ✅, Tracker angelegt, Pflichtdokumente gelesen
-- [ ] **Phase 1 — Audit:** Audit-Skript, Kategorisierung aller Funde, DB-Content-Analyse, Systemebene, EN-Qualitätsreview, 🔶-Checkpoint
+- [x] **Phase 0 — Einstieg:** Branch ✅, Tracker angelegt, Pflichtdokumente gelesen
+- [x] **Phase 1 — Audit:** Audit-Skript, Kategorisierung, DB-/System-Analyse, EN-Review und 🔶-Checkpoint dokumentiert; keine Prod-Zugriffe
 - [ ] **Phase 2 — Externalisierung:** alle nutzersichtbaren Strings über ARB-Keys
 - [ ] **Phase 3 — Übersetzung:** Glossar, alle EN-Werte nach Style Guide, 12 DE==EN-Keys aufgelöst
 - [ ] **Phase 4 — Systemebene:** InfoPlist.strings de/en, Android, Push (client+server), Locale-Formate
@@ -67,6 +67,27 @@
 **Werkzeuge:** `scripts/i18n_audit.py` (Tokenizer-basiert, Kategorien a–g, `--gate` für Phase 5,
 Allowlist `scripts/i18n_audit_allowlist.txt` für bewusste Ausnahmen wie „Reflex Journey“).
 
+## 🔶 Founder-Checkpoint Phase 1
+
+**Code darf ohne Rückfrage weiterlaufen; dieser Block verlangt keine sofortige Entscheidung.**
+
+- **Mengengerüst am Handoff nach Onboarding + Dashboard:** 1.458 heuristische Gate-Kandidaten,
+  davon 891 als deutsch erkannt, plus 17 feste `de`/`de_DE`-Formatierungen. Der Wert ist eine
+  konservative Obergrenze und enthält noch technische Fehlklassifikationen; das End-Gate wird
+  erst bei 0 realen nutzersichtbaren Hardcodes grün.
+- **DB-Content-Empfehlung:** Keine neue Übersetzungstabelle und keine JSONB-Migration bauen.
+  `exercises` und `reflex_packages` besitzen bereits `_de`/`_en`-Felder, die App-Modelle lesen
+  sie locale-aware. Dieses bestehende Muster bleibt die Architektur. Eine Prüfung der Live-Daten
+  wird in diesem Auftrag bewusst **nicht** ausgeführt, weil Prod-Zugriffe ausdrücklich verboten
+  sind. Der einsprachige Fragebogen ist lokaler App-Content und wird analog als DE/EN-Feldpaar
+  ergänzt.
+- **Recht/Sicherheit:** `consent_screen.dart` (335 Literale) und der ungenutzte, aber
+  rechtlich sensible `training_disclaimer_dialog.dart` (19 Literale) werden nicht frei
+  übersetzt. Beide gehen mit Empfehlung an den Anwalt (`docs/legal/ANWALTS_BRIEFING.md`).
+- **Systemrand:** iOS-Usage-Descriptions, Android-Ressourcen, client-/serverseitige Push-Copy
+  und 17 feste deutsche Locale-Formate sind Phase 4. Ein Edge-Function-Deploy bleibt separat
+  Founder-gated; im i18n-Auftrag wird nur lokaler Code vorbereitet und verifiziert.
+
 ## Datei-Status (Audit 2026-07-15)
 
 Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
@@ -74,13 +95,13 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 | Bereich | Datei | a/b/c | d-log | sonst | Status |
 |---|---|---|---|---|---|
-| onboarding | features/onboarding/presentation/screens/entry_points_screen.dart | 50 | 0 | 0  | offen |
-| onboarding | features/onboarding/presentation/screens/for_whom_screen.dart | 21 | 0 | 0  | offen |
-| auth | features/auth/data/repositories/supabase_auth_repository.dart | 0 | 5 | 0  | offen |
-| auth | features/auth/presentation/screens/change_password_screen.dart | 1 | 0 | 0  | offen |
-| auth | features/auth/presentation/screens/login_screen.dart | 14 | 0 | 0  | offen |
-| dashboard | features/dashboard/presentation/screens/dashboard_screen.dart | 76 | 0 | 4  | offen |
-| training | features/training/domain/models/exercise.dart | 0 | 0 | 445 bilingual-ok | offen |
+| onboarding | features/onboarding/presentation/screens/entry_points_screen.dart | 50 | 0 | 0  | verifiziert (`0705c7c`, analyze + 245 Tests) |
+| onboarding | features/onboarding/presentation/screens/for_whom_screen.dart | 21 | 0 | 0  | verifiziert (`0705c7c`, analyze + 245 Tests) |
+| auth | features/auth/data/repositories/supabase_auth_repository.dart | 0 | 5 | 0  | verifiziert (technische Meldungen bereits EN) |
+| auth | features/auth/presentation/screens/change_password_screen.dart | 1 | 0 | 0  | verifiziert (keine UI-Hardcodes) |
+| auth | features/auth/presentation/screens/login_screen.dart | 14 | 0 | 0  | verifiziert (nur bewusste Sprach-Autonyme) |
+| dashboard | features/dashboard/presentation/screens/dashboard_screen.dart | 76 | 0 | 4  | verifiziert (`2abf16a`, analyze + 245 Tests) |
+| training | features/training/domain/models/exercise.dart | 0 | 0 | 445 bilingual-ok | verifiziert (DE/EN-Feldpaare) |
 | training | features/training/domain/services/audio_announcement_service.dart | 0 | 1 | 0  | offen |
 | training | features/training/presentation/screens/immersive_exercise_screen.dart | 18 | 0 | 0  | offen |
 | training | features/training/presentation/screens/immersive_session_screen.dart | 1 | 0 | 0  | offen |
@@ -103,7 +124,7 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | training | features/training/presentation/widgets/music_picker_sheet.dart | 4 | 0 | 0  | offen |
 | training | features/training/presentation/widgets/parallel_lines_visualizer.dart | 2 | 0 | 0  | offen |
 | training | features/training/presentation/widgets/rhythm_visualizer.dart | 3 | 3 | 0  | offen |
-| training | features/training/presentation/widgets/training_disclaimer_dialog.dart | 19 | 0 | 0  | offen |
+| training | features/training/presentation/widgets/training_disclaimer_dialog.dart | 0 | 0 | 19 e-legal! | geflaggt – Anwalt, nicht frei übersetzen |
 | training | features/training/presentation/widgets/training_intro_widget.dart | 2 | 0 | 0  | offen |
 | training | features/training/presentation/widgets/training_outro_widget.dart | 1 | 0 | 0  | offen |
 | packages | features/packages/presentation/screens/packages_screen.dart | 10 | 0 | 0  | offen |
@@ -111,7 +132,7 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | journal | features/journal/presentation/widgets/journal_entry_tile.dart | 10 | 0 | 3  | offen |
 | progress | features/progress/presentation/screens/progress_overview_screen.dart | 36 | 0 | 0  | offen |
 | golden_day | features/golden_day/presentation/screens/golden_day_screen.dart | 6 | 0 | 0  | offen |
-| assessment | features/assessment/domain/completion_questions.dart | 0 | 0 | 7 bilingual-ok | offen |
+| assessment | features/assessment/domain/completion_questions.dart | 0 | 0 | 7 bilingual-ok | verifiziert (DE/EN-Feldpaare) |
 | assessment | features/assessment/domain/draft_persistence_service.dart | 0 | 2 | 0  | offen |
 | assessment | features/assessment/domain/reflex_questionnaire_definitions.dart | 134 | 0 | 0  | offen |
 | assessment | features/assessment/domain/services/reflex_profile_pdf_service.dart | 36 | 0 | 1  | offen |
@@ -174,7 +195,7 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | video | features/video/presentation/screens/video_call_screen.dart | 28 | 20 | 0  | offen |
 | video | features/video/presentation/widgets/incoming_call_listener.dart | 10 | 0 | 0  | offen |
 | premium | features/premium/data/premium_repository.dart | 2 | 0 | 0  | offen |
-| consent | features/consent/presentation/screens/consent_screen.dart | 0 | 0 | 335 e-legal! | offen |
+| consent | features/consent/presentation/screens/consent_screen.dart | 0 | 0 | 335 e-legal! | geflaggt – Anwalt, nicht frei übersetzen |
 | admin | features/admin/presentation/providers/admin_provider.dart | 9 | 0 | 0  | offen |
 | admin | features/admin/presentation/screens/admin_panel_screen.dart | 99 | 0 | 0  | offen |
 | dev_tools | features/dev_tools/presentation/screens/dev_tools_screen.dart | 36 | 7 | 0  | offen |
@@ -214,3 +235,9 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
   Mengengerüst + Architektur-Befunde oben. Live-DB-Check der EN-Spalten in dieser Session
   nicht möglich (Prod-Zugriffe für diese Session verboten) → als vorbereitetes SQL im
   🔶-Block an den Founder.
+- **2026-07-15, Handoff:** Vier i18n-Commits gegen den Tree geprüft. Onboarding fügte real
+  49 Keys hinzu, Dashboard 64 (gesamt 429 DE = 429 EN; alle neuen Keys mit Metadaten).
+  Auth ist bereits sauber und braucht keinen eigenen Umbau. Das angefangene Audit-Gate wurde
+  gegen False Negatives gehärtet: Vergleichsliterale werden präzise statt zeilenweise
+  gefiltert; Regressionstests decken `.contains`, Ternary und `case` ab. Nächster Code-Batch:
+  Training-Intro, Position und Bewegung; rechtlicher Trainingshinweis bleibt ausgespart.
