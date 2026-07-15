@@ -1,6 +1,13 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { create, getNumericDate } from 'https://deno.land/x/djwt@v2.8/mod.ts';
+import {
+  buildAppointmentConfirmedCopy,
+  buildDefaultAppointmentTitle,
+  buildDefaultClientLabel,
+  normalizeSupportedLocale,
+} from '../_shared/notification_copy.ts';
+import type { NotificationCopy } from '../_shared/notification_copy.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -39,7 +46,6 @@ serve(async (req: Request) => {
     if (appointment.trainee_id !== user.id) return json({ error: 'Forbidden' }, 403);
     if (!appointment.scheduled_for) return json({ error: 'Appointment has no scheduled time' }, 400);
 
-    const traineeName = appointment.profiles?.display_name ?? 'Klient';
     const { data: tokens, error: tokenError } = await serviceClient
       .from('device_tokens')
       .select('token')
@@ -50,19 +56,37 @@ serve(async (req: Request) => {
     if (tokenError) throw tokenError;
     if (!tokens || tokens.length === 0) return json({ sent: 0, skipped: 'no_tokens' });
 
+    const { data: recipientProfile, error: profileError } = await serviceClient
+      .from('profiles')
+      .select('locale')
+      .eq('id', appointment.trainer_id)
+      .maybeSingle();
+    if (profileError) throw profileError;
+    const locale = normalizeSupportedLocale(recipientProfile?.locale);
+    const relatedProfile = (Array.isArray(appointment.profiles)
+      ? appointment.profiles[0]
+      : appointment.profiles) as { display_name?: string | null } | null;
+    const traineeName = relatedProfile?.display_name ??
+      buildDefaultClientLabel(locale);
+    const copy = buildAppointmentConfirmedCopy({
+      locale,
+      traineeName,
+      scheduledFor: appointment.scheduled_for,
+    });
+
     const accessToken = await getFirebaseAccessToken();
     let sent = 0;
     for (const { token } of tokens as Array<{ token: string }>) {
       const ok = await sendFcmMessage(accessToken, token, {
         type: 'appointment_confirmed',
         appointment_id: appointment.id,
-        title: appointment.title ?? 'Isometrische Partneruebung',
+        title: appointment.title ?? buildDefaultAppointmentTitle(locale),
         scheduled_for: appointment.scheduled_for,
         duration_minutes: String(appointment.duration_minutes ?? 60),
         location: appointment.location ?? '',
         notes: appointment.notes ?? '',
         trainee_name: traineeName,
-      });
+      }, copy);
       if (ok) sent += 1;
     }
 
@@ -126,12 +150,8 @@ async function sendFcmMessage(
   accessToken: string,
   token: string,
   data: Record<string, string>,
+  copy: NotificationCopy,
 ): Promise<boolean> {
-  const when = new Date(data.scheduled_for).toLocaleString('de-DE', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-    timeZone: 'Europe/Berlin',
-  });
   const response = await fetch(
     `https://fcm.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/messages:send`,
     {
@@ -144,8 +164,8 @@ async function sendFcmMessage(
         message: {
           token,
           notification: {
-            title: 'Termin bestaetigt',
-            body: `${data.trainee_name} hat ${when} angenommen. Tippe zum Kalendereintrag.`,
+            title: copy.title,
+            body: copy.body,
           },
           data,
           android: {

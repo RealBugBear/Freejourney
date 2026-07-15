@@ -1,6 +1,11 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { create, getNumericDate } from 'https://deno.land/x/djwt@v2.8/mod.ts';
+import {
+  buildAppointmentProposalCopy,
+  normalizeSupportedLocale,
+} from '../_shared/notification_copy.ts';
+import type { NotificationCopy } from '../_shared/notification_copy.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -48,13 +53,23 @@ serve(async (req: Request) => {
     if (tokenError) throw tokenError;
     if (!tokens || tokens.length === 0) return json({ sent: 0, skipped: 'no_tokens' });
 
+    const { data: recipientProfile, error: profileError } = await serviceClient
+      .from('profiles')
+      .select('locale')
+      .eq('id', appointment.trainee_id)
+      .maybeSingle();
+    if (profileError) throw profileError;
+    const copy = buildAppointmentProposalCopy(
+      normalizeSupportedLocale(recipientProfile?.locale),
+    );
+
     const accessToken = await getFirebaseAccessToken();
     let sent = 0;
     for (const { token } of tokens as Array<{ token: string }>) {
       const ok = await sendFcmMessage(accessToken, token, {
         type: 'appointment_proposal',
         appointment_id: appointment.id,
-      });
+      }, copy);
       if (ok) sent += 1;
     }
 
@@ -118,6 +133,7 @@ async function sendFcmMessage(
   accessToken: string,
   token: string,
   data: Record<string, string>,
+  copy: NotificationCopy,
 ): Promise<boolean> {
   const response = await fetch(
     `https://fcm.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/messages:send`,
@@ -131,8 +147,8 @@ async function sendFcmMessage(
         message: {
           token,
           notification: {
-            title: 'Neue Terminvorschlaege',
-            body: 'Waehle einen passenden Termin aus.',
+            title: copy.title,
+            body: copy.body,
           },
           data,
           android: {

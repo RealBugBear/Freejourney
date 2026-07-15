@@ -1,6 +1,11 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { create, getNumericDate } from 'https://deno.land/x/djwt@v2.8/mod.ts';
+import {
+  buildIncomingVideoCallCopy,
+  normalizeSupportedLocale,
+} from '../_shared/notification_copy.ts';
+import type { NotificationCopy } from '../_shared/notification_copy.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -12,7 +17,13 @@ interface RequestPayload {
 }
 
 interface DeviceTokenRow {
+  user_id: string;
   token: string;
+}
+
+interface RecipientProfileRow {
+  id: string;
+  locale: string | null;
 }
 
 serve(async (req: Request) => {
@@ -80,9 +91,21 @@ serve(async (req: Request) => {
       return json({ sent: 0, skipped: 'no_recipients' });
     }
 
+    const { data: recipientProfiles, error: profileError } = await serviceClient
+      .from('profiles')
+      .select('id, locale')
+      .in('id', recipientIds);
+    if (profileError) throw profileError;
+    const localesByUserId = new Map(
+      ((recipientProfiles ?? []) as RecipientProfileRow[]).map((profile) => [
+        profile.id,
+        normalizeSupportedLocale(profile.locale),
+      ]),
+    );
+
     const { data: tokens, error: tokenError } = await serviceClient
       .from('device_tokens')
-      .select('token')
+      .select('user_id, token')
       .in('user_id', recipientIds)
       .eq('enabled', true)
       .is('revoked_at', null);
@@ -96,12 +119,15 @@ serve(async (req: Request) => {
     let sent = 0;
 
     for (const row of tokens as DeviceTokenRow[]) {
+      const copy = buildIncomingVideoCallCopy(
+        localesByUserId.get(row.user_id) ?? 'de',
+      );
       const ok = await sendFcmMessage(accessToken, row.token, {
         call_id: call.id,
         channel_id: call.channel_id,
         agora_channel_name: call.agora_channel_name,
         started_by: call.started_by,
-      });
+      }, copy);
       if (ok) sent += 1;
     }
 
@@ -175,6 +201,7 @@ async function sendFcmMessage(
   accessToken: string,
   token: string,
   data: Record<string, string>,
+  copy: NotificationCopy,
 ): Promise<boolean> {
   const response = await fetch(
     `https://fcm.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/messages:send`,
@@ -188,8 +215,8 @@ async function sendFcmMessage(
         message: {
           token,
           notification: {
-            title: 'Eingehender Video-Call',
-            body: 'Tippe, um den Anruf zu öffnen.',
+            title: copy.title,
+            body: copy.body,
           },
           data: {
             type: 'video_call',

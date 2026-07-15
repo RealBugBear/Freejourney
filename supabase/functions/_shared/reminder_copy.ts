@@ -1,3 +1,5 @@
+import type { SupportedLocale } from './notification_copy.ts';
+
 export type ReminderType = 'training_soft' | 'streak_warning' | 'comeback';
 export type WeeklyGoalSource = 'curriculum' | 'user_setting' | 'default';
 
@@ -11,6 +13,7 @@ export function buildTrainingReminderCopy(
   streakDaysOrWeeks?: number | null,
   weeklyGoal?: number | null,
   weeklyGoalSource: WeeklyGoalSource = 'default',
+  locale: SupportedLocale = 'de',
 ): TrainingReminderCopy {
   const canUseWeeklyGoal =
     weeklyGoal != null &&
@@ -22,6 +25,16 @@ export function buildTrainingReminderCopy(
     : null;
 
   if (type === 'training_soft') {
+    if (locale === 'en') {
+      const sessionLabel = weeklyGoal === 1 ? 'session' : 'sessions';
+      return {
+        title: 'Time for Your Session',
+        body: canUseWeeklyGoal
+          ? `Now is a good time for your next session. Your weekly goal: ${weeklyGoal} ${sessionLabel}.`
+          : "There's still time for your session today.",
+      };
+    }
+
     return {
       title: 'Zeit fuer deine Einheit',
       body: canUseWeeklyGoal
@@ -31,11 +44,29 @@ export function buildTrainingReminderCopy(
   }
 
   if (type === 'streak_warning') {
+    if (locale === 'en') {
+      return {
+        title: 'Training Reminder',
+        body: streak != null
+          ? `You're on a ${streak}-day streak. There's still time for a short session today.`
+          : "There's still time for a short session today.",
+      };
+    }
+
     return {
       title: 'Training-Erinnerung',
       body: streak != null
         ? `Deine Serie laeuft seit ${streak} Tagen. Heute ist noch Zeit fuer eine kurze Einheit.`
         : 'Heute ist noch Zeit fuer eine kurze Einheit.',
+    };
+  }
+
+  if (locale === 'en') {
+    return {
+      title: 'Get Back Into It',
+      body: streak != null
+        ? `After ${streak} strong days, today is a good time to get back into it.`
+        : 'Today is a good time to get back into it.',
     };
   }
 

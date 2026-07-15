@@ -287,3 +287,9 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
   sind als DE/EN-Feldpaare umgesetzt; DE-Runtime-Copy ist vollständig identisch zum Ausgangsstand,
   EN nutzt `FPR` statt `FLR`. 32 Assessment-Tests, Claim-/Residue-Prüfung und scoped Analyze sind
   grün. Allgemeine Assessment-UI und PDF-Rahmentexte bleiben ein eigener ARB-/Formatierungs-Batch.
+- **2026-07-15, serverseitige Push-Copy:** Reminder-, Termin-, Call-Request- und eingehende
+  Video-Call-Notifications lesen die Empfängersprache aus `profiles.locale`, normalisieren auf
+  `de`/`en` und fallen bei fehlendem/ungültigem Wert auf Deutsch zurück. Mehrere Empfänger werden
+  pro Device-Token in ihrer eigenen Sprache bedient. Bestehende DE-Copy ist regressionsgetestet,
+  en-US-Copy nutzt `session`; 15/15 Deno-Tests und `deno check` für alle fünf Entry-Points sind
+  grün. Kein Schema, kein Prod-Zugriff und kein Function-Deploy; Deploy bleibt Founder-gated.

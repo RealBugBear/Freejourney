@@ -9,6 +9,9 @@ import type {
   WeeklyGoalSource,
 } from '../_shared/reminder_copy.ts';
 import {
+  normalizeSupportedLocale,
+} from '../_shared/notification_copy.ts';
+import {
   getFirebaseAccessToken,
   sendFcmNotification,
 } from '../_shared/fcm.ts';
@@ -26,6 +29,12 @@ const FIREBASE_SERVICE_ACCOUNT_JSON = Deno.env.get('FIREBASE_SERVICE_ACCOUNT_JSO
 const FIREBASE_PROJECT_ID = Deno.env.get('FIREBASE_PROJECT_ID') ?? 'corejourney-prod';
 
 const MAX_LIMIT = 100;
+
+function createServiceClient() {
+  return createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+}
+
+type ServiceClient = ReturnType<typeof createServiceClient>;
 
 interface NotificationJob {
   id: string;
@@ -68,7 +77,7 @@ serve(async (req: Request) => {
       Math.max(Number(body.limit ?? 50) || 50, 1),
       MAX_LIMIT,
     );
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const supabase = createServiceClient();
     const { data: jobs, error: claimError } = await supabase.rpc(
       'claim_due_notification_jobs',
       { p_limit: limit },
@@ -125,7 +134,7 @@ serve(async (req: Request) => {
 });
 
 async function processJob(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   job: NotificationJob,
   accessToken: string,
 ): Promise<{ status: 'sent' | 'failed' | 'skipped'; tokensDisabled: number }> {
@@ -145,6 +154,16 @@ async function processJob(
     .eq('user_id', job.user_id)
     .single();
   if (preferenceError) throw preferenceError;
+
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('locale')
+    .eq('id', job.user_id)
+    .maybeSingle();
+  if (profileError) throw profileError;
+  const locale = normalizeSupportedLocale(
+    (profile as { locale?: unknown } | null)?.locale,
+  );
 
   const { data: tokens, error: tokenError } = await supabase
     .from('device_tokens')
@@ -171,6 +190,7 @@ async function processJob(
     streak,
     (preference as ReminderPreference).weekly_goal,
     (preference as ReminderPreference).weekly_goal_source,
+    locale,
   );
 
   const messageIds: string[] = [];
@@ -222,7 +242,7 @@ async function processJob(
 }
 
 async function revalidateJob(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   job: NotificationJob,
 ): Promise<string | null> {
   const now = Date.now();
@@ -297,7 +317,7 @@ async function revalidateJob(
 }
 
 async function loadCompletedSessionsForDate(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   userId: string,
   enrollmentIds: string[],
   completedAfterIso: string,
@@ -320,7 +340,7 @@ async function loadCompletedSessionsForDate(
 }
 
 async function calculateDailyStreak(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   job: NotificationJob,
 ): Promise<number | null> {
   const { data, error } = await supabase
@@ -354,7 +374,7 @@ async function calculateDailyStreak(
 }
 
 async function disableToken(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   tokenId: string,
 ): Promise<void> {
   const { error } = await supabase
@@ -369,7 +389,7 @@ async function disableToken(
 }
 
 async function updateJob(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   jobId: string,
   values: Record<string, unknown>,
 ): Promise<void> {
