@@ -54,7 +54,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Social login is not configured correctly yet. Please contact support.';
 
   @override
-  String get authErrorSocialCancelled => 'Sign-in was cancelled.';
+  String get authErrorSocialCancelled => 'Sign-in was canceled.';
 
   @override
   String get email => 'Email';
@@ -168,7 +168,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get moodSubmit => 'Save';
 
   @override
-  String get moodChartEmpty => 'Log a unit to see your wellbeing over time.';
+  String get moodChartEmpty => 'Log a session to see your wellbeing over time.';
 
   @override
   String get intakeAssessmentTitle => 'Getting Started';
@@ -342,7 +342,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get paywallDurationNote =>
-      'The full programme typically takes 10–12 months — at your pace, pauses included.';
+      'The full program typically takes 10–12 months — at your pace, pauses included.';
 
   @override
   String get paywallMonthlyTitle => 'Monthly';
@@ -376,7 +376,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Purchases are not available in this version yet.';
 
   @override
-  String get paywallCancelNote => 'Subscriptions can be cancelled anytime.';
+  String get paywallCancelNote => 'Subscriptions can be canceled anytime.';
 
   @override
   String get packageAvailable => 'Available';
@@ -590,7 +590,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get journalEmptySubtitle =>
-      'Write down what you observe in daily life — after a unit or whenever you like.';
+      'Write down what you observe in daily life — after a session or whenever you like.';
 
   @override
   String get journalEmptyHint =>
@@ -862,7 +862,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appointmentStatusConfirmed => 'Confirmed';
 
   @override
-  String get appointmentStatusCancelled => 'Cancelled';
+  String get appointmentStatusCancelled => 'Canceled';
 
   @override
   String get appointmentStatusDone => 'Completed';

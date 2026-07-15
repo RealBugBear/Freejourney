@@ -132,8 +132,9 @@ keine Rechtstexte, Flag bleibt false.
       Client-Push sowie verbleibende Datum-/Zahlformate sind offen; Deploy/Live-
       Änderungen nur nach Founder-Go.
 - [ ] 13. Dauerhafte Gates: ARB-Key-/Placeholder-Parität, Leerwerte und
-      EN-Umlautprüfung sind als `make i18n-check` in Release-Readiness aktiv;
-      Hardcode-Audit erst bei Endstand 0 aktivieren.
+      EN-Umlautprüfung sowie Glossar/en-US/Claim/DE==EN-Qualität sind als
+      `make i18n-check` in Release-Readiness aktiv; Hardcode-Audit erst bei
+      Endstand 0 aktivieren.
 - [ ] 14. EN-Qualitätssweep (en-US, Glossar, DE==EN-Entscheidungen,
       Heilversprechen-Check) und offene Recht/DB/Bild/Store-Punkte flaggen.
 - [ ] 15. Visuelle EN-Evidenz für beide Sprachwechsel-Wege und alle

@@ -17,7 +17,7 @@
   "signInWithApple": "Continue with Apple",
   "signInWithGoogle": "Continue with Google",
   "authErrorSocialConfiguration": "Social login is not configured correctly yet. Please contact support.",
-  "authErrorSocialCancelled": "Sign-in was cancelled.",
+  "authErrorSocialCancelled": "Sign-in was canceled.",
   "email": "Email",
   "password": "Password",
   "forgotPassword": "Forgot Password?",
@@ -79,7 +79,7 @@
   "stressLabel": "Stress",
   "moodSkip": "Skip",
   "moodSubmit": "Save",
-  "moodChartEmpty": "Log a unit to see your wellbeing over time.",
+  "moodChartEmpty": "Log a session to see your wellbeing over time.",
 
   "intakeAssessmentTitle": "Getting Started",
   "intakeWelcomeTitle": "Welcome to your Reflex Integration Program",
@@ -138,7 +138,7 @@
   "packageCompleted": "Completed",
   "paywallTitle": "Unlock all packages",
   "paywallSubtitle": "Package 1 stays free forever. Premium unlocks every further reflex package — for you and your family profiles.",
-  "paywallDurationNote": "The full programme typically takes 10–12 months — at your pace, pauses included.",
+  "paywallDurationNote": "The full program typically takes 10–12 months — at your pace, pauses included.",
   "paywallMonthlyTitle": "Monthly",
   "paywallPerMonth": "per month",
   "paywallYearlyTitle": "Yearly",
@@ -149,7 +149,7 @@
   "paywallUnlock": "Unlock",
   "paywallRestore": "Restore purchases",
   "paywallNotAvailable": "Purchases are not available in this version yet.",
-  "paywallCancelNote": "Subscriptions can be cancelled anytime.",
+  "paywallCancelNote": "Subscriptions can be canceled anytime.",
   "packageAvailable": "Available",
 
   "settings": "Settings",
@@ -241,7 +241,7 @@
 
   "journal": "Journal",
   "journalEmptyTitle": "No entries yet.",
-  "journalEmptySubtitle": "Write down what you observe in daily life — after a unit or whenever you like.",
+  "journalEmptySubtitle": "Write down what you observe in daily life — after a session or whenever you like.",
   "journalEmptyHint": "Keep track of what changes in your daily life.",
   "journalNewEntry": "New Note",
   "journalPostTrainingTitle": "Changes in everyday life?",
@@ -342,7 +342,7 @@
   "appointmentSelectCalendarSubtitle": "Select the calendar for Reflex Journey appointments.",
   "appointmentStatusPlanned": "Planned",
   "appointmentStatusConfirmed": "Confirmed",
-  "appointmentStatusCancelled": "Cancelled",
+  "appointmentStatusCancelled": "Canceled",
   "appointmentStatusDone": "Completed",
   "appointmentOpenInCalendar": "Open in Calendar",
 

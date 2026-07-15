@@ -293,3 +293,9 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
   pro Device-Token in ihrer eigenen Sprache bedient. Bestehende DE-Copy ist regressionsgetestet,
   en-US-Copy nutzt `session`; 15/15 Deno-Tests und `deno check` für alle fünf Entry-Points sind
   grün. Kein Schema, kein Prod-Zugriff und kein Function-Deploy; Deploy bleibt Founder-gated.
+- **2026-07-15, EN-Qualitätsgate:** Ein zweites ARB-Gate prüft Glossar (`session`, nie `unit`),
+  en-US-Schreibweisen, verbotene Claim-Begriffe und unbegründete identische DE/EN-Werte.
+  27 bewusst identische Produktnamen/Akronyme besitzen exakte Einzelbegründungen; Legal- und
+  Quellentitel-Ausnahmen sind typisiert und ohne Wildcards. Sechs alte, nicht rechtliche EN-Werte
+  wurden auf en-US/Glossar korrigiert. Der lawyer-owned Disclaimer bleibt unverändert und exakt
+  ausgenommen. 11 fokussierte Quality-Tests und der reale 551-Key-Katalog sind grün.

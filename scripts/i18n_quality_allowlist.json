@@ -1,0 +1,45 @@
+{
+  "identical_values": {
+    "appTitle": "Reflex Journey is the registered product name in every locale.",
+    "dashboard": "Dashboard is the established and correctly spelled UI noun in both languages.",
+    "goldenDay": "Golden Day is a named in-product concept, not translatable sentence copy.",
+    "languageEnglish": "Language choices intentionally display the English autonym.",
+    "languageGerman": "Language choices intentionally display the German autonym.",
+    "packageShortAtnr": "ATNR is the canonical reflex acronym in both languages.",
+    "packageShortBabinski": "Babinski is an eponym and canonical reflex name.",
+    "packageShortBabkin": "Babkin is an eponym and canonical reflex name.",
+    "packageShortLandau": "Landau is an eponym and canonical reflex name.",
+    "packageShortMoro": "Moro is an eponym and canonical reflex name.",
+    "packageShortStnr": "STNR is the canonical reflex acronym in both languages.",
+    "packageShortTlr": "TLR is the canonical reflex acronym in both languages.",
+    "profileVersion": "Version plus its numeric placeholder is spelled identically in German and English.",
+    "routineMode": "Routine is the established product-mode label in both locales.",
+    "silentMode": "Silent is an intentionally shared product-mode name.",
+    "stressLabel": "Stress is spelled identically and has the same meaning in both languages.",
+    "themeSystem": "System is the conventional platform-theme label in both languages.",
+    "trainerDiscoveryRadiusLabel": "The numeric radius and SI unit km are locale-independent.",
+    "trainerSetupBioLabel": "Bio is the conventional short profile label in both languages.",
+    "trainingMusicAmbientFlow": "Ambient Flow is the proper title of the bundled music track.",
+    "trainingPause": "Pause is spelled identically and is idiomatic in both languages.",
+    "trainingPositionLabel": "Position is spelled identically and is idiomatic in both languages.",
+    "trainingRoutineSubtitle": "Hands-free is an intentionally shared product-mode descriptor.",
+    "trainingSecondsAbbreviation": "sec is the deliberately shared compact time abbreviation.",
+    "trainingTempoFeedbackSummary": "Tempo and Feedback are established shared UI nouns; placeholders are locale-neutral.",
+    "trainingVideo": "Video is spelled identically and is idiomatic in both languages.",
+    "tutorialMode": "Tutorial is the established product-mode label in both locales."
+  },
+  "claim_terms": {
+    "disclaimerText": {
+      "kind": "lawyer-owned",
+      "reason": "Safety disclaimer wording is lawyer-owned and may only change after legal review."
+    },
+    "entryPointsCoordinationSource": {
+      "kind": "source-title",
+      "reason": "Movements That Heal is a cited publication title and must remain verbatim."
+    },
+    "entryPointsEmotionSource": {
+      "kind": "source-title",
+      "reason": "Movements That Heal is a cited publication title and must remain verbatim."
+    }
+  }
+}

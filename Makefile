@@ -44,9 +44,10 @@ run-sim:
 run-android:
 	flutter run -d $(ANDROID_ID) --flavor development -t $(ENTRY)
 
-## Verify DE/EN ARB parity, values, placeholders, and EN umlauts.
+## Verify ARB parity/placeholders and launch-copy quality rules.
 i18n-check:
 	python3 scripts/i18n_check.py
+	python3 scripts/i18n_quality_check.py
 
 ## Automated release-readiness checks (docs/RELEASE_READINESS_CHECKLIST.md):
 ## static analysis must be free of errors and warnings (infos = pending
