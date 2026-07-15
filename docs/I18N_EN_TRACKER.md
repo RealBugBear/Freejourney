@@ -87,6 +87,14 @@ Allowlist `scripts/i18n_audit_allowlist.txt` für bewusste Ausnahmen wie „Refl
 - **Systemrand:** iOS-Usage-Descriptions, Android-Ressourcen, client-/serverseitige Push-Copy
   und 17 feste deutsche Locale-Formate sind Phase 4. Ein Edge-Function-Deploy bleibt separat
   Founder-gated; im i18n-Auftrag wird nur lokaler Code vorbereitet und verifiziert.
+- **🔶 Kalender-/Privacy-Entscheidung vor Release:** Die vorhandene native Integration ist
+  plattformübergreifend inkonsistent: iOS ruft ab iOS 17 vollen Kalenderzugriff auf, besitzt
+  aber nur `NSCalendarsUsageDescription`; Android fragt `READ_CALENDAR`/`WRITE_CALENDAR` im
+  Kotlin-Code an, während das Quell-Manifest diese Rechte nicht deklariert. Zusätzlich existiert
+  ein Always-Location-Usage-Key, obwohl die App nur When-in-use anfragt. Entweder direkten
+  Kalenderzugriff samt korrekter Permissions/Datenschutzangaben bewusst behalten oder auf den
+  bereits möglichen ICS-/Share-Weg begrenzen. Im i18n-Auftrag wurde keine dieser Semantiken
+  verändert.
 
 ## Datei-Status (Audit 2026-07-15)
 
@@ -259,3 +267,9 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
   Sprachwechsel und beim Neuaufbau nach bestehender Session, Sign-in oder Token-Refresh;
   lokale Auswahl/App-Start werden bei einem Netzwerkfehler nie blockiert. Kein Schema-Change
   und kein Prod-Zugriff. Zwei neue Unit-Tests decken Wechsel und Session-Restore ab.
+- **2026-07-15, System-Permission-Texte:** Alle fünf bestehenden iOS-Usage-Descriptions als
+  `de.lproj/en.lproj/InfoPlist.strings` lokalisiert und als Xcode-Variant-Group paketiert;
+  DE ist wortgleich zum bisherigen `Info.plist`, EN ist natürliche en-US-Copy. Marken-/Flavor-
+  Namen bleiben invariant. Android benötigt für die bestehenden Systemdialoge keine zusätzliche
+  App-Copy. 5 Plattformtests, `plutil` und Xcode-Projektparser sind grün. Einschränkung: Die
+  Flutter-In-App-Sprache steuert iOS-Systemdialoge nicht; iOS nutzt seine App-/Gerätesprache.

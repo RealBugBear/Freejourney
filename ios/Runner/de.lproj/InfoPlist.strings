@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Reflex Journey benötigt Kamera-Zugriff für Video-Calls mit deinem Trainer.";
+"NSMicrophoneUsageDescription" = "Reflex Journey benötigt Mikrofon-Zugriff für Video-Calls mit deinem Trainer.";
+"NSLocationWhenInUseUsageDescription" = "Reflex Journey benötigt deinen Standort, um Trainer in deiner Nähe anzuzeigen.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Reflex Journey benötigt deinen Standort, um Trainer in deiner Nähe anzuzeigen, wenn du standortbasierte Trainer-Suche und zugehörige Funktionen nutzt.";
+"NSCalendarsUsageDescription" = "Reflex Journey benötigt Zugriff auf deinen Kalender, damit du Trainingstermine mit deinem Trainer direkt als Kalendereintrag speichern kannst.";

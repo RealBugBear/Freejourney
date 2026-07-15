@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Reflex Journey needs access to your camera for video calls with your trainer.";
+"NSMicrophoneUsageDescription" = "Reflex Journey needs access to your microphone for video calls with your trainer.";
+"NSLocationWhenInUseUsageDescription" = "Reflex Journey needs access to your location to show trainers near you.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Reflex Journey needs access to your location to show trainers near you when you use location-based trainer search and related features.";
+"NSCalendarsUsageDescription" = "Reflex Journey needs access to your calendar so you can save training appointments with your trainer directly to your calendar.";
