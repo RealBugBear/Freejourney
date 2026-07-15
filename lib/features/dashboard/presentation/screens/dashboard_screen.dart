@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -60,6 +61,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   void _showRoutineTip() {
+    final l10n = AppLocalizations.of(context);
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: AppColors.surfaceDark,
@@ -72,19 +74,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Du kennst die Übungen jetzt',
-              style: TextStyle(
+            Text(
+              l10n.dashboardRoutineTipTitle,
+              style: const TextStyle(
                 color: AppColors.textPrimaryDark,
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Probiere den Routine-Modus — er führt dich komplett '
-              'hands-free per Audio durch das Training.',
-              style: TextStyle(
+            Text(
+              l10n.dashboardRoutineTipBody,
+              style: const TextStyle(
                 color: AppColors.textSecondaryDark,
                 fontSize: 14,
                 height: 1.5,
@@ -97,7 +98,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 foregroundColor: AppColors.textPrimary,
               ),
               onPressed: () => Navigator.pop(context),
-              child: const Text('Verstanden'),
+              child: Text(l10n.gotIt),
             ),
           ],
         ),
@@ -156,21 +157,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final now = ref.read(appClockProvider).now();
     if (_isCompletedToday(progress, now)) return;
 
+    final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Einheit eintragen'),
-        content: const Text(
-          'Die heutige Einheit wird eingetragen. Danach kannst du direkt nachspüren und eine Beobachtung festhalten.',
-        ),
+        title: Text(l10n.dashboardLogUnitTitle),
+        content: Text(l10n.dashboardLogUnitBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Abbrechen'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Heute geübt eintragen'),
+            child: Text(l10n.dashboardLogUnitConfirm),
           ),
         ],
       ),
@@ -192,13 +192,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
       final settings = ref.read(settingsProvider);
       if (settings.remindersEnabled) {
-        final isDE = settings.languageCode == 'de';
         await NotificationService.instance.suppressTodayAndReschedule(
           startMinutes: settings.reminderStartMinutes,
-          titleDe: isDE ? 'Zeit für deine Einheit' : 'Time for your unit',
-          bodyDe: isDE
-              ? 'Nimm dir Zeit für deine heutige Einheit.'
-              : "Take time for today's unit.",
+          titleDe: l10n.reminderSessionTitle,
+          bodyDe: l10n.reminderSessionBody,
         );
       }
 
@@ -217,8 +214,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Die heutige Einheit wurde eingetragen.'),
+          SnackBar(
+            content: Text(l10n.dashboardLogUnitSuccess),
           ),
         );
       }
@@ -226,7 +223,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Die Einheit konnte nicht eingetragen werden: $e'),
+            content: Text(l10n.dashboardLogUnitError('$e')),
           ),
         );
       }
@@ -295,19 +292,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   ) async {
     var selectedIds = candidates.map((c) => c.profile.id).toSet();
 
+    final l10n = AppLocalizations.of(context);
     return showDialog<List<String>>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) {
           return AlertDialog(
-            title: const Text('Zusammen trainieren?'),
+            title: Text(l10n.dashboardJointTrainingTitle),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Diese Kinder haben dasselbe aktive Paket. Soll die Einheit nach dem Training auch für sie eingetragen werden?',
-                ),
+                Text(l10n.dashboardJointTrainingBody),
                 const SizedBox(height: 12),
                 for (final candidate in candidates)
                   CheckboxListTile(
@@ -330,13 +326,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx, const <String>[]),
-                child: const Text('Nur dieses Profil'),
+                child: Text(l10n.dashboardJointTrainingOnlyThis),
               ),
               FilledButton(
                 onPressed: selectedIds.isEmpty
                     ? null
                     : () => Navigator.pop(ctx, selectedIds.toList()),
-                child: const Text('Gemeinsam eintragen'),
+                child: Text(l10n.dashboardJointTrainingTogether),
               ),
             ],
           );
@@ -425,7 +421,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             ),
           IconButton(
             icon: const Icon(Icons.settings_outlined),
-            tooltip: 'Einstellungen',
+            tooltip: AppLocalizations.of(context).settings,
             onPressed: () => context.push(Routes.settings),
           ),
         ],
@@ -447,7 +443,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 const _CompletionQuestionnaireBanner(),
                 const _AppointmentProposalBanner(),
                 _DailyUnitCard(
-                  packageName: _packageName(packageId),
+                  packageName:
+                      _packageName(AppLocalizations.of(context), packageId),
                   currentDay: progress?.currentDay ?? 1,
                   totalDays: ((enrollment?.assignedDurationWeeks ?? 8) * 7)
                       .clamp(1, 3650),
@@ -501,27 +498,27 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
-  static String _packageName(String packageId) {
+  static String _packageName(AppLocalizations l10n, String packageId) {
     switch (packageId) {
       case 'spinal_galant':
-        return 'Spinaler Galant';
+        return l10n.packageShortSpinalGalant;
       case 'tlr':
-        return 'TLR';
+        return l10n.packageShortTlr;
       case 'babkin':
-        return 'Babkin';
+        return l10n.packageShortBabkin;
       case 'such_saug':
-        return 'Such-Saug';
+        return l10n.packageShortSuchSaug;
       case 'atnr':
-        return 'ATNR';
+        return l10n.packageShortAtnr;
       case 'stnr':
-        return 'STNR';
+        return l10n.packageShortStnr;
       case 'babinski':
-        return 'Babinski';
+        return l10n.packageShortBabinski;
       case 'landau':
-        return 'Landau';
+        return l10n.packageShortLandau;
       case 'moro':
       default:
-        return 'Moro';
+        return l10n.packageShortMoro;
     }
   }
 
@@ -591,6 +588,7 @@ class _DailyUnitCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final progress = (currentDay / totalDays).clamp(0.0, 1.0);
 
     return Card(
@@ -607,7 +605,7 @@ class _DailyUnitCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Heute',
+                        l10n.today,
                         style: theme.textTheme.labelLarge?.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w700,
@@ -616,10 +614,10 @@ class _DailyUnitCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         showVorrundePrimary
-                            ? 'Vorrunde'
+                            ? l10n.dashboardVorrunde
                             : hasActivePackage
-                                ? '$packageName Paket'
-                                : 'Noch kein aktives Paket',
+                                ? l10n.dashboardPackageHeadline(packageName)
+                                : l10n.dashboardNoActivePackage,
                         style: theme.textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
@@ -628,9 +626,9 @@ class _DailyUnitCard extends StatelessWidget {
                   ),
                 ),
                 if (completedToday)
-                  const _StatusChip(
+                  _StatusChip(
                     icon: Icons.check_circle_outline,
-                    label: 'Heute abgeschlossen',
+                    label: l10n.dashboardCompletedToday,
                   ),
               ],
             ),
@@ -638,8 +636,8 @@ class _DailyUnitCard extends StatelessWidget {
             if (showVorrundePrimary) ...[
               Text(
                 vorrundeReadyForMoro
-                    ? 'Die vier Wochen Vorrunde sind erreicht. Du kannst jetzt Moro starten.'
-                    : 'Die Vorrunde bereitet dich rhythmisch auf Moro vor. Du kannst sie fortsetzen oder jederzeit mit Moro starten.',
+                    ? l10n.dashboardVorrundeReady
+                    : l10n.dashboardVorrundeIntro,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   height: 1.35,
@@ -655,15 +653,15 @@ class _DailyUnitCard extends StatelessWidget {
                     : Icons.play_arrow_rounded),
                 label: Text(
                   vorrundeReadyForMoro
-                      ? 'Jetzt Moro starten'
-                      : 'Vorrunde fortsetzen',
+                      ? l10n.dashboardStartMoroNow
+                      : l10n.dashboardContinueVorrunde,
                 ),
               ),
               if (!vorrundeReadyForMoro) ...[
                 const SizedBox(height: 10),
                 TextButton(
                   onPressed: onStartTrainingFlow,
-                  child: const Text('Trotzdem Moro starten'),
+                  child: Text(l10n.dashboardStartMoroAnyway),
                 ),
               ],
             ] else if (hasActivePackage) ...[
@@ -682,15 +680,15 @@ class _DailyUnitCard extends StatelessWidget {
                 children: [
                   _InfoChip(
                     icon: Icons.calendar_today_outlined,
-                    label: 'Tag $currentDay von $totalDays',
+                    label: l10n.dashboardDayOfTotal(currentDay, totalDays),
                   ),
                   _InfoChip(
                     icon: Icons.self_improvement,
-                    label: '$movementCount Bewegungen',
+                    label: l10n.dashboardMovementCount(movementCount),
                   ),
                   _InfoChip(
                     icon: Icons.schedule_outlined,
-                    label: 'ca. $estimatedMinutes Min.',
+                    label: l10n.dashboardEstimatedMinutes(estimatedMinutes),
                   ),
                 ],
               ),
@@ -701,7 +699,7 @@ class _DailyUnitCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'Die Bewegungen bleiben bewusst gleich. Regelmäßigkeit ist wichtiger als Intensität.',
+                l10n.dashboardRegularityNote,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   height: 1.35,
@@ -712,7 +710,7 @@ class _DailyUnitCard extends StatelessWidget {
                 FilledButton.icon(
                   onPressed: onBeginGuided,
                   icon: const Icon(Icons.play_arrow_rounded),
-                  label: const Text('Einheit beginnen'),
+                  label: Text(l10n.dashboardBeginUnit),
                 ),
                 const SizedBox(height: 10),
               ],
@@ -722,7 +720,7 @@ class _DailyUnitCard extends StatelessWidget {
                     child: OutlinedButton.icon(
                       onPressed: onObservation,
                       icon: const Icon(Icons.edit_note_outlined),
-                      label: const Text('Erfahrung dokumentieren'),
+                      label: Text(l10n.dashboardDocumentExperience),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -735,7 +733,9 @@ class _DailyUnitCard extends StatelessWidget {
                             : Icons.check_circle_outline,
                       ),
                       label: Text(
-                        completedToday ? 'Heute erledigt' : 'Einheit eintragen',
+                        completedToday
+                            ? l10n.dashboardDoneToday
+                            : l10n.dashboardLogUnitTitle,
                       ),
                     ),
                   ),
@@ -745,20 +745,20 @@ class _DailyUnitCard extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: onBeginRoutine,
                 icon: const Icon(Icons.timer_outlined),
-                label: const Text('Routine-Modus'),
+                label: Text(l10n.dashboardRoutineModeButton),
               ),
               const SizedBox(height: 10),
               OutlinedButton.icon(
                 onPressed: onBeginVorrunde,
                 icon: const Icon(Icons.self_improvement_outlined),
-                label: const Text('Vorrunde zur Beruhigung'),
+                label: Text(l10n.dashboardVorrundeCalm),
               ),
               if (didVorrundeToday) ...[
                 const SizedBox(height: 8),
                 Text(
                   completedToday
-                      ? 'Heute Pakettraining und Vorrunde gemacht'
-                      : 'Heute Vorrunde gemacht',
+                      ? l10n.dashboardDidBothToday
+                      : l10n.dashboardDidVorrundeToday,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -769,7 +769,7 @@ class _DailyUnitCard extends StatelessWidget {
               const LinearProgressIndicator(),
             ] else if (!hasProfile!) ...[
               Text(
-                'Leg dein erstes Reflexprofil an, um loszulegen.',
+                l10n.dashboardCreateFirstProfileHint,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -778,11 +778,11 @@ class _DailyUnitCard extends StatelessWidget {
               FilledButton.icon(
                 onPressed: onCreateProfile,
                 icon: const Icon(Icons.person_add_outlined),
-                label: const Text('Erstes Profil anlegen'),
+                label: Text(l10n.dashboardCreateFirstProfile),
               ),
             ] else ...[
               Text(
-                'Du hast ein Profil angelegt. Starte jetzt ein Paket, um deinen Rhythmus aufzubauen.',
+                l10n.dashboardStartPackageHint,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -791,7 +791,7 @@ class _DailyUnitCard extends StatelessWidget {
               FilledButton.icon(
                 onPressed: onStartPackage,
                 icon: const Icon(Icons.playlist_add_check_outlined),
-                label: const Text('Paket starten'),
+                label: Text(l10n.dashboardStartPackage),
               ),
             ],
           ],
@@ -806,18 +806,19 @@ class _DailyImpulseCard extends StatelessWidget {
 
   final int weekday;
 
-  static const _impulses = [
-    'Heute zählt nicht Perfektion, sondern Regelmäßigkeit.',
-    'Beobachte, ohne zu bewerten.',
-    'Langsam und regelmäßig ist genug.',
-    'Hier ist dein nächster ruhiger Schritt.',
-    'Nimm wahr, was heute da ist.',
-    'Ruhiger Rhythmus gibt dem Körper Orientierung.',
-    'Eine kurze Einheit ist besser als Druck.',
-  ];
+  static List<String> _impulses(AppLocalizations l10n) => [
+        l10n.dashboardImpulseRegularity,
+        l10n.dashboardImpulseObserve,
+        l10n.dashboardImpulseSlowIsEnough,
+        l10n.dashboardImpulseNextStep,
+        l10n.dashboardImpulsePerceive,
+        l10n.dashboardImpulseRhythm,
+        l10n.dashboardImpulseShortUnit,
+      ];
 
   @override
   Widget build(BuildContext context) {
+    final impulses = _impulses(AppLocalizations.of(context));
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -831,7 +832,7 @@ class _DailyImpulseCard extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                _impulses[(weekday - 1).clamp(0, _impulses.length - 1)],
+                impulses[(weekday - 1).clamp(0, impulses.length - 1)],
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
@@ -869,14 +870,15 @@ class _WeeklyRegularityStrip extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Diese Woche',
+                  AppLocalizations.of(context).thisWeek,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
                 ),
                 const Spacer(),
                 Text(
-                  '${completedWeekdays.length}/7 geübt',
+                  AppLocalizations.of(context)
+                      .dashboardPracticedOfWeek(completedWeekdays.length),
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -914,7 +916,9 @@ class _WeeklyRegularityStrip extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        _weekdayLabel(index),
+                        DateFormat.E(
+                                Localizations.localeOf(context).toString())
+                            .format(day),
                         style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ],
@@ -926,11 +930,6 @@ class _WeeklyRegularityStrip extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  static String _weekdayLabel(int index) {
-    const labels = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
-    return labels[index];
   }
 }
 
@@ -951,9 +950,10 @@ class _BegleitungNoticeCard extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final l10n = AppLocalizations.of(context);
     final title = proposalCount > 0
-        ? '$proposalCount Terminvorschlag${proposalCount == 1 ? '' : 'e'} offen'
-        : '$unreadMessages neue Nachricht${unreadMessages == 1 ? '' : 'en'}';
+        ? l10n.dashboardProposalsOpen(proposalCount)
+        : l10n.dashboardNewMessages(unreadMessages);
 
     return Material(
       color: AppColors.primary.withValues(alpha: 0.09),
@@ -1150,16 +1150,16 @@ class _AppointmentProposalBanner extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        count == 1
-                            ? 'Neuer Terminvorschlag'
-                            : '$count neue Terminvorschläge',
+                        AppLocalizations.of(context)
+                            .dashboardProposalBannerTitle(count),
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '$trainerName hat dir Termine vorgeschlagen.',
+                        AppLocalizations.of(context)
+                            .dashboardProposalBannerBody(trainerName),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -1189,10 +1189,11 @@ class _DashboardProfileTitle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profilesAsync = ref.watch(allReflexSubjectProfilesProvider);
     final selected = ref.watch(selectedSubjectProfileProvider);
-    final title = selected?.displayName ?? 'Heute';
+    final l10n = AppLocalizations.of(context);
+    final title = selected?.displayName ?? l10n.today;
 
     return PopupMenuButton<String>(
-      tooltip: 'Profil wechseln',
+      tooltip: l10n.dashboardSwitchProfile,
       enabled: profilesAsync.valueOrNull?.isNotEmpty ?? false,
       onSelected: (value) {
         if (value == '__add_profile') {
@@ -1222,7 +1223,9 @@ class _DashboardProfileTitle extends ConsumerWidget {
                   Expanded(child: Text(profile.displayName)),
                   const SizedBox(width: 8),
                   Text(
-                    profile.profileType == 'adult_self' ? 'Ich' : 'Kind',
+                    profile.profileType == 'adult_self'
+                        ? l10n.profileBadgeSelf
+                        : l10n.profileBadgeChild,
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -1231,13 +1234,13 @@ class _DashboardProfileTitle extends ConsumerWidget {
               ),
             ),
           const PopupMenuDivider(),
-          const PopupMenuItem<String>(
+          PopupMenuItem<String>(
             value: '__add_profile',
             child: Row(
               children: [
-                Icon(Icons.add),
-                SizedBox(width: 10),
-                Text('Profil hinzufügen'),
+                const Icon(Icons.add),
+                const SizedBox(width: 10),
+                Text(l10n.dashboardAddProfile),
               ],
             ),
           ),

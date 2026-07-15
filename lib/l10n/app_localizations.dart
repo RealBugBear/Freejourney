@@ -2287,6 +2287,390 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Später — direkt zum Training'**
   String get forWhomLaterToTraining;
+
+  /// Generic acknowledgement button
+  ///
+  /// In de, this message translates to:
+  /// **'Verstanden'**
+  String get gotIt;
+
+  /// Generic label for today
+  ///
+  /// In de, this message translates to:
+  /// **'Heute'**
+  String get today;
+
+  /// Short package name shown on dashboard
+  ///
+  /// In de, this message translates to:
+  /// **'Moro'**
+  String get packageShortMoro;
+
+  /// Short package name shown on dashboard
+  ///
+  /// In de, this message translates to:
+  /// **'Spinaler Galant'**
+  String get packageShortSpinalGalant;
+
+  /// Short package name shown on dashboard
+  ///
+  /// In de, this message translates to:
+  /// **'TLR'**
+  String get packageShortTlr;
+
+  /// Short package name shown on dashboard
+  ///
+  /// In de, this message translates to:
+  /// **'Babkin'**
+  String get packageShortBabkin;
+
+  /// Short package name shown on dashboard
+  ///
+  /// In de, this message translates to:
+  /// **'Such-Saug'**
+  String get packageShortSuchSaug;
+
+  /// Short package name shown on dashboard
+  ///
+  /// In de, this message translates to:
+  /// **'ATNR'**
+  String get packageShortAtnr;
+
+  /// Short package name shown on dashboard
+  ///
+  /// In de, this message translates to:
+  /// **'STNR'**
+  String get packageShortStnr;
+
+  /// Short package name shown on dashboard
+  ///
+  /// In de, this message translates to:
+  /// **'Babinski'**
+  String get packageShortBabinski;
+
+  /// Short package name shown on dashboard
+  ///
+  /// In de, this message translates to:
+  /// **'Landau'**
+  String get packageShortLandau;
+
+  /// Bottom sheet suggesting routine mode: title
+  ///
+  /// In de, this message translates to:
+  /// **'Du kennst die Übungen jetzt'**
+  String get dashboardRoutineTipTitle;
+
+  /// Bottom sheet suggesting routine mode: body
+  ///
+  /// In de, this message translates to:
+  /// **'Probiere den Routine-Modus — er führt dich komplett hands-free per Audio durch das Training.'**
+  String get dashboardRoutineTipBody;
+
+  /// Log-session dialog title, also used as button label
+  ///
+  /// In de, this message translates to:
+  /// **'Einheit eintragen'**
+  String get dashboardLogUnitTitle;
+
+  /// Log-session dialog body
+  ///
+  /// In de, this message translates to:
+  /// **'Die heutige Einheit wird eingetragen. Danach kannst du direkt nachspüren und eine Beobachtung festhalten.'**
+  String get dashboardLogUnitBody;
+
+  /// Log-session dialog confirm button
+  ///
+  /// In de, this message translates to:
+  /// **'Heute geübt eintragen'**
+  String get dashboardLogUnitConfirm;
+
+  /// Snackbar after logging today's session
+  ///
+  /// In de, this message translates to:
+  /// **'Die heutige Einheit wurde eingetragen.'**
+  String get dashboardLogUnitSuccess;
+
+  /// Snackbar when logging fails
+  ///
+  /// In de, this message translates to:
+  /// **'Die Einheit konnte nicht eingetragen werden: {error}'**
+  String dashboardLogUnitError(String error);
+
+  /// Local reminder notification title
+  ///
+  /// In de, this message translates to:
+  /// **'Zeit für deine Einheit'**
+  String get reminderSessionTitle;
+
+  /// Local reminder notification body
+  ///
+  /// In de, this message translates to:
+  /// **'Nimm dir Zeit für deine heutige Einheit.'**
+  String get reminderSessionBody;
+
+  /// Joint-training dialog title (multiple child profiles)
+  ///
+  /// In de, this message translates to:
+  /// **'Zusammen trainieren?'**
+  String get dashboardJointTrainingTitle;
+
+  /// Joint-training dialog body
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Kinder haben dasselbe aktive Paket. Soll die Einheit nach dem Training auch für sie eingetragen werden?'**
+  String get dashboardJointTrainingBody;
+
+  /// Joint-training dialog: log only active profile
+  ///
+  /// In de, this message translates to:
+  /// **'Nur dieses Profil'**
+  String get dashboardJointTrainingOnlyThis;
+
+  /// Joint-training dialog: log for selected profiles too
+  ///
+  /// In de, this message translates to:
+  /// **'Gemeinsam eintragen'**
+  String get dashboardJointTrainingTogether;
+
+  /// Headline when the warm-up round is the primary activity
+  ///
+  /// In de, this message translates to:
+  /// **'Vorrunde'**
+  String get dashboardVorrunde;
+
+  /// Headline for the active package
+  ///
+  /// In de, this message translates to:
+  /// **'{name} Paket'**
+  String dashboardPackageHeadline(String name);
+
+  /// Headline when no package is active
+  ///
+  /// In de, this message translates to:
+  /// **'Noch kein aktives Paket'**
+  String get dashboardNoActivePackage;
+
+  /// Status chip when today's session is done
+  ///
+  /// In de, this message translates to:
+  /// **'Heute abgeschlossen'**
+  String get dashboardCompletedToday;
+
+  /// Info text when warm-up phase is complete
+  ///
+  /// In de, this message translates to:
+  /// **'Die vier Wochen Vorrunde sind erreicht. Du kannst jetzt Moro starten.'**
+  String get dashboardVorrundeReady;
+
+  /// Info text while warm-up phase is running
+  ///
+  /// In de, this message translates to:
+  /// **'Die Vorrunde bereitet dich rhythmisch auf Moro vor. Du kannst sie fortsetzen oder jederzeit mit Moro starten.'**
+  String get dashboardVorrundeIntro;
+
+  /// Button: start Moro after warm-up complete
+  ///
+  /// In de, this message translates to:
+  /// **'Jetzt Moro starten'**
+  String get dashboardStartMoroNow;
+
+  /// Button: continue the warm-up round
+  ///
+  /// In de, this message translates to:
+  /// **'Vorrunde fortsetzen'**
+  String get dashboardContinueVorrunde;
+
+  /// Button: start Moro before warm-up is complete
+  ///
+  /// In de, this message translates to:
+  /// **'Trotzdem Moro starten'**
+  String get dashboardStartMoroAnyway;
+
+  /// Chip: current day within package
+  ///
+  /// In de, this message translates to:
+  /// **'Tag {current} von {total}'**
+  String dashboardDayOfTotal(int current, int total);
+
+  /// Chip: number of movements in today's session
+  ///
+  /// In de, this message translates to:
+  /// **'{count} Bewegungen'**
+  String dashboardMovementCount(int count);
+
+  /// Chip: estimated session duration
+  ///
+  /// In de, this message translates to:
+  /// **'ca. {minutes} Min.'**
+  String dashboardEstimatedMinutes(int minutes);
+
+  /// Note under the daily unit card
+  ///
+  /// In de, this message translates to:
+  /// **'Die Bewegungen bleiben bewusst gleich. Regelmäßigkeit ist wichtiger als Intensität.'**
+  String get dashboardRegularityNote;
+
+  /// Primary button: start today's session
+  ///
+  /// In de, this message translates to:
+  /// **'Einheit beginnen'**
+  String get dashboardBeginUnit;
+
+  /// Button: open observation sheet
+  ///
+  /// In de, this message translates to:
+  /// **'Erfahrung dokumentieren'**
+  String get dashboardDocumentExperience;
+
+  /// Disabled button label when already logged today
+  ///
+  /// In de, this message translates to:
+  /// **'Heute erledigt'**
+  String get dashboardDoneToday;
+
+  /// Button: start session in routine mode
+  ///
+  /// In de, this message translates to:
+  /// **'Routine-Modus'**
+  String get dashboardRoutineModeButton;
+
+  /// Button: start warm-up round for calming
+  ///
+  /// In de, this message translates to:
+  /// **'Vorrunde zur Beruhigung'**
+  String get dashboardVorrundeCalm;
+
+  /// Note when both package session and warm-up were done today
+  ///
+  /// In de, this message translates to:
+  /// **'Heute Pakettraining und Vorrunde gemacht'**
+  String get dashboardDidBothToday;
+
+  /// Note when only the warm-up was done today
+  ///
+  /// In de, this message translates to:
+  /// **'Heute Vorrunde gemacht'**
+  String get dashboardDidVorrundeToday;
+
+  /// Empty state: no profile yet
+  ///
+  /// In de, this message translates to:
+  /// **'Leg dein erstes Reflexprofil an, um loszulegen.'**
+  String get dashboardCreateFirstProfileHint;
+
+  /// Button: create first profile
+  ///
+  /// In de, this message translates to:
+  /// **'Erstes Profil anlegen'**
+  String get dashboardCreateFirstProfile;
+
+  /// Empty state: profile exists, no package
+  ///
+  /// In de, this message translates to:
+  /// **'Du hast ein Profil angelegt. Starte jetzt ein Paket, um deinen Rhythmus aufzubauen.'**
+  String get dashboardStartPackageHint;
+
+  /// Button: start a package
+  ///
+  /// In de, this message translates to:
+  /// **'Paket starten'**
+  String get dashboardStartPackage;
+
+  /// Daily impulse card (Monday)
+  ///
+  /// In de, this message translates to:
+  /// **'Heute zählt nicht Perfektion, sondern Regelmäßigkeit.'**
+  String get dashboardImpulseRegularity;
+
+  /// Daily impulse card (Tuesday)
+  ///
+  /// In de, this message translates to:
+  /// **'Beobachte, ohne zu bewerten.'**
+  String get dashboardImpulseObserve;
+
+  /// Daily impulse card (Wednesday)
+  ///
+  /// In de, this message translates to:
+  /// **'Langsam und regelmäßig ist genug.'**
+  String get dashboardImpulseSlowIsEnough;
+
+  /// Daily impulse card (Thursday)
+  ///
+  /// In de, this message translates to:
+  /// **'Hier ist dein nächster ruhiger Schritt.'**
+  String get dashboardImpulseNextStep;
+
+  /// Daily impulse card (Friday)
+  ///
+  /// In de, this message translates to:
+  /// **'Nimm wahr, was heute da ist.'**
+  String get dashboardImpulsePerceive;
+
+  /// Daily impulse card (Saturday)
+  ///
+  /// In de, this message translates to:
+  /// **'Ruhiger Rhythmus gibt dem Körper Orientierung.'**
+  String get dashboardImpulseRhythm;
+
+  /// Daily impulse card (Sunday)
+  ///
+  /// In de, this message translates to:
+  /// **'Eine kurze Einheit ist besser als Druck.'**
+  String get dashboardImpulseShortUnit;
+
+  /// Weekly regularity strip: practiced days count
+  ///
+  /// In de, this message translates to:
+  /// **'{count}/7 geübt'**
+  String dashboardPracticedOfWeek(int count);
+
+  /// Guidance notice: open appointment proposals
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, one{1 Terminvorschlag offen} other{{count} Terminvorschläge offen}}'**
+  String dashboardProposalsOpen(int count);
+
+  /// Guidance notice: unread messages
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, one{1 neue Nachricht} other{{count} neue Nachrichten}}'**
+  String dashboardNewMessages(int count);
+
+  /// Appointment proposal banner title
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, one{Neuer Terminvorschlag} other{{count} neue Terminvorschläge}}'**
+  String dashboardProposalBannerTitle(int count);
+
+  /// Appointment proposal banner body
+  ///
+  /// In de, this message translates to:
+  /// **'{name} hat dir Termine vorgeschlagen.'**
+  String dashboardProposalBannerBody(String name);
+
+  /// Tooltip on the profile switcher
+  ///
+  /// In de, this message translates to:
+  /// **'Profil wechseln'**
+  String get dashboardSwitchProfile;
+
+  /// Badge marking the adult self profile in the switcher
+  ///
+  /// In de, this message translates to:
+  /// **'Ich'**
+  String get profileBadgeSelf;
+
+  /// Badge marking a child profile in the switcher
+  ///
+  /// In de, this message translates to:
+  /// **'Kind'**
+  String get profileBadgeChild;
+
+  /// Menu item: add another profile
+  ///
+  /// In de, this message translates to:
+  /// **'Profil hinzufügen'**
+  String get dashboardAddProfile;
 }
 
 class _AppLocalizationsDelegate

@@ -1214,4 +1214,250 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forWhomLaterToTraining => 'Later — Straight to Training';
+
+  @override
+  String get gotIt => 'Got It';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get packageShortMoro => 'Moro';
+
+  @override
+  String get packageShortSpinalGalant => 'Spinal Galant';
+
+  @override
+  String get packageShortTlr => 'TLR';
+
+  @override
+  String get packageShortBabkin => 'Babkin';
+
+  @override
+  String get packageShortSuchSaug => 'Rooting-Sucking';
+
+  @override
+  String get packageShortAtnr => 'ATNR';
+
+  @override
+  String get packageShortStnr => 'STNR';
+
+  @override
+  String get packageShortBabinski => 'Babinski';
+
+  @override
+  String get packageShortLandau => 'Landau';
+
+  @override
+  String get dashboardRoutineTipTitle => 'You Know the Exercises Now';
+
+  @override
+  String get dashboardRoutineTipBody =>
+      'Try Routine Mode — it guides you through the whole training hands-free, by audio.';
+
+  @override
+  String get dashboardLogUnitTitle => 'Log Session';
+
+  @override
+  String get dashboardLogUnitBody =>
+      'Today\'s session will be logged. Right after, you can tune in and note down what you observe.';
+
+  @override
+  String get dashboardLogUnitConfirm => 'Log Today\'s Practice';
+
+  @override
+  String get dashboardLogUnitSuccess => 'Today\'s session has been logged.';
+
+  @override
+  String dashboardLogUnitError(String error) {
+    return 'The session could not be logged: $error';
+  }
+
+  @override
+  String get reminderSessionTitle => 'Time for Your Session';
+
+  @override
+  String get reminderSessionBody => 'Take a moment for today\'s session.';
+
+  @override
+  String get dashboardJointTrainingTitle => 'Train Together?';
+
+  @override
+  String get dashboardJointTrainingBody =>
+      'These children have the same active package. After training, should the session be logged for them as well?';
+
+  @override
+  String get dashboardJointTrainingOnlyThis => 'Only This Profile';
+
+  @override
+  String get dashboardJointTrainingTogether => 'Log Together';
+
+  @override
+  String get dashboardVorrunde => 'Warm-Up Round';
+
+  @override
+  String dashboardPackageHeadline(String name) {
+    return '$name Package';
+  }
+
+  @override
+  String get dashboardNoActivePackage => 'No Active Package Yet';
+
+  @override
+  String get dashboardCompletedToday => 'Completed Today';
+
+  @override
+  String get dashboardVorrundeReady =>
+      'You\'ve reached the four weeks of warm-up rounds. You can start Moro now.';
+
+  @override
+  String get dashboardVorrundeIntro =>
+      'The warm-up round prepares you rhythmically for Moro. You can continue it or start Moro whenever you\'re ready.';
+
+  @override
+  String get dashboardStartMoroNow => 'Start Moro Now';
+
+  @override
+  String get dashboardContinueVorrunde => 'Continue Warm-Up';
+
+  @override
+  String get dashboardStartMoroAnyway => 'Start Moro Anyway';
+
+  @override
+  String dashboardDayOfTotal(int current, int total) {
+    return 'Day $current of $total';
+  }
+
+  @override
+  String dashboardMovementCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count movements',
+      one: '1 movement',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardEstimatedMinutes(int minutes) {
+    return 'approx. $minutes min';
+  }
+
+  @override
+  String get dashboardRegularityNote =>
+      'The movements deliberately stay the same. Regularity matters more than intensity.';
+
+  @override
+  String get dashboardBeginUnit => 'Begin Session';
+
+  @override
+  String get dashboardDocumentExperience => 'Log Your Experience';
+
+  @override
+  String get dashboardDoneToday => 'Done Today';
+
+  @override
+  String get dashboardRoutineModeButton => 'Routine Mode';
+
+  @override
+  String get dashboardVorrundeCalm => 'Calming Warm-Up';
+
+  @override
+  String get dashboardDidBothToday => 'Package training and warm-up done today';
+
+  @override
+  String get dashboardDidVorrundeToday => 'Warm-up done today';
+
+  @override
+  String get dashboardCreateFirstProfileHint =>
+      'Create your first reflex profile to get started.';
+
+  @override
+  String get dashboardCreateFirstProfile => 'Create First Profile';
+
+  @override
+  String get dashboardStartPackageHint =>
+      'Your profile is ready. Start a package now to build your rhythm.';
+
+  @override
+  String get dashboardStartPackage => 'Start Package';
+
+  @override
+  String get dashboardImpulseRegularity =>
+      'Today isn\'t about perfection — it\'s about regularity.';
+
+  @override
+  String get dashboardImpulseObserve => 'Observe without judging.';
+
+  @override
+  String get dashboardImpulseSlowIsEnough => 'Slow and regular is enough.';
+
+  @override
+  String get dashboardImpulseNextStep => 'Here is your next calm step.';
+
+  @override
+  String get dashboardImpulsePerceive => 'Notice what is here today.';
+
+  @override
+  String get dashboardImpulseRhythm =>
+      'A calm rhythm gives the body something to hold on to.';
+
+  @override
+  String get dashboardImpulseShortUnit => 'A short session beats pressure.';
+
+  @override
+  String dashboardPracticedOfWeek(int count) {
+    return '$count/7 practiced';
+  }
+
+  @override
+  String dashboardProposalsOpen(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count open appointment proposals',
+      one: '1 open appointment proposal',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardNewMessages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new messages',
+      one: '1 new message',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardProposalBannerTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count New Appointment Proposals',
+      one: 'New Appointment Proposal',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardProposalBannerBody(String name) {
+    return '$name suggested appointment times for you.';
+  }
+
+  @override
+  String get dashboardSwitchProfile => 'Switch Profile';
+
+  @override
+  String get profileBadgeSelf => 'Me';
+
+  @override
+  String get profileBadgeChild => 'Child';
+
+  @override
+  String get dashboardAddProfile => 'Add Profile';
 }

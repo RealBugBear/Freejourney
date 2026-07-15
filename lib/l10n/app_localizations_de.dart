@@ -1233,4 +1233,249 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get forWhomLaterToTraining => 'Später — direkt zum Training';
+
+  @override
+  String get gotIt => 'Verstanden';
+
+  @override
+  String get today => 'Heute';
+
+  @override
+  String get packageShortMoro => 'Moro';
+
+  @override
+  String get packageShortSpinalGalant => 'Spinaler Galant';
+
+  @override
+  String get packageShortTlr => 'TLR';
+
+  @override
+  String get packageShortBabkin => 'Babkin';
+
+  @override
+  String get packageShortSuchSaug => 'Such-Saug';
+
+  @override
+  String get packageShortAtnr => 'ATNR';
+
+  @override
+  String get packageShortStnr => 'STNR';
+
+  @override
+  String get packageShortBabinski => 'Babinski';
+
+  @override
+  String get packageShortLandau => 'Landau';
+
+  @override
+  String get dashboardRoutineTipTitle => 'Du kennst die Übungen jetzt';
+
+  @override
+  String get dashboardRoutineTipBody =>
+      'Probiere den Routine-Modus — er führt dich komplett hands-free per Audio durch das Training.';
+
+  @override
+  String get dashboardLogUnitTitle => 'Einheit eintragen';
+
+  @override
+  String get dashboardLogUnitBody =>
+      'Die heutige Einheit wird eingetragen. Danach kannst du direkt nachspüren und eine Beobachtung festhalten.';
+
+  @override
+  String get dashboardLogUnitConfirm => 'Heute geübt eintragen';
+
+  @override
+  String get dashboardLogUnitSuccess =>
+      'Die heutige Einheit wurde eingetragen.';
+
+  @override
+  String dashboardLogUnitError(String error) {
+    return 'Die Einheit konnte nicht eingetragen werden: $error';
+  }
+
+  @override
+  String get reminderSessionTitle => 'Zeit für deine Einheit';
+
+  @override
+  String get reminderSessionBody => 'Nimm dir Zeit für deine heutige Einheit.';
+
+  @override
+  String get dashboardJointTrainingTitle => 'Zusammen trainieren?';
+
+  @override
+  String get dashboardJointTrainingBody =>
+      'Diese Kinder haben dasselbe aktive Paket. Soll die Einheit nach dem Training auch für sie eingetragen werden?';
+
+  @override
+  String get dashboardJointTrainingOnlyThis => 'Nur dieses Profil';
+
+  @override
+  String get dashboardJointTrainingTogether => 'Gemeinsam eintragen';
+
+  @override
+  String get dashboardVorrunde => 'Vorrunde';
+
+  @override
+  String dashboardPackageHeadline(String name) {
+    return '$name Paket';
+  }
+
+  @override
+  String get dashboardNoActivePackage => 'Noch kein aktives Paket';
+
+  @override
+  String get dashboardCompletedToday => 'Heute abgeschlossen';
+
+  @override
+  String get dashboardVorrundeReady =>
+      'Die vier Wochen Vorrunde sind erreicht. Du kannst jetzt Moro starten.';
+
+  @override
+  String get dashboardVorrundeIntro =>
+      'Die Vorrunde bereitet dich rhythmisch auf Moro vor. Du kannst sie fortsetzen oder jederzeit mit Moro starten.';
+
+  @override
+  String get dashboardStartMoroNow => 'Jetzt Moro starten';
+
+  @override
+  String get dashboardContinueVorrunde => 'Vorrunde fortsetzen';
+
+  @override
+  String get dashboardStartMoroAnyway => 'Trotzdem Moro starten';
+
+  @override
+  String dashboardDayOfTotal(int current, int total) {
+    return 'Tag $current von $total';
+  }
+
+  @override
+  String dashboardMovementCount(int count) {
+    return '$count Bewegungen';
+  }
+
+  @override
+  String dashboardEstimatedMinutes(int minutes) {
+    return 'ca. $minutes Min.';
+  }
+
+  @override
+  String get dashboardRegularityNote =>
+      'Die Bewegungen bleiben bewusst gleich. Regelmäßigkeit ist wichtiger als Intensität.';
+
+  @override
+  String get dashboardBeginUnit => 'Einheit beginnen';
+
+  @override
+  String get dashboardDocumentExperience => 'Erfahrung dokumentieren';
+
+  @override
+  String get dashboardDoneToday => 'Heute erledigt';
+
+  @override
+  String get dashboardRoutineModeButton => 'Routine-Modus';
+
+  @override
+  String get dashboardVorrundeCalm => 'Vorrunde zur Beruhigung';
+
+  @override
+  String get dashboardDidBothToday =>
+      'Heute Pakettraining und Vorrunde gemacht';
+
+  @override
+  String get dashboardDidVorrundeToday => 'Heute Vorrunde gemacht';
+
+  @override
+  String get dashboardCreateFirstProfileHint =>
+      'Leg dein erstes Reflexprofil an, um loszulegen.';
+
+  @override
+  String get dashboardCreateFirstProfile => 'Erstes Profil anlegen';
+
+  @override
+  String get dashboardStartPackageHint =>
+      'Du hast ein Profil angelegt. Starte jetzt ein Paket, um deinen Rhythmus aufzubauen.';
+
+  @override
+  String get dashboardStartPackage => 'Paket starten';
+
+  @override
+  String get dashboardImpulseRegularity =>
+      'Heute zählt nicht Perfektion, sondern Regelmäßigkeit.';
+
+  @override
+  String get dashboardImpulseObserve => 'Beobachte, ohne zu bewerten.';
+
+  @override
+  String get dashboardImpulseSlowIsEnough =>
+      'Langsam und regelmäßig ist genug.';
+
+  @override
+  String get dashboardImpulseNextStep =>
+      'Hier ist dein nächster ruhiger Schritt.';
+
+  @override
+  String get dashboardImpulsePerceive => 'Nimm wahr, was heute da ist.';
+
+  @override
+  String get dashboardImpulseRhythm =>
+      'Ruhiger Rhythmus gibt dem Körper Orientierung.';
+
+  @override
+  String get dashboardImpulseShortUnit =>
+      'Eine kurze Einheit ist besser als Druck.';
+
+  @override
+  String dashboardPracticedOfWeek(int count) {
+    return '$count/7 geübt';
+  }
+
+  @override
+  String dashboardProposalsOpen(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Terminvorschläge offen',
+      one: '1 Terminvorschlag offen',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardNewMessages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count neue Nachrichten',
+      one: '1 neue Nachricht',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardProposalBannerTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count neue Terminvorschläge',
+      one: 'Neuer Terminvorschlag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardProposalBannerBody(String name) {
+    return '$name hat dir Termine vorgeschlagen.';
+  }
+
+  @override
+  String get dashboardSwitchProfile => 'Profil wechseln';
+
+  @override
+  String get profileBadgeSelf => 'Ich';
+
+  @override
+  String get profileBadgeChild => 'Kind';
+
+  @override
+  String get dashboardAddProfile => 'Profil hinzufügen';
 }
