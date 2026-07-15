@@ -106,10 +106,10 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | training | features/training/presentation/screens/immersive_exercise_screen.dart | 18 | 0 | 0  | offen |
 | training | features/training/presentation/screens/immersive_session_screen.dart | 1 | 0 | 0  | offen |
 | training | features/training/presentation/screens/training_exercise_screen.dart | 32 | 0 | 0  | offen |
-| training | features/training/presentation/screens/training_intro_screen.dart | 8 | 0 | 0  | offen |
-| training | features/training/presentation/screens/training_movement_screen.dart | 11 | 0 | 0  | offen |
+| training | features/training/presentation/screens/training_intro_screen.dart | 8 | 0 | 0  | verifiziert (Audit 0, 5 DE/EN-Widget-Tests + 250 Tests) |
+| training | features/training/presentation/screens/training_movement_screen.dart | 11 | 0 | 0  | verifiziert (Audit 0, ICU-Plural geprüft, 250 Tests) |
 | training | features/training/presentation/screens/training_outro_screen.dart | 8 | 0 | 0  | offen |
-| training | features/training/presentation/screens/training_position_screen.dart | 9 | 0 | 0  | offen |
+| training | features/training/presentation/screens/training_position_screen.dart | 9 | 0 | 0  | verifiziert (Audit 0, Semantik/Dialog DE+EN, 250 Tests) |
 | training | features/training/presentation/screens/training_preparation_screen.dart | 2 | 0 | 0  | offen |
 | training | features/training/presentation/screens/training_session_screen.dart | 1 | 0 | 4  | offen |
 | training | features/training/presentation/screens/training_start_flow_screen.dart | 29 | 0 | 0  | offen |
@@ -241,3 +241,10 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
   gegen False Negatives gehärtet: Vergleichsliterale werden präzise statt zeilenweise
   gefiltert; Regressionstests decken `.contains`, Ternary und `case` ab. Nächster Code-Batch:
   Training-Intro, Position und Bewegung; rechtlicher Trainingshinweis bleibt ausgespart.
+- **2026-07-15, Training-Instruktionen:** Intro, Positions- und Bewegungsanweisung vollständig
+  externalisiert; 16 semantische Keys ergänzt (445 DE = 445 EN, jeweils mit Metadaten).
+  Deutsche UI-Ausgaben bleiben unverändert. Englische Copy folgt Glossar (`session`,
+  `exercise`, `movement`) und ICU behandelt Singular/Plural. Audit für alle drei Dateien: 0.
+  Fünf Widget-Tests prüfen natürliche EN-Copy, Tooltips, Fortschritts-Semantik, Dialoge,
+  Singular/Plural und DE-Parität. Vollcheck: Analyze 0 Fehler/0 Warnungen (bekannte Infos),
+  **250/250 Tests grün**.

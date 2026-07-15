@@ -88,7 +88,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboard => 'Dashboard';
 
   @override
-  String get startTraining => 'Begin Unit';
+  String get startTraining => 'Start Session';
 
   @override
   String currentDay(int day, int total) {
@@ -1460,4 +1460,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dashboardAddProfile => 'Add Profile';
+
+  @override
+  String get trainingIntroTitle => 'Welcome to Your Session';
+
+  @override
+  String get trainingIntroDescription =>
+      'Today, you\'ll practice seven movements at a calm pace.';
+
+  @override
+  String get trainingIntroRegularity =>
+      'Consistency matters more than intensity.';
+
+  @override
+  String get trainingIntroMovementCount => '7 movements';
+
+  @override
+  String get trainingIntroDuration => 'About 15–20 minutes';
+
+  @override
+  String get trainingIntroClothing => 'Comfortable clothing recommended';
+
+  @override
+  String trainingProgressSemantics(int current, int total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      total,
+      locale: localeName,
+      other: 'Progress: step $current of $total.',
+      one: 'Progress: step $current of 1.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trainingExitTooltip => 'Exit Session';
+
+  @override
+  String get trainingContinueToMovement => 'Continue to Movement';
+
+  @override
+  String get trainingHintTitle => 'Tip';
+
+  @override
+  String trainingRepetitionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count repetitions',
+      one: '1 repetition',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trainingStartExercise => 'Start Exercise';
+
+  @override
+  String get trainingAbortTitle => 'Exit Session?';
+
+  @override
+  String get trainingAbortBody =>
+      'Are you sure you want to exit this session? Your progress will be lost.';
+
+  @override
+  String get trainingAbortStay => 'Keep Training';
+
+  @override
+  String get trainingAbortConfirm => 'Exit Session';
 }

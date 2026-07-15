@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../widgets/premium_glassmorphic_card.dart';
 
 class TrainingIntroScreen extends StatelessWidget {
@@ -13,6 +14,7 @@ class TrainingIntroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: Container(
@@ -52,7 +54,7 @@ class TrainingIntroScreen extends StatelessWidget {
 
                         // Title - Bigger and bolder
                         Text(
-                          'Willkommen zu deiner Einheit',
+                          l10n.trainingIntroTitle,
                           style: theme.textTheme.headlineLarge?.copyWith(
                             color: theme.colorScheme.onPrimaryContainer,
                             fontWeight: FontWeight.bold,
@@ -65,7 +67,7 @@ class TrainingIntroScreen extends StatelessWidget {
 
                         // Description - Better readability
                         Text(
-                          'Heute gehst du 7 Bewegungen in ruhigem Rhythmus durch.',
+                          l10n.trainingIntroDescription,
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: theme.colorScheme.onPrimaryContainer
                                 .withValues(alpha: 0.9),
@@ -78,7 +80,7 @@ class TrainingIntroScreen extends StatelessWidget {
                         const SizedBox(height: 8),
 
                         Text(
-                          'Regelmäßigkeit ist wichtiger als Intensität.',
+                          l10n.trainingIntroRegularity,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             color: theme.colorScheme.onPrimaryContainer
                                 .withValues(alpha: 0.75),
@@ -102,19 +104,19 @@ class TrainingIntroScreen extends StatelessWidget {
                               _buildInfoRow(
                                 context,
                                 Icons.self_improvement,
-                                '7 Bewegungen',
+                                l10n.trainingIntroMovementCount,
                               ),
                               const SizedBox(height: 14),
                               _buildInfoRow(
                                 context,
                                 Icons.timer,
-                                'ca. 15-20 Minuten',
+                                l10n.trainingIntroDuration,
                               ),
                               const SizedBox(height: 14),
                               _buildInfoRow(
                                 context,
                                 Icons.smartphone,
-                                'Bequeme Kleidung empfohlen',
+                                l10n.trainingIntroClothing,
                               ),
                             ],
                           ),
@@ -128,7 +130,7 @@ class TrainingIntroScreen extends StatelessWidget {
                           height: 72,
                           child: Semantics(
                             button: true,
-                            label: 'Einheit beginnen',
+                            label: l10n.startTraining,
                             child: FilledButton(
                               onPressed: onStart,
                               style: FilledButton.styleFrom(
@@ -139,11 +141,11 @@ class TrainingIntroScreen extends StatelessWidget {
                                 ),
                                 elevation: 4,
                               ),
-                              child: const FittedBox(
+                              child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  'Einheit beginnen',
-                                  style: TextStyle(
+                                  l10n.startTraining,
+                                  style: const TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 0.5,

@@ -106,8 +106,9 @@ keine Rechtstexte, Flag bleibt false.
       DE/EN-Glossar anlegen; Widget-Test ergänzen (Commit `0705c7c`).
 - [x] 3. Dashboard vollständig externalisieren, ICU-Plurale und locale-aware
       Wochentage einsetzen; Suite grün (Commit `2abf16a`).
-- [ ] 4. Handoff bereinigen: begonnenes Audit-Gate/Allowlist prüfen und separat
-      committen; Tracker-Zeilen auf den realen Stand bringen.
+- [x] 4. Handoff bereinigt: Audit-Gate/Allowlist präzisiert, Regressionstests
+      ergänzt und Tracker auf den realen Stand gebracht (Commit `4f8a1d5`;
+      `make release-readiness-mobile`, 245/245 Tests).
 - [x] 5. Auth-Handoff geprüft: keine unallowlisteten UI-/Fehler-Hardcodes;
       technische Repository-Meldungen bereits Englisch. Kein Code-Commit nötig.
 - [ ] 6. Home-/Trainingskern + Packages externalisieren/übersetzen; alle

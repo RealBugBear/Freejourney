@@ -1478,4 +1478,71 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get dashboardAddProfile => 'Profil hinzufügen';
+
+  @override
+  String get trainingIntroTitle => 'Willkommen zu deiner Einheit';
+
+  @override
+  String get trainingIntroDescription =>
+      'Heute gehst du 7 Bewegungen in ruhigem Rhythmus durch.';
+
+  @override
+  String get trainingIntroRegularity =>
+      'Regelmäßigkeit ist wichtiger als Intensität.';
+
+  @override
+  String get trainingIntroMovementCount => '7 Bewegungen';
+
+  @override
+  String get trainingIntroDuration => 'ca. 15-20 Minuten';
+
+  @override
+  String get trainingIntroClothing => 'Bequeme Kleidung empfohlen';
+
+  @override
+  String trainingProgressSemantics(int current, int total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      total,
+      locale: localeName,
+      other: 'Fortschritt $current von $total Schritten.',
+      one: 'Fortschritt $current von einem Schritt.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trainingExitTooltip => 'Training abbrechen';
+
+  @override
+  String get trainingContinueToMovement => 'Weiter zur Bewegung';
+
+  @override
+  String get trainingHintTitle => 'Hinweis';
+
+  @override
+  String trainingRepetitionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count× Wiederholungen',
+      one: '$count× Wiederholungen',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trainingStartExercise => 'Übung starten';
+
+  @override
+  String get trainingAbortTitle => 'Training abbrechen?';
+
+  @override
+  String get trainingAbortBody =>
+      'Möchtest du das Training wirklich abbrechen? Dein Fortschritt geht verloren.';
+
+  @override
+  String get trainingAbortStay => 'Nein, weiter trainieren';
+
+  @override
+  String get trainingAbortConfirm => 'Ja, abbrechen';
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/exercise.dart';
 import '../widgets/animated_progress_bar.dart';
 import '../widgets/exercise_image_widget.dart';
@@ -18,24 +19,26 @@ class TrainingMovementScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
     final movementInstructions = exercise.movementInstructions(locale);
     final hints = exercise.hints(locale);
+    final currentStep = (exercise.exerciseNumber - 1) * 3 + 2;
+    const totalSteps = 21;
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).maybePop(),
-          tooltip: 'Zurück',
+          tooltip: l10n.back,
         ),
         // Slim progress bar
         title: Semantics(
-          label:
-              'Fortschritt ${((exercise.exerciseNumber - 1) * 3 + 2)} von 21 Schritten.',
+          label: l10n.trainingProgressSemantics(currentStep, totalSteps),
           child: AnimatedProgressBar(
-            currentStep: (exercise.exerciseNumber - 1) * 3 + 2,
-            totalSteps: 21,
+            currentStep: currentStep,
+            totalSteps: totalSteps,
             compact: true,
           ),
         ),
@@ -44,7 +47,7 @@ class TrainingMovementScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () => _showCancelDialog(context),
-            tooltip: 'Training abbrechen',
+            tooltip: l10n.trainingExitTooltip,
           ),
         ],
         backgroundColor: Colors.transparent,
@@ -181,7 +184,7 @@ class TrainingMovementScreen extends ConsumerWidget {
                             ),
                             const SizedBox(width: 6),
                             Text(
-                              'Hinweis',
+                              l10n.trainingHintTitle,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13,
@@ -209,7 +212,7 @@ class TrainingMovementScreen extends ConsumerWidget {
                 // Repetitions - Very minimal
                 const SizedBox(height: 8),
                 Text(
-                  '${exercise.repetitions}× Wiederholungen',
+                  l10n.trainingRepetitionCount(exercise.repetitions),
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: theme.colorScheme.onSurface.withOpacity(0.45),
                     fontSize: 11,
@@ -225,7 +228,7 @@ class TrainingMovementScreen extends ConsumerWidget {
                   height: 76,
                   child: Semantics(
                     button: true,
-                    label: 'Übung starten',
+                    label: l10n.trainingStartExercise,
                     child: FilledButton(
                       onPressed: onContinue,
                       style: FilledButton.styleFrom(
@@ -240,17 +243,17 @@ class TrainingMovementScreen extends ConsumerWidget {
                         fit: BoxFit.scaleDown,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Text(
-                              'Übung starten',
-                              style: TextStyle(
+                              l10n.trainingStartExercise,
+                              style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.5,
                               ),
                             ),
-                            SizedBox(width: 10),
-                            Icon(Icons.play_arrow, size: 30),
+                            const SizedBox(width: 10),
+                            const Icon(Icons.play_arrow, size: 30),
                           ],
                         ),
                       ),
@@ -266,17 +269,16 @@ class TrainingMovementScreen extends ConsumerWidget {
   }
 
   void _showCancelDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Training abbrechen?'),
-        content: const Text(
-          'Möchtest du das Training wirklich abbrechen? Dein Fortschritt geht verloren.',
-        ),
+        title: Text(l10n.trainingAbortTitle),
+        content: Text(l10n.trainingAbortBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Nein, weiter trainieren'),
+            child: Text(l10n.trainingAbortStay),
           ),
           TextButton(
             onPressed: () {
@@ -286,7 +288,7 @@ class TrainingMovementScreen extends ConsumerWidget {
             style: TextButton.styleFrom(
               foregroundColor: Colors.red,
             ),
-            child: const Text('Ja, abbrechen'),
+            child: Text(l10n.trainingAbortConfirm),
           ),
         ],
       ),

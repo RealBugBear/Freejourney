@@ -2671,6 +2671,102 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Profil hinzufügen'**
   String get dashboardAddProfile;
+
+  /// Headline on the training session introduction screen
+  ///
+  /// In de, this message translates to:
+  /// **'Willkommen zu deiner Einheit'**
+  String get trainingIntroTitle;
+
+  /// Description on the training session introduction screen
+  ///
+  /// In de, this message translates to:
+  /// **'Heute gehst du 7 Bewegungen in ruhigem Rhythmus durch.'**
+  String get trainingIntroDescription;
+
+  /// Encouraging note on the training session introduction screen
+  ///
+  /// In de, this message translates to:
+  /// **'Regelmäßigkeit ist wichtiger als Intensität.'**
+  String get trainingIntroRegularity;
+
+  /// Movement count in the training introduction info card
+  ///
+  /// In de, this message translates to:
+  /// **'7 Bewegungen'**
+  String get trainingIntroMovementCount;
+
+  /// Estimated duration in the training introduction info card
+  ///
+  /// In de, this message translates to:
+  /// **'ca. 15-20 Minuten'**
+  String get trainingIntroDuration;
+
+  /// Clothing recommendation in the training introduction info card
+  ///
+  /// In de, this message translates to:
+  /// **'Bequeme Kleidung empfohlen'**
+  String get trainingIntroClothing;
+
+  /// Accessibility label for progress through training instruction steps
+  ///
+  /// In de, this message translates to:
+  /// **'{total, plural, one{Fortschritt {current} von einem Schritt.} other{Fortschritt {current} von {total} Schritten.}}'**
+  String trainingProgressSemantics(int current, int total);
+
+  /// Tooltip for the button that exits an active training session
+  ///
+  /// In de, this message translates to:
+  /// **'Training abbrechen'**
+  String get trainingExitTooltip;
+
+  /// Button from position instructions to movement instructions
+  ///
+  /// In de, this message translates to:
+  /// **'Weiter zur Bewegung'**
+  String get trainingContinueToMovement;
+
+  /// Heading above an exercise hint
+  ///
+  /// In de, this message translates to:
+  /// **'Hinweis'**
+  String get trainingHintTitle;
+
+  /// Number of repetitions shown before an exercise
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, one{{count}× Wiederholungen} other{{count}× Wiederholungen}}'**
+  String trainingRepetitionCount(int count);
+
+  /// Button that starts the current exercise
+  ///
+  /// In de, this message translates to:
+  /// **'Übung starten'**
+  String get trainingStartExercise;
+
+  /// Title of the confirmation dialog for exiting training
+  ///
+  /// In de, this message translates to:
+  /// **'Training abbrechen?'**
+  String get trainingAbortTitle;
+
+  /// Body of the confirmation dialog for exiting training
+  ///
+  /// In de, this message translates to:
+  /// **'Möchtest du das Training wirklich abbrechen? Dein Fortschritt geht verloren.'**
+  String get trainingAbortBody;
+
+  /// Button that dismisses the exit-training confirmation
+  ///
+  /// In de, this message translates to:
+  /// **'Nein, weiter trainieren'**
+  String get trainingAbortStay;
+
+  /// Destructive button that confirms exiting training
+  ///
+  /// In de, this message translates to:
+  /// **'Ja, abbrechen'**
+  String get trainingAbortConfirm;
 }
 
 class _AppLocalizationsDelegate

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/exercise.dart';
 import '../widgets/animated_progress_bar.dart';
 import '../widgets/exercise_image_widget.dart';
@@ -18,23 +19,25 @@ class TrainingPositionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
     final positionInstructions = exercise.positionInstructions(locale);
+    final currentStep = (exercise.exerciseNumber - 1) * 3 + 1;
+    const totalSteps = 21;
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).maybePop(),
-          tooltip: 'Zurück',
+          tooltip: l10n.back,
         ),
         // Slim progress bar
         title: Semantics(
-          label:
-              'Fortschritt ${((exercise.exerciseNumber - 1) * 3 + 1)} von 21 Schritten.',
+          label: l10n.trainingProgressSemantics(currentStep, totalSteps),
           child: AnimatedProgressBar(
-            currentStep: (exercise.exerciseNumber - 1) * 3 + 1,
-            totalSteps: 21,
+            currentStep: currentStep,
+            totalSteps: totalSteps,
             compact: true,
           ),
         ),
@@ -43,7 +46,7 @@ class TrainingPositionScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () => _showCancelDialog(context),
-            tooltip: 'Training abbrechen',
+            tooltip: l10n.trainingExitTooltip,
           ),
         ],
         backgroundColor: Colors.transparent,
@@ -160,7 +163,7 @@ class TrainingPositionScreen extends ConsumerWidget {
                   height: 56,
                   child: Semantics(
                     button: true,
-                    label: 'Weiter zur Bewegung',
+                    label: l10n.trainingContinueToMovement,
                     child: FilledButton(
                       onPressed: onContinue,
                       style: FilledButton.styleFrom(
@@ -175,17 +178,17 @@ class TrainingPositionScreen extends ConsumerWidget {
                         fit: BoxFit.scaleDown,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Text(
-                              'Weiter zur Bewegung',
-                              style: TextStyle(
+                              l10n.trainingContinueToMovement,
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.5,
                               ),
                             ),
-                            SizedBox(width: 10),
-                            Icon(Icons.arrow_forward, size: 24),
+                            const SizedBox(width: 10),
+                            const Icon(Icons.arrow_forward, size: 24),
                           ],
                         ),
                       ),
@@ -201,17 +204,16 @@ class TrainingPositionScreen extends ConsumerWidget {
   }
 
   void _showCancelDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Training abbrechen?'),
-        content: const Text(
-          'Möchtest du das Training wirklich abbrechen? Dein Fortschritt geht verloren.',
-        ),
+        title: Text(l10n.trainingAbortTitle),
+        content: Text(l10n.trainingAbortBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Nein, weiter trainieren'),
+            child: Text(l10n.trainingAbortStay),
           ),
           TextButton(
             onPressed: () {
@@ -221,7 +223,7 @@ class TrainingPositionScreen extends ConsumerWidget {
             style: TextButton.styleFrom(
               foregroundColor: Colors.red,
             ),
-            child: const Text('Ja, abbrechen'),
+            child: Text(l10n.trainingAbortConfirm),
           ),
         ],
       ),
