@@ -39,7 +39,7 @@ Für jeden offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Blo
 | R3 | Untertitel „Dein Reflexintegrations-Weg“ + Copy-Freigabe als ein 15-Min-Durchgang | `STORE_LISTING_DRAFT.md`, „Offene Entscheidungen“ | **sofort** | ☐ offen |
 | R4 | ASC-App-Record in gemeinsamer Claude-in-Chrome-Sitzung anlegen (~20 Min.) | Backlog P3 (ASC-Record) | **sofort** | ☐ offen |
 | R5 | Support-Postfach: `support@reflexjourney.app` als echtes Postfach (mailbox.org) | Backlog P3 (Support-Postfach) | **sofort** | ☐ offen |
-| R6 | Secrets-Löschung freigeben (Beleglage vollständig, ein „Go R6“ genügt) | Backlog „Next up“ Punkt 5 | **sofort** | ☐ offen |
+| R6 | Secrets-Löschung freigeben (Beleglage vollständig, ein „Go R6“ genügt) | Backlog „Next up“ Punkt 5 | **sofort** | ✅ 2026-07-18 angenommen („Go R6“) — `AGARO-APP-ID` + `BOT-USER-ID` per `supabase secrets unset` gelöscht, per `secrets list` verifiziert (beide weg, `AGORA_APP_ID` intakt); Evidenz im Backlog P0.2 |
 | R7 | Telefonnummer: jetzt nichts kaufen; nach Anwalts-Antwort ggf. sipgate | Backlog P3 (EU-Trader-Status) | nach R1/Anwalts-Antwort | ☐ offen |
 | R8 | Paywall: Trigger-basiert post-launch planen + Bestandsschutz-Formel-Vorschlag | Backlog „Open questions / parked“ (Monetarisierung) | Formel: vor der ersten Launch-Kommunikation · Rest: post-launch | 🔄 teilentschieden 2026-07-07 (D4): Struktur-Bau vorgezogen (T23–T25), Trio bestätigt, kein Einzelkauf; **offen bleibt:** Bestandsschutz-Formel-Freigabe + Aktivierungs-Trigger + AGB-Beauftragung |
 | R9 | Reaktivierungs-Checkliste Community/Video statt eigenem Plan jetzt | Backlog „Open questions / parked“ (neuer Punkt) | erst bei Reaktivierungswunsch | ☐ offen |
