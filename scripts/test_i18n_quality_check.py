@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import io
 import json
 import tempfile
 import unittest
-from contextlib import redirect_stderr
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
 from scripts.i18n_quality_check import check_catalogs, main
@@ -266,6 +268,47 @@ class CliTest(unittest.TestCase):
         self.assertEqual(result, 1)
         self.assertIn("i18n quality check failed with 1 issue(s)", stderr.getvalue())
         self.assertIn("[glossary-unit:copy]", stderr.getvalue())
+
+    def test_catalog_without_rules_is_skipped_with_a_notice_and_en_still_gated(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            directory = Path(temp_dir)
+            de_path = directory / "app_de.arb"
+            en_path = directory / "app_en.arb"
+            fr_path = directory / "app_fr.arb"
+            allowlist_path = directory / "allowlist.json"
+            de_path.write_text(
+                json.dumps({"@@locale": "de", "copy": "Sitzung"}),
+                encoding="utf-8",
+            )
+            en_path.write_text(
+                json.dumps({"@@locale": "en", "copy": "Session"}),
+                encoding="utf-8",
+            )
+            fr_path.write_text(
+                json.dumps({"@@locale": "fr", "copy": "Séance"}),
+                encoding="utf-8",
+            )
+            allowlist_path.write_text(json.dumps(allowlist()), encoding="utf-8")
+            stdout = io.StringIO()
+            with redirect_stdout(stdout):
+                result = main(
+                    [
+                        "--de",
+                        str(de_path),
+                        "--en",
+                        str(en_path),
+                        "--allowlist",
+                        str(allowlist_path),
+                    ]
+                )
+
+        self.assertEqual(result, 0)
+        self.assertIn(
+            "app_fr.arb: no quality rules defined yet — "
+            "add them when the language ships",
+            stdout.getvalue(),
+        )
+        self.assertIn("i18n quality check passed", stdout.getvalue())
 
 
 if __name__ == "__main__":

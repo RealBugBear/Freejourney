@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Validate parity and basic quality constraints for the DE/EN ARB files.
+"""Validate parity and basic quality constraints for all ARB catalogs.
 
-The check is intentionally independent of Flutter so it can fail quickly in
-local and CI release-readiness runs.
+The German template (``app_de.arb``) is compared against every other
+``lib/l10n/app_*.arb`` catalog the script discovers, so adding a language
+is covered by this gate without touching it. The check is intentionally
+independent of Flutter so it can fail quickly in local and CI
+release-readiness runs.
 """
 
 from __future__ import annotations
@@ -20,6 +23,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DE_ARB = REPO_ROOT / "lib" / "l10n" / "app_de.arb"
 DEFAULT_EN_ARB = REPO_ROOT / "lib" / "l10n" / "app_en.arb"
 
+ARB_LOCALE = re.compile(r"^app_(\w+)\.arb$")
 GERMAN_UMLAUT = re.compile(r"[äöüÄÖÜß]")
 IDENTIFIER = re.compile(r"[A-Za-z][A-Za-z0-9_]*")
 COMPLEX_FORMATS = {"plural", "select", "selectordinal"}
@@ -176,28 +180,37 @@ def _placeholder_metadata(
     return dict(placeholders)
 
 
-def check_catalogs(de_catalog: Catalog, en_catalog: Catalog) -> list[str]:
-    """Return deterministic, human-readable validation issues."""
+def check_catalogs(
+    de_catalog: Catalog,
+    target_catalog: Catalog,
+    target_locale: str = "en",
+) -> list[str]:
+    """Return deterministic, human-readable validation issues.
+
+    The German template is compared against one target-language catalog;
+    callers loop this per discovered catalog. The umlaut check only applies
+    to non-DE catalogs.
+    """
 
     issues: list[str] = []
     de_keys = _message_keys(de_catalog)
-    en_keys = _message_keys(en_catalog)
+    target_keys = _message_keys(target_catalog)
 
-    for key in sorted(de_keys - en_keys):
-        issues.append(f"[en:{key}] message key is missing")
-    for key in sorted(en_keys - de_keys):
+    for key in sorted(de_keys - target_keys):
+        issues.append(f"[{target_locale}:{key}] message key is missing")
+    for key in sorted(target_keys - de_keys):
         issues.append(f"[de:{key}] message key is missing")
 
     de_metadata_keys = _metadata_keys(de_catalog)
-    en_metadata_keys = _metadata_keys(en_catalog)
-    for key in sorted(de_metadata_keys - en_metadata_keys):
-        issues.append(f"[en:@{key}] metadata key is missing")
-    for key in sorted(en_metadata_keys - de_metadata_keys):
+    target_metadata_keys = _metadata_keys(target_catalog)
+    for key in sorted(de_metadata_keys - target_metadata_keys):
+        issues.append(f"[{target_locale}:@{key}] metadata key is missing")
+    for key in sorted(target_metadata_keys - de_metadata_keys):
         issues.append(f"[de:@{key}] metadata key is missing")
 
     for locale, catalog, keys in (
         ("de", de_catalog, de_keys),
-        ("en", en_catalog, en_keys),
+        (target_locale, target_catalog, target_keys),
     ):
         for key in sorted(keys):
             value = catalog[key]
@@ -209,42 +222,50 @@ def check_catalogs(de_catalog: Catalog, en_catalog: Catalog) -> list[str]:
             elif not value.strip():
                 issues.append(f"[{locale}:{key}] value is empty")
             if (
-                locale == "en"
+                locale != "de"
                 and isinstance(value, str)
                 and GERMAN_UMLAUT.search(value)
             ):
-                issues.append(f"[en:{key}] value contains a German umlaut or ß")
+                issues.append(
+                    f"[{locale}:{key}] value contains a German umlaut or ß"
+                )
 
-    for key in sorted(de_keys & en_keys):
+    for key in sorted(de_keys & target_keys):
         de_value = de_catalog[key]
-        en_value = en_catalog[key]
-        if not isinstance(de_value, str) or not isinstance(en_value, str):
+        target_value = target_catalog[key]
+        if not isinstance(de_value, str) or not isinstance(target_value, str):
             continue
 
         de_placeholders = extract_placeholders(de_value)
-        en_placeholders = extract_placeholders(en_value)
-        if de_placeholders != en_placeholders:
+        target_placeholders = extract_placeholders(target_value)
+        if de_placeholders != target_placeholders:
             issues.append(
                 f"[{key}] placeholder sets differ: "
-                f"de={sorted(de_placeholders)}, en={sorted(en_placeholders)}"
+                f"de={sorted(de_placeholders)}, "
+                f"{target_locale}={sorted(target_placeholders)}"
             )
 
         de_metadata = _placeholder_metadata(de_catalog, key, "de", issues)
-        en_metadata = _placeholder_metadata(en_catalog, key, "en", issues)
+        target_metadata = _placeholder_metadata(
+            target_catalog, key, target_locale, issues
+        )
         if set(de_metadata) != de_placeholders:
             issues.append(
                 f"[de:{key}] placeholder metadata differs from message: "
                 f"message={sorted(de_placeholders)}, "
                 f"metadata={sorted(de_metadata)}"
             )
-        if set(en_metadata) != en_placeholders:
+        if set(target_metadata) != target_placeholders:
             issues.append(
-                f"[en:{key}] placeholder metadata differs from message: "
-                f"message={sorted(en_placeholders)}, "
-                f"metadata={sorted(en_metadata)}"
+                f"[{target_locale}:{key}] placeholder metadata differs from "
+                f"message: message={sorted(target_placeholders)}, "
+                f"metadata={sorted(target_metadata)}"
             )
-        if de_metadata != en_metadata:
-            issues.append(f"[{key}] placeholder metadata differs between de and en")
+        if de_metadata != target_metadata:
+            issues.append(
+                f"[{key}] placeholder metadata differs between de and "
+                f"{target_locale}"
+            )
 
     return issues
 
@@ -257,10 +278,14 @@ def load_catalog(path: Path) -> dict[str, Any]:
     return catalog
 
 
-def check_files(de_path: Path, en_path: Path) -> tuple[list[str], int]:
+def check_files(
+    de_path: Path,
+    target_path: Path,
+    target_locale: str = "en",
+) -> tuple[list[str], int]:
     load_issues: list[str] = []
     catalogs: dict[str, dict[str, Any]] = {}
-    for locale, path in (("de", de_path), ("en", en_path)):
+    for locale, path in (("de", de_path), (target_locale, target_path)):
         try:
             catalogs[locale] = load_catalog(path)
         except (OSError, json.JSONDecodeError, ValueError) as error:
@@ -269,28 +294,70 @@ def check_files(de_path: Path, en_path: Path) -> tuple[list[str], int]:
     if load_issues:
         return load_issues, 0
 
-    issues = check_catalogs(catalogs["de"], catalogs["en"])
+    issues = check_catalogs(
+        catalogs["de"], catalogs[target_locale], target_locale
+    )
     return issues, len(_message_keys(catalogs["de"]))
+
+
+def discover_target_catalogs(template_path: Path) -> list[tuple[str, Path]]:
+    """Return (locale, path) for every non-template app_*.arb, sorted."""
+
+    targets: list[tuple[str, Path]] = []
+    for path in sorted(template_path.parent.glob("app_*.arb")):
+        if path == template_path:
+            continue
+        match = ARB_LOCALE.match(path.name)
+        if match is None:
+            continue
+        targets.append((match.group(1), path))
+    return targets
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--de", type=Path, default=DEFAULT_DE_ARB)
-    parser.add_argument("--en", type=Path, default=DEFAULT_EN_ARB)
+    parser.add_argument(
+        "--template",
+        type=Path,
+        default=DEFAULT_DE_ARB,
+        help="DE template ARB; every sibling app_*.arb is checked against it",
+    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    issues, key_count = check_files(args.de, args.en)
-    if issues:
-        print(f"i18n check failed with {len(issues)} issue(s):", file=sys.stderr)
-        for issue in issues:
-            print(f"- {issue}", file=sys.stderr)
+
+    targets = discover_target_catalogs(args.template)
+    if not targets:
+        print(
+            f"i18n check failed: no target catalogs found next to "
+            f"{args.template}",
+            file=sys.stderr,
+        )
         return 1
 
-    print(f"i18n check passed: {key_count} DE/EN message keys are in parity.")
-    return 0
+    failed = False
+    for target_locale, target_path in targets:
+        issues, key_count = check_files(
+            args.template, target_path, target_locale
+        )
+        if issues:
+            failed = True
+            print(
+                f"i18n check failed for {target_path.name} with "
+                f"{len(issues)} issue(s):",
+                file=sys.stderr,
+            )
+            for issue in issues:
+                print(f"- {issue}", file=sys.stderr)
+        else:
+            print(
+                f"i18n check passed: {target_path.name} has {key_count} "
+                f"message keys in parity with the DE template."
+            )
+
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":

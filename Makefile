@@ -45,6 +45,7 @@ run-android:
 	flutter run -d $(ANDROID_ID) --flavor development -t $(ENTRY)
 
 ## Verify ARB parity/placeholders and launch-copy quality rules.
+# validates ALL lib/l10n/app_*.arb catalogs against the DE template
 i18n-check:
 	python3 scripts/i18n_check.py
 	python3 scripts/i18n_quality_check.py

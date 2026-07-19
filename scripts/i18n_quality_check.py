@@ -22,6 +22,8 @@ DEFAULT_DE_ARB = REPO_ROOT / "lib" / "l10n" / "app_de.arb"
 DEFAULT_EN_ARB = REPO_ROOT / "lib" / "l10n" / "app_en.arb"
 DEFAULT_ALLOWLIST = REPO_ROOT / "scripts" / "i18n_quality_allowlist.json"
 
+ARB_LOCALE = re.compile(r"^app_(\w+)\.arb$")
+
 Catalog = Mapping[str, Any]
 Allowlist = Mapping[str, Any]
 
@@ -288,6 +290,14 @@ def check_catalogs(
     return sorted(issues)
 
 
+# Quality rules are language-specific (glossary, en-US spelling, claim
+# vocabulary). A catalog whose locale has no entry here is skipped with an
+# explicit notice — add a rule set when that language ships.
+RULES_BY_LOCALE = {
+    "en": check_catalogs,
+}
+
+
 def load_json_object(path: Path, label: str) -> dict[str, Any]:
     with path.open(encoding="utf-8") as json_file:
         value = json.load(json_file)
@@ -320,6 +330,20 @@ def check_files(
     return issues, len(_message_values(loaded["en"]))
 
 
+def discover_target_catalogs(template_path: Path) -> list[tuple[str, Path]]:
+    """Return (locale, path) for every non-template app_*.arb, sorted."""
+
+    targets: list[tuple[str, Path]] = []
+    for path in sorted(template_path.parent.glob("app_*.arb")):
+        if path == template_path:
+            continue
+        match = ARB_LOCALE.match(path.name)
+        if match is None:
+            continue
+        targets.append((match.group(1), path))
+    return targets
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--de", type=Path, default=DEFAULT_DE_ARB)
@@ -330,6 +354,15 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+
+    # Catalogs without a rule set are skipped loudly, never silently.
+    for target_locale, target_path in discover_target_catalogs(args.de):
+        if target_locale not in RULES_BY_LOCALE:
+            print(
+                f"{target_path.name}: no quality rules defined yet — "
+                "add them when the language ships"
+            )
+
     issues, key_count = check_files(args.de, args.en, args.allowlist)
     if issues:
         print(

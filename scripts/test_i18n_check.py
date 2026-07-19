@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
 
+import io
 import json
 import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
-from scripts.i18n_check import check_catalogs, check_files, extract_placeholders
+from scripts.i18n_check import (
+    check_catalogs,
+    check_files,
+    discover_target_catalogs,
+    extract_placeholders,
+    main,
+)
 
 
 def catalog(locale: str, greeting: str = "Hello {name}") -> dict:
@@ -148,6 +156,72 @@ class FileCheckTest(unittest.TestCase):
 
         self.assertEqual(issues, [])
         self.assertEqual(key_count, 3)
+
+
+class MultiCatalogDiscoveryTest(unittest.TestCase):
+    def _write(self, directory: Path, locale: str, data: dict) -> Path:
+        path = directory / f"app_{locale}.arb"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        return path
+
+    def test_discovers_every_non_template_catalog_sorted(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            directory = Path(temp_dir)
+            template = self._write(directory, "de", catalog("de"))
+            self._write(directory, "fr", catalog("fr"))
+            self._write(directory, "en", catalog("en"))
+            (directory / "notes.txt").write_text("ignored", encoding="utf-8")
+
+            targets = discover_target_catalogs(template)
+
+        self.assertEqual(
+            [(locale, path.name) for locale, path in targets],
+            [("en", "app_en.arb"), ("fr", "app_fr.arb")],
+        )
+
+    def test_incomplete_extra_catalog_fails_the_gate_naming_the_file(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            directory = Path(temp_dir)
+            template = self._write(directory, "de", catalog("de"))
+            self._write(directory, "en", catalog("en"))
+            incomplete_fr = catalog("fr")
+            del incomplete_fr["title"]
+            self._write(directory, "fr", incomplete_fr)
+
+            stderr = io.StringIO()
+            with redirect_stdout(io.StringIO()), redirect_stderr(stderr):
+                result = main(["--template", str(template)])
+
+        self.assertEqual(result, 1)
+        self.assertIn("app_fr.arb", stderr.getvalue())
+        self.assertIn("[fr:title] message key is missing", stderr.getvalue())
+
+    def test_complete_extra_catalog_passes_the_gate(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            directory = Path(temp_dir)
+            template = self._write(directory, "de", catalog("de"))
+            self._write(directory, "en", catalog("en"))
+            self._write(directory, "fr", catalog("fr"))
+
+            stdout = io.StringIO()
+            with redirect_stdout(stdout):
+                result = main(["--template", str(template)])
+
+        self.assertEqual(result, 0)
+        self.assertIn("app_en.arb", stdout.getvalue())
+        self.assertIn("app_fr.arb", stdout.getvalue())
+
+    def test_umlaut_check_applies_to_every_non_german_catalog(self):
+        de = catalog("de")
+        fr = catalog("fr")
+        fr["title"] = "Zurück"
+
+        issues = check_catalogs(de, fr, "fr")
+
+        self.assertIn(
+            "[fr:title] value contains a German umlaut or ß",
+            issues,
+        )
 
 
 if __name__ == "__main__":
