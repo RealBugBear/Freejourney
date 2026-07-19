@@ -1412,5 +1412,670 @@
   "trainerAlertDay28Body": "Jetzt Termin für die Isometrische Partnerübung buchen.",
   "@trainerAlertDay28Body": {"description": "Trainer notification body when a trainee reaches day 28"},
   "traineeFallbackName": "Dein Trainee",
-  "@traineeFallbackName": {"description": "Fallback name when a trainee has no display name or email"}
+  "@traineeFallbackName": {"description": "Fallback name when a trainee has no display name or email"},
+  "answerUnknown": "Weiß ich nicht",
+  "@answerUnknown": {
+      "description": "Yes/no/unknown answer option"
+  },
+  "scoreBandStrong": "stark ausgeprägt",
+  "@scoreBandStrong": {
+      "description": "Reflex score band: strong"
+  },
+  "scoreBandElevated": "auffällig",
+  "@scoreBandElevated": {
+      "description": "Reflex score band: elevated"
+  },
+  "scoreBandIndication": "Anzeichen",
+  "@scoreBandIndication": {
+      "description": "Reflex score band: indication"
+  },
+  "scoreBandInconspicuous": "unauffällig",
+  "@scoreBandInconspicuous": {
+      "description": "Reflex score band: inconspicuous"
+  },
+  "scoreBandInsufficientData": "zu wenig Daten",
+  "@scoreBandInsufficientData": {
+      "description": "Reflex score band: insufficient data"
+  },
+  "monthsCount": "{count} Monate",
+  "@monthsCount": {
+      "description": "Count of months",
+      "placeholders": {
+          "count": {
+              "type": "int"
+          }
+      }
+  },
+  "yearsCount": "{count} Jahre",
+  "@yearsCount": {
+      "description": "Count of years",
+      "placeholders": {
+          "count": {
+              "type": "int"
+          }
+      }
+  },
+  "leave": "Verlassen",
+  "@leave": {
+      "description": "Dialog action to leave a flow"
+  },
+  "resume": "Fortsetzen",
+  "@resume": {
+      "description": "Dialog action to resume a draft"
+  },
+  "finish": "Abschließen",
+  "@finish": {
+      "description": "Primary action to finish a questionnaire"
+  },
+  "switchAction": "Wechseln",
+  "@switchAction": {
+      "description": "Switch profile/subject action"
+  },
+  "selfName": "Ich",
+  "@selfName": {
+      "description": "Default display name for adult self profile"
+  },
+  "analysisPlaceholderTitle": "Analyse",
+  "@analysisPlaceholderTitle": {
+      "description": "Analysis placeholder screen title"
+  },
+  "analysisPlaceholderContinue": "Weiter zur Zustimmung",
+  "@analysisPlaceholderContinue": {
+      "description": "CTA to consent"
+  },
+  "analysisPlaceholderHeadline": "Hier startet bald deine persönliche Standortanalyse.",
+  "@analysisPlaceholderHeadline": {
+      "description": "Analysis placeholder headline"
+  },
+  "analysisPlaceholderBody": "Vor dem ersten Training wird hier ein kurzer Fragebogen stehen. Damit kann Reflex Journey deinen aktuellen Stand besser einordnen und die Empfehlung sauberer machen.",
+  "@analysisPlaceholderBody": {
+      "description": "Analysis placeholder body"
+  },
+  "analysisPlaceholderStepQuestionnaireTitle": "Fragebogen",
+  "@analysisPlaceholderStepQuestionnaireTitle": {
+      "description": "Placeholder step title"
+  },
+  "analysisPlaceholderStepQuestionnaireBody": "Symptome, Belastung, Trainingsziel und bisherige Erfahrung.",
+  "@analysisPlaceholderStepQuestionnaireBody": {
+      "description": "Placeholder step body"
+  },
+  "analysisPlaceholderStepAssessmentTitle": "Auswertung",
+  "@analysisPlaceholderStepAssessmentTitle": {
+      "description": "Placeholder assessment step title"
+  },
+  "analysisPlaceholderStepAssessmentBody": "Eine ruhige Einschätzung deines aktuellen Ausgangspunkts.",
+  "@analysisPlaceholderStepAssessmentBody": {
+      "description": "Placeholder assessment step body"
+  },
+  "durationRecAccept": "Empfehlung übernehmen",
+  "@durationRecAccept": {
+      "description": "Accept recommended duration"
+  },
+  "durationRecSkippedBody": "Du hast das Reflexprofil übersprungen oder es liegt für dieses Profil noch keine Auswertung vor. Die Empfehlung nutzt deshalb die Standardlogik anhand deiner Angabe zum isometrischen Partnertraining.",
+  "@durationRecSkippedBody": {
+      "description": "Duration recommendation when assessment unused"
+  },
+  "durationRecRangeWithTrainer": "4 bis 6",
+  "@durationRecRangeWithTrainer": {
+      "description": "Week range when user had trainer"
+  },
+  "durationRecRangeWithoutTrainer": "6 bis 8",
+  "@durationRecRangeWithoutTrainer": {
+      "description": "Week range when user had no trainer"
+  },
+  "durationRecTrainerAlready": "bereits",
+  "@durationRecTrainerAlready": {
+      "description": "Trainer status fragment: already"
+  },
+  "durationRecTrainerNotYet": "noch nicht",
+  "@durationRecTrainerNotYet": {
+      "description": "Trainer status fragment: not yet"
+  },
+  "durationRecMoroBody": "Diese Empfehlung basiert auf deiner persönlichen Reflexprofil-Auswertung.\n\nFür das Moro-Paket betrachten wir sowohl Moro als auch FLR, weil beide in dieser Auswertung relevant sind. Der stärkere Hinweis liegt bei {percent} und bestimmt die Dauerstufe.\n\nDa du {trainerStatus} isometrisches Partnertraining mit einer Fachperson gemacht hast, verwenden wir den Empfehlungsbereich {range} Wochen. Du kannst die Empfehlung übernehmen oder die Dauer manuell anpassen.",
+  "@durationRecMoroBody": {
+      "description": "Moro package duration recommendation body",
+      "placeholders": {
+          "percent": {
+              "type": "String"
+          },
+          "trainerStatus": {
+              "type": "String"
+          },
+          "range": {
+              "type": "String"
+          }
+      }
+  },
+  "durationRecGenericBody": "Diese Empfehlung basiert auf deiner persönlichen Reflexprofil-Auswertung. Aufgrund deiner ermittelten Reflex-Tendenz empfehlen wir für dieses Paket eine Dauer von {weeks} Wochen.\n\nDa du {trainerStatus} isometrisches Partnertraining mit einer Fachperson gemacht hast, verwenden wir den Empfehlungsbereich {range} Wochen.",
+  "@durationRecGenericBody": {
+      "description": "Generic package duration recommendation body",
+      "placeholders": {
+          "weeks": {
+              "type": "int"
+          },
+          "trainerStatus": {
+              "type": "String"
+          },
+          "range": {
+              "type": "String"
+          }
+      }
+  },
+  "durationRecTendency": "{label}-Tendenz: {percent}",
+  "@durationRecTendency": {
+      "description": "Reflex tendency line in duration recommendation",
+      "placeholders": {
+          "label": {
+              "type": "String"
+          },
+          "percent": {
+              "type": "String"
+          }
+      }
+  },
+  "durationRecStrongerHint": "Für die Dauer zählt der stärkere Hinweis.",
+  "@durationRecStrongerHint": {
+      "description": "Note when multiple reflexes considered"
+  },
+  "durationRecNoData": "keine ausreichenden Daten",
+  "@durationRecNoData": {
+      "description": "Percent placeholder when missing"
+  },
+  "radarNotEnoughData": "Zu wenig Daten",
+  "@radarNotEnoughData": {
+      "description": "Radar chart empty state"
+  },
+  "reflexProfileNameBirthRequired": "Bitte gib einen Namen und das Geburtsdatum an.",
+  "@reflexProfileNameBirthRequired": {
+      "description": "Validation error"
+  },
+  "reflexProfileBirthFuture": "Das Geburtsdatum darf nicht in der Zukunft liegen.",
+  "@reflexProfileBirthFuture": {
+      "description": "Validation error"
+  },
+  "reflexProfileCreateChildFailed": "Kinderprofil konnte nicht angelegt werden: {error}",
+  "@reflexProfileCreateChildFailed": {
+      "description": "Error creating child profile",
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "reflexProfileClearanceTitle": "Rücksprache erforderlich",
+  "@reflexProfileClearanceTitle": {
+      "description": "Professional clearance dialog title"
+  },
+  "reflexProfileClearanceBody": "Bei dieser Angabe empfehlen wir dringend, das Training nur nach Rücksprache und mit ausdrücklicher Zustimmung eines behandelnden Arztes, Therapeuten oder Psychologen durchzuführen.\n\nMit dem Fortfahren bestätigst du, dass du diese Rücksprache eigenverantwortlich berücksichtigst und das Training entsprechend begleitet oder freigegeben durchführst.\n\nFrage: {question}",
+  "@reflexProfileClearanceBody": {
+      "description": "Professional clearance dialog body",
+      "placeholders": {
+          "question": {
+              "type": "String"
+          }
+      }
+  },
+  "reflexProfileClearanceConfirm": "Verstanden und bestätigt",
+  "@reflexProfileClearanceConfirm": {
+      "description": "Clearance dialog confirm button"
+  },
+  "reflexProfileAnswerAllChoice": "Bitte beantworte alle Auswahl- und Zahlenfragen.",
+  "@reflexProfileAnswerAllChoice": {
+      "description": "Submit validation"
+  },
+  "reflexProfileCompleteFailed": "Reflexprofil konnte nicht abgeschlossen werden: {error}",
+  "@reflexProfileCompleteFailed": {
+      "description": "Submit error",
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "reflexProfileLeaveTitle": "Fragebogen verlassen?",
+  "@reflexProfileLeaveTitle": {
+      "description": "Exit confirmation title"
+  },
+  "reflexProfileLeaveBody": "Dein Fortschritt wird gespeichert. Du kannst jederzeit weitermachen.",
+  "@reflexProfileLeaveBody": {
+      "description": "Exit confirmation body"
+  },
+  "reflexProfileResumeTitle": "Fragebogen fortsetzen?",
+  "@reflexProfileResumeTitle": {
+      "description": "Resume draft dialog title"
+  },
+  "reflexProfileResumeBody": "Du hast diesen Fragebogen bereits begonnen. Möchtest du dort weitermachen, wo du aufgehört hast?",
+  "@reflexProfileResumeBody": {
+      "description": "Resume draft dialog body"
+  },
+  "reflexProfileStartOver": "Von vorne",
+  "@reflexProfileStartOver": {
+      "description": "Discard draft and restart"
+  },
+  "reflexProfileLoadProfilesFailed": "Profile konnten nicht geladen werden: {error}",
+  "@reflexProfileLoadProfilesFailed": {
+      "description": "Profiles load error",
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "reflexProfileForWhomTitle": "Für wen machst du diesen Fragebogen?",
+  "@reflexProfileForWhomTitle": {
+      "description": "Subject selection title"
+  },
+  "reflexProfileForWhomBody": "Der Fragebogen unterscheidet sich je nachdem, ob er für ein Kind oder für dich selbst ausgefüllt wird.",
+  "@reflexProfileForWhomBody": {
+      "description": "Subject selection body"
+  },
+  "reflexProfileForMyChild": "Für mein Kind",
+  "@reflexProfileForMyChild": {
+      "description": "Choose child subject"
+  },
+  "reflexProfileParentQuestionnaire": "Elternfragebogen",
+  "@reflexProfileParentQuestionnaire": {
+      "description": "Child path subtitle"
+  },
+  "reflexProfileForMyself": "Für mich",
+  "@reflexProfileForMyself": {
+      "description": "Choose adult self subject"
+  },
+  "reflexProfileForMyselfComingSoon": "Für mich selbst · bald verfügbar",
+  "@reflexProfileForMyselfComingSoon": {
+      "description": "Adult path disabled subtitle"
+  },
+  "reflexProfileAdultComingSoonTitle": "Erwachsenenfragebogen kommt bald",
+  "@reflexProfileAdultComingSoonTitle": {
+      "description": "Adult coming soon title"
+  },
+  "reflexProfileAdultComingSoonBody": "Der Fragebogen für Erwachsene befindet sich noch in Entwicklung. Du kannst ihn bald hier ausfüllen.",
+  "@reflexProfileAdultComingSoonBody": {
+      "description": "Adult coming soon body"
+  },
+  "reflexProfileOrientationTitle": "Eine Orientierung, keine Diagnose",
+  "@reflexProfileOrientationTitle": {
+      "description": "Start screen disclaimer title"
+  },
+  "reflexProfileOrientationBody": "Das Reflexprofil sammelt Beobachtungen und zeigt Hinweisstärken. Es ersetzt keine medizinische oder therapeutische Diagnose.",
+  "@reflexProfileOrientationBody": {
+      "description": "Start screen disclaimer body"
+  },
+  "reflexProfileSelectChild": "Kinderprofil auswählen",
+  "@reflexProfileSelectChild": {
+      "description": "Child profile picker heading"
+  },
+  "reflexProfileStartQuestionnaire": "Fragebogen starten",
+  "@reflexProfileStartQuestionnaire": {
+      "description": "Start questionnaire CTA"
+  },
+  "reflexProfileNewChild": "Neues Kinderprofil",
+  "@reflexProfileNewChild": {
+      "description": "Create child profile heading"
+  },
+  "reflexProfileNameOrNickname": "Name oder Spitzname",
+  "@reflexProfileNameOrNickname": {
+      "description": "Child name field label"
+  },
+  "reflexProfilePickBirthDate": "Geburtsdatum auswählen",
+  "@reflexProfilePickBirthDate": {
+      "description": "Date picker help text"
+  },
+  "reflexProfileBirthDateRequired": "Geburtsdatum *",
+  "@reflexProfileBirthDateRequired": {
+      "description": "Birth date field label"
+  },
+  "reflexProfileBirthDateHelper": "Pflichtfeld – wird für die Altersauswertung benötigt",
+  "@reflexProfileBirthDateHelper": {
+      "description": "Birth date helper"
+  },
+  "reflexProfileSelectDate": "Datum auswählen",
+  "@reflexProfileSelectDate": {
+      "description": "Empty date placeholder"
+  },
+  "reflexProfileCreateAndStart": "Profil anlegen und starten",
+  "@reflexProfileCreateAndStart": {
+      "description": "Create child profile CTA"
+  },
+  "reflexProfileAnswerRequiredSection": "Bitte beantworte alle Pflichtfragen in diesem Abschnitt.",
+  "@reflexProfileAnswerRequiredSection": {
+      "description": "Module validation"
+  },
+  "reflexProfileChildFallback": "Kinderprofil",
+  "@reflexProfileChildFallback": {
+      "description": "Fallback when no child name"
+  },
+  "reflexProfileSectionOf": "Abschnitt {current} von {total}",
+  "@reflexProfileSectionOf": {
+      "description": "Module progress",
+      "placeholders": {
+          "current": {
+              "type": "int"
+          },
+          "total": {
+              "type": "int"
+          }
+      }
+  },
+  "reflexProfileWhatIsMeant": "Was ist gemeint?",
+  "@reflexProfileWhatIsMeant": {
+      "description": "Help expansion title"
+  },
+  "reflexProfileMonthsLabel": "Monate",
+  "@reflexProfileMonthsLabel": {
+      "description": "Months input label"
+  },
+  "reflexProfileFreeTextLabel": "Freitext",
+  "@reflexProfileFreeTextLabel": {
+      "description": "Free text input label"
+  },
+  "reflexProfileOtherLabel": "Sonstiges / Ergänzung",
+  "@reflexProfileOtherLabel": {
+      "description": "Multi-select free text label"
+  },
+  "reflexResultTitle": "Reflexprofil-Auswertung",
+  "@reflexResultTitle": {
+      "description": "Result screen app bar"
+  },
+  "reflexResultLoadFailed": "Auswertung konnte nicht geladen werden: {error}",
+  "@reflexResultLoadFailed": {
+      "description": "Result load error",
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "reflexResultIndicationStrengths": "Hinweistärken",
+  "@reflexResultIndicationStrengths": {
+      "description": "Result headline"
+  },
+  "reflexResultDisclaimer": "Diese Auswertung zeigt Antwortmuster und ersetzt keine medizinische oder therapeutische Diagnose.",
+  "@reflexResultDisclaimer": {
+      "description": "Result disclaimer"
+  },
+  "reflexResultChartCaption": "Die Grafik zeigt die stärksten Reflexbereiche aus deinem Antwortmuster.",
+  "@reflexResultChartCaption": {
+      "description": "Radar caption"
+  },
+  "reflexResultWarningNotice": "{count, plural, =1{Du hast 1 Hinweis bestätigt, bei dem wir dringend Rücksprache mit Arzt, Therapeut oder Psychologe empfehlen. Eine Trainerbegleitung ist in deinem Fall besonders sinnvoll.} other{Du hast {count} Hinweise bestätigt, bei denen wir dringend Rücksprache mit Arzt, Therapeut oder Psychologe empfehlen. Eine Trainerbegleitung ist in deinem Fall besonders sinnvoll.}}",
+  "@reflexResultWarningNotice": {
+      "description": "Warning confirmations banner",
+      "placeholders": {
+          "count": {
+              "type": "int"
+          }
+      }
+  },
+  "reflexResultAreasTitle": "Reflexbereiche",
+  "@reflexResultAreasTitle": {
+      "description": "Score list title"
+  },
+  "reflexResultAdditionalInfo": "Ergänzende Angaben",
+  "@reflexResultAdditionalInfo": {
+      "description": "Additional answers section"
+  },
+  "reflexResultSharePdf": "PDF-Zusammenfassung teilen",
+  "@reflexResultSharePdf": {
+      "description": "Share PDF button"
+  },
+  "reflexResultToDashboard": "Zum Dashboard",
+  "@reflexResultToDashboard": {
+      "description": "Dashboard CTA"
+  },
+  "reflexResultShareSubject": "Reflex Journey Reflexprofil",
+  "@reflexResultShareSubject": {
+      "description": "PDF share subject"
+  },
+  "reflexResultShareText": "Reflex Journey Reflexprofil-Zusammenfassung",
+  "@reflexResultShareText": {
+      "description": "PDF share text"
+  },
+  "reflexResultPdfFailed": "PDF konnte nicht erstellt werden: {error}",
+  "@reflexResultPdfFailed": {
+      "description": "PDF creation error",
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "reflexResultShareWithTrainer": "Mit Trainer teilen",
+  "@reflexResultShareWithTrainer": {
+      "description": "Trainer share card title"
+  },
+  "reflexResultShareWithTrainerBody": "Du kannst {trainerName} dein vollständiges Reflexprofil freigeben. Das hilft bei der gemeinsamen Begleitung und kann später widerrufen werden.",
+  "@reflexResultShareWithTrainerBody": {
+      "description": "Trainer share card body",
+      "placeholders": {
+          "trainerName": {
+              "type": "String"
+          }
+      }
+  },
+  "reflexResultShareLoadFailed": "Freigabe konnte nicht geladen werden: {error}",
+  "@reflexResultShareLoadFailed": {
+      "description": "Share status error",
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "reflexResultShareRevoked": "Freigabe wurde widerrufen.",
+  "@reflexResultShareRevoked": {
+      "description": "Share revoked snackbar"
+  },
+  "reflexResultShareRevokeFailed": "Freigabe konnte nicht widerrufen werden: {error}",
+  "@reflexResultShareRevokeFailed": {
+      "description": "Revoke error",
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "reflexResultRevokeShare": "Freigabe widerrufen",
+  "@reflexResultRevokeShare": {
+      "description": "Revoke button"
+  },
+  "reflexResultShareGranted": "Reflexprofil wurde freigegeben.",
+  "@reflexResultShareGranted": {
+      "description": "Share granted snackbar"
+  },
+  "reflexResultShareGrantFailed": "Reflexprofil konnte nicht freigegeben werden: {error}",
+  "@reflexResultShareGrantFailed": {
+      "description": "Grant error",
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "reflexResultAllowTrainer": "Trainer darf Auswertung sehen",
+  "@reflexResultAllowTrainer": {
+      "description": "Grant share button"
+  },
+  "reflexResultYesOfAnswered": "{yesCount} von {answeredCount} beantworteten zugeordneten Fragen wurden mit Ja beantwortet.",
+  "@reflexResultYesOfAnswered": {
+      "description": "Score tile yes ratio",
+      "placeholders": {
+          "yesCount": {
+              "type": "int"
+          },
+          "answeredCount": {
+              "type": "int"
+          }
+      }
+  },
+  "reflexResultNoAdditional": "Keine weiteren Angaben vorhanden.",
+  "@reflexResultNoAdditional": {
+      "description": "Empty additional answers"
+  },
+  "reflexResultNoCompleted": "Noch keine abgeschlossene Auswertung vorhanden.",
+  "@reflexResultNoCompleted": {
+      "description": "Empty result state"
+  },
+  "reflexResultStartProfile": "Reflexprofil starten",
+  "@reflexResultStartProfile": {
+      "description": "Empty result CTA"
+  },
+  "reflexDemoAnswerAll": "Bitte beantworte alle Fragen.",
+  "@reflexDemoAnswerAll": {
+      "description": "Demo validation"
+  },
+  "reflexDemoFullTest": "Volltest",
+  "@reflexDemoFullTest": {
+      "description": "App bar action when signed in"
+  },
+  "reflexDemoForWhomTitle": "Für wen machst du den Kurztest?",
+  "@reflexDemoForWhomTitle": {
+      "description": "Demo subject title"
+  },
+  "reflexDemoForWhomBody": "Dieser Kurztest zeigt beispielhaft, wie eine Reflexprofil-Auswertung aussehen kann. Er wird nicht gespeichert.",
+  "@reflexDemoForWhomBody": {
+      "description": "Demo subject body"
+  },
+  "reflexDemoSelfComingSoonTitle": "Kurztest für mich selbst kommt bald",
+  "@reflexDemoSelfComingSoonTitle": {
+      "description": "Demo adult coming soon title"
+  },
+  "reflexDemoSelfComingSoonBody": "Der Fragebogen für dich selbst befindet sich noch in Entwicklung.",
+  "@reflexDemoSelfComingSoonBody": {
+      "description": "Demo adult coming soon body"
+  },
+  "reflexDemoTitle": "Kurztest",
+  "@reflexDemoTitle": {
+      "description": "Demo questionnaire title"
+  },
+  "reflexDemoIntro": "Diese Demo zeigt beispielhaft, wie eine Reflexprofil-Auswertung aussehen kann. Sie wird nicht gespeichert und ersetzt keinen vollständigen Fragebogen.",
+  "@reflexDemoIntro": {
+      "description": "Demo intro"
+  },
+  "reflexDemoEvaluate": "Demo auswerten",
+  "@reflexDemoEvaluate": {
+      "description": "Evaluate demo CTA"
+  },
+  "reflexDemoSignInForFull": "Für den vollständigen Fragebogen anmelden",
+  "@reflexDemoSignInForFull": {
+      "description": "Guest CTA to auth"
+  },
+  "reflexDemoStartFull": "Vollständigen Fragebogen starten",
+  "@reflexDemoStartFull": {
+      "description": "Signed-in CTA to full questionnaire"
+  },
+  "reflexDemoGuestHint": "Nach der Registrierung kannst du Kinderprofile anlegen, den vollständigen Fragebogen speichern und die Auswertung später erneut ansehen.",
+  "@reflexDemoGuestHint": {
+      "description": "Guest hint under CTA"
+  },
+  "reflexDemoSignedInHint": "Im vollständigen Fragebogen werden alle Kategorien abgefragt und die Auswertung kann gespeichert werden.",
+  "@reflexDemoSignedInHint": {
+      "description": "Signed-in hint under CTA"
+  },
+  "reflexDemoOpenFullTest": "Volltest öffnen",
+  "@reflexDemoOpenFullTest": {
+      "description": "Open full assessment button"
+  },
+  "reflexDemoSignInOrRegister": "Anmelden oder registrieren",
+  "@reflexDemoSignInOrRegister": {
+      "description": "Auth CTA"
+  },
+  "reflexDemoResultTitle": "Demo-Auswertung",
+  "@reflexDemoResultTitle": {
+      "description": "Demo result app bar"
+  },
+  "reflexDemoResultHeadline": "Dein Demo-Ergebnis",
+  "@reflexDemoResultHeadline": {
+      "description": "Demo result headline"
+  },
+  "reflexDemoResultDisclaimer": "Diese Auswertung basiert nur auf dem Kurztest und ist keine Diagnose. Sie zeigt Antwortmuster — für ein vollständiges Reflexprofil sind alle 112 Fragen notwendig.",
+  "@reflexDemoResultDisclaimer": {
+      "description": "Demo result disclaimer"
+  },
+  "reflexDemoNotEnoughChartData": "Nicht genug Daten für die Grafik.",
+  "@reflexDemoNotEnoughChartData": {
+      "description": "Demo chart empty"
+  },
+  "reflexDemoChartCaption": "Die Grafik zeigt die stärksten Reflexbereiche aus deinen Kurztest-Antworten.",
+  "@reflexDemoChartCaption": {
+      "description": "Demo chart caption"
+  },
+  "reflexDemoAccountBenefitGuest": "Mit einem Konto kannst du den vollständigen Fragebogen ausfüllen, dein Ergebnis speichern und mit deinem Trainer teilen.",
+  "@reflexDemoAccountBenefitGuest": {
+      "description": "Demo result account benefit for guests"
+  },
+  "reflexDemoAccountBenefitSignedIn": "Im vollständigen Fragebogen werden alle Kategorien erfasst und das Ergebnis dauerhaft gespeichert.",
+  "@reflexDemoAccountBenefitSignedIn": {
+      "description": "Demo result account benefit when signed in"
+  },
+  "reflexPdfTitle": "Reflexprofil Zusammenfassung",
+  "@reflexPdfTitle": {
+      "description": "PDF document title"
+  },
+  "reflexPdfGeneratedOn": "Erstellt am {date}",
+  "@reflexPdfGeneratedOn": {
+      "description": "PDF generated-on line",
+      "placeholders": {
+          "date": {
+              "type": "String"
+          }
+      }
+  },
+  "reflexPdfSummaryNotice": "Diese Auswertung zeigt Antwortmuster und Hinweisstärken. Sie ersetzt keine medizinische oder therapeutische Diagnose.",
+  "@reflexPdfSummaryNotice": {
+      "description": "PDF summary notice"
+  },
+  "reflexPdfSafetyNotice": "{count} Sicherheits-/Rücksprache-Hinweise wurden bestätigt. Training sollte nur nach ausdrücklicher Rücksprache mit Arzt, Therapeut oder Psychologe erfolgen.",
+  "@reflexPdfSafetyNotice": {
+      "description": "PDF safety notice",
+      "placeholders": {
+          "count": {
+              "type": "int"
+          }
+      }
+  },
+  "reflexPdfOverviewTitle": "Übersicht Reflexbereiche",
+  "@reflexPdfOverviewTitle": {
+      "description": "PDF scores section title"
+  },
+  "reflexPdfAreaHeader": "Reflexbereich",
+  "@reflexPdfAreaHeader": {
+      "description": "PDF table header"
+  },
+  "reflexPdfPercentHeader": "Prozent",
+  "@reflexPdfPercentHeader": {
+      "description": "PDF table header"
+  },
+  "reflexPdfClassificationHeader": "Einordnung",
+  "@reflexPdfClassificationHeader": {
+      "description": "PDF table header"
+  },
+  "reflexPdfYesAnsweredHeader": "Ja / Beantwortet",
+  "@reflexPdfYesAnsweredHeader": {
+      "description": "PDF table header"
+  },
+  "reflexPdfAnswersTitle": "Antwortübersicht",
+  "@reflexPdfAnswersTitle": {
+      "description": "PDF answers title"
+  },
+  "reflexPdfQuestionHeader": "Frage",
+  "@reflexPdfQuestionHeader": {
+      "description": "PDF answers header"
+  },
+  "reflexPdfAnswerHeader": "Antwort",
+  "@reflexPdfAnswerHeader": {
+      "description": "PDF answers header"
+  },
+  "reflexPdfEmptyAnswer": "-",
+  "@reflexPdfEmptyAnswer": {
+      "description": "PDF empty answer placeholder"
+  },
+  "reflexPdfFileNameStem": "reflexjourney_reflexprofil",
+  "@reflexPdfFileNameStem": {
+      "description": "PDF temp file name stem"
+  },
+  "reflexProfileNameRequired": "Bitte gib einen Namen an.",
+  "@reflexProfileNameRequired": {
+      "description": "Validation when subject display name is empty"
+  }
 }

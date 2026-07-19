@@ -128,7 +128,7 @@ class _DurationRecommendationScreenState
               ),
               const SizedBox(height: 20),
               _RecommendationInfo(
-                text: _recommendationText(recommendation),
+                text: _recommendationText(l10n, recommendation),
               ),
               if (recommendation.usedAssessment &&
                   recommendation.consideredPercents.isNotEmpty) ...[
@@ -158,7 +158,7 @@ class _DurationRecommendationScreenState
                 OutlinedButton.icon(
                   onPressed: () => setState(() => _showManualAdjust = true),
                   icon: const Icon(Icons.tune_outlined),
-                  label: const Text('Dauer anpassen'),
+                  label: Text(l10n.adjustDuration),
                 ),
               ],
               const Spacer(),
@@ -175,7 +175,7 @@ class _DurationRecommendationScreenState
                       )
                     : Text(_showManualAdjust
                         ? l10n.confirm
-                        : 'Empfehlung übernehmen'),
+                        : l10n.durationRecAccept),
               ),
             ],
           ),
@@ -184,16 +184,31 @@ class _DurationRecommendationScreenState
     );
   }
 
-  String _recommendationText(TrainingDurationRecommendation recommendation) {
+  String _recommendationText(
+    AppLocalizations l10n,
+    TrainingDurationRecommendation recommendation,
+  ) {
     if (!recommendation.usedAssessment) {
-      return 'Du hast das Reflexprofil übersprungen oder es liegt für dieses Profil noch keine Auswertung vor. Die Empfehlung nutzt deshalb die Standardlogik anhand deiner Angabe zum isometrischen Partnertraining.';
+      return l10n.durationRecSkippedBody;
     }
-    final range =
-        recommendation.hadIsometricWithTrainer ? '4 bis 6' : '6 bis 8';
+    final range = recommendation.hadIsometricWithTrainer
+        ? l10n.durationRecRangeWithTrainer
+        : l10n.durationRecRangeWithoutTrainer;
+    final trainerStatus = recommendation.hadIsometricWithTrainer
+        ? l10n.durationRecTrainerAlready
+        : l10n.durationRecTrainerNotYet;
     if (_packageId == 'moro') {
-      return 'Diese Empfehlung basiert auf deiner persönlichen Reflexprofil-Auswertung.\n\nFür das Moro-Paket betrachten wir sowohl Moro als auch FLR, weil beide in dieser Auswertung relevant sind. Der stärkere Hinweis liegt bei ${_formatPercent(recommendation.strongestPercent)} und bestimmt die Dauerstufe.\n\nDa du ${recommendation.hadIsometricWithTrainer ? 'bereits' : 'noch nicht'} isometrisches Partnertraining mit einer Fachperson gemacht hast, verwenden wir den Empfehlungsbereich $range Wochen. Du kannst die Empfehlung übernehmen oder die Dauer manuell anpassen.';
+      return l10n.durationRecMoroBody(
+        _formatPercent(l10n, recommendation.strongestPercent),
+        trainerStatus,
+        range,
+      );
     }
-    return 'Diese Empfehlung basiert auf deiner persönlichen Reflexprofil-Auswertung. Aufgrund deiner ermittelten Reflex-Tendenz empfehlen wir für dieses Paket eine Dauer von ${recommendation.weeks} Wochen.\n\nDa du ${recommendation.hadIsometricWithTrainer ? 'bereits' : 'noch nicht'} isometrisches Partnertraining mit einer Fachperson gemacht hast, verwenden wir den Empfehlungsbereich $range Wochen.';
+    return l10n.durationRecGenericBody(
+      recommendation.weeks,
+      trainerStatus,
+      range,
+    );
   }
 }
 
@@ -204,6 +219,8 @@ class _ReflexTendencyList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -218,13 +235,19 @@ class _ReflexTendencyList extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 6),
                 child: Text(
-                  '${_reflexLabel(reflex)}-Tendenz: ${_formatPercent(recommendation.consideredPercents[reflex])}',
+                  l10n.durationRecTendency(
+                    reflex.label(locale),
+                    _formatPercent(
+                      l10n,
+                      recommendation.consideredPercents[reflex],
+                    ),
+                  ),
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
             if (recommendation.consideredReflexes.length > 1)
               Text(
-                'Für die Dauer zählt der stärkere Hinweis.',
+                l10n.durationRecStrongerHint,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -236,29 +259,13 @@ class _ReflexTendencyList extends StatelessWidget {
   }
 }
 
-String _formatPercent(double? percent) {
-  if (percent == null) return 'keine ausreichenden Daten';
+String _formatPercent(AppLocalizations l10n, double? percent) {
+  if (percent == null) return l10n.durationRecNoData;
   final rounded = percent.roundToDouble() == percent
       ? percent.toStringAsFixed(0)
       : percent.toStringAsFixed(1);
   return '$rounded%';
 }
-
-String _reflexLabel(PrimitiveReflex reflex) => switch (reflex) {
-      PrimitiveReflex.moro => 'Moro',
-      PrimitiveReflex.flr => 'FLR',
-      PrimitiveReflex.spinalGalant => 'Spinaler Galant',
-      PrimitiveReflex.tlr => 'TLR',
-      PrimitiveReflex.atnr => 'ATNR',
-      PrimitiveReflex.stnr => 'STNR',
-      PrimitiveReflex.babkin => 'Babkin',
-      PrimitiveReflex.palmar => 'Palmar',
-      PrimitiveReflex.plantar => 'Plantar',
-      PrimitiveReflex.rootingSucking => 'Such-Saug',
-      PrimitiveReflex.babinski => 'Babinski',
-      PrimitiveReflex.landau => 'Landau',
-      _ => reflex.name,
-    };
 
 class _RecommendationInfo extends StatelessWidget {
   const _RecommendationInfo({required this.text});

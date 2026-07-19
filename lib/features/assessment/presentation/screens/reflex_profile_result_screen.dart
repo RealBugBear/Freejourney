@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/navigation/app_router.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/reflex_profile_assessment.dart';
 import '../../domain/services/reflex_profile_pdf_service.dart';
@@ -11,6 +12,8 @@ import '../../domain/reflex_questionnaire.dart';
 import '../providers/reflex_profile_provider.dart';
 import '../widgets/reflex_radar_chart.dart';
 import '../../../trainer/presentation/providers/trainer_provider.dart';
+import '../reflex_profile_pdf_copy.dart';
+import '../reflex_score_band_l10n.dart';
 import 'reflex_profile_result_helpers.dart';
 
 class ReflexProfileResultScreen extends ConsumerWidget {
@@ -47,14 +50,14 @@ class ReflexProfileResultScreen extends ConsumerWidget {
     final packageId = _packageId(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Reflexprofil-Auswertung')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).reflexResultTitle)),
       body: SafeArea(
         child: assessmentAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, _) => Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
-              child: Text('Auswertung konnte nicht geladen werden: $error'),
+              child: Text(AppLocalizations.of(context).reflexResultLoadFailed('$error')),
             ),
           ),
           data: (assessment) {
@@ -86,6 +89,7 @@ class _ResultContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     final locale = Localizations.localeOf(context).languageCode;
     final scores = _scoreRows(assessment, locale);
@@ -103,15 +107,14 @@ class _ResultContent extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
       children: [
         Text(
-          'Hinweistärken',
+          l10n.reflexResultIndicationStrengths,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w900,
               ),
         ),
         const SizedBox(height: 8),
         Text(
-          'Diese Auswertung zeigt Antwortmuster und ersetzt keine medizinische '
-          'oder therapeutische Diagnose.',
+          l10n.reflexResultDisclaimer,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: cs.onSurfaceVariant,
                 height: 1.4,
@@ -130,8 +133,7 @@ class _ResultContent extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Die Grafik zeigt die stärksten Reflexbereiche aus deinem '
-                  'Antwortmuster.',
+                  l10n.reflexResultChartCaption,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: cs.onSurfaceVariant,
                       ),
@@ -154,10 +156,7 @@ class _ResultContent extends ConsumerWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Du hast $warningCount Hinweis${warningCount == 1 ? '' : 'e'} '
-                      'bestätigt, bei denen wir dringend Rücksprache mit Arzt, '
-                      'Therapeut oder Psychologe empfehlen. Eine Trainerbegleitung '
-                      'ist in deinem Fall besonders sinnvoll.',
+                      l10n.reflexResultWarningNotice(warningCount),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             height: 1.4,
                           ),
@@ -178,7 +177,7 @@ class _ResultContent extends ConsumerWidget {
         ],
         const SizedBox(height: 18),
         Text(
-          'Reflexbereiche',
+          l10n.reflexResultAreasTitle,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w900,
               ),
@@ -187,7 +186,7 @@ class _ResultContent extends ConsumerWidget {
         for (final score in scores) _ScoreTile(score: score),
         const SizedBox(height: 18),
         Text(
-          'Ergänzende Angaben',
+          l10n.reflexResultAdditionalInfo,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w800,
               ),
@@ -200,13 +199,13 @@ class _ResultContent extends ConsumerWidget {
         OutlinedButton.icon(
           onPressed: () => _sharePdf(context, assessment),
           icon: const Icon(Icons.picture_as_pdf_outlined),
-          label: const Text('PDF-Zusammenfassung teilen'),
+          label: Text(l10n.reflexResultSharePdf),
         ),
         const SizedBox(height: 20),
         FilledButton.icon(
           onPressed: () => context.go(Routes.dashboard),
           icon: const Icon(Icons.dashboard_outlined),
-          label: const Text('Zum Dashboard'),
+          label: Text(l10n.reflexResultToDashboard),
         ),
       ],
     );
@@ -216,11 +215,16 @@ class _ResultContent extends ConsumerWidget {
     BuildContext context,
     ReflexProfileAssessment assessment,
   ) async {
+    final l10n = AppLocalizations.of(context);
     try {
       final box = context.findRenderObject() as RenderBox?;
       final screenSize = MediaQuery.of(context).size;
-      final file =
-          await const ReflexProfilePdfService().createSummaryPdf(assessment);
+      final locale = Localizations.localeOf(context);
+      final file = await const ReflexProfilePdfService().createSummaryPdf(
+        assessment,
+        locale: locale,
+        copy: reflexProfilePdfCopyFromL10n(l10n),
+      );
       final origin = box != null
           ? box.localToGlobal(Offset.zero) & box.size
           : Rect.fromLTWH(
@@ -231,14 +235,14 @@ class _ResultContent extends ConsumerWidget {
             );
       await Share.shareXFiles(
         [XFile(file.path, mimeType: 'application/pdf')],
-        subject: 'Reflex Journey Reflexprofil',
-        text: 'Reflex Journey Reflexprofil-Zusammenfassung',
+        subject: l10n.reflexResultShareSubject,
+        text: l10n.reflexResultShareText,
         sharePositionOrigin: origin,
       );
     } catch (error) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('PDF konnte nicht erstellt werden: $error')),
+          SnackBar(content: Text(l10n.reflexResultPdfFailed('$error'))),
         );
       }
     }
@@ -256,6 +260,7 @@ class _TrainerShareCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     final subjectId = assessment.subjectProfileId!;
     final lookup = ReflexTrainerShareLookup(
@@ -281,7 +286,7 @@ class _TrainerShareCard extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Mit Trainer teilen',
+                        l10n.reflexResultShareWithTrainer,
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w900,
@@ -289,9 +294,7 @@ class _TrainerShareCard extends ConsumerWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Du kannst ${connection.displayName} dein vollständiges '
-                        'Reflexprofil freigeben. Das hilft bei der gemeinsamen '
-                        'Begleitung und kann später widerrufen werden.',
+                        l10n.reflexResultShareWithTrainerBody(connection.displayName),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: cs.onSurfaceVariant,
                               height: 1.35,
@@ -306,7 +309,7 @@ class _TrainerShareCard extends ConsumerWidget {
             shareAsync.when(
               loading: () => const LinearProgressIndicator(),
               error: (error, _) => Text(
-                'Freigabe konnte nicht geladen werden: $error',
+                l10n.reflexResultShareLoadFailed('$error'),
                 style: const TextStyle(color: AppColors.error),
               ),
               data: (isShared) => Align(
@@ -322,8 +325,8 @@ class _TrainerShareCard extends ConsumerWidget {
                             );
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Freigabe wurde widerrufen.'),
+                                SnackBar(
+                                  content: Text(l10n.reflexResultShareRevoked),
                                 ),
                               );
                             }
@@ -332,7 +335,7 @@ class _TrainerShareCard extends ConsumerWidget {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'Freigabe konnte nicht widerrufen werden: $e',
+                                    l10n.reflexResultShareRevokeFailed('$e'),
                                   ),
                                 ),
                               );
@@ -340,7 +343,7 @@ class _TrainerShareCard extends ConsumerWidget {
                           }
                         },
                         icon: const Icon(Icons.visibility_off_outlined),
-                        label: const Text('Freigabe widerrufen'),
+                        label: Text(l10n.reflexResultRevokeShare),
                       )
                     : FilledButton.icon(
                         onPressed: () async {
@@ -353,9 +356,8 @@ class _TrainerShareCard extends ConsumerWidget {
                             );
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text('Reflexprofil wurde freigegeben.'),
+                                SnackBar(
+                                  content: Text(l10n.reflexResultShareGranted),
                                 ),
                               );
                             }
@@ -364,7 +366,7 @@ class _TrainerShareCard extends ConsumerWidget {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'Reflexprofil konnte nicht freigegeben werden: $e',
+                                    l10n.reflexResultShareGrantFailed('$e'),
                                   ),
                                 ),
                               );
@@ -372,7 +374,7 @@ class _TrainerShareCard extends ConsumerWidget {
                           }
                         },
                         icon: const Icon(Icons.visibility_outlined),
-                        label: const Text('Trainer darf Auswertung sehen'),
+                        label: Text(l10n.reflexResultAllowTrainer),
                       ),
               ),
             ),
@@ -390,6 +392,7 @@ class _ScoreTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     return Card(
       child: Padding(
@@ -419,7 +422,7 @@ class _ScoreTile extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              _bandLabel(score.band),
+              scoreBandLabel(l10n, score.band),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: _bandColor(score.band,
                         secondaryColor: cs.onSurfaceVariant),
@@ -440,8 +443,7 @@ class _ScoreTile extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              '${score.yesCount} von ${score.answeredCount} beantworteten '
-              'zugeordneten Fragen wurden mit Ja beantwortet.',
+              l10n.reflexResultYesOfAnswered(score.yesCount, score.answeredCount),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: cs.onSurfaceVariant,
                   ),
@@ -464,7 +466,7 @@ class _RelevanteAngaben extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Text(
-          'Keine weiteren Angaben vorhanden.',
+          AppLocalizations.of(context).reflexResultNoAdditional,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 fontStyle: FontStyle.italic,
@@ -555,7 +557,7 @@ class _RelevantAnswerCard extends StatelessWidget {
             if (hasMonths) ...[
               SizedBox(height: hasFreeText ? 4 : 8),
               Text(
-                '${item.months} Monate',
+                AppLocalizations.of(context).monthsCount(item.months!),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.w700,
                       color: cs.onSurface,
@@ -584,12 +586,12 @@ class _EmptyResult extends StatelessWidget {
           children: [
             const Icon(Icons.assignment_outlined, size: 42),
             const SizedBox(height: 12),
-            const Text('Noch keine abgeschlossene Auswertung vorhanden.'),
+            Text(AppLocalizations.of(context).reflexResultNoCompleted),
             const SizedBox(height: 12),
             FilledButton(
               onPressed: () =>
                   context.go(Routes.reflexProfile, extra: packageId),
-              child: const Text('Reflexprofil starten'),
+              child: Text(AppLocalizations.of(context).reflexResultStartProfile),
             ),
           ],
         ),
@@ -650,14 +652,6 @@ ReflexScoreBand _scoreBandFromName(String name) {
     orElse: () => ReflexScoreBand.insufficientData,
   );
 }
-
-String _bandLabel(ReflexScoreBand band) => switch (band) {
-      ReflexScoreBand.strong => 'stark ausgeprägt',
-      ReflexScoreBand.elevated => 'auffällig',
-      ReflexScoreBand.indication => 'Anzeichen',
-      ReflexScoreBand.inconspicuous => 'unauffällig',
-      ReflexScoreBand.insufficientData => 'zu wenig Daten',
-    };
 
 Color _bandColor(ReflexScoreBand band, {required Color secondaryColor}) =>
     switch (band) {

@@ -5,10 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/navigation/app_router.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/reflex_profile_scoring.dart';
 import '../../domain/reflex_questionnaire.dart';
 import '../../domain/reflex_questionnaire_definitions.dart';
+import '../reflex_score_band_l10n.dart';
 
 class ReflexProfileDemoScreen extends StatefulWidget {
   const ReflexProfileDemoScreen({super.key});
@@ -37,7 +39,7 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
         .toList();
     if (missing.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Bitte beantworte alle Fragen.')),
+        SnackBar(content: Text(AppLocalizations.of(context).reflexDemoAnswerAll)),
       );
       return;
     }
@@ -68,7 +70,9 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
           TextButton(
             onPressed: () =>
                 context.go(user == null ? Routes.login : Routes.reflexProfile),
-            child: Text(user == null ? 'Anmelden' : 'Volltest'),
+            child: Text(user == null
+                ? AppLocalizations.of(context).signIn
+                : AppLocalizations.of(context).reflexDemoFullTest),
           ),
         ],
       ),
@@ -81,21 +85,21 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
   }
 
   Widget _buildForWhom() {
+    final l10n = AppLocalizations.of(context);
     return ListView(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
       children: [
         const Icon(Icons.insights_outlined, size: 44, color: AppColors.primary),
         const SizedBox(height: 18),
         Text(
-          'Für wen machst du den Kurztest?',
+          l10n.reflexDemoForWhomTitle,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w800,
               ),
         ),
         const SizedBox(height: 10),
         Text(
-          'Dieser Kurztest zeigt beispielhaft, wie eine Reflexprofil-Auswertung '
-          'aussehen kann. Er wird nicht gespeichert.',
+          l10n.reflexDemoForWhomBody,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 height: 1.45,
@@ -108,11 +112,11 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             leading: const Icon(Icons.child_care_outlined,
                 color: AppColors.primary, size: 28),
-            title: const Text(
-              'Für mein Kind',
-              style: TextStyle(fontWeight: FontWeight.w800),
+            title: Text(
+              l10n.reflexProfileForMyChild,
+              style: const TextStyle(fontWeight: FontWeight.w800),
             ),
-            subtitle: const Text('Elternfragebogen'),
+            subtitle: Text(l10n.reflexProfileParentQuestionnaire),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () => setState(() => _selectedFor = 'child'),
           ),
@@ -126,13 +130,13 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 28),
             title: Text(
-              'Für mich',
+              l10n.reflexProfileForMyself,
               style: TextStyle(
                 fontWeight: FontWeight.w800,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
-            subtitle: const Text('Für mich selbst · bald verfügbar'),
+            subtitle: Text(l10n.reflexProfileForMyselfComingSoon),
             trailing: const Icon(Icons.lock_outline, size: 16),
             onTap: () => setState(() => _selectedFor = 'adult'),
           ),
@@ -142,6 +146,7 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
   }
 
   Widget _buildAdultComingSoon() {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -152,7 +157,7 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
                 size: 48, color: AppColors.primary),
             const SizedBox(height: 16),
             Text(
-              'Kurztest für mich selbst kommt bald',
+              l10n.reflexDemoSelfComingSoonTitle,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -160,7 +165,7 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
             ),
             const SizedBox(height: 10),
             Text(
-              'Der Fragebogen für dich selbst befindet sich noch in Entwicklung.',
+              l10n.reflexDemoSelfComingSoonBody,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     height: 1.45,
@@ -171,7 +176,7 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
             OutlinedButton.icon(
               onPressed: () => setState(() => _selectedFor = null),
               icon: const Icon(Icons.arrow_back),
-              label: const Text('Zurück'),
+              label: Text(l10n.back),
             ),
           ],
         ),
@@ -180,20 +185,19 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
   }
 
   Widget _buildQuestionnaire(User? user) {
+    final l10n = AppLocalizations.of(context);
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
       children: [
         Text(
-          'Kurztest',
+          l10n.reflexDemoTitle,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w800,
               ),
         ),
         const SizedBox(height: 8),
         Text(
-          'Diese Demo zeigt beispielhaft, wie eine Reflexprofil-Auswertung '
-          'aussehen kann. Sie wird nicht gespeichert und ersetzt keinen '
-          'vollständigen Fragebogen.',
+          l10n.reflexDemoIntro,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 height: 1.4,
@@ -210,7 +214,7 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
         FilledButton.icon(
           onPressed: _submit,
           icon: const Icon(Icons.insights_outlined),
-          label: const Text('Demo auswerten'),
+          label: Text(l10n.reflexDemoEvaluate),
         ),
         const SizedBox(height: 12),
         Card(
@@ -221,8 +225,8 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
               children: [
                 Text(
                   user == null
-                      ? 'Für den vollständigen Fragebogen anmelden'
-                      : 'Vollständigen Fragebogen starten',
+                      ? l10n.reflexDemoSignInForFull
+                      : l10n.reflexDemoStartFull,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
@@ -230,11 +234,8 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
                 const SizedBox(height: 6),
                 Text(
                   user == null
-                      ? 'Nach der Registrierung kannst du Kinderprofile anlegen, '
-                          'den vollständigen Fragebogen speichern und die Auswertung '
-                          'später erneut ansehen.'
-                      : 'Im vollständigen Fragebogen werden alle Kategorien abgefragt '
-                          'und die Auswertung kann gespeichert werden.',
+                      ? l10n.reflexDemoGuestHint
+                      : l10n.reflexDemoSignedInHint,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                         height: 1.35,
@@ -247,8 +248,8 @@ class _ReflexProfileDemoScreenState extends State<ReflexProfileDemoScreen> {
                     onPressed: () => context
                         .go(user == null ? Routes.login : Routes.reflexProfile),
                     child: Text(user == null
-                        ? 'Anmelden oder registrieren'
-                        : 'Volltest öffnen'),
+                        ? l10n.reflexDemoSignInOrRegister
+                        : l10n.reflexDemoOpenFullTest),
                   ),
                 ),
               ],
@@ -271,26 +272,25 @@ class _DemoResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final user = Supabase.instance.client.auth.currentUser;
     final locale = Localizations.localeOf(context).languageCode;
     final topScores = scores.take(8).toList();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Demo-Auswertung')),
+      appBar: AppBar(title: Text(l10n.reflexDemoResultTitle)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
         children: [
           Text(
-            'Dein Demo-Ergebnis',
+            l10n.reflexDemoResultHeadline,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w900,
                 ),
           ),
           const SizedBox(height: 8),
           Text(
-            'Diese Auswertung basiert nur auf dem Kurztest und ist keine Diagnose. '
-            'Sie zeigt Antwortmuster — für ein vollständiges Reflexprofil sind '
-            'alle 112 Fragen notwendig.',
+            l10n.reflexDemoResultDisclaimer,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   height: 1.4,
@@ -324,12 +324,12 @@ class _DemoResultScreen extends StatelessWidget {
                                   ),
                             ),
                           )
-                        : const Center(
-                            child: Text('Nicht genug Daten für die Grafik.')),
+                        : Center(
+                            child: Text(l10n.reflexDemoNotEnoughChartData)),
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Die Grafik zeigt die stärksten Reflexbereiche aus deinen Kurztest-Antworten.',
+                    l10n.reflexDemoChartCaption,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -340,7 +340,7 @@ class _DemoResultScreen extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           Text(
-            'Reflexbereiche',
+            l10n.reflexResultAreasTitle,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w900,
                 ),
@@ -357,8 +357,8 @@ class _DemoResultScreen extends StatelessWidget {
                 children: [
                   Text(
                     user == null
-                        ? 'Vollständigen Fragebogen starten'
-                        : 'Volltest öffnen',
+                        ? l10n.reflexDemoStartFull
+                        : l10n.reflexDemoOpenFullTest,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
@@ -366,10 +366,8 @@ class _DemoResultScreen extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     user == null
-                        ? 'Mit einem Konto kannst du den vollständigen Fragebogen '
-                            'ausfüllen, dein Ergebnis speichern und mit deinem Trainer teilen.'
-                        : 'Im vollständigen Fragebogen werden alle Kategorien erfasst '
-                            'und das Ergebnis dauerhaft gespeichert.',
+                        ? l10n.reflexDemoAccountBenefitGuest
+                        : l10n.reflexDemoAccountBenefitSignedIn,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                           height: 1.35,
@@ -382,8 +380,8 @@ class _DemoResultScreen extends StatelessWidget {
                       onPressed: () => context.go(
                           user == null ? Routes.login : Routes.reflexProfile),
                       child: Text(user == null
-                          ? 'Anmelden oder registrieren'
-                          : 'Volltest öffnen'),
+                          ? l10n.reflexDemoSignInOrRegister
+                          : l10n.reflexDemoOpenFullTest),
                     ),
                   ),
                 ],
@@ -403,6 +401,7 @@ class _DemoScoreTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final color = _bandColor(score.band);
     final locale = Localizations.localeOf(context).languageCode;
     return Card(
@@ -433,7 +432,7 @@ class _DemoScoreTile extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              _bandLabel(score.band),
+              scoreBandLabel(l10n, score.band),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: color,
                     fontWeight: FontWeight.w700,
@@ -571,6 +570,7 @@ class _DemoQuestionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
@@ -589,10 +589,10 @@ class _DemoQuestionTile extends StatelessWidget {
             SegmentedButton<String>(
               showSelectedIcon: false,
               emptySelectionAllowed: true,
-              segments: const [
-                ButtonSegment(value: 'yes', label: Text('Ja')),
-                ButtonSegment(value: 'no', label: Text('Nein')),
-                ButtonSegment(value: 'unknown', label: Text('Weiß ich nicht')),
+              segments: [
+                ButtonSegment(value: 'yes', label: Text(l10n.yes)),
+                ButtonSegment(value: 'no', label: Text(l10n.no)),
+                ButtonSegment(value: 'unknown', label: Text(l10n.answerUnknown)),
               ],
               selected: {
                 if (answer?.yesNoUnknown == true)
@@ -628,10 +628,3 @@ Color _bandColor(ReflexScoreBand band) => switch (band) {
       ReflexScoreBand.insufficientData => const Color(0xFF9E9E9E),
     };
 
-String _bandLabel(ReflexScoreBand band) => switch (band) {
-      ReflexScoreBand.strong => 'stark ausgeprägt',
-      ReflexScoreBand.elevated => 'auffällig',
-      ReflexScoreBand.indication => 'Anzeichen',
-      ReflexScoreBand.inconspicuous => 'unauffällig',
-      ReflexScoreBand.insufficientData => 'zu wenig Daten',
-    };

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/navigation/app_router.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/draft_persistence_service.dart';
 import '../../domain/reflex_profile_scoring.dart';
@@ -93,12 +94,13 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   Future<void> _createProfile() async {
     final name = _nameController.text.trim();
     final birthDate = _selectedBirthDate;
+    final l10n = AppLocalizations.of(context);
     if (name.isEmpty || birthDate == null) {
-      _showError('Bitte gib einen Namen und das Geburtsdatum an.');
+      _showError(l10n.reflexProfileNameBirthRequired);
       return;
     }
     if (birthDate.isAfter(DateTime.now())) {
-      _showError('Das Geburtsdatum darf nicht in der Zukunft liegen.');
+      _showError(l10n.reflexProfileBirthFuture);
       return;
     }
 
@@ -114,7 +116,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
         await _checkForDraft(profile.id);
       }
     } catch (e) {
-      _showError('Kinderprofil konnte nicht angelegt werden: $e');
+      _showError(AppLocalizations.of(context).reflexProfileCreateChildFailed('$e'));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -149,23 +151,22 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       barrierDismissible: false,
       builder: (context) => PopScope(
         canPop: false,
-        child: AlertDialog(
-          title: const Text('Rücksprache erforderlich'),
-          content: Text(
-            'Bei dieser Angabe empfehlen wir dringend, das Training nur nach '
-            'Rücksprache und mit ausdrücklicher Zustimmung eines behandelnden '
-            'Arztes, Therapeuten oder Psychologen durchzuführen.\n\n'
-            'Mit dem Fortfahren bestätigst du, dass du diese Rücksprache '
-            'eigenverantwortlich berücksichtigst und das Training entsprechend '
-            'begleitet oder freigegeben durchführst.\n\n'
-            'Frage: ${question.text(locale)}',
-          ),
-          actions: [
-            FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Verstanden und bestätigt'),
-            ),
-          ],
+        child: Builder(
+          builder: (context) {
+            final l10n = AppLocalizations.of(context);
+            return AlertDialog(
+              title: Text(l10n.reflexProfileClearanceTitle),
+              content: Text(
+                l10n.reflexProfileClearanceBody(question.text(locale)),
+              ),
+              actions: [
+                FilledButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text(l10n.reflexProfileClearanceConfirm),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -195,7 +196,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
     }).toList();
 
     if (missing.isNotEmpty) {
-      _showError('Bitte beantworte alle Auswahl- und Zahlenfragen.');
+      _showError(AppLocalizations.of(context).reflexProfileAnswerAllChoice);
       return;
     }
 
@@ -246,7 +247,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
         );
       }
     } catch (e) {
-      _showError('Reflexprofil konnte nicht abgeschlossen werden: $e');
+      _showError(AppLocalizations.of(context).reflexProfileCompleteFailed('$e'));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -330,22 +331,23 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   Future<void> _showExitConfirmation() async {
     final leave = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Fragebogen verlassen?'),
-        content: const Text(
-          'Dein Fortschritt wird gespeichert. Du kannst jederzeit weitermachen.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Abbrechen'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Verlassen'),
-          ),
-        ],
-      ),
+      builder: (ctx) {
+        final l10n = AppLocalizations.of(ctx);
+        return AlertDialog(
+          title: Text(l10n.reflexProfileLeaveTitle),
+          content: Text(l10n.reflexProfileLeaveBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: Text(l10n.leave),
+            ),
+          ],
+        );
+      },
     );
     if (leave == true && mounted) {
       _saveLocalDraft();
@@ -393,23 +395,23 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
 
     final resume = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Fragebogen fortsetzen?'),
-        content: const Text(
-          'Du hast diesen Fragebogen bereits begonnen. '
-          'Möchtest du dort weitermachen, wo du aufgehört hast?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Von vorne'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Fortsetzen'),
-          ),
-        ],
-      ),
+      builder: (ctx) {
+        final l10n = AppLocalizations.of(ctx);
+        return AlertDialog(
+          title: Text(l10n.reflexProfileResumeTitle),
+          content: Text(l10n.reflexProfileResumeBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(l10n.reflexProfileStartOver),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: Text(l10n.resume),
+            ),
+          ],
+        );
+      },
     );
 
     if (!mounted) return;
@@ -512,7 +514,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
             error: (error, _) => Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text('Profile konnten nicht geladen werden: $error'),
+                child: Text(AppLocalizations.of(context).reflexProfileLoadProfilesFailed('$error')),
               ),
             ),
             data: (profiles) {
@@ -534,21 +536,21 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   Widget _buildForWhom() {
+    final l10n = AppLocalizations.of(context);
     return ListView(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
       children: [
         const Icon(Icons.people_outline, size: 44, color: AppColors.primary),
         const SizedBox(height: 18),
         Text(
-          'Für wen machst du diesen Fragebogen?',
+          l10n.reflexProfileForWhomTitle,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w800,
               ),
         ),
         const SizedBox(height: 10),
         Text(
-          'Der Fragebogen unterscheidet sich je nachdem, ob er für ein Kind '
-          'oder für dich selbst ausgefüllt wird.',
+          l10n.reflexProfileForWhomBody,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 height: 1.45,
@@ -561,11 +563,11 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             leading: const Icon(Icons.child_care_outlined,
                 color: AppColors.primary, size: 28),
-            title: const Text(
-              'Für mein Kind',
-              style: TextStyle(fontWeight: FontWeight.w800),
+            title: Text(
+              l10n.reflexProfileForMyChild,
+              style: const TextStyle(fontWeight: FontWeight.w800),
             ),
-            subtitle: const Text('Elternfragebogen'),
+            subtitle: Text(l10n.reflexProfileParentQuestionnaire),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () => setState(() => _questionnaireFor = 'child'),
           ),
@@ -579,13 +581,13 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 28),
             title: Text(
-              'Für mich',
+              l10n.reflexProfileForMyself,
               style: TextStyle(
                 fontWeight: FontWeight.w800,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
-            subtitle: const Text('Für mich selbst · bald verfügbar'),
+            subtitle: Text(l10n.reflexProfileForMyselfComingSoon),
             trailing: const Icon(Icons.lock_outline, size: 16),
             onTap: () => setState(() => _questionnaireFor = 'adult'),
           ),
@@ -595,6 +597,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   Widget _buildAdultComingSoon() {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -605,7 +608,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                 size: 48, color: AppColors.primary),
             const SizedBox(height: 16),
             Text(
-              'Erwachsenenfragebogen kommt bald',
+              l10n.reflexProfileAdultComingSoonTitle,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -613,8 +616,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
             ),
             const SizedBox(height: 10),
             Text(
-              'Der Fragebogen für Erwachsene befindet sich noch in Entwicklung. '
-              'Du kannst ihn bald hier ausfüllen.',
+              l10n.reflexProfileAdultComingSoonBody,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     height: 1.45,
@@ -625,7 +627,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
             OutlinedButton.icon(
               onPressed: () => setState(() => _questionnaireFor = null),
               icon: const Icon(Icons.arrow_back),
-              label: const Text('Zurück'),
+              label: Text(l10n.back),
             ),
           ],
         ),
@@ -634,6 +636,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   Widget _buildStart(List<ReflexSubjectProfile> profiles) {
+    final l10n = AppLocalizations.of(context);
     return ListView(
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
       children: [
@@ -644,15 +647,14 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
         ),
         const SizedBox(height: 18),
         Text(
-          'Eine Orientierung, keine Diagnose',
+          l10n.reflexProfileOrientationTitle,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w800,
               ),
         ),
         const SizedBox(height: 10),
         Text(
-          'Das Reflexprofil sammelt Beobachtungen und zeigt Hinweisstärken. '
-          'Es ersetzt keine medizinische oder therapeutische Diagnose.',
+          l10n.reflexProfileOrientationBody,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 height: 1.45,
@@ -661,7 +663,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
         const SizedBox(height: 20),
         if (profiles.isNotEmpty) ...[
           Text(
-            'Kinderprofil auswählen',
+            l10n.reflexProfileSelectChild,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
@@ -678,10 +680,15 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                       ? AppColors.primary
                       : Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-                title: Text(profile.displayName),
+                title: Text(
+                  profile.displayName.isEmpty
+                      ? l10n.profile
+                      : profile.displayName,
+                ),
                 subtitle: Text(
                   [
-                    if (profile.ageYears != null) '${profile.ageYears} Jahre',
+                    if (profile.ageYears != null)
+                      l10n.yearsCount(profile.ageYears!),
                     if (profile.ageGroup != null) profile.ageGroup!,
                   ].join(' · '),
                 ),
@@ -694,12 +701,12 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                 ? null
                 : () => _checkForDraft(_selectedProfile!.id),
             icon: const Icon(Icons.assignment_outlined),
-            label: const Text('Fragebogen starten'),
+            label: Text(l10n.reflexProfileStartQuestionnaire),
           ),
           const SizedBox(height: 24),
         ],
         Text(
-          'Neues Kinderprofil',
+          l10n.reflexProfileNewChild,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w800,
               ),
@@ -708,9 +715,9 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
         TextField(
           controller: _nameController,
           textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            labelText: 'Name oder Spitzname',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: l10n.reflexProfileNameOrNickname,
+            border: const OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 12),
@@ -723,7 +730,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                   DateTime(now.year - 6, now.month, now.day),
               firstDate: DateTime(now.year - 100),
               lastDate: now,
-              helpText: 'Geburtsdatum auswählen',
+              helpText: l10n.reflexProfilePickBirthDate,
             );
             if (picked != null) {
               setState(() => _selectedBirthDate = picked);
@@ -732,16 +739,16 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
           borderRadius: BorderRadius.circular(4),
           child: InputDecorator(
             decoration: InputDecoration(
-              labelText: 'Geburtsdatum *',
+              labelText: l10n.reflexProfileBirthDateRequired,
               border: const OutlineInputBorder(),
               suffixIcon: const Icon(Icons.calendar_month_outlined),
               helperText: _selectedBirthDate == null
-                  ? 'Pflichtfeld – wird für die Altersauswertung benötigt'
+                  ? l10n.reflexProfileBirthDateHelper
                   : null,
             ),
             child: Text(
               _selectedBirthDate == null
-                  ? 'Datum auswählen'
+                  ? l10n.reflexProfileSelectDate
                   : '${_selectedBirthDate!.day.toString().padLeft(2, '0')}.'
                       '${_selectedBirthDate!.month.toString().padLeft(2, '0')}.'
                       '${_selectedBirthDate!.year}',
@@ -756,7 +763,9 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
         FilledButton.icon(
           onPressed: _saving ? null : _createProfile,
           icon: const Icon(Icons.person_add_alt_1_outlined),
-          label: Text(_saving ? 'Speichern...' : 'Profil anlegen und starten'),
+          label: Text(
+            _saving ? l10n.saving : l10n.reflexProfileCreateAndStart,
+          ),
         ),
       ],
     );
@@ -787,7 +796,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       setState(() {
         _highlightedQuestionIds = missing.map((q) => q.id).toSet();
       });
-      _showError('Bitte beantworte alle Pflichtfragen in diesem Abschnitt.');
+      _showError(AppLocalizations.of(context).reflexProfileAnswerRequiredSection);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final key = _questionKeys[missing.first.id];
         if (key?.currentContext != null) {
@@ -824,6 +833,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   Widget _buildQuestionnaire() {
+    final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
     final activeModules = _activeModules;
     final safeIndex = _currentModuleIndex.clamp(0, activeModules.length - 1);
@@ -858,7 +868,9 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          _selectedProfile?.displayName ?? 'Kinderprofil',
+                          _selectedProfile?.displayName.isNotEmpty == true
+                              ? _selectedProfile!.displayName
+                              : l10n.reflexProfileChildFallback,
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w800,
@@ -870,7 +882,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                             ? null
                             : () =>
                                 setState(() => _questionnaireStarted = false),
-                        child: const Text('Wechseln'),
+                        child: Text(l10n.switchAction),
                       ),
                     ],
                   ),
@@ -878,7 +890,10 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
               ),
               const SizedBox(height: 16),
               Text(
-                'Abschnitt ${safeIndex + 1} von ${activeModules.length}',
+                l10n.reflexProfileSectionOf(
+                  safeIndex + 1,
+                  activeModules.length,
+                ),
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -906,7 +921,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                   OutlinedButton.icon(
                     onPressed: _saving ? null : _prevModule,
                     icon: const Icon(Icons.arrow_back),
-                    label: const Text('Zurück'),
+                    label: Text(l10n.back),
                   ),
                 const Spacer(),
                 FilledButton.icon(
@@ -915,8 +930,8 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                       ? Icons.check_circle_outline
                       : Icons.arrow_forward),
                   label: Text(_saving
-                      ? 'Speichern...'
-                      : (isLast ? 'Abschließen' : 'Weiter')),
+                      ? l10n.saving
+                      : (isLast ? l10n.finish : l10n.next)),
                 ),
               ],
             ),
@@ -927,6 +942,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   Widget _buildQuestion(ReflexQuestion question) {
+    final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
     final helpText = question.helpText(locale);
     final highlighted = _highlightedQuestionIds.contains(question.id);
@@ -965,7 +981,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                 ExpansionTile(
                   tilePadding: EdgeInsets.zero,
                   dense: true,
-                  title: const Text('Was ist gemeint?'),
+                  title: Text(l10n.reflexProfileWhatIsMeant),
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
@@ -998,12 +1014,13 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   Widget _buildYesNoUnknown(ReflexQuestion question) {
+    final l10n = AppLocalizations.of(context);
     final value = _answers[question.id];
     return Row(
       children: [
         Expanded(
           child: _AnswerButton(
-            label: 'Ja',
+            label: l10n.yes,
             selected: value?.yesNoUnknown == true,
             onTap: () => _setYesNoAnswer(question, true),
             accentColor: const Color(0xFF00C882),
@@ -1013,7 +1030,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
         const SizedBox(width: 8),
         Expanded(
           child: _AnswerButton(
-            label: 'Nein',
+            label: l10n.no,
             selected: value?.yesNoUnknown == false,
             onTap: () => _setYesNoAnswer(question, false),
             accentColor: AppColors.error,
@@ -1024,7 +1041,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
         Expanded(
           flex: 2,
           child: _AnswerButton(
-            label: 'Weiß ich nicht',
+            label: l10n.answerUnknown,
             selected: value?.isUnknown == true,
             onTap: () => _setYesNoAnswer(question, null),
             accentColor: const Color(0xFF5B8AF0),
@@ -1036,6 +1053,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   Widget _buildMonths(ReflexQuestion question) {
+    final l10n = AppLocalizations.of(context);
     final controller = _controllerFor(question.id);
     final isUnknown = _answers[question.id]?.isUnknown ?? false;
 
@@ -1047,9 +1065,9 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
             controller: controller,
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            decoration: const InputDecoration(
-              labelText: 'Monate',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: l10n.reflexProfileMonthsLabel,
+              border: const OutlineInputBorder(),
             ),
             onChanged: (value) {
               setState(() {
@@ -1062,7 +1080,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
           ),
         const SizedBox(height: 8),
         _AnswerButton(
-          label: 'Weiß ich nicht',
+          label: l10n.answerUnknown,
           selected: isUnknown,
           accentColor: const Color(0xFFE97356),
           icon: Icons.help_outline,
@@ -1085,14 +1103,15 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   Widget _buildFreeText(ReflexQuestion question) {
+    final l10n = AppLocalizations.of(context);
     final controller = _controllerFor(question.id);
     return TextField(
       controller: controller,
       minLines: 2,
       maxLines: 4,
-      decoration: const InputDecoration(
-        labelText: 'Freitext',
-        border: OutlineInputBorder(),
+      decoration: InputDecoration(
+        labelText: l10n.reflexProfileFreeTextLabel,
+        border: const OutlineInputBorder(),
       ),
       onChanged: (value) {
         setState(() {
@@ -1104,6 +1123,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   Widget _buildMultiSelectWithText(ReflexQuestion question) {
+    final l10n = AppLocalizations.of(context);
     final answer = _answers[question.id] ?? const ReflexAnswerValue();
     final controller = _controllerFor(question.id);
     return Column(
@@ -1133,9 +1153,9 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
           controller: controller,
           minLines: 2,
           maxLines: 4,
-          decoration: const InputDecoration(
-            labelText: 'Sonstiges / Ergänzung',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: l10n.reflexProfileOtherLabel,
+            border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
             setState(() {

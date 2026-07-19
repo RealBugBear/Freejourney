@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/reflex_questionnaire.dart';
 
 /// One axis on the radar chart.
@@ -39,7 +40,7 @@ class ReflexRadarChart extends StatelessWidget {
     if (scores.length < 3) {
       return Center(
         child: Text(
-          'Zu wenig Daten',
+          AppLocalizations.of(context).radarNotEnoughData,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),

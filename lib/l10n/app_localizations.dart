@@ -4886,6 +4886,823 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Dein Trainee'**
   String get traineeFallbackName;
+
+  /// Yes/no/unknown answer option
+  ///
+  /// In de, this message translates to:
+  /// **'Weiß ich nicht'**
+  String get answerUnknown;
+
+  /// Reflex score band: strong
+  ///
+  /// In de, this message translates to:
+  /// **'stark ausgeprägt'**
+  String get scoreBandStrong;
+
+  /// Reflex score band: elevated
+  ///
+  /// In de, this message translates to:
+  /// **'auffällig'**
+  String get scoreBandElevated;
+
+  /// Reflex score band: indication
+  ///
+  /// In de, this message translates to:
+  /// **'Anzeichen'**
+  String get scoreBandIndication;
+
+  /// Reflex score band: inconspicuous
+  ///
+  /// In de, this message translates to:
+  /// **'unauffällig'**
+  String get scoreBandInconspicuous;
+
+  /// Reflex score band: insufficient data
+  ///
+  /// In de, this message translates to:
+  /// **'zu wenig Daten'**
+  String get scoreBandInsufficientData;
+
+  /// Count of months
+  ///
+  /// In de, this message translates to:
+  /// **'{count} Monate'**
+  String monthsCount(int count);
+
+  /// Count of years
+  ///
+  /// In de, this message translates to:
+  /// **'{count} Jahre'**
+  String yearsCount(int count);
+
+  /// Dialog action to leave a flow
+  ///
+  /// In de, this message translates to:
+  /// **'Verlassen'**
+  String get leave;
+
+  /// Dialog action to resume a draft
+  ///
+  /// In de, this message translates to:
+  /// **'Fortsetzen'**
+  String get resume;
+
+  /// Primary action to finish a questionnaire
+  ///
+  /// In de, this message translates to:
+  /// **'Abschließen'**
+  String get finish;
+
+  /// Switch profile/subject action
+  ///
+  /// In de, this message translates to:
+  /// **'Wechseln'**
+  String get switchAction;
+
+  /// Default display name for adult self profile
+  ///
+  /// In de, this message translates to:
+  /// **'Ich'**
+  String get selfName;
+
+  /// Analysis placeholder screen title
+  ///
+  /// In de, this message translates to:
+  /// **'Analyse'**
+  String get analysisPlaceholderTitle;
+
+  /// CTA to consent
+  ///
+  /// In de, this message translates to:
+  /// **'Weiter zur Zustimmung'**
+  String get analysisPlaceholderContinue;
+
+  /// Analysis placeholder headline
+  ///
+  /// In de, this message translates to:
+  /// **'Hier startet bald deine persönliche Standortanalyse.'**
+  String get analysisPlaceholderHeadline;
+
+  /// Analysis placeholder body
+  ///
+  /// In de, this message translates to:
+  /// **'Vor dem ersten Training wird hier ein kurzer Fragebogen stehen. Damit kann Reflex Journey deinen aktuellen Stand besser einordnen und die Empfehlung sauberer machen.'**
+  String get analysisPlaceholderBody;
+
+  /// Placeholder step title
+  ///
+  /// In de, this message translates to:
+  /// **'Fragebogen'**
+  String get analysisPlaceholderStepQuestionnaireTitle;
+
+  /// Placeholder step body
+  ///
+  /// In de, this message translates to:
+  /// **'Symptome, Belastung, Trainingsziel und bisherige Erfahrung.'**
+  String get analysisPlaceholderStepQuestionnaireBody;
+
+  /// Placeholder assessment step title
+  ///
+  /// In de, this message translates to:
+  /// **'Auswertung'**
+  String get analysisPlaceholderStepAssessmentTitle;
+
+  /// Placeholder assessment step body
+  ///
+  /// In de, this message translates to:
+  /// **'Eine ruhige Einschätzung deines aktuellen Ausgangspunkts.'**
+  String get analysisPlaceholderStepAssessmentBody;
+
+  /// Accept recommended duration
+  ///
+  /// In de, this message translates to:
+  /// **'Empfehlung übernehmen'**
+  String get durationRecAccept;
+
+  /// Duration recommendation when assessment unused
+  ///
+  /// In de, this message translates to:
+  /// **'Du hast das Reflexprofil übersprungen oder es liegt für dieses Profil noch keine Auswertung vor. Die Empfehlung nutzt deshalb die Standardlogik anhand deiner Angabe zum isometrischen Partnertraining.'**
+  String get durationRecSkippedBody;
+
+  /// Week range when user had trainer
+  ///
+  /// In de, this message translates to:
+  /// **'4 bis 6'**
+  String get durationRecRangeWithTrainer;
+
+  /// Week range when user had no trainer
+  ///
+  /// In de, this message translates to:
+  /// **'6 bis 8'**
+  String get durationRecRangeWithoutTrainer;
+
+  /// Trainer status fragment: already
+  ///
+  /// In de, this message translates to:
+  /// **'bereits'**
+  String get durationRecTrainerAlready;
+
+  /// Trainer status fragment: not yet
+  ///
+  /// In de, this message translates to:
+  /// **'noch nicht'**
+  String get durationRecTrainerNotYet;
+
+  /// Moro package duration recommendation body
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Empfehlung basiert auf deiner persönlichen Reflexprofil-Auswertung.\n\nFür das Moro-Paket betrachten wir sowohl Moro als auch FLR, weil beide in dieser Auswertung relevant sind. Der stärkere Hinweis liegt bei {percent} und bestimmt die Dauerstufe.\n\nDa du {trainerStatus} isometrisches Partnertraining mit einer Fachperson gemacht hast, verwenden wir den Empfehlungsbereich {range} Wochen. Du kannst die Empfehlung übernehmen oder die Dauer manuell anpassen.'**
+  String durationRecMoroBody(
+      String percent, String trainerStatus, String range);
+
+  /// Generic package duration recommendation body
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Empfehlung basiert auf deiner persönlichen Reflexprofil-Auswertung. Aufgrund deiner ermittelten Reflex-Tendenz empfehlen wir für dieses Paket eine Dauer von {weeks} Wochen.\n\nDa du {trainerStatus} isometrisches Partnertraining mit einer Fachperson gemacht hast, verwenden wir den Empfehlungsbereich {range} Wochen.'**
+  String durationRecGenericBody(int weeks, String trainerStatus, String range);
+
+  /// Reflex tendency line in duration recommendation
+  ///
+  /// In de, this message translates to:
+  /// **'{label}-Tendenz: {percent}'**
+  String durationRecTendency(String label, String percent);
+
+  /// Note when multiple reflexes considered
+  ///
+  /// In de, this message translates to:
+  /// **'Für die Dauer zählt der stärkere Hinweis.'**
+  String get durationRecStrongerHint;
+
+  /// Percent placeholder when missing
+  ///
+  /// In de, this message translates to:
+  /// **'keine ausreichenden Daten'**
+  String get durationRecNoData;
+
+  /// Radar chart empty state
+  ///
+  /// In de, this message translates to:
+  /// **'Zu wenig Daten'**
+  String get radarNotEnoughData;
+
+  /// Validation error
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte gib einen Namen und das Geburtsdatum an.'**
+  String get reflexProfileNameBirthRequired;
+
+  /// Validation error
+  ///
+  /// In de, this message translates to:
+  /// **'Das Geburtsdatum darf nicht in der Zukunft liegen.'**
+  String get reflexProfileBirthFuture;
+
+  /// Error creating child profile
+  ///
+  /// In de, this message translates to:
+  /// **'Kinderprofil konnte nicht angelegt werden: {error}'**
+  String reflexProfileCreateChildFailed(String error);
+
+  /// Professional clearance dialog title
+  ///
+  /// In de, this message translates to:
+  /// **'Rücksprache erforderlich'**
+  String get reflexProfileClearanceTitle;
+
+  /// Professional clearance dialog body
+  ///
+  /// In de, this message translates to:
+  /// **'Bei dieser Angabe empfehlen wir dringend, das Training nur nach Rücksprache und mit ausdrücklicher Zustimmung eines behandelnden Arztes, Therapeuten oder Psychologen durchzuführen.\n\nMit dem Fortfahren bestätigst du, dass du diese Rücksprache eigenverantwortlich berücksichtigst und das Training entsprechend begleitet oder freigegeben durchführst.\n\nFrage: {question}'**
+  String reflexProfileClearanceBody(String question);
+
+  /// Clearance dialog confirm button
+  ///
+  /// In de, this message translates to:
+  /// **'Verstanden und bestätigt'**
+  String get reflexProfileClearanceConfirm;
+
+  /// Submit validation
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte beantworte alle Auswahl- und Zahlenfragen.'**
+  String get reflexProfileAnswerAllChoice;
+
+  /// Submit error
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil konnte nicht abgeschlossen werden: {error}'**
+  String reflexProfileCompleteFailed(String error);
+
+  /// Exit confirmation title
+  ///
+  /// In de, this message translates to:
+  /// **'Fragebogen verlassen?'**
+  String get reflexProfileLeaveTitle;
+
+  /// Exit confirmation body
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Fortschritt wird gespeichert. Du kannst jederzeit weitermachen.'**
+  String get reflexProfileLeaveBody;
+
+  /// Resume draft dialog title
+  ///
+  /// In de, this message translates to:
+  /// **'Fragebogen fortsetzen?'**
+  String get reflexProfileResumeTitle;
+
+  /// Resume draft dialog body
+  ///
+  /// In de, this message translates to:
+  /// **'Du hast diesen Fragebogen bereits begonnen. Möchtest du dort weitermachen, wo du aufgehört hast?'**
+  String get reflexProfileResumeBody;
+
+  /// Discard draft and restart
+  ///
+  /// In de, this message translates to:
+  /// **'Von vorne'**
+  String get reflexProfileStartOver;
+
+  /// Profiles load error
+  ///
+  /// In de, this message translates to:
+  /// **'Profile konnten nicht geladen werden: {error}'**
+  String reflexProfileLoadProfilesFailed(String error);
+
+  /// Subject selection title
+  ///
+  /// In de, this message translates to:
+  /// **'Für wen machst du diesen Fragebogen?'**
+  String get reflexProfileForWhomTitle;
+
+  /// Subject selection body
+  ///
+  /// In de, this message translates to:
+  /// **'Der Fragebogen unterscheidet sich je nachdem, ob er für ein Kind oder für dich selbst ausgefüllt wird.'**
+  String get reflexProfileForWhomBody;
+
+  /// Choose child subject
+  ///
+  /// In de, this message translates to:
+  /// **'Für mein Kind'**
+  String get reflexProfileForMyChild;
+
+  /// Child path subtitle
+  ///
+  /// In de, this message translates to:
+  /// **'Elternfragebogen'**
+  String get reflexProfileParentQuestionnaire;
+
+  /// Choose adult self subject
+  ///
+  /// In de, this message translates to:
+  /// **'Für mich'**
+  String get reflexProfileForMyself;
+
+  /// Adult path disabled subtitle
+  ///
+  /// In de, this message translates to:
+  /// **'Für mich selbst · bald verfügbar'**
+  String get reflexProfileForMyselfComingSoon;
+
+  /// Adult coming soon title
+  ///
+  /// In de, this message translates to:
+  /// **'Erwachsenenfragebogen kommt bald'**
+  String get reflexProfileAdultComingSoonTitle;
+
+  /// Adult coming soon body
+  ///
+  /// In de, this message translates to:
+  /// **'Der Fragebogen für Erwachsene befindet sich noch in Entwicklung. Du kannst ihn bald hier ausfüllen.'**
+  String get reflexProfileAdultComingSoonBody;
+
+  /// Start screen disclaimer title
+  ///
+  /// In de, this message translates to:
+  /// **'Eine Orientierung, keine Diagnose'**
+  String get reflexProfileOrientationTitle;
+
+  /// Start screen disclaimer body
+  ///
+  /// In de, this message translates to:
+  /// **'Das Reflexprofil sammelt Beobachtungen und zeigt Hinweisstärken. Es ersetzt keine medizinische oder therapeutische Diagnose.'**
+  String get reflexProfileOrientationBody;
+
+  /// Child profile picker heading
+  ///
+  /// In de, this message translates to:
+  /// **'Kinderprofil auswählen'**
+  String get reflexProfileSelectChild;
+
+  /// Start questionnaire CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Fragebogen starten'**
+  String get reflexProfileStartQuestionnaire;
+
+  /// Create child profile heading
+  ///
+  /// In de, this message translates to:
+  /// **'Neues Kinderprofil'**
+  String get reflexProfileNewChild;
+
+  /// Child name field label
+  ///
+  /// In de, this message translates to:
+  /// **'Name oder Spitzname'**
+  String get reflexProfileNameOrNickname;
+
+  /// Date picker help text
+  ///
+  /// In de, this message translates to:
+  /// **'Geburtsdatum auswählen'**
+  String get reflexProfilePickBirthDate;
+
+  /// Birth date field label
+  ///
+  /// In de, this message translates to:
+  /// **'Geburtsdatum *'**
+  String get reflexProfileBirthDateRequired;
+
+  /// Birth date helper
+  ///
+  /// In de, this message translates to:
+  /// **'Pflichtfeld – wird für die Altersauswertung benötigt'**
+  String get reflexProfileBirthDateHelper;
+
+  /// Empty date placeholder
+  ///
+  /// In de, this message translates to:
+  /// **'Datum auswählen'**
+  String get reflexProfileSelectDate;
+
+  /// Create child profile CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Profil anlegen und starten'**
+  String get reflexProfileCreateAndStart;
+
+  /// Module validation
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte beantworte alle Pflichtfragen in diesem Abschnitt.'**
+  String get reflexProfileAnswerRequiredSection;
+
+  /// Fallback when no child name
+  ///
+  /// In de, this message translates to:
+  /// **'Kinderprofil'**
+  String get reflexProfileChildFallback;
+
+  /// Module progress
+  ///
+  /// In de, this message translates to:
+  /// **'Abschnitt {current} von {total}'**
+  String reflexProfileSectionOf(int current, int total);
+
+  /// Help expansion title
+  ///
+  /// In de, this message translates to:
+  /// **'Was ist gemeint?'**
+  String get reflexProfileWhatIsMeant;
+
+  /// Months input label
+  ///
+  /// In de, this message translates to:
+  /// **'Monate'**
+  String get reflexProfileMonthsLabel;
+
+  /// Free text input label
+  ///
+  /// In de, this message translates to:
+  /// **'Freitext'**
+  String get reflexProfileFreeTextLabel;
+
+  /// Multi-select free text label
+  ///
+  /// In de, this message translates to:
+  /// **'Sonstiges / Ergänzung'**
+  String get reflexProfileOtherLabel;
+
+  /// Result screen app bar
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil-Auswertung'**
+  String get reflexResultTitle;
+
+  /// Result load error
+  ///
+  /// In de, this message translates to:
+  /// **'Auswertung konnte nicht geladen werden: {error}'**
+  String reflexResultLoadFailed(String error);
+
+  /// Result headline
+  ///
+  /// In de, this message translates to:
+  /// **'Hinweistärken'**
+  String get reflexResultIndicationStrengths;
+
+  /// Result disclaimer
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Auswertung zeigt Antwortmuster und ersetzt keine medizinische oder therapeutische Diagnose.'**
+  String get reflexResultDisclaimer;
+
+  /// Radar caption
+  ///
+  /// In de, this message translates to:
+  /// **'Die Grafik zeigt die stärksten Reflexbereiche aus deinem Antwortmuster.'**
+  String get reflexResultChartCaption;
+
+  /// Warning confirmations banner
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, =1{Du hast 1 Hinweis bestätigt, bei dem wir dringend Rücksprache mit Arzt, Therapeut oder Psychologe empfehlen. Eine Trainerbegleitung ist in deinem Fall besonders sinnvoll.} other{Du hast {count} Hinweise bestätigt, bei denen wir dringend Rücksprache mit Arzt, Therapeut oder Psychologe empfehlen. Eine Trainerbegleitung ist in deinem Fall besonders sinnvoll.}}'**
+  String reflexResultWarningNotice(int count);
+
+  /// Score list title
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexbereiche'**
+  String get reflexResultAreasTitle;
+
+  /// Additional answers section
+  ///
+  /// In de, this message translates to:
+  /// **'Ergänzende Angaben'**
+  String get reflexResultAdditionalInfo;
+
+  /// Share PDF button
+  ///
+  /// In de, this message translates to:
+  /// **'PDF-Zusammenfassung teilen'**
+  String get reflexResultSharePdf;
+
+  /// Dashboard CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Zum Dashboard'**
+  String get reflexResultToDashboard;
+
+  /// PDF share subject
+  ///
+  /// In de, this message translates to:
+  /// **'Reflex Journey Reflexprofil'**
+  String get reflexResultShareSubject;
+
+  /// PDF share text
+  ///
+  /// In de, this message translates to:
+  /// **'Reflex Journey Reflexprofil-Zusammenfassung'**
+  String get reflexResultShareText;
+
+  /// PDF creation error
+  ///
+  /// In de, this message translates to:
+  /// **'PDF konnte nicht erstellt werden: {error}'**
+  String reflexResultPdfFailed(String error);
+
+  /// Trainer share card title
+  ///
+  /// In de, this message translates to:
+  /// **'Mit Trainer teilen'**
+  String get reflexResultShareWithTrainer;
+
+  /// Trainer share card body
+  ///
+  /// In de, this message translates to:
+  /// **'Du kannst {trainerName} dein vollständiges Reflexprofil freigeben. Das hilft bei der gemeinsamen Begleitung und kann später widerrufen werden.'**
+  String reflexResultShareWithTrainerBody(String trainerName);
+
+  /// Share status error
+  ///
+  /// In de, this message translates to:
+  /// **'Freigabe konnte nicht geladen werden: {error}'**
+  String reflexResultShareLoadFailed(String error);
+
+  /// Share revoked snackbar
+  ///
+  /// In de, this message translates to:
+  /// **'Freigabe wurde widerrufen.'**
+  String get reflexResultShareRevoked;
+
+  /// Revoke error
+  ///
+  /// In de, this message translates to:
+  /// **'Freigabe konnte nicht widerrufen werden: {error}'**
+  String reflexResultShareRevokeFailed(String error);
+
+  /// Revoke button
+  ///
+  /// In de, this message translates to:
+  /// **'Freigabe widerrufen'**
+  String get reflexResultRevokeShare;
+
+  /// Share granted snackbar
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil wurde freigegeben.'**
+  String get reflexResultShareGranted;
+
+  /// Grant error
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil konnte nicht freigegeben werden: {error}'**
+  String reflexResultShareGrantFailed(String error);
+
+  /// Grant share button
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer darf Auswertung sehen'**
+  String get reflexResultAllowTrainer;
+
+  /// Score tile yes ratio
+  ///
+  /// In de, this message translates to:
+  /// **'{yesCount} von {answeredCount} beantworteten zugeordneten Fragen wurden mit Ja beantwortet.'**
+  String reflexResultYesOfAnswered(int yesCount, int answeredCount);
+
+  /// Empty additional answers
+  ///
+  /// In de, this message translates to:
+  /// **'Keine weiteren Angaben vorhanden.'**
+  String get reflexResultNoAdditional;
+
+  /// Empty result state
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine abgeschlossene Auswertung vorhanden.'**
+  String get reflexResultNoCompleted;
+
+  /// Empty result CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil starten'**
+  String get reflexResultStartProfile;
+
+  /// Demo validation
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte beantworte alle Fragen.'**
+  String get reflexDemoAnswerAll;
+
+  /// App bar action when signed in
+  ///
+  /// In de, this message translates to:
+  /// **'Volltest'**
+  String get reflexDemoFullTest;
+
+  /// Demo subject title
+  ///
+  /// In de, this message translates to:
+  /// **'Für wen machst du den Kurztest?'**
+  String get reflexDemoForWhomTitle;
+
+  /// Demo subject body
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Kurztest zeigt beispielhaft, wie eine Reflexprofil-Auswertung aussehen kann. Er wird nicht gespeichert.'**
+  String get reflexDemoForWhomBody;
+
+  /// Demo adult coming soon title
+  ///
+  /// In de, this message translates to:
+  /// **'Kurztest für mich selbst kommt bald'**
+  String get reflexDemoSelfComingSoonTitle;
+
+  /// Demo adult coming soon body
+  ///
+  /// In de, this message translates to:
+  /// **'Der Fragebogen für dich selbst befindet sich noch in Entwicklung.'**
+  String get reflexDemoSelfComingSoonBody;
+
+  /// Demo questionnaire title
+  ///
+  /// In de, this message translates to:
+  /// **'Kurztest'**
+  String get reflexDemoTitle;
+
+  /// Demo intro
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Demo zeigt beispielhaft, wie eine Reflexprofil-Auswertung aussehen kann. Sie wird nicht gespeichert und ersetzt keinen vollständigen Fragebogen.'**
+  String get reflexDemoIntro;
+
+  /// Evaluate demo CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Demo auswerten'**
+  String get reflexDemoEvaluate;
+
+  /// Guest CTA to auth
+  ///
+  /// In de, this message translates to:
+  /// **'Für den vollständigen Fragebogen anmelden'**
+  String get reflexDemoSignInForFull;
+
+  /// Signed-in CTA to full questionnaire
+  ///
+  /// In de, this message translates to:
+  /// **'Vollständigen Fragebogen starten'**
+  String get reflexDemoStartFull;
+
+  /// Guest hint under CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Nach der Registrierung kannst du Kinderprofile anlegen, den vollständigen Fragebogen speichern und die Auswertung später erneut ansehen.'**
+  String get reflexDemoGuestHint;
+
+  /// Signed-in hint under CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Im vollständigen Fragebogen werden alle Kategorien abgefragt und die Auswertung kann gespeichert werden.'**
+  String get reflexDemoSignedInHint;
+
+  /// Open full assessment button
+  ///
+  /// In de, this message translates to:
+  /// **'Volltest öffnen'**
+  String get reflexDemoOpenFullTest;
+
+  /// Auth CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Anmelden oder registrieren'**
+  String get reflexDemoSignInOrRegister;
+
+  /// Demo result app bar
+  ///
+  /// In de, this message translates to:
+  /// **'Demo-Auswertung'**
+  String get reflexDemoResultTitle;
+
+  /// Demo result headline
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Demo-Ergebnis'**
+  String get reflexDemoResultHeadline;
+
+  /// Demo result disclaimer
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Auswertung basiert nur auf dem Kurztest und ist keine Diagnose. Sie zeigt Antwortmuster — für ein vollständiges Reflexprofil sind alle 112 Fragen notwendig.'**
+  String get reflexDemoResultDisclaimer;
+
+  /// Demo chart empty
+  ///
+  /// In de, this message translates to:
+  /// **'Nicht genug Daten für die Grafik.'**
+  String get reflexDemoNotEnoughChartData;
+
+  /// Demo chart caption
+  ///
+  /// In de, this message translates to:
+  /// **'Die Grafik zeigt die stärksten Reflexbereiche aus deinen Kurztest-Antworten.'**
+  String get reflexDemoChartCaption;
+
+  /// Demo result account benefit for guests
+  ///
+  /// In de, this message translates to:
+  /// **'Mit einem Konto kannst du den vollständigen Fragebogen ausfüllen, dein Ergebnis speichern und mit deinem Trainer teilen.'**
+  String get reflexDemoAccountBenefitGuest;
+
+  /// Demo result account benefit when signed in
+  ///
+  /// In de, this message translates to:
+  /// **'Im vollständigen Fragebogen werden alle Kategorien erfasst und das Ergebnis dauerhaft gespeichert.'**
+  String get reflexDemoAccountBenefitSignedIn;
+
+  /// PDF document title
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil Zusammenfassung'**
+  String get reflexPdfTitle;
+
+  /// PDF generated-on line
+  ///
+  /// In de, this message translates to:
+  /// **'Erstellt am {date}'**
+  String reflexPdfGeneratedOn(String date);
+
+  /// PDF summary notice
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Auswertung zeigt Antwortmuster und Hinweisstärken. Sie ersetzt keine medizinische oder therapeutische Diagnose.'**
+  String get reflexPdfSummaryNotice;
+
+  /// PDF safety notice
+  ///
+  /// In de, this message translates to:
+  /// **'{count} Sicherheits-/Rücksprache-Hinweise wurden bestätigt. Training sollte nur nach ausdrücklicher Rücksprache mit Arzt, Therapeut oder Psychologe erfolgen.'**
+  String reflexPdfSafetyNotice(int count);
+
+  /// PDF scores section title
+  ///
+  /// In de, this message translates to:
+  /// **'Übersicht Reflexbereiche'**
+  String get reflexPdfOverviewTitle;
+
+  /// PDF table header
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexbereich'**
+  String get reflexPdfAreaHeader;
+
+  /// PDF table header
+  ///
+  /// In de, this message translates to:
+  /// **'Prozent'**
+  String get reflexPdfPercentHeader;
+
+  /// PDF table header
+  ///
+  /// In de, this message translates to:
+  /// **'Einordnung'**
+  String get reflexPdfClassificationHeader;
+
+  /// PDF table header
+  ///
+  /// In de, this message translates to:
+  /// **'Ja / Beantwortet'**
+  String get reflexPdfYesAnsweredHeader;
+
+  /// PDF answers title
+  ///
+  /// In de, this message translates to:
+  /// **'Antwortübersicht'**
+  String get reflexPdfAnswersTitle;
+
+  /// PDF answers header
+  ///
+  /// In de, this message translates to:
+  /// **'Frage'**
+  String get reflexPdfQuestionHeader;
+
+  /// PDF answers header
+  ///
+  /// In de, this message translates to:
+  /// **'Antwort'**
+  String get reflexPdfAnswerHeader;
+
+  /// PDF empty answer placeholder
+  ///
+  /// In de, this message translates to:
+  /// **'-'**
+  String get reflexPdfEmptyAnswer;
+
+  /// PDF temp file name stem
+  ///
+  /// In de, this message translates to:
+  /// **'reflexjourney_reflexprofil'**
+  String get reflexPdfFileNameStem;
+
+  /// Validation when subject display name is empty
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte gib einen Namen an.'**
+  String get reflexProfileNameRequired;
 }
 
 class _AppLocalizationsDelegate

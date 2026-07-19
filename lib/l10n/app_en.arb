@@ -1412,5 +1412,670 @@
   "trainerAlertDay28Body": "Book the appointment for the isometric partner exercise now.",
   "@trainerAlertDay28Body": {"description": "Trainer notification body when a trainee reaches day 28"},
   "traineeFallbackName": "Your trainee",
-  "@traineeFallbackName": {"description": "Fallback name when a trainee has no display name or email"}
+  "@traineeFallbackName": {"description": "Fallback name when a trainee has no display name or email"},
+  "answerUnknown": "I don't know",
+  "@answerUnknown": {
+    "description": "Yes/no/unknown answer option"
+  },
+  "scoreBandStrong": "strong",
+  "@scoreBandStrong": {
+    "description": "Reflex score band: strong"
+  },
+  "scoreBandElevated": "elevated",
+  "@scoreBandElevated": {
+    "description": "Reflex score band: elevated"
+  },
+  "scoreBandIndication": "indication",
+  "@scoreBandIndication": {
+    "description": "Reflex score band: indication"
+  },
+  "scoreBandInconspicuous": "inconspicuous",
+  "@scoreBandInconspicuous": {
+    "description": "Reflex score band: inconspicuous"
+  },
+  "scoreBandInsufficientData": "not enough data",
+  "@scoreBandInsufficientData": {
+    "description": "Reflex score band: insufficient data"
+  },
+  "monthsCount": "{count, plural, =1{{count} month} other{{count} months}}",
+  "@monthsCount": {
+    "description": "Count of months",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yearsCount": "{count, plural, =1{{count} year} other{{count} years}}",
+  "@yearsCount": {
+    "description": "Count of years",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "leave": "Leave",
+  "@leave": {
+    "description": "Dialog action to leave a flow"
+  },
+  "resume": "Resume",
+  "@resume": {
+    "description": "Dialog action to resume a draft"
+  },
+  "finish": "Finish",
+  "@finish": {
+    "description": "Primary action to finish a questionnaire"
+  },
+  "switchAction": "Switch",
+  "@switchAction": {
+    "description": "Switch profile/subject action"
+  },
+  "selfName": "Me",
+  "@selfName": {
+    "description": "Default display name for adult self profile"
+  },
+  "analysisPlaceholderTitle": "Analysis",
+  "@analysisPlaceholderTitle": {
+    "description": "Analysis placeholder screen title"
+  },
+  "analysisPlaceholderContinue": "Continue to Consent",
+  "@analysisPlaceholderContinue": {
+    "description": "CTA to consent"
+  },
+  "analysisPlaceholderHeadline": "Your personal baseline analysis will start here soon.",
+  "@analysisPlaceholderHeadline": {
+    "description": "Analysis placeholder headline"
+  },
+  "analysisPlaceholderBody": "Before your first training, this will become a short questionnaire. It will help Reflex Journey understand your current baseline and improve the recommendation.",
+  "@analysisPlaceholderBody": {
+    "description": "Analysis placeholder body"
+  },
+  "analysisPlaceholderStepQuestionnaireTitle": "Questionnaire",
+  "@analysisPlaceholderStepQuestionnaireTitle": {
+    "description": "Placeholder step title"
+  },
+  "analysisPlaceholderStepQuestionnaireBody": "Symptoms, load, training goal and prior experience.",
+  "@analysisPlaceholderStepQuestionnaireBody": {
+    "description": "Placeholder step body"
+  },
+  "analysisPlaceholderStepAssessmentTitle": "Assessment",
+  "@analysisPlaceholderStepAssessmentTitle": {
+    "description": "Placeholder assessment step title"
+  },
+  "analysisPlaceholderStepAssessmentBody": "A calm assessment of your current starting point.",
+  "@analysisPlaceholderStepAssessmentBody": {
+    "description": "Placeholder assessment step body"
+  },
+  "durationRecAccept": "Use Recommendation",
+  "@durationRecAccept": {
+    "description": "Accept recommended duration"
+  },
+  "durationRecSkippedBody": "You skipped the reflex profile, or there is no results summary for this profile yet. The recommendation therefore uses the standard logic based on your answer about isometric partner training.",
+  "@durationRecSkippedBody": {
+    "description": "Duration recommendation when assessment unused"
+  },
+  "durationRecRangeWithTrainer": "4 to 6",
+  "@durationRecRangeWithTrainer": {
+    "description": "Week range when user had trainer"
+  },
+  "durationRecRangeWithoutTrainer": "6 to 8",
+  "@durationRecRangeWithoutTrainer": {
+    "description": "Week range when user had no trainer"
+  },
+  "durationRecTrainerAlready": "already",
+  "@durationRecTrainerAlready": {
+    "description": "Trainer status fragment: already"
+  },
+  "durationRecTrainerNotYet": "not yet",
+  "@durationRecTrainerNotYet": {
+    "description": "Trainer status fragment: not yet"
+  },
+  "durationRecMoroBody": "This recommendation is based on your personal reflex profile results.\n\nFor the Moro package we look at both Moro and FPR, because both matter in this summary. The stronger indication is at {percent} and sets the duration level.\n\nBecause you have {trainerStatus} done isometric partner training with a professional, we use the {range}-week recommendation range. You can use the recommendation or adjust the duration manually.",
+  "@durationRecMoroBody": {
+    "description": "Moro package duration recommendation body",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "trainerStatus": {
+        "type": "String"
+      },
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "durationRecGenericBody": "This recommendation is based on your personal reflex profile results. Based on your assessed reflex tendency, we recommend {weeks} weeks for this package.\n\nBecause you have {trainerStatus} done isometric partner training with a professional, we use the {range}-week recommendation range.",
+  "@durationRecGenericBody": {
+    "description": "Generic package duration recommendation body",
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      },
+      "trainerStatus": {
+        "type": "String"
+      },
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "durationRecTendency": "{label} tendency: {percent}",
+  "@durationRecTendency": {
+    "description": "Reflex tendency line in duration recommendation",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "durationRecStrongerHint": "The stronger indication determines the duration.",
+  "@durationRecStrongerHint": {
+    "description": "Note when multiple reflexes considered"
+  },
+  "durationRecNoData": "insufficient data",
+  "@durationRecNoData": {
+    "description": "Percent placeholder when missing"
+  },
+  "radarNotEnoughData": "Not enough data",
+  "@radarNotEnoughData": {
+    "description": "Radar chart empty state"
+  },
+  "reflexProfileNameBirthRequired": "Please enter a name and date of birth.",
+  "@reflexProfileNameBirthRequired": {
+    "description": "Validation error"
+  },
+  "reflexProfileBirthFuture": "The date of birth cannot be in the future.",
+  "@reflexProfileBirthFuture": {
+    "description": "Validation error"
+  },
+  "reflexProfileCreateChildFailed": "Couldn't create the child profile: {error}",
+  "@reflexProfileCreateChildFailed": {
+    "description": "Error creating child profile",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "reflexProfileClearanceTitle": "Consultation Required",
+  "@reflexProfileClearanceTitle": {
+    "description": "Professional clearance dialog title"
+  },
+  "reflexProfileClearanceBody": "For this answer, we strongly recommend training only after consultation and with the explicit approval of a doctor, therapist, or psychologist who cares for you.\n\nBy continuing, you confirm that you will take this consultation into account on your own responsibility and train with appropriate accompaniment or clearance.\n\nQuestion: {question}",
+  "@reflexProfileClearanceBody": {
+    "description": "Professional clearance dialog body",
+    "placeholders": {
+      "question": {
+        "type": "String"
+      }
+    }
+  },
+  "reflexProfileClearanceConfirm": "Understood and Confirmed",
+  "@reflexProfileClearanceConfirm": {
+    "description": "Clearance dialog confirm button"
+  },
+  "reflexProfileAnswerAllChoice": "Please answer all choice and number questions.",
+  "@reflexProfileAnswerAllChoice": {
+    "description": "Submit validation"
+  },
+  "reflexProfileCompleteFailed": "Couldn't complete the reflex profile: {error}",
+  "@reflexProfileCompleteFailed": {
+    "description": "Submit error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "reflexProfileLeaveTitle": "Leave Questionnaire?",
+  "@reflexProfileLeaveTitle": {
+    "description": "Exit confirmation title"
+  },
+  "reflexProfileLeaveBody": "Your progress will be saved. You can continue anytime.",
+  "@reflexProfileLeaveBody": {
+    "description": "Exit confirmation body"
+  },
+  "reflexProfileResumeTitle": "Resume Questionnaire?",
+  "@reflexProfileResumeTitle": {
+    "description": "Resume draft dialog title"
+  },
+  "reflexProfileResumeBody": "You already started this questionnaire. Do you want to continue where you left off?",
+  "@reflexProfileResumeBody": {
+    "description": "Resume draft dialog body"
+  },
+  "reflexProfileStartOver": "Start Over",
+  "@reflexProfileStartOver": {
+    "description": "Discard draft and restart"
+  },
+  "reflexProfileLoadProfilesFailed": "Couldn't load profiles: {error}",
+  "@reflexProfileLoadProfilesFailed": {
+    "description": "Profiles load error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "reflexProfileForWhomTitle": "Who is this questionnaire for?",
+  "@reflexProfileForWhomTitle": {
+    "description": "Subject selection title"
+  },
+  "reflexProfileForWhomBody": "The questionnaire differs depending on whether it is filled out for a child or for yourself.",
+  "@reflexProfileForWhomBody": {
+    "description": "Subject selection body"
+  },
+  "reflexProfileForMyChild": "For My Child",
+  "@reflexProfileForMyChild": {
+    "description": "Choose child subject"
+  },
+  "reflexProfileParentQuestionnaire": "Parent questionnaire",
+  "@reflexProfileParentQuestionnaire": {
+    "description": "Child path subtitle"
+  },
+  "reflexProfileForMyself": "For Me",
+  "@reflexProfileForMyself": {
+    "description": "Choose adult self subject"
+  },
+  "reflexProfileForMyselfComingSoon": "For myself · coming soon",
+  "@reflexProfileForMyselfComingSoon": {
+    "description": "Adult path disabled subtitle"
+  },
+  "reflexProfileAdultComingSoonTitle": "Adult Questionnaire Coming Soon",
+  "@reflexProfileAdultComingSoonTitle": {
+    "description": "Adult coming soon title"
+  },
+  "reflexProfileAdultComingSoonBody": "The adult questionnaire is still in development. You'll soon be able to fill it out here.",
+  "@reflexProfileAdultComingSoonBody": {
+    "description": "Adult coming soon body"
+  },
+  "reflexProfileOrientationTitle": "Guidance Only — Not a Verdict",
+  "@reflexProfileOrientationTitle": {
+    "description": "Start screen disclaimer title"
+  },
+  "reflexProfileOrientationBody": "The reflex profile gathers observations and shows indication strengths. It is not a substitute for advice from a qualified professional.",
+  "@reflexProfileOrientationBody": {
+    "description": "Start screen disclaimer body"
+  },
+  "reflexProfileSelectChild": "Select Child Profile",
+  "@reflexProfileSelectChild": {
+    "description": "Child profile picker heading"
+  },
+  "reflexProfileStartQuestionnaire": "Start Questionnaire",
+  "@reflexProfileStartQuestionnaire": {
+    "description": "Start questionnaire CTA"
+  },
+  "reflexProfileNewChild": "New Child Profile",
+  "@reflexProfileNewChild": {
+    "description": "Create child profile heading"
+  },
+  "reflexProfileNameOrNickname": "Name or nickname",
+  "@reflexProfileNameOrNickname": {
+    "description": "Child name field label"
+  },
+  "reflexProfilePickBirthDate": "Select date of birth",
+  "@reflexProfilePickBirthDate": {
+    "description": "Date picker help text"
+  },
+  "reflexProfileBirthDateRequired": "Date of birth *",
+  "@reflexProfileBirthDateRequired": {
+    "description": "Birth date field label"
+  },
+  "reflexProfileBirthDateHelper": "Required – needed for the age assessment",
+  "@reflexProfileBirthDateHelper": {
+    "description": "Birth date helper"
+  },
+  "reflexProfileSelectDate": "Select date",
+  "@reflexProfileSelectDate": {
+    "description": "Empty date placeholder"
+  },
+  "reflexProfileCreateAndStart": "Create Profile and Start",
+  "@reflexProfileCreateAndStart": {
+    "description": "Create child profile CTA"
+  },
+  "reflexProfileAnswerRequiredSection": "Please answer all required questions in this section.",
+  "@reflexProfileAnswerRequiredSection": {
+    "description": "Module validation"
+  },
+  "reflexProfileChildFallback": "Child profile",
+  "@reflexProfileChildFallback": {
+    "description": "Fallback when no child name"
+  },
+  "reflexProfileSectionOf": "Section {current} of {total}",
+  "@reflexProfileSectionOf": {
+    "description": "Module progress",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "reflexProfileWhatIsMeant": "What does this mean?",
+  "@reflexProfileWhatIsMeant": {
+    "description": "Help expansion title"
+  },
+  "reflexProfileMonthsLabel": "Months",
+  "@reflexProfileMonthsLabel": {
+    "description": "Months input label"
+  },
+  "reflexProfileFreeTextLabel": "Free text",
+  "@reflexProfileFreeTextLabel": {
+    "description": "Free text input label"
+  },
+  "reflexProfileOtherLabel": "Other / notes",
+  "@reflexProfileOtherLabel": {
+    "description": "Multi-select free text label"
+  },
+  "reflexResultTitle": "Reflex Profile Results",
+  "@reflexResultTitle": {
+    "description": "Result screen app bar"
+  },
+  "reflexResultLoadFailed": "Couldn't load results: {error}",
+  "@reflexResultLoadFailed": {
+    "description": "Result load error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "reflexResultIndicationStrengths": "Indication Strengths",
+  "@reflexResultIndicationStrengths": {
+    "description": "Result headline"
+  },
+  "reflexResultDisclaimer": "These results show answer patterns and are not a substitute for advice from a qualified professional.",
+  "@reflexResultDisclaimer": {
+    "description": "Result disclaimer"
+  },
+  "reflexResultChartCaption": "The chart shows the strongest reflex areas from your answer pattern.",
+  "@reflexResultChartCaption": {
+    "description": "Radar caption"
+  },
+  "reflexResultWarningNotice": "{count, plural, =1{You confirmed 1 indication where we strongly recommend consulting a doctor, therapist, or psychologist. Trainer guidance is especially helpful in your case.} other{You confirmed {count} indications where we strongly recommend consulting a doctor, therapist, or psychologist. Trainer guidance is especially helpful in your case.}}",
+  "@reflexResultWarningNotice": {
+    "description": "Warning confirmations banner",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reflexResultAreasTitle": "Reflex Areas",
+  "@reflexResultAreasTitle": {
+    "description": "Score list title"
+  },
+  "reflexResultAdditionalInfo": "Additional Details",
+  "@reflexResultAdditionalInfo": {
+    "description": "Additional answers section"
+  },
+  "reflexResultSharePdf": "Share PDF Summary",
+  "@reflexResultSharePdf": {
+    "description": "Share PDF button"
+  },
+  "reflexResultToDashboard": "Go to Dashboard",
+  "@reflexResultToDashboard": {
+    "description": "Dashboard CTA"
+  },
+  "reflexResultShareSubject": "Reflex Journey Reflex Profile",
+  "@reflexResultShareSubject": {
+    "description": "PDF share subject"
+  },
+  "reflexResultShareText": "Reflex Journey Reflex Profile Summary",
+  "@reflexResultShareText": {
+    "description": "PDF share text"
+  },
+  "reflexResultPdfFailed": "Couldn't create the PDF: {error}",
+  "@reflexResultPdfFailed": {
+    "description": "PDF creation error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "reflexResultShareWithTrainer": "Share with Trainer",
+  "@reflexResultShareWithTrainer": {
+    "description": "Trainer share card title"
+  },
+  "reflexResultShareWithTrainerBody": "You can share your full reflex profile with {trainerName}. This supports your shared guidance and can be revoked later.",
+  "@reflexResultShareWithTrainerBody": {
+    "description": "Trainer share card body",
+    "placeholders": {
+      "trainerName": {
+        "type": "String"
+      }
+    }
+  },
+  "reflexResultShareLoadFailed": "Couldn't load sharing status: {error}",
+  "@reflexResultShareLoadFailed": {
+    "description": "Share status error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "reflexResultShareRevoked": "Sharing was revoked.",
+  "@reflexResultShareRevoked": {
+    "description": "Share revoked snackbar"
+  },
+  "reflexResultShareRevokeFailed": "Couldn't revoke sharing: {error}",
+  "@reflexResultShareRevokeFailed": {
+    "description": "Revoke error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "reflexResultRevokeShare": "Revoke Sharing",
+  "@reflexResultRevokeShare": {
+    "description": "Revoke button"
+  },
+  "reflexResultShareGranted": "Reflex profile was shared.",
+  "@reflexResultShareGranted": {
+    "description": "Share granted snackbar"
+  },
+  "reflexResultShareGrantFailed": "Couldn't share the reflex profile: {error}",
+  "@reflexResultShareGrantFailed": {
+    "description": "Grant error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "reflexResultAllowTrainer": "Allow Trainer to See Results",
+  "@reflexResultAllowTrainer": {
+    "description": "Grant share button"
+  },
+  "reflexResultYesOfAnswered": "{yesCount} of {answeredCount} answered linked questions were answered yes.",
+  "@reflexResultYesOfAnswered": {
+    "description": "Score tile yes ratio",
+    "placeholders": {
+      "yesCount": {
+        "type": "int"
+      },
+      "answeredCount": {
+        "type": "int"
+      }
+    }
+  },
+  "reflexResultNoAdditional": "No additional details available.",
+  "@reflexResultNoAdditional": {
+    "description": "Empty additional answers"
+  },
+  "reflexResultNoCompleted": "No completed results yet.",
+  "@reflexResultNoCompleted": {
+    "description": "Empty result state"
+  },
+  "reflexResultStartProfile": "Start Reflex Profile",
+  "@reflexResultStartProfile": {
+    "description": "Empty result CTA"
+  },
+  "reflexDemoAnswerAll": "Please answer all questions.",
+  "@reflexDemoAnswerAll": {
+    "description": "Demo validation"
+  },
+  "reflexDemoFullTest": "Full Assessment",
+  "@reflexDemoFullTest": {
+    "description": "App bar action when signed in"
+  },
+  "reflexDemoForWhomTitle": "Who is the short assessment for?",
+  "@reflexDemoForWhomTitle": {
+    "description": "Demo subject title"
+  },
+  "reflexDemoForWhomBody": "This short assessment shows an example of what reflex profile results can look like. It is not saved.",
+  "@reflexDemoForWhomBody": {
+    "description": "Demo subject body"
+  },
+  "reflexDemoSelfComingSoonTitle": "Short Assessment for Myself Coming Soon",
+  "@reflexDemoSelfComingSoonTitle": {
+    "description": "Demo adult coming soon title"
+  },
+  "reflexDemoSelfComingSoonBody": "The questionnaire for yourself is still in development.",
+  "@reflexDemoSelfComingSoonBody": {
+    "description": "Demo adult coming soon body"
+  },
+  "reflexDemoTitle": "Short Assessment",
+  "@reflexDemoTitle": {
+    "description": "Demo questionnaire title"
+  },
+  "reflexDemoIntro": "This demo shows an example of what reflex profile results can look like. It is not saved and does not replace a full questionnaire.",
+  "@reflexDemoIntro": {
+    "description": "Demo intro"
+  },
+  "reflexDemoEvaluate": "See Demo Results",
+  "@reflexDemoEvaluate": {
+    "description": "Evaluate demo CTA"
+  },
+  "reflexDemoSignInForFull": "Sign In for Full Questionnaire",
+  "@reflexDemoSignInForFull": {
+    "description": "Guest CTA to auth"
+  },
+  "reflexDemoStartFull": "Start Full Questionnaire",
+  "@reflexDemoStartFull": {
+    "description": "Signed-in CTA to full questionnaire"
+  },
+  "reflexDemoGuestHint": "After signing up you can create child profiles, save the full questionnaire, and review the results later.",
+  "@reflexDemoGuestHint": {
+    "description": "Guest hint under CTA"
+  },
+  "reflexDemoSignedInHint": "The full questionnaire covers all categories and the results can be saved.",
+  "@reflexDemoSignedInHint": {
+    "description": "Signed-in hint under CTA"
+  },
+  "reflexDemoOpenFullTest": "Open Full Assessment",
+  "@reflexDemoOpenFullTest": {
+    "description": "Open full assessment button"
+  },
+  "reflexDemoSignInOrRegister": "Sign In or Sign Up",
+  "@reflexDemoSignInOrRegister": {
+    "description": "Auth CTA"
+  },
+  "reflexDemoResultTitle": "Demo Results",
+  "@reflexDemoResultTitle": {
+    "description": "Demo result app bar"
+  },
+  "reflexDemoResultHeadline": "Your Demo Result",
+  "@reflexDemoResultHeadline": {
+    "description": "Demo result headline"
+  },
+  "reflexDemoResultDisclaimer": "These results are based only on the short assessment and are an illustrative snapshot, not a professional evaluation. They show answer patterns — a complete reflex profile needs all 112 questions.",
+  "@reflexDemoResultDisclaimer": {
+    "description": "Demo result disclaimer"
+  },
+  "reflexDemoNotEnoughChartData": "Not enough data for the chart.",
+  "@reflexDemoNotEnoughChartData": {
+    "description": "Demo chart empty"
+  },
+  "reflexDemoChartCaption": "The chart shows the strongest reflex areas from your short-assessment answers.",
+  "@reflexDemoChartCaption": {
+    "description": "Demo chart caption"
+  },
+  "reflexDemoAccountBenefitGuest": "With an account you can complete the full questionnaire, save your result, and share it with your trainer.",
+  "@reflexDemoAccountBenefitGuest": {
+    "description": "Demo result account benefit for guests"
+  },
+  "reflexDemoAccountBenefitSignedIn": "The full questionnaire covers all categories and saves the result permanently.",
+  "@reflexDemoAccountBenefitSignedIn": {
+    "description": "Demo result account benefit when signed in"
+  },
+  "reflexPdfTitle": "Reflex Profile Summary",
+  "@reflexPdfTitle": {
+    "description": "PDF document title"
+  },
+  "reflexPdfGeneratedOn": "Created on {date}",
+  "@reflexPdfGeneratedOn": {
+    "description": "PDF generated-on line",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "reflexPdfSummaryNotice": "These results show answer patterns and indication strengths. They are not a substitute for advice from a qualified professional.",
+  "@reflexPdfSummaryNotice": {
+    "description": "PDF summary notice"
+  },
+  "reflexPdfSafetyNotice": "{count, plural, =1{1 safety/consultation notice was confirmed. Training should only happen after explicit consultation with a doctor, therapist, or psychologist.} other{{count} safety/consultation notices were confirmed. Training should only happen after explicit consultation with a doctor, therapist, or psychologist.}}",
+  "@reflexPdfSafetyNotice": {
+    "description": "PDF safety notice",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reflexPdfOverviewTitle": "Reflex Areas Overview",
+  "@reflexPdfOverviewTitle": {
+    "description": "PDF scores section title"
+  },
+  "reflexPdfAreaHeader": "Reflex area",
+  "@reflexPdfAreaHeader": {
+    "description": "PDF table header"
+  },
+  "reflexPdfPercentHeader": "Percent",
+  "@reflexPdfPercentHeader": {
+    "description": "PDF table header"
+  },
+  "reflexPdfClassificationHeader": "Classification",
+  "@reflexPdfClassificationHeader": {
+    "description": "PDF table header"
+  },
+  "reflexPdfYesAnsweredHeader": "Yes / Answered",
+  "@reflexPdfYesAnsweredHeader": {
+    "description": "PDF table header"
+  },
+  "reflexPdfAnswersTitle": "Answer Overview",
+  "@reflexPdfAnswersTitle": {
+    "description": "PDF answers title"
+  },
+  "reflexPdfQuestionHeader": "Question",
+  "@reflexPdfQuestionHeader": {
+    "description": "PDF answers header"
+  },
+  "reflexPdfAnswerHeader": "Answer",
+  "@reflexPdfAnswerHeader": {
+    "description": "PDF answers header"
+  },
+  "reflexPdfEmptyAnswer": "—",
+  "@reflexPdfEmptyAnswer": {
+    "description": "PDF empty answer placeholder"
+  },
+  "reflexPdfFileNameStem": "reflexjourney_reflex_profile",
+  "@reflexPdfFileNameStem": {
+    "description": "PDF temp file name stem"
+  },
+  "reflexProfileNameRequired": "Please enter a name.",
+  "@reflexProfileNameRequired": {
+    "description": "Validation when subject display name is empty"
+  }
 }

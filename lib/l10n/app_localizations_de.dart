@@ -2837,4 +2837,498 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get traineeFallbackName => 'Dein Trainee';
+
+  @override
+  String get answerUnknown => 'Weiß ich nicht';
+
+  @override
+  String get scoreBandStrong => 'stark ausgeprägt';
+
+  @override
+  String get scoreBandElevated => 'auffällig';
+
+  @override
+  String get scoreBandIndication => 'Anzeichen';
+
+  @override
+  String get scoreBandInconspicuous => 'unauffällig';
+
+  @override
+  String get scoreBandInsufficientData => 'zu wenig Daten';
+
+  @override
+  String monthsCount(int count) {
+    return '$count Monate';
+  }
+
+  @override
+  String yearsCount(int count) {
+    return '$count Jahre';
+  }
+
+  @override
+  String get leave => 'Verlassen';
+
+  @override
+  String get resume => 'Fortsetzen';
+
+  @override
+  String get finish => 'Abschließen';
+
+  @override
+  String get switchAction => 'Wechseln';
+
+  @override
+  String get selfName => 'Ich';
+
+  @override
+  String get analysisPlaceholderTitle => 'Analyse';
+
+  @override
+  String get analysisPlaceholderContinue => 'Weiter zur Zustimmung';
+
+  @override
+  String get analysisPlaceholderHeadline =>
+      'Hier startet bald deine persönliche Standortanalyse.';
+
+  @override
+  String get analysisPlaceholderBody =>
+      'Vor dem ersten Training wird hier ein kurzer Fragebogen stehen. Damit kann Reflex Journey deinen aktuellen Stand besser einordnen und die Empfehlung sauberer machen.';
+
+  @override
+  String get analysisPlaceholderStepQuestionnaireTitle => 'Fragebogen';
+
+  @override
+  String get analysisPlaceholderStepQuestionnaireBody =>
+      'Symptome, Belastung, Trainingsziel und bisherige Erfahrung.';
+
+  @override
+  String get analysisPlaceholderStepAssessmentTitle => 'Auswertung';
+
+  @override
+  String get analysisPlaceholderStepAssessmentBody =>
+      'Eine ruhige Einschätzung deines aktuellen Ausgangspunkts.';
+
+  @override
+  String get durationRecAccept => 'Empfehlung übernehmen';
+
+  @override
+  String get durationRecSkippedBody =>
+      'Du hast das Reflexprofil übersprungen oder es liegt für dieses Profil noch keine Auswertung vor. Die Empfehlung nutzt deshalb die Standardlogik anhand deiner Angabe zum isometrischen Partnertraining.';
+
+  @override
+  String get durationRecRangeWithTrainer => '4 bis 6';
+
+  @override
+  String get durationRecRangeWithoutTrainer => '6 bis 8';
+
+  @override
+  String get durationRecTrainerAlready => 'bereits';
+
+  @override
+  String get durationRecTrainerNotYet => 'noch nicht';
+
+  @override
+  String durationRecMoroBody(
+      String percent, String trainerStatus, String range) {
+    return 'Diese Empfehlung basiert auf deiner persönlichen Reflexprofil-Auswertung.\n\nFür das Moro-Paket betrachten wir sowohl Moro als auch FLR, weil beide in dieser Auswertung relevant sind. Der stärkere Hinweis liegt bei $percent und bestimmt die Dauerstufe.\n\nDa du $trainerStatus isometrisches Partnertraining mit einer Fachperson gemacht hast, verwenden wir den Empfehlungsbereich $range Wochen. Du kannst die Empfehlung übernehmen oder die Dauer manuell anpassen.';
+  }
+
+  @override
+  String durationRecGenericBody(int weeks, String trainerStatus, String range) {
+    return 'Diese Empfehlung basiert auf deiner persönlichen Reflexprofil-Auswertung. Aufgrund deiner ermittelten Reflex-Tendenz empfehlen wir für dieses Paket eine Dauer von $weeks Wochen.\n\nDa du $trainerStatus isometrisches Partnertraining mit einer Fachperson gemacht hast, verwenden wir den Empfehlungsbereich $range Wochen.';
+  }
+
+  @override
+  String durationRecTendency(String label, String percent) {
+    return '$label-Tendenz: $percent';
+  }
+
+  @override
+  String get durationRecStrongerHint =>
+      'Für die Dauer zählt der stärkere Hinweis.';
+
+  @override
+  String get durationRecNoData => 'keine ausreichenden Daten';
+
+  @override
+  String get radarNotEnoughData => 'Zu wenig Daten';
+
+  @override
+  String get reflexProfileNameBirthRequired =>
+      'Bitte gib einen Namen und das Geburtsdatum an.';
+
+  @override
+  String get reflexProfileBirthFuture =>
+      'Das Geburtsdatum darf nicht in der Zukunft liegen.';
+
+  @override
+  String reflexProfileCreateChildFailed(String error) {
+    return 'Kinderprofil konnte nicht angelegt werden: $error';
+  }
+
+  @override
+  String get reflexProfileClearanceTitle => 'Rücksprache erforderlich';
+
+  @override
+  String reflexProfileClearanceBody(String question) {
+    return 'Bei dieser Angabe empfehlen wir dringend, das Training nur nach Rücksprache und mit ausdrücklicher Zustimmung eines behandelnden Arztes, Therapeuten oder Psychologen durchzuführen.\n\nMit dem Fortfahren bestätigst du, dass du diese Rücksprache eigenverantwortlich berücksichtigst und das Training entsprechend begleitet oder freigegeben durchführst.\n\nFrage: $question';
+  }
+
+  @override
+  String get reflexProfileClearanceConfirm => 'Verstanden und bestätigt';
+
+  @override
+  String get reflexProfileAnswerAllChoice =>
+      'Bitte beantworte alle Auswahl- und Zahlenfragen.';
+
+  @override
+  String reflexProfileCompleteFailed(String error) {
+    return 'Reflexprofil konnte nicht abgeschlossen werden: $error';
+  }
+
+  @override
+  String get reflexProfileLeaveTitle => 'Fragebogen verlassen?';
+
+  @override
+  String get reflexProfileLeaveBody =>
+      'Dein Fortschritt wird gespeichert. Du kannst jederzeit weitermachen.';
+
+  @override
+  String get reflexProfileResumeTitle => 'Fragebogen fortsetzen?';
+
+  @override
+  String get reflexProfileResumeBody =>
+      'Du hast diesen Fragebogen bereits begonnen. Möchtest du dort weitermachen, wo du aufgehört hast?';
+
+  @override
+  String get reflexProfileStartOver => 'Von vorne';
+
+  @override
+  String reflexProfileLoadProfilesFailed(String error) {
+    return 'Profile konnten nicht geladen werden: $error';
+  }
+
+  @override
+  String get reflexProfileForWhomTitle =>
+      'Für wen machst du diesen Fragebogen?';
+
+  @override
+  String get reflexProfileForWhomBody =>
+      'Der Fragebogen unterscheidet sich je nachdem, ob er für ein Kind oder für dich selbst ausgefüllt wird.';
+
+  @override
+  String get reflexProfileForMyChild => 'Für mein Kind';
+
+  @override
+  String get reflexProfileParentQuestionnaire => 'Elternfragebogen';
+
+  @override
+  String get reflexProfileForMyself => 'Für mich';
+
+  @override
+  String get reflexProfileForMyselfComingSoon =>
+      'Für mich selbst · bald verfügbar';
+
+  @override
+  String get reflexProfileAdultComingSoonTitle =>
+      'Erwachsenenfragebogen kommt bald';
+
+  @override
+  String get reflexProfileAdultComingSoonBody =>
+      'Der Fragebogen für Erwachsene befindet sich noch in Entwicklung. Du kannst ihn bald hier ausfüllen.';
+
+  @override
+  String get reflexProfileOrientationTitle =>
+      'Eine Orientierung, keine Diagnose';
+
+  @override
+  String get reflexProfileOrientationBody =>
+      'Das Reflexprofil sammelt Beobachtungen und zeigt Hinweisstärken. Es ersetzt keine medizinische oder therapeutische Diagnose.';
+
+  @override
+  String get reflexProfileSelectChild => 'Kinderprofil auswählen';
+
+  @override
+  String get reflexProfileStartQuestionnaire => 'Fragebogen starten';
+
+  @override
+  String get reflexProfileNewChild => 'Neues Kinderprofil';
+
+  @override
+  String get reflexProfileNameOrNickname => 'Name oder Spitzname';
+
+  @override
+  String get reflexProfilePickBirthDate => 'Geburtsdatum auswählen';
+
+  @override
+  String get reflexProfileBirthDateRequired => 'Geburtsdatum *';
+
+  @override
+  String get reflexProfileBirthDateHelper =>
+      'Pflichtfeld – wird für die Altersauswertung benötigt';
+
+  @override
+  String get reflexProfileSelectDate => 'Datum auswählen';
+
+  @override
+  String get reflexProfileCreateAndStart => 'Profil anlegen und starten';
+
+  @override
+  String get reflexProfileAnswerRequiredSection =>
+      'Bitte beantworte alle Pflichtfragen in diesem Abschnitt.';
+
+  @override
+  String get reflexProfileChildFallback => 'Kinderprofil';
+
+  @override
+  String reflexProfileSectionOf(int current, int total) {
+    return 'Abschnitt $current von $total';
+  }
+
+  @override
+  String get reflexProfileWhatIsMeant => 'Was ist gemeint?';
+
+  @override
+  String get reflexProfileMonthsLabel => 'Monate';
+
+  @override
+  String get reflexProfileFreeTextLabel => 'Freitext';
+
+  @override
+  String get reflexProfileOtherLabel => 'Sonstiges / Ergänzung';
+
+  @override
+  String get reflexResultTitle => 'Reflexprofil-Auswertung';
+
+  @override
+  String reflexResultLoadFailed(String error) {
+    return 'Auswertung konnte nicht geladen werden: $error';
+  }
+
+  @override
+  String get reflexResultIndicationStrengths => 'Hinweistärken';
+
+  @override
+  String get reflexResultDisclaimer =>
+      'Diese Auswertung zeigt Antwortmuster und ersetzt keine medizinische oder therapeutische Diagnose.';
+
+  @override
+  String get reflexResultChartCaption =>
+      'Die Grafik zeigt die stärksten Reflexbereiche aus deinem Antwortmuster.';
+
+  @override
+  String reflexResultWarningNotice(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Du hast $count Hinweise bestätigt, bei denen wir dringend Rücksprache mit Arzt, Therapeut oder Psychologe empfehlen. Eine Trainerbegleitung ist in deinem Fall besonders sinnvoll.',
+      one:
+          'Du hast 1 Hinweis bestätigt, bei dem wir dringend Rücksprache mit Arzt, Therapeut oder Psychologe empfehlen. Eine Trainerbegleitung ist in deinem Fall besonders sinnvoll.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reflexResultAreasTitle => 'Reflexbereiche';
+
+  @override
+  String get reflexResultAdditionalInfo => 'Ergänzende Angaben';
+
+  @override
+  String get reflexResultSharePdf => 'PDF-Zusammenfassung teilen';
+
+  @override
+  String get reflexResultToDashboard => 'Zum Dashboard';
+
+  @override
+  String get reflexResultShareSubject => 'Reflex Journey Reflexprofil';
+
+  @override
+  String get reflexResultShareText =>
+      'Reflex Journey Reflexprofil-Zusammenfassung';
+
+  @override
+  String reflexResultPdfFailed(String error) {
+    return 'PDF konnte nicht erstellt werden: $error';
+  }
+
+  @override
+  String get reflexResultShareWithTrainer => 'Mit Trainer teilen';
+
+  @override
+  String reflexResultShareWithTrainerBody(String trainerName) {
+    return 'Du kannst $trainerName dein vollständiges Reflexprofil freigeben. Das hilft bei der gemeinsamen Begleitung und kann später widerrufen werden.';
+  }
+
+  @override
+  String reflexResultShareLoadFailed(String error) {
+    return 'Freigabe konnte nicht geladen werden: $error';
+  }
+
+  @override
+  String get reflexResultShareRevoked => 'Freigabe wurde widerrufen.';
+
+  @override
+  String reflexResultShareRevokeFailed(String error) {
+    return 'Freigabe konnte nicht widerrufen werden: $error';
+  }
+
+  @override
+  String get reflexResultRevokeShare => 'Freigabe widerrufen';
+
+  @override
+  String get reflexResultShareGranted => 'Reflexprofil wurde freigegeben.';
+
+  @override
+  String reflexResultShareGrantFailed(String error) {
+    return 'Reflexprofil konnte nicht freigegeben werden: $error';
+  }
+
+  @override
+  String get reflexResultAllowTrainer => 'Trainer darf Auswertung sehen';
+
+  @override
+  String reflexResultYesOfAnswered(int yesCount, int answeredCount) {
+    return '$yesCount von $answeredCount beantworteten zugeordneten Fragen wurden mit Ja beantwortet.';
+  }
+
+  @override
+  String get reflexResultNoAdditional => 'Keine weiteren Angaben vorhanden.';
+
+  @override
+  String get reflexResultNoCompleted =>
+      'Noch keine abgeschlossene Auswertung vorhanden.';
+
+  @override
+  String get reflexResultStartProfile => 'Reflexprofil starten';
+
+  @override
+  String get reflexDemoAnswerAll => 'Bitte beantworte alle Fragen.';
+
+  @override
+  String get reflexDemoFullTest => 'Volltest';
+
+  @override
+  String get reflexDemoForWhomTitle => 'Für wen machst du den Kurztest?';
+
+  @override
+  String get reflexDemoForWhomBody =>
+      'Dieser Kurztest zeigt beispielhaft, wie eine Reflexprofil-Auswertung aussehen kann. Er wird nicht gespeichert.';
+
+  @override
+  String get reflexDemoSelfComingSoonTitle =>
+      'Kurztest für mich selbst kommt bald';
+
+  @override
+  String get reflexDemoSelfComingSoonBody =>
+      'Der Fragebogen für dich selbst befindet sich noch in Entwicklung.';
+
+  @override
+  String get reflexDemoTitle => 'Kurztest';
+
+  @override
+  String get reflexDemoIntro =>
+      'Diese Demo zeigt beispielhaft, wie eine Reflexprofil-Auswertung aussehen kann. Sie wird nicht gespeichert und ersetzt keinen vollständigen Fragebogen.';
+
+  @override
+  String get reflexDemoEvaluate => 'Demo auswerten';
+
+  @override
+  String get reflexDemoSignInForFull =>
+      'Für den vollständigen Fragebogen anmelden';
+
+  @override
+  String get reflexDemoStartFull => 'Vollständigen Fragebogen starten';
+
+  @override
+  String get reflexDemoGuestHint =>
+      'Nach der Registrierung kannst du Kinderprofile anlegen, den vollständigen Fragebogen speichern und die Auswertung später erneut ansehen.';
+
+  @override
+  String get reflexDemoSignedInHint =>
+      'Im vollständigen Fragebogen werden alle Kategorien abgefragt und die Auswertung kann gespeichert werden.';
+
+  @override
+  String get reflexDemoOpenFullTest => 'Volltest öffnen';
+
+  @override
+  String get reflexDemoSignInOrRegister => 'Anmelden oder registrieren';
+
+  @override
+  String get reflexDemoResultTitle => 'Demo-Auswertung';
+
+  @override
+  String get reflexDemoResultHeadline => 'Dein Demo-Ergebnis';
+
+  @override
+  String get reflexDemoResultDisclaimer =>
+      'Diese Auswertung basiert nur auf dem Kurztest und ist keine Diagnose. Sie zeigt Antwortmuster — für ein vollständiges Reflexprofil sind alle 112 Fragen notwendig.';
+
+  @override
+  String get reflexDemoNotEnoughChartData =>
+      'Nicht genug Daten für die Grafik.';
+
+  @override
+  String get reflexDemoChartCaption =>
+      'Die Grafik zeigt die stärksten Reflexbereiche aus deinen Kurztest-Antworten.';
+
+  @override
+  String get reflexDemoAccountBenefitGuest =>
+      'Mit einem Konto kannst du den vollständigen Fragebogen ausfüllen, dein Ergebnis speichern und mit deinem Trainer teilen.';
+
+  @override
+  String get reflexDemoAccountBenefitSignedIn =>
+      'Im vollständigen Fragebogen werden alle Kategorien erfasst und das Ergebnis dauerhaft gespeichert.';
+
+  @override
+  String get reflexPdfTitle => 'Reflexprofil Zusammenfassung';
+
+  @override
+  String reflexPdfGeneratedOn(String date) {
+    return 'Erstellt am $date';
+  }
+
+  @override
+  String get reflexPdfSummaryNotice =>
+      'Diese Auswertung zeigt Antwortmuster und Hinweisstärken. Sie ersetzt keine medizinische oder therapeutische Diagnose.';
+
+  @override
+  String reflexPdfSafetyNotice(int count) {
+    return '$count Sicherheits-/Rücksprache-Hinweise wurden bestätigt. Training sollte nur nach ausdrücklicher Rücksprache mit Arzt, Therapeut oder Psychologe erfolgen.';
+  }
+
+  @override
+  String get reflexPdfOverviewTitle => 'Übersicht Reflexbereiche';
+
+  @override
+  String get reflexPdfAreaHeader => 'Reflexbereich';
+
+  @override
+  String get reflexPdfPercentHeader => 'Prozent';
+
+  @override
+  String get reflexPdfClassificationHeader => 'Einordnung';
+
+  @override
+  String get reflexPdfYesAnsweredHeader => 'Ja / Beantwortet';
+
+  @override
+  String get reflexPdfAnswersTitle => 'Antwortübersicht';
+
+  @override
+  String get reflexPdfQuestionHeader => 'Frage';
+
+  @override
+  String get reflexPdfAnswerHeader => 'Antwort';
+
+  @override
+  String get reflexPdfEmptyAnswer => '-';
+
+  @override
+  String get reflexPdfFileNameStem => 'reflexjourney_reflexprofil';
+
+  @override
+  String get reflexProfileNameRequired => 'Bitte gib einen Namen an.';
 }

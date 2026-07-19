@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../consent/presentation/providers/consent_provider.dart';
 
 class AnalysisPlaceholderScreen extends ConsumerWidget {
@@ -31,12 +31,11 @@ class AnalysisPlaceholderScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDE =
-        ref.watch(settingsProvider).languageCode == AppLanguages.sourceCode;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isDE ? 'Analyse' : 'Analysis'),
+        title: Text(l10n.analysisPlaceholderTitle),
         automaticallyImplyLeading: false,
       ),
       bottomNavigationBar: SafeArea(
@@ -44,7 +43,7 @@ class AnalysisPlaceholderScreen extends ConsumerWidget {
         child: ElevatedButton(
           onPressed: () => _continue(context, ref),
           child: Text(
-            isDE ? 'Weiter zur Zustimmung' : 'Continue to consent',
+            l10n.analysisPlaceholderContinue,
             textAlign: TextAlign.center,
           ),
         ),
@@ -70,18 +69,14 @@ class AnalysisPlaceholderScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                isDE
-                    ? 'Hier startet bald deine persönliche Standortanalyse.'
-                    : 'Your personal baseline analysis will start here soon.',
+                l10n.analysisPlaceholderHeadline,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
               ),
               const SizedBox(height: 12),
               Text(
-                isDE
-                    ? 'Vor dem ersten Training wird hier ein kurzer Fragebogen stehen. Damit kann Reflex Journey deinen aktuellen Stand besser einordnen und die Empfehlung sauberer machen.'
-                    : 'Before your first training, this will become a short questionnaire. It will help Reflex Journey understand your current baseline and improve the recommendation.',
+                l10n.analysisPlaceholderBody,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       height: 1.45,
@@ -90,18 +85,14 @@ class AnalysisPlaceholderScreen extends ConsumerWidget {
               const SizedBox(height: 24),
               _PlaceholderStep(
                 icon: Icons.assignment_outlined,
-                title: isDE ? 'Fragebogen' : 'Questionnaire',
-                body: isDE
-                    ? 'Symptome, Belastung, Trainingsziel und bisherige Erfahrung.'
-                    : 'Symptoms, load, training goal and prior experience.',
+                title: l10n.analysisPlaceholderStepQuestionnaireTitle,
+                body: l10n.analysisPlaceholderStepQuestionnaireBody,
               ),
               const SizedBox(height: 12),
               _PlaceholderStep(
                 icon: Icons.insights_outlined,
-                title: isDE ? 'Auswertung' : 'Assessment',
-                body: isDE
-                    ? 'Eine ruhige Einschätzung deines aktuellen Ausgangspunkts.'
-                    : 'A calm assessment of your current starting point.',
+                title: l10n.analysisPlaceholderStepAssessmentTitle,
+                body: l10n.analysisPlaceholderStepAssessmentBody,
               ),
             ],
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../core/l10n/active_localizations.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../domain/models/reflex_profile_assessment.dart';
@@ -27,7 +28,7 @@ class ReflexSubjectProfile {
   factory ReflexSubjectProfile.fromJson(Map<String, dynamic> json) {
     return ReflexSubjectProfile(
       id: json['id'] as String,
-      displayName: json['display_name'] as String? ?? 'Profil',
+      displayName: json['display_name'] as String? ?? '',
       profileType: json['profile_type'] as String? ?? 'child',
       birthDate: json['birth_date'] == null
           ? null
@@ -331,17 +332,20 @@ Future<void> recordReflexProfileSkipped(
 
 Future<ReflexSubjectProfile> createAdultSelfProfile(
   WidgetRef ref, {
-  String displayName = 'Ich',
+  String? displayName,
 }) async {
   final userId = Supabase.instance.client.auth.currentUser?.id;
-  if (userId == null) throw Exception('Nicht eingeloggt.');
+  if (userId == null) throw Exception('Not signed in.');
+
+  final resolvedName =
+      displayName ?? (await lookupActiveAppLocalizations()).selfName;
 
   final row = await Supabase.instance.client
       .from('reflex_subject_profiles')
       .insert({
         'owner_user_id': userId,
         'profile_type': 'adult_self',
-        'display_name': displayName,
+        'display_name': resolvedName,
       })
       .select()
       .single();
@@ -359,7 +363,7 @@ Future<ReflexSubjectProfile> createChildReflexSubjectProfile(
   required DateTime birthDate,
 }) async {
   final userId = Supabase.instance.client.auth.currentUser?.id;
-  if (userId == null) throw Exception('Nicht eingeloggt.');
+  if (userId == null) throw Exception('Not signed in.');
 
   final now = DateTime.now();
   final ageMonths =
@@ -396,11 +400,12 @@ Future<ReflexSubjectProfile> updateReflexSubjectProfile(
   DateTime? birthDate,
 }) async {
   final userId = Supabase.instance.client.auth.currentUser?.id;
-  if (userId == null) throw Exception('Nicht eingeloggt.');
+  if (userId == null) throw Exception('Not signed in.');
 
   final trimmedName = displayName.trim();
   if (trimmedName.isEmpty) {
-    throw Exception('Bitte gib einen Namen an.');
+    final l10n = await lookupActiveAppLocalizations();
+    throw Exception(l10n.reflexProfileNameRequired);
   }
 
   final payload = <String, dynamic>{
@@ -475,7 +480,7 @@ Future<void> grantReflexProfileTrainerShare(
   required String relationshipId,
 }) async {
   final userId = Supabase.instance.client.auth.currentUser?.id;
-  if (userId == null) throw Exception('Nicht eingeloggt.');
+  if (userId == null) throw Exception('Not signed in.');
 
   final existing = await Supabase.instance.client
       .from('reflex_profile_trainer_shares')
@@ -524,7 +529,7 @@ Future<void> revokeReflexProfileTrainerShare(
   required String trainerId,
 }) async {
   final userId = Supabase.instance.client.auth.currentUser?.id;
-  if (userId == null) throw Exception('Nicht eingeloggt.');
+  if (userId == null) throw Exception('Not signed in.');
 
   await Supabase.instance.client
       .from('reflex_profile_trainer_shares')
