@@ -146,3 +146,33 @@ keine Rechtstexte, Flag bleibt false.
 - [ ] 16. `make release-readiness-mobile`, Prod-Build ohne Codesign und
       Abschlussreport/Tracker finalisieren. Signierte IPA/Upload bleiben ein
       separater gated Release-Schritt und sind nicht Teil des i18n-Prompts.
+
+---
+
+# P0.6-Vorbereitung — Rechtstext-Entwürfe für die Kanzlei (2026-07-19)
+
+Founder-Auftrag: „Legal texts as perfect as possible so the lawyers can just
+review and if needed add or adjust.“ Ziel: Anlagen 4–6 zum Anwalts-Briefing —
+versandfertige Entwürfe, sodass die Kanzlei redigiert statt neu entwirft.
+**KEINE Veröffentlichung vor Anwalts-Freigabe** (Entwurfs-Banner in jeder Datei).
+
+Faktenquellen (gelesen): ANWALTS_BRIEFING.md, Consent-Launch-Entwurf +
+Beleg-Liste (consent_screen.dart 631–770), STANDORT_DATENFLUSS_T13.md,
+PRIVACY_LABELS_DRAFT.md, Website-Repo-Check (statisch; Grep auf
+analytics/gtag/cookie/plausible/umami → 0 Treffer).
+
+- [x] 1. `docs/legal/DATENSCHUTZERKLAERUNG_ENTWURF.md` — App + Website, DE,
+      „du“-Ton wie App-Copy; Marker `[FOUNDER: …]` und `[⚖️ ANWALT: …]`;
+      Beleg-Anhang (Behauptung → Code-/Doku-Beleg) für die Kanzlei
+- [x] 2. `docs/legal/IMPRESSUM_ENTWURF.md` — Platzhalter Rechtsform/Adresse,
+      DSA-Trader-/Adress-Frage geflaggt, VSBG-Passage (kein toter ODR-Link)
+- [x] 3. `docs/legal/TRAINER_ERSTANSPRACHE_ART14_ENTWURF.md` — Art.-13/14-
+      Informationstext + kurzer E-Mail-Footer; UWG-§7-Vorbehalt deutlich
+- [x] 4. `ANWALTS_BRIEFING.md` aktualisieren: Leistungen 1/2/3/6 auf
+      „Prüfung/Redigat unseres Entwurfs“ umstellen, Anlagen 4–6 ergänzen
+- [x] 5. Backlog P0.6 + „Next up“ Punkt 1 aktualisieren (Anlagenliste)
+- [ ] 6. Commit nur der Legal-/Doku-Dateien (explizite Liste, Index-Check davor)
+
+Nicht-Ziele: kein EN-Text jetzt (folgt nach DE-Freigabe, Anwalt prüft unsere
+Übersetzung); keine AGB (Baustein 8 bleibt optionales Angebot); keine
+Veränderung am aktiven Consent-Code; nichts veröffentlichen/deployen.

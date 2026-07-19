@@ -44,19 +44,25 @@
 
 ## 2. Gewünschte Leistungen (bitte je Baustein bepreisen)
 
-1. **Datenschutzerklärung für die App** (DSGVO; Deutsch; Englisch gern als
-   Prüfung/Freigabe unserer Übersetzung). Wird im App Store als
-   Pflicht-URL verlinkt (`reflexjourney.app/datenschutz`).
-2. **Datenschutzerklärung/-abschnitte für die Website** — inkl. des
+1. **Datenschutzerklärung für App + Website: Prüfung/Redigat unseres
+   Entwurfs** (Anlage 4 — vollständiger Text, jede Tatsachenbehauptung mit
+   technischem Beleg-Anhang; offene Rechtsfragen sind darin als
+   ⚖️-Marker gesammelt). DSGVO; Deutsch; Englisch anschließend als
+   Prüfung/Freigabe unserer Übersetzung. Wird im App Store als
+   Pflicht-URL verlinkt (`reflexjourney.app/datenschutz`). Der Entwurf
+   deckt auch die Website-Abschnitte ab — inkl. des
    Trainer-Bewerbungsformulars (Formular-Daten gehen per E-Mail-Versand
    über unseren bestehenden Dienstleister Resend an unser Support-Postfach;
    kein Datei-Upload).
-3. **Impressum** (Website; dieselben Angaben erscheinen als
-   „Trader-Status“ nach dem EU Digital Services Act öffentlich auf der
-   App-Store-Produktseite: Adresse, Telefonnummer, E-Mail). **Konkrete
-   Beratungsfrage:** Solo-Gründer arbeitet von der Privatadresse — welche
-   Adresse/Telefonnummer muss bzw. darf öffentlich stehen, und welche
-   Gestaltungen (separate Nummer, c/o-/Büroservice-Adresse) sind zulässig?
+2. *(in Leistung 1 aufgegangen — Anlage 4 enthält App- und
+   Website-Abschnitte in einem Dokument; auf Wunsch trennen wir sie.)*
+3. **Impressum: Prüfung/Redigat unseres Entwurfs** (Anlage 5). Dieselben
+   Angaben erscheinen als „Trader-Status“ nach dem EU Digital Services Act
+   öffentlich auf der App-Store-Produktseite: Adresse, Telefonnummer,
+   E-Mail. **Konkrete Beratungsfrage (im Entwurf markiert):** Solo-Gründer
+   arbeitet von der Privatadresse — welche Adresse/Telefonnummer muss bzw.
+   darf öffentlich stehen, und welche Gestaltungen (separate Nummer,
+   c/o-/Büroservice-Adresse) sind zulässig?
 4. **In-App-Einwilligung (Consent-Screen):** Juristische Prüfung/
    Überarbeitung unserer vorbereiteten Entwurfsfassung (Anlage 1). Die App
    hat eine funktionierende Re-Consent-Mechanik (Versions-Bump). Bitte dabei
@@ -69,7 +75,9 @@
 6. **Trainer-Akquise:** Kurzprüfung der Zulässigkeit der B2B-Erstansprache
    (UWG § 7) und der Informationspflichten (Art. 14 DSGVO) für unser
    Vorgehen (max. ~20 Praxen, individuelle Ansprache über öffentlich
-   angegebene Kontaktwege, keine Massenmails, kein Tracking).
+   angegebene Kontaktwege, keine Massenmails, kein Tracking). Ein
+   Entwurf des Art.-14-Informationstexts samt E-Mail-Kurzhinweis liegt
+   als Anlage 6 bei; vor Ihrem Go wird nichts versendet.
 7. **Trainer-Vetting:** Kurzbestätigung unseres Sichtprüfungs-Ablaufs
    (Abschnitt 6) — insbesondere der Grundsatz „ansehen, nie speichern“
    beim erweiterten Führungszeugnis (Art. 10 DSGVO) und der geplante
@@ -150,6 +158,14 @@ Prüfvermerk (Name, „geprüft ja/nein“, Vorlagedatum, Wiedervorlage nach
 3. **Entwurf Privacy Nutrition Labels** (Apple) / Data Safety (Google) —
    zur Konsistenzprüfung mit der Datenschutzerklärung. Enthält eine
    offene Einordnungsfrage („Standort: linked vs. not linked“).
+4. **Entwurf Datenschutzerklärung App + Website** — vollständiger
+   Fließtext mit ⚖️-Markern an allen Stellen, die juristische Einordnung
+   brauchen, einer Sammelliste dieser offenen Punkte und einem
+   Beleg-Anhang (jede Behauptung → Code-/Infrastruktur-Nachweis).
+5. **Entwurf Impressum** — mit denselben Markern; enthält die
+   Adress-/Telefonnummern-Beratungsfrage (Leistung 3).
+6. **Entwurf Art.-14-Informationstext Trainer-Erstansprache** — Vollext
+   für die Website + Kurzhinweis für die E-Mail (Leistung 6).
 
 *(Die Anlagen werden als PDF/Markdown mitgesendet; auf Wunsch stellen wir
 weitere technische Detail-Dokumentation bereit — alles ist schriftlich
@@ -178,11 +194,15 @@ belegt, Rückfragen können schnell beantwortet werden.)*
 > Kinderprofile; die Infrastruktur liegt in der EU.
 >
 > Ich benötige die im beigefügten Briefing beschriebenen Leistungen —
-> im Kern: Datenschutzerklärung (App + Website), Impressum inkl. einer
-> Beratungsfrage zur öffentlichen Adresse/Telefonnummer (EU-DSA-
-> Trader-Status im App Store), Prüfung unseres In-App-Einwilligungstexts
-> sowie zwei Kurzprüfungen (B2B-Erstansprache, Prüfablauf mit erweitertem
-> Führungszeugnis).
+> im Kern: Prüfung und Überarbeitung unserer bereits ausformulierten
+> Entwürfe (Datenschutzerklärung App + Website, Impressum,
+> In-App-Einwilligungstext, Art.-14-Text für eine B2B-Erstansprache)
+> sowie eine Beratungsfrage zur öffentlichen Adresse/Telefonnummer
+> (EU-DSA-Trader-Status im App Store) und zwei Kurzprüfungen
+> (B2B-Erstansprache, Prüfablauf mit erweitertem Führungszeugnis).
+> Alle Entwürfe markieren die offenen Rechtsfragen explizit und belegen
+> jede Tatsachenbehauptung technisch — Sie können redigieren statt neu
+> entwerfen.
 >
 > Das Briefing enthält eine vollständige, technisch belegte Übersicht der
 > Datenverarbeitung samt Anlagen — Sie finden dort alles für ein
