@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/chat_channel.dart';
 
 class MessageInputBar extends StatefulWidget {
@@ -51,6 +53,7 @@ class _MessageInputBarState extends State<MessageInputBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final showCallBtn = widget.onCallRequest != null &&
         widget.channel.type == ChannelType.direct;
 
@@ -68,7 +71,7 @@ class _MessageInputBarState extends State<MessageInputBar> {
               IconButton(
                 icon: const Icon(Icons.videocam_outlined),
                 color: theme.colorScheme.primary,
-                tooltip: 'Video-Call anfragen',
+                tooltip: l10n.chatRequestVideoCall,
                 onPressed: widget.onCallRequest,
               ),
             Expanded(
@@ -78,7 +81,7 @@ class _MessageInputBarState extends State<MessageInputBar> {
                 maxLines: 5,
                 textCapitalization: TextCapitalization.sentences,
                 decoration: InputDecoration(
-                  hintText: 'Nachricht schreiben …',
+                  hintText: l10n.chatMessageHint,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(22),
                     borderSide: BorderSide.none,

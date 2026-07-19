@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 enum ChannelType { direct, community, applicationReview }
 
 enum MemberRole { member, moderator }
@@ -27,11 +29,12 @@ class ChatChannel extends Equatable {
 
   bool get isModerator => currentUserRole == MemberRole.moderator;
 
-  String channelDisplayName({String? packageName}) {
+  String channelDisplayName(AppLocalizations l10n, {String? packageName}) {
     return switch (type) {
-      ChannelType.direct => 'Trainer',
-      ChannelType.community => packageName ?? packageId ?? 'Community',
-      ChannelType.applicationReview => 'Trainer-Bewerbung',
+      ChannelType.direct => l10n.trainerFallbackName,
+      ChannelType.community =>
+        packageName ?? packageId ?? l10n.chatChannelTypeCommunity,
+      ChannelType.applicationReview => l10n.chatChannelTypeApplicationReview,
     };
   }
 

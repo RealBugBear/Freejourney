@@ -6646,6 +6646,228 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Landau'**
   String get trainerPkgLandau;
+
+  /// Chat channel type label for community channels
+  ///
+  /// In de, this message translates to:
+  /// **'Community'**
+  String get chatChannelTypeCommunity;
+
+  /// Chat channel type label for trainer application review
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer-Bewerbung'**
+  String get chatChannelTypeApplicationReview;
+
+  /// Fallback display name when user name is missing
+  ///
+  /// In de, this message translates to:
+  /// **'Nutzer'**
+  String get chatUserFallback;
+
+  /// Fallback display name for trainer applicants
+  ///
+  /// In de, this message translates to:
+  /// **'Bewerber'**
+  String get chatApplicantFallback;
+
+  /// Chat inbox screen title
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer-Kommunikation'**
+  String get chatInboxTitle;
+
+  /// Section header for the linked trainer chat
+  ///
+  /// In de, this message translates to:
+  /// **'MEIN TRAINER'**
+  String get chatInboxSectionMyTrainer;
+
+  /// Relative date label for yesterday
+  ///
+  /// In de, this message translates to:
+  /// **'Gestern'**
+  String get chatYesterday;
+
+  /// Empty inbox/DM title when there are no chats
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine Nachrichten'**
+  String get chatNoMessagesYet;
+
+  /// Empty chat inbox body
+  ///
+  /// In de, this message translates to:
+  /// **'Hier erscheinen deine Chats.\nVerbinde dich mit deinem Trainer, um Nachrichten und Video-Calls zu nutzen.'**
+  String get chatInboxEmptyBody;
+
+  /// FAB label to open trainer chat from DM screen
+  ///
+  /// In de, this message translates to:
+  /// **'Chat mit Trainer'**
+  String get dmChatWithTrainer;
+
+  /// Empty DM list body
+  ///
+  /// In de, this message translates to:
+  /// **'Hier erscheinen deine direkten Nachrichten mit deinem Trainer.'**
+  String get dmEmptyBody;
+
+  /// Direct chat title with partner name
+  ///
+  /// In de, this message translates to:
+  /// **'Chat mit {name}'**
+  String chatWithName(String name);
+
+  /// Tooltip to start a video call as trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Call starten'**
+  String get chatStartCall;
+
+  /// Tooltip/action to request a video call
+  ///
+  /// In de, this message translates to:
+  /// **'Video-Call anfragen'**
+  String get chatRequestVideoCall;
+
+  /// Confirm dialog title for video call request
+  ///
+  /// In de, this message translates to:
+  /// **'Video-Call anfragen?'**
+  String get chatRequestVideoCallTitle;
+
+  /// Confirm dialog body for video call request
+  ///
+  /// In de, this message translates to:
+  /// **'Du sendest deinem Trainer eine Anfrage für einen Video-Call. Der Trainer entscheidet, ob und wann er den Call startet.'**
+  String get chatRequestVideoCallBody;
+
+  /// Confirm button to send a video call request
+  ///
+  /// In de, this message translates to:
+  /// **'Anfrage senden'**
+  String get chatSendRequest;
+
+  /// Error message when chat messages fail to load
+  ///
+  /// In de, this message translates to:
+  /// **'Nachrichten konnten gerade nicht geladen werden. Bitte Verbindung prüfen.'**
+  String get chatMessagesLoadFailed;
+
+  /// Empty state inside a chat thread
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine Nachrichten.\nSchreib die erste!'**
+  String get chatEmptyThread;
+
+  /// Confirm dialog title for soft-deleting a message
+  ///
+  /// In de, this message translates to:
+  /// **'Nachricht entfernen?'**
+  String get chatDeleteMessageTitle;
+
+  /// Confirm dialog body for soft-deleting a message
+  ///
+  /// In de, this message translates to:
+  /// **'Die Nachricht wird für alle als entfernt angezeigt.'**
+  String get chatDeleteMessageBody;
+
+  /// Confirm button to remove a chat message
+  ///
+  /// In de, this message translates to:
+  /// **'Entfernen'**
+  String get chatRemove;
+
+  /// SnackBar when camera/mic permission is denied for calls
+  ///
+  /// In de, this message translates to:
+  /// **'Kamera & Mikrofon-Zugriff erforderlich. Bitte in den Einstellungen erlauben.'**
+  String get chatCameraMicPermissionRequired;
+
+  /// SnackBar when starting a video call fails
+  ///
+  /// In de, this message translates to:
+  /// **'Fehler beim Starten des Calls: {error}'**
+  String chatCallStartFailed(String error);
+
+  /// SnackBar when appointment scheduler cannot be opened from chat
+  ///
+  /// In de, this message translates to:
+  /// **'Terminplanung konnte nicht geöffnet werden.'**
+  String get chatAppointmentOpenFailed;
+
+  /// SnackBar when opening a chat channel fails
+  ///
+  /// In de, this message translates to:
+  /// **'Chat konnte nicht geöffnet werden: {error}'**
+  String chatOpenFailed(String error);
+
+  /// Label on appointment proposal message bubble
+  ///
+  /// In de, this message translates to:
+  /// **'Terminvorschlag'**
+  String get chatAppointmentProposal;
+
+  /// Button to view an appointment proposal from chat
+  ///
+  /// In de, this message translates to:
+  /// **'Vorschlag ansehen'**
+  String get chatViewProposal;
+
+  /// Placeholder text for a soft-deleted message
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Nachricht wurde entfernt.'**
+  String get chatMessageRemoved;
+
+  /// Display name for system/assistant chat messages
+  ///
+  /// In de, this message translates to:
+  /// **'Reflex Journey Assistent'**
+  String get chatAssistantName;
+
+  /// Outgoing call-request bubble when sender is trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer-Anfrage gesendet'**
+  String get chatCallRequestSentAsTrainer;
+
+  /// Outgoing call-request bubble when sender is client
+  ///
+  /// In de, this message translates to:
+  /// **'Video-Call-Anfrage gesendet'**
+  String get chatCallRequestSentAsClient;
+
+  /// Incoming call-request bubble shown to trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Nutzer möchte einen Video-Call'**
+  String get chatCallRequestIncomingAsTrainer;
+
+  /// Incoming call-request bubble shown to client
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer möchte einen Video-Call'**
+  String get chatCallRequestIncomingAsClient;
+
+  /// Hint text in the chat message input field
+  ///
+  /// In de, this message translates to:
+  /// **'Nachricht schreiben …'**
+  String get chatMessageHint;
+
+  /// Typing indicator label
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, =1{tippt …} other{{count} tippen …}}'**
+  String chatTyping(int count);
+
+  /// Persisted chat message content for a video call request
+  ///
+  /// In de, this message translates to:
+  /// **'📹 Video-Call angefragt'**
+  String get chatCallRequestMessageContent;
 }
 
 class _AppLocalizationsDelegate

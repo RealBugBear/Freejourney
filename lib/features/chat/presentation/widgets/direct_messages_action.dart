@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/navigation/app_router.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../providers/chat_providers.dart';
 
 class DirectMessagesAction extends ConsumerWidget {
@@ -17,9 +18,10 @@ class DirectMessagesAction extends ConsumerWidget {
     }
 
     final unread = ref.watch(totalUnreadCountProvider);
+    final l10n = AppLocalizations.of(context);
 
     return IconButton(
-      tooltip: 'Nachrichten',
+      tooltip: l10n.profileMessages,
       onPressed: () => context.push(Routes.dm),
       icon: Badge(
         isLabelVisible: unread > 0,

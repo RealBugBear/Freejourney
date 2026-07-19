@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/navigation/app_router.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/chat_channel.dart';
 import '../navigation/chat_navigation.dart';
 import '../providers/chat_providers.dart';
@@ -15,8 +16,8 @@ class DmScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channelsAsync = ref.watch(chatChannelsProvider);
-
     final trainerIdAsync = ref.watch(clientTrainerIdProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -30,7 +31,7 @@ class DmScreen extends ConsumerWidget {
             }
           },
         ),
-        title: const Text('Nachrichten'),
+        title: Text(l10n.profileMessages),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -38,7 +39,7 @@ class DmScreen extends ConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.settings_outlined),
-            tooltip: 'Einstellungen',
+            tooltip: l10n.settings,
             onPressed: () => context.push(Routes.settings),
           ),
         ],
@@ -46,7 +47,7 @@ class DmScreen extends ConsumerWidget {
       floatingActionButton: trainerIdAsync.valueOrNull != null
           ? FloatingActionButton.extended(
               icon: const Icon(Icons.chat_bubble_outline),
-              label: const Text('Chat mit Trainer'),
+              label: Text(l10n.dmChatWithTrainer),
               onPressed: () {
                 final id = trainerIdAsync.valueOrNull;
                 if (id != null) _openTrainerChat(context, ref, id);
@@ -94,11 +95,12 @@ class _DmListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final hasUnread = channel.unreadCount > 0;
     final title = channel.type == ChannelType.applicationReview
-        ? channel.channelDisplayName()
+        ? channel.channelDisplayName(l10n)
         : ref.watch(chatPartnerNameProvider(channel.id)).valueOrNull ??
-            channel.channelDisplayName();
+            channel.channelDisplayName(l10n);
 
     return ListTile(
       leading: CircleAvatar(
@@ -132,7 +134,7 @@ class _DmListTile extends ConsumerWidget {
           : null,
       trailing: channel.lastMessageAt != null
           ? Text(
-              _formatTime(channel.lastMessageAt!),
+              _formatTime(context, channel.lastMessageAt!),
               style: theme.textTheme.labelSmall?.copyWith(
                 color: hasUnread
                     ? theme.colorScheme.primary
@@ -144,13 +146,15 @@ class _DmListTile extends ConsumerWidget {
     );
   }
 
-  String _formatTime(DateTime dt) {
+  String _formatTime(BuildContext context, DateTime dt) {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toString();
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final msgDay = DateTime(dt.year, dt.month, dt.day);
-    if (msgDay == today) return DateFormat.Hm().format(dt);
-    if (today.difference(msgDay).inDays == 1) return 'Gestern';
-    return DateFormat('dd.MM').format(dt);
+    if (msgDay == today) return DateFormat.Hm(locale).format(dt);
+    if (today.difference(msgDay).inDays == 1) return l10n.chatYesterday;
+    return DateFormat.Md(locale).format(dt);
   }
 }
 
@@ -158,36 +162,39 @@ class _EmptyState extends StatelessWidget {
   const _EmptyState();
 
   @override
-  Widget build(BuildContext context) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.chat_bubble_outline,
-                  size: 64,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.25)),
-              const SizedBox(height: 16),
-              Text('Noch keine Nachrichten',
-                  style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 8),
-              Text(
-                'Hier erscheinen deine direkten Nachrichten mit deinem Trainer.',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.55),
-                    ),
-              ),
-            ],
-          ),
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.chat_bubble_outline,
+                size: 64,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.25)),
+            const SizedBox(height: 16),
+            Text(l10n.chatNoMessagesYet,
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text(
+              l10n.dmEmptyBody,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.55),
+                  ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _ErrorState extends StatelessWidget {
@@ -195,18 +202,20 @@ class _ErrorState extends StatelessWidget {
   final VoidCallback onRetry;
 
   @override
-  Widget build(BuildContext context) => Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, size: 48),
-            const SizedBox(height: 8),
-            Text('Fehler beim Laden',
-                style: Theme.of(context).textTheme.bodyLarge),
-            const SizedBox(height: 8),
-            TextButton(
-                onPressed: onRetry, child: const Text('Erneut versuchen')),
-          ],
-        ),
-      );
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.error_outline, size: 48),
+          const SizedBox(height: 8),
+          Text(l10n.errorLoadFailedInline,
+              style: Theme.of(context).textTheme.bodyLarge),
+          const SizedBox(height: 8),
+          TextButton(onPressed: onRetry, child: Text(l10n.retry)),
+        ],
+      ),
+    );
+  }
 }

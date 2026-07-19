@@ -1,6 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../../../core/l10n/active_localizations.dart';
 import '../../domain/models/chat_channel.dart';
 import '../../domain/models/chat_message.dart';
 import '../../domain/repositories/chat_repository.dart';
@@ -233,10 +236,11 @@ class SupabaseChatRepository implements ChatRepository {
     final userId = _userId;
     if (userId == null) return;
 
+    final l10n = await lookupActiveAppLocalizations();
     await _client.from('chat_messages').insert({
       'channel_id': channelId,
       'sender_id': userId,
-      'content': '📹 Video-Call angefragt / Video call requested',
+      'content': l10n.chatCallRequestMessageContent,
       'is_bot_response': false,
       'is_call_request': true,
     });

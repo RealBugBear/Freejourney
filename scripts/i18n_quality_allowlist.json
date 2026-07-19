@@ -67,7 +67,8 @@
     "trainerPkgAtnr": "trainerPkgAtnr is an intentionally shared short package label.",
     "trainerPkgStnr": "trainerPkgStnr is an intentionally shared short package label.",
     "trainerPkgBabinski": "trainerPkgBabinski is an intentionally shared short package label.",
-    "trainerPkgLandau": "trainerPkgLandau is an intentionally shared short package label."
+    "trainerPkgLandau": "trainerPkgLandau is an intentionally shared short package label.",
+    "chatChannelTypeCommunity": "Community is the established product-area label in both languages."
   },
   "claim_terms": {
     "disclaimerText": {

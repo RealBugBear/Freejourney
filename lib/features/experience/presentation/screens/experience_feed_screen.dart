@@ -29,7 +29,9 @@ class ExperienceFeedScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(channel.channelDisplayName()),
+        title: Text(
+          channel.channelDisplayName(AppLocalizations.of(context)),
+        ),
       ),
       floatingActionButton: isModerator
           ? FloatingActionButton(

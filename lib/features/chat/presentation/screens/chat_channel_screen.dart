@@ -18,7 +18,9 @@ import '../../../video/presentation/widgets/incoming_call_listener.dart';
 import '../../../trainer/domain/models/trainer_client.dart';
 import '../../../trainer/presentation/providers/trainer_provider.dart';
 import '../../../../config/launch_flags.dart';
+import '../../../../core/l10n/active_localizations.dart';
 import '../../../../core/logging/app_logger.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/navigation/app_router.dart';
 import 'package:go_router/go_router.dart';
 
@@ -115,10 +117,10 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
       appLogger.e(
           'ChatChannelScreen: permissions denied camera=$cameraOk mic=$micOk');
       if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-              'Kamera & Mikrofon-Zugriff erforderlich. Bitte in den Einstellungen erlauben.'),
+        SnackBar(
+          content: Text(l10n.chatCameraMicPermissionRequired),
         ),
       );
       return;
@@ -144,8 +146,9 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
         await ref.read(endCallProvider.notifier).end(call.id);
       }
       if (mounted) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Fehler beim Starten des Calls: $e')),
+          SnackBar(content: Text(l10n.chatCallStartFailed('$e'))),
         );
       }
     }
@@ -176,14 +179,9 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
       appLogger.e('ChatChannelScreen: propose appointment failed',
           error: e, stackTrace: st);
       if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e is StateError
-                ? e.message
-                : 'Terminplanung konnte nicht geöffnet werden.',
-          ),
-        ),
+        SnackBar(content: Text(l10n.chatAppointmentOpenFailed)),
       );
     }
   }
@@ -202,7 +200,7 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
     final resolvedClientId = directClientId ?? await _safePartnerId(ref);
     if (resolvedClientId == null) {
       throw StateError(
-          'Klient konnte für Terminplanung nicht gefunden werden.');
+          'Client could not be found for appointment scheduling.');
     }
 
     final knownClients = ref.read(trainerClientsProvider).valueOrNull ?? [];
@@ -215,13 +213,14 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
         .select('display_name')
         .eq('id', resolvedClientId)
         .maybeSingle();
+    final l10n = await lookupActiveAppLocalizations();
     final displayName =
-        (profile?['display_name'] as String?)?.trim() ?? 'Nutzer';
+        (profile?['display_name'] as String?)?.trim() ?? l10n.chatUserFallback;
 
     return TrainerClient(
       relationshipId: '',
       clientId: resolvedClientId,
-      displayName: displayName.isEmpty ? 'Nutzer' : displayName,
+      displayName: displayName.isEmpty ? l10n.chatUserFallback : displayName,
       currentDay: 1,
       dailyStreak: 0,
     );
@@ -236,7 +235,7 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
     final applicationId = channel?['application_id'] as String?;
     if (applicationId == null) {
       throw StateError(
-          'Bewerbung konnte für den Review-Kanal nicht gefunden werden.');
+          'Application could not be found for the review channel.');
     }
 
     final application = await Supabase.instance.client
@@ -245,14 +244,15 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
         .eq('id', applicationId)
         .maybeSingle();
     if (application == null) {
-      throw StateError('Bewerber konnte nicht gefunden werden.');
+      throw StateError('Applicant could not be found.');
     }
 
     final applicantId = application['user_id'] as String?;
     if (applicantId == null) {
-      throw StateError('Bewerber konnte nicht gefunden werden.');
+      throw StateError('Applicant could not be found.');
     }
 
+    final l10n = await lookupActiveAppLocalizations();
     final desiredDisplayName =
         (application['desired_display_name'] as String?)?.trim();
     final fullName = (application['full_name'] as String?)?.trim();
@@ -260,7 +260,7 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
         ? desiredDisplayName!
         : fullName?.isNotEmpty == true
             ? fullName!
-            : 'Bewerber';
+            : l10n.chatApplicantFallback;
 
     return TrainerClient(
       relationshipId: '',
@@ -324,18 +324,16 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
   }
 
   void _sendCallRequest() {
+    final l10n = AppLocalizations.of(context);
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Video-Call anfragen?'),
-        content: const Text(
-          'Du sendest deinem Trainer eine Anfrage für einen Video-Call. '
-          'Der Trainer entscheidet, ob und wann er den Call startet.',
-        ),
+        title: Text(l10n.chatRequestVideoCallTitle),
+        content: Text(l10n.chatRequestVideoCallBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Abbrechen'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () {
@@ -344,7 +342,7 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
                   .read(sendMessageProvider.notifier)
                   .sendCallRequest(widget.channelId);
             },
-            child: const Text('Anfrage senden'),
+            child: Text(l10n.chatSendRequest),
           ),
         ],
       ),
@@ -372,21 +370,28 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
       },
     );
 
+    final l10n = AppLocalizations.of(context);
+    final partnerName = ref
+            .watch(chatPartnerNameProvider(widget.channelId))
+            .valueOrNull ??
+        l10n.trainerFallbackName;
+
     return Scaffold(
       appBar: AppBar(
         title: isDirect
-            ? Text(
-                'Chat mit ${ref.watch(chatPartnerNameProvider(widget.channelId)).valueOrNull ?? 'Trainer'}',
-              )
+            ? Text(l10n.chatWithName(partnerName))
             : isApplicationReview
-                ? const Text('Trainer-Bewerbung')
-                : Text(channel?.channelDisplayName() ?? 'Chat'),
+                ? Text(l10n.chatChannelTypeApplicationReview)
+                : Text(
+                    channel?.channelDisplayName(l10n) ??
+                        l10n.trainerChatFallback,
+                  ),
         actions: [
           // Trainer/Admin moderator: propose appointment (+ call, if enabled).
           if (canModerateCall) ...[
             IconButton(
               icon: const Icon(Icons.event_outlined),
-              tooltip: 'Termin vorschlagen',
+              tooltip: l10n.trainerProposeAppointment,
               onPressed: () => _proposeAppointment(
                 ref,
                 reviewFlow: isApplicationReview,
@@ -395,7 +400,7 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
             if (kVideoCallsEnabled)
               IconButton(
                 icon: const Icon(Icons.videocam_outlined),
-                tooltip: 'Call starten',
+                tooltip: l10n.chatStartCall,
                 onPressed: _startCall,
               ),
           ],
@@ -403,7 +408,7 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
           if (isPractitioner && kVideoCallsEnabled)
             IconButton(
               icon: const Icon(Icons.videocam_outlined),
-              tooltip: 'Video-Call anfragen',
+              tooltip: l10n.chatRequestVideoCall,
               onPressed: _sendCallRequest,
             ),
         ],
@@ -413,11 +418,11 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
           Expanded(
             child: messagesAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => const Center(
+              error: (e, _) => Center(
                 child: Padding(
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   child: Text(
-                    'Nachrichten konnten gerade nicht geladen werden. Bitte Verbindung prüfen.',
+                    l10n.chatMessagesLoadFailed,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -431,7 +436,7 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
                 if (allMessages.isEmpty) {
                   return Center(
                     child: Text(
-                      'Noch keine Nachrichten.\nSchreib die erste!',
+                      l10n.chatEmptyThread,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context)
@@ -526,16 +531,16 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
   }
 
   void _confirmDelete(ChatMessage message) {
+    final l10n = AppLocalizations.of(context);
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Nachricht entfernen?'),
-        content:
-            const Text('Die Nachricht wird für alle als entfernt angezeigt.'),
+        title: Text(l10n.chatDeleteMessageTitle),
+        content: Text(l10n.chatDeleteMessageBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Abbrechen'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -543,7 +548,7 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
               ref.read(deleteMessageProvider.notifier).delete(message.id);
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Entfernen'),
+            child: Text(l10n.chatRemove),
           ),
         ],
       ),

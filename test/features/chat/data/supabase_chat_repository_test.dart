@@ -1,7 +1,9 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:corejourney/features/chat/domain/models/chat_channel.dart';
 import 'package:corejourney/features/chat/domain/models/chat_message.dart';
 import 'package:corejourney/features/chat/domain/repositories/chat_repository.dart';
+import 'package:corejourney/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class _FakeChatRepository implements ChatRepository {
   @override
@@ -57,15 +59,17 @@ void main() {
       expect(ch.isModerator, isFalse);
     });
     test('channelDisplayName returns Trainer for direct', () {
+      final l10n = lookupAppLocalizations(const Locale('de'));
       final ch = ChatChannel(
           id: '1',
           type: ChannelType.direct,
           createdAt: DateTime(2026),
           currentUserRole: MemberRole.member,
           unreadCount: 0);
-      expect(ch.channelDisplayName(), 'Trainer');
+      expect(ch.channelDisplayName(l10n), l10n.trainerFallbackName);
     });
     test('channelDisplayName returns packageName for community', () {
+      final l10n = lookupAppLocalizations(const Locale('de'));
       final ch = ChatChannel(
           id: '1',
           type: ChannelType.community,
@@ -73,7 +77,7 @@ void main() {
           createdAt: DateTime(2026),
           currentUserRole: MemberRole.member,
           unreadCount: 0);
-      expect(ch.channelDisplayName(packageName: 'Moro'), 'Moro');
+      expect(ch.channelDisplayName(l10n, packageName: 'Moro'), 'Moro');
     });
     test('fromJson parses correctly', () {
       final json = {

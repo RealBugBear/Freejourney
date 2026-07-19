@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../l10n/app_localizations.dart';
 import '../providers/chat_providers.dart';
 
 class TypingIndicator extends ConsumerStatefulWidget {
@@ -35,6 +37,8 @@ class _TypingIndicatorState extends ConsumerState<TypingIndicator>
     final users = typingAsync.valueOrNull ?? {};
     if (users.isEmpty) return const SizedBox.shrink();
 
+    final l10n = AppLocalizations.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(left: 16, bottom: 4, top: 2),
       child: Row(
@@ -63,7 +67,7 @@ class _TypingIndicatorState extends ConsumerState<TypingIndicator>
           ),
           const SizedBox(width: 6),
           Text(
-            users.length == 1 ? 'tippt …' : '${users.length} tippen …',
+            l10n.chatTyping(users.length),
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: Theme.of(context)
                       .colorScheme

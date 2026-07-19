@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/navigation/app_router.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/repositories/supabase_chat_repository.dart';
 import '../../domain/models/chat_channel.dart';
 import '../providers/chat_providers.dart';
@@ -32,8 +33,9 @@ Future<void> openDirectChatWithUser(
     }
   } catch (e) {
     if (!context.mounted) return;
+    final l10n = AppLocalizations.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Chat konnte nicht geöffnet werden: $e')),
+      SnackBar(content: Text(l10n.chatOpenFailed('$e'))),
     );
   }
 }

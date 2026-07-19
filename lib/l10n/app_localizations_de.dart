@@ -3913,4 +3913,138 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get trainerPkgLandau => 'Landau';
+
+  @override
+  String get chatChannelTypeCommunity => 'Community';
+
+  @override
+  String get chatChannelTypeApplicationReview => 'Trainer-Bewerbung';
+
+  @override
+  String get chatUserFallback => 'Nutzer';
+
+  @override
+  String get chatApplicantFallback => 'Bewerber';
+
+  @override
+  String get chatInboxTitle => 'Trainer-Kommunikation';
+
+  @override
+  String get chatInboxSectionMyTrainer => 'MEIN TRAINER';
+
+  @override
+  String get chatYesterday => 'Gestern';
+
+  @override
+  String get chatNoMessagesYet => 'Noch keine Nachrichten';
+
+  @override
+  String get chatInboxEmptyBody =>
+      'Hier erscheinen deine Chats.\nVerbinde dich mit deinem Trainer, um Nachrichten und Video-Calls zu nutzen.';
+
+  @override
+  String get dmChatWithTrainer => 'Chat mit Trainer';
+
+  @override
+  String get dmEmptyBody =>
+      'Hier erscheinen deine direkten Nachrichten mit deinem Trainer.';
+
+  @override
+  String chatWithName(String name) {
+    return 'Chat mit $name';
+  }
+
+  @override
+  String get chatStartCall => 'Call starten';
+
+  @override
+  String get chatRequestVideoCall => 'Video-Call anfragen';
+
+  @override
+  String get chatRequestVideoCallTitle => 'Video-Call anfragen?';
+
+  @override
+  String get chatRequestVideoCallBody =>
+      'Du sendest deinem Trainer eine Anfrage für einen Video-Call. Der Trainer entscheidet, ob und wann er den Call startet.';
+
+  @override
+  String get chatSendRequest => 'Anfrage senden';
+
+  @override
+  String get chatMessagesLoadFailed =>
+      'Nachrichten konnten gerade nicht geladen werden. Bitte Verbindung prüfen.';
+
+  @override
+  String get chatEmptyThread => 'Noch keine Nachrichten.\nSchreib die erste!';
+
+  @override
+  String get chatDeleteMessageTitle => 'Nachricht entfernen?';
+
+  @override
+  String get chatDeleteMessageBody =>
+      'Die Nachricht wird für alle als entfernt angezeigt.';
+
+  @override
+  String get chatRemove => 'Entfernen';
+
+  @override
+  String get chatCameraMicPermissionRequired =>
+      'Kamera & Mikrofon-Zugriff erforderlich. Bitte in den Einstellungen erlauben.';
+
+  @override
+  String chatCallStartFailed(String error) {
+    return 'Fehler beim Starten des Calls: $error';
+  }
+
+  @override
+  String get chatAppointmentOpenFailed =>
+      'Terminplanung konnte nicht geöffnet werden.';
+
+  @override
+  String chatOpenFailed(String error) {
+    return 'Chat konnte nicht geöffnet werden: $error';
+  }
+
+  @override
+  String get chatAppointmentProposal => 'Terminvorschlag';
+
+  @override
+  String get chatViewProposal => 'Vorschlag ansehen';
+
+  @override
+  String get chatMessageRemoved => 'Diese Nachricht wurde entfernt.';
+
+  @override
+  String get chatAssistantName => 'Reflex Journey Assistent';
+
+  @override
+  String get chatCallRequestSentAsTrainer => 'Trainer-Anfrage gesendet';
+
+  @override
+  String get chatCallRequestSentAsClient => 'Video-Call-Anfrage gesendet';
+
+  @override
+  String get chatCallRequestIncomingAsTrainer =>
+      'Nutzer möchte einen Video-Call';
+
+  @override
+  String get chatCallRequestIncomingAsClient =>
+      'Trainer möchte einen Video-Call';
+
+  @override
+  String get chatMessageHint => 'Nachricht schreiben …';
+
+  @override
+  String chatTyping(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tippen …',
+      one: 'tippt …',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatCallRequestMessageContent => '📹 Video-Call angefragt';
 }

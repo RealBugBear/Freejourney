@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../chat/domain/models/chat_channel.dart';
 import '../../../chat/presentation/providers/chat_providers.dart';
 import '../../../chat/presentation/widgets/direct_messages_action.dart';
@@ -123,7 +124,7 @@ class _CommunityChannelTile extends StatelessWidget {
             const Icon(Icons.push_pin_outlined, color: Colors.white, size: 20),
       ),
       title: Text(
-        'Pinnwand ${channel.channelDisplayName()}',
+        'Pinnwand ${channel.channelDisplayName(AppLocalizations.of(context))}',
         style: theme.textTheme.bodyLarge?.copyWith(
           fontWeight: hasUnread ? FontWeight.bold : FontWeight.normal,
         ),

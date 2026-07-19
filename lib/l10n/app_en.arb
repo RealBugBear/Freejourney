@@ -4220,5 +4220,173 @@
   "trainerPkgLandau": "Landau",
   "@trainerPkgLandau": {
     "description": "Short Landau package label on trainer clients list"
+  },
+  "chatChannelTypeCommunity": "Community",
+  "@chatChannelTypeCommunity": {
+    "description": "Chat channel type label for community channels"
+  },
+  "chatChannelTypeApplicationReview": "Trainer application",
+  "@chatChannelTypeApplicationReview": {
+    "description": "Chat channel type label for trainer application review"
+  },
+  "chatUserFallback": "User",
+  "@chatUserFallback": {
+    "description": "Fallback display name when user name is missing"
+  },
+  "chatApplicantFallback": "Applicant",
+  "@chatApplicantFallback": {
+    "description": "Fallback display name for trainer applicants"
+  },
+  "chatInboxTitle": "Trainer Communication",
+  "@chatInboxTitle": {
+    "description": "Chat inbox screen title"
+  },
+  "chatInboxSectionMyTrainer": "MY TRAINER",
+  "@chatInboxSectionMyTrainer": {
+    "description": "Section header for the linked trainer chat"
+  },
+  "chatYesterday": "Yesterday",
+  "@chatYesterday": {
+    "description": "Relative date label for yesterday"
+  },
+  "chatNoMessagesYet": "No messages yet",
+  "@chatNoMessagesYet": {
+    "description": "Empty inbox/DM title when there are no chats"
+  },
+  "chatInboxEmptyBody": "Your chats will show up here.\nConnect with your trainer to use messages and video calls.",
+  "@chatInboxEmptyBody": {
+    "description": "Empty chat inbox body"
+  },
+  "dmChatWithTrainer": "Chat with Trainer",
+  "@dmChatWithTrainer": {
+    "description": "FAB label to open trainer chat from DM screen"
+  },
+  "dmEmptyBody": "Your direct messages with your trainer will show up here.",
+  "@dmEmptyBody": {
+    "description": "Empty DM list body"
+  },
+  "chatWithName": "Chat with {name}",
+  "@chatWithName": {
+    "description": "Direct chat title with partner name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatStartCall": "Start Call",
+  "@chatStartCall": {
+    "description": "Tooltip to start a video call as trainer"
+  },
+  "chatRequestVideoCall": "Request Video Call",
+  "@chatRequestVideoCall": {
+    "description": "Tooltip/action to request a video call"
+  },
+  "chatRequestVideoCallTitle": "Request a video call?",
+  "@chatRequestVideoCallTitle": {
+    "description": "Confirm dialog title for video call request"
+  },
+  "chatRequestVideoCallBody": "You'll send your trainer a request for a video call. Your trainer decides whether and when to start the call.",
+  "@chatRequestVideoCallBody": {
+    "description": "Confirm dialog body for video call request"
+  },
+  "chatSendRequest": "Send Request",
+  "@chatSendRequest": {
+    "description": "Confirm button to send a video call request"
+  },
+  "chatMessagesLoadFailed": "Messages couldn't be loaded right now. Please check your connection.",
+  "@chatMessagesLoadFailed": {
+    "description": "Error message when chat messages fail to load"
+  },
+  "chatEmptyThread": "No messages yet.\nSend the first one!",
+  "@chatEmptyThread": {
+    "description": "Empty state inside a chat thread"
+  },
+  "chatDeleteMessageTitle": "Remove message?",
+  "@chatDeleteMessageTitle": {
+    "description": "Confirm dialog title for soft-deleting a message"
+  },
+  "chatDeleteMessageBody": "The message will show as removed for everyone.",
+  "@chatDeleteMessageBody": {
+    "description": "Confirm dialog body for soft-deleting a message"
+  },
+  "chatRemove": "Remove",
+  "@chatRemove": {
+    "description": "Confirm button to remove a chat message"
+  },
+  "chatCameraMicPermissionRequired": "Camera and microphone access is required. Please allow access in Settings.",
+  "@chatCameraMicPermissionRequired": {
+    "description": "SnackBar when camera/mic permission is denied for calls"
+  },
+  "chatCallStartFailed": "Couldn't start the call: {error}",
+  "@chatCallStartFailed": {
+    "description": "SnackBar when starting a video call fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAppointmentOpenFailed": "Couldn't open appointment scheduling.",
+  "@chatAppointmentOpenFailed": {
+    "description": "SnackBar when appointment scheduler cannot be opened from chat"
+  },
+  "chatOpenFailed": "Couldn't open chat: {error}",
+  "@chatOpenFailed": {
+    "description": "SnackBar when opening a chat channel fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAppointmentProposal": "Appointment proposal",
+  "@chatAppointmentProposal": {
+    "description": "Label on appointment proposal message bubble"
+  },
+  "chatViewProposal": "View proposal",
+  "@chatViewProposal": {
+    "description": "Button to view an appointment proposal from chat"
+  },
+  "chatMessageRemoved": "This message was removed.",
+  "@chatMessageRemoved": {
+    "description": "Placeholder text for a soft-deleted message"
+  },
+  "chatAssistantName": "Reflex Journey Assistant",
+  "@chatAssistantName": {
+    "description": "Display name for system/assistant chat messages"
+  },
+  "chatCallRequestSentAsTrainer": "Trainer request sent",
+  "@chatCallRequestSentAsTrainer": {
+    "description": "Outgoing call-request bubble when sender is trainer"
+  },
+  "chatCallRequestSentAsClient": "Video call request sent",
+  "@chatCallRequestSentAsClient": {
+    "description": "Outgoing call-request bubble when sender is client"
+  },
+  "chatCallRequestIncomingAsTrainer": "A client wants a video call",
+  "@chatCallRequestIncomingAsTrainer": {
+    "description": "Incoming call-request bubble shown to trainer"
+  },
+  "chatCallRequestIncomingAsClient": "Your trainer wants a video call",
+  "@chatCallRequestIncomingAsClient": {
+    "description": "Incoming call-request bubble shown to client"
+  },
+  "chatMessageHint": "Write a message…",
+  "@chatMessageHint": {
+    "description": "Hint text in the chat message input field"
+  },
+  "chatTyping": "{count, plural, =1{typing…} other{{count} typing…}}",
+  "@chatTyping": {
+    "description": "Typing indicator label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatCallRequestMessageContent": "📹 Video call requested",
+  "@chatCallRequestMessageContent": {
+    "description": "Persisted chat message content for a video call request"
   }
 }

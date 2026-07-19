@@ -13,6 +13,7 @@ import 'package:corejourney/features/chat/domain/models/chat_message.dart';
 import 'package:corejourney/features/chat/domain/repositories/chat_repository.dart';
 import 'package:corejourney/features/chat/presentation/providers/chat_providers.dart';
 import 'package:corejourney/features/chat/presentation/screens/chat_channel_screen.dart';
+import 'package:corejourney/l10n/app_localizations.dart';
 
 class _StubChatRepository implements ChatRepository {
   @override
@@ -72,6 +73,9 @@ Widget _app(ChatChannel channel) => ProviderScope(
         chatRepositoryProvider.overrideWithValue(_StubChatRepository()),
       ],
       child: MaterialApp(
+        locale: const Locale('de'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: ChatChannelScreen(channelId: channel.id, channel: channel),
       ),
     );

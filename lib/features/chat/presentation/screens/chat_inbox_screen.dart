@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/chat_channel.dart';
 import '../navigation/chat_navigation.dart';
 import '../providers/chat_providers.dart';
@@ -13,10 +14,11 @@ class ChatInboxScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channelsAsync = ref.watch(chatChannelsProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trainer-Kommunikation'),
+        title: Text(l10n.chatInboxTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -35,7 +37,7 @@ class ChatInboxScreen extends ConsumerWidget {
 
           return ListView(
             children: [
-              const _SectionHeader(title: 'MEIN TRAINER'),
+              _SectionHeader(title: l10n.chatInboxSectionMyTrainer),
               ...direct.map(
                 (c) => _ChannelListTile(
                   channel: c,
@@ -79,12 +81,13 @@ class _ChannelListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final hasUnread = channel.unreadCount > 0;
 
     final title = channel.type == ChannelType.direct
         ? ref.watch(chatPartnerNameProvider(channel.id)).valueOrNull ??
-            channel.channelDisplayName()
-        : channel.channelDisplayName();
+            channel.channelDisplayName(l10n)
+        : channel.channelDisplayName(l10n);
 
     return ListTile(
       leading: CircleAvatar(
@@ -125,7 +128,7 @@ class _ChannelListTile extends ConsumerWidget {
         children: [
           if (channel.lastMessageAt != null)
             Text(
-              _formatTime(channel.lastMessageAt!),
+              _formatTime(context, channel.lastMessageAt!),
               style: theme.textTheme.labelSmall?.copyWith(
                 color: hasUnread
                     ? theme.colorScheme.primary
@@ -156,13 +159,15 @@ class _ChannelListTile extends ConsumerWidget {
     );
   }
 
-  String _formatTime(DateTime dt) {
+  String _formatTime(BuildContext context, DateTime dt) {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toString();
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final msgDay = DateTime(dt.year, dt.month, dt.day);
-    if (msgDay == today) return DateFormat.Hm().format(dt);
-    if (today.difference(msgDay).inDays == 1) return 'Gestern';
-    return DateFormat('dd.MM').format(dt);
+    if (msgDay == today) return DateFormat.Hm(locale).format(dt);
+    if (today.difference(msgDay).inDays == 1) return l10n.chatYesterday;
+    return DateFormat.Md(locale).format(dt);
   }
 }
 
@@ -170,37 +175,39 @@ class _EmptyState extends StatelessWidget {
   const _EmptyState();
 
   @override
-  Widget build(BuildContext context) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.chat_bubble_outline,
-                  size: 64,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.25)),
-              const SizedBox(height: 16),
-              Text('Noch keine Nachrichten',
-                  style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 8),
-              Text(
-                'Hier erscheinen deine Chats.\n'
-                'Verbinde dich mit deinem Trainer, um Nachrichten und Video-Calls zu nutzen.',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.55),
-                    ),
-              ),
-            ],
-          ),
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.chat_bubble_outline,
+                size: 64,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.25)),
+            const SizedBox(height: 16),
+            Text(l10n.chatNoMessagesYet,
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text(
+              l10n.chatInboxEmptyBody,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.55),
+                  ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _ErrorState extends StatelessWidget {
@@ -208,18 +215,20 @@ class _ErrorState extends StatelessWidget {
   final VoidCallback onRetry;
 
   @override
-  Widget build(BuildContext context) => Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, size: 48),
-            const SizedBox(height: 8),
-            Text('Fehler beim Laden',
-                style: Theme.of(context).textTheme.bodyLarge),
-            const SizedBox(height: 8),
-            TextButton(
-                onPressed: onRetry, child: const Text('Erneut versuchen')),
-          ],
-        ),
-      );
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.error_outline, size: 48),
+          const SizedBox(height: 8),
+          Text(l10n.errorLoadFailedInline,
+              style: Theme.of(context).textTheme.bodyLarge),
+          const SizedBox(height: 8),
+          TextButton(onPressed: onRetry, child: Text(l10n.retry)),
+        ],
+      ),
+    );
+  }
 }

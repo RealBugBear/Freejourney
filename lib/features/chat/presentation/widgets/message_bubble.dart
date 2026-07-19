@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/chat_message.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -149,7 +150,7 @@ class _AppointmentProposalBubble extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Terminvorschlag',
+                    AppLocalizations.of(context).chatAppointmentProposal,
                     style: theme.textTheme.labelLarge?.copyWith(
                       color: theme.colorScheme.onTertiaryContainer,
                       fontWeight: FontWeight.w800,
@@ -170,7 +171,7 @@ class _AppointmentProposalBubble extends StatelessWidget {
               FilledButton.icon(
                 onPressed: onOpenAppointmentProposals,
                 icon: const Icon(Icons.arrow_forward_outlined, size: 18),
-                label: const Text('Vorschlag ansehen'),
+                label: Text(AppLocalizations.of(context).chatViewProposal),
               ),
             ],
             const SizedBox(height: 4),
@@ -207,7 +208,7 @@ class _DeletedBubble extends StatelessWidget {
             border: Border.all(color: Colors.grey.shade300),
           ),
           child: Text(
-            'Diese Nachricht wurde entfernt.',
+            AppLocalizations.of(context).chatMessageRemoved,
             style: TextStyle(
               fontStyle: FontStyle.italic,
               color: Colors.grey.shade500,
@@ -250,7 +251,7 @@ class _BotBubble extends StatelessWidget {
                   size: 13, color: theme.colorScheme.onSecondaryContainer),
               const SizedBox(width: 4),
               Text(
-                'Reflex Journey Assistent',
+                AppLocalizations.of(context).chatAssistantName,
                 style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.onSecondaryContainer,
@@ -282,6 +283,7 @@ class _CallRequestBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final showActions =
         !isOwn && (onAccept != null || onProposeAppointment != null);
 
@@ -309,7 +311,7 @@ class _CallRequestBubble extends StatelessWidget {
                     color: Colors.teal.shade700, size: 20),
                 const SizedBox(width: 8),
                 Text(
-                  _title,
+                  _title(l10n),
                   style: TextStyle(
                     color: Colors.teal.shade800,
                     fontWeight: FontWeight.w500,
@@ -334,8 +336,10 @@ class _CallRequestBubble extends StatelessWidget {
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      child: const Text('Annehmen',
-                          style: TextStyle(fontSize: 12)),
+                      child: Text(
+                        AppLocalizations.of(context).trainerRequestAccept,
+                        style: const TextStyle(fontSize: 12),
+                      ),
                     ),
                   if (onAccept != null && onProposeAppointment != null)
                     const SizedBox(width: 8),
@@ -350,8 +354,10 @@ class _CallRequestBubble extends StatelessWidget {
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      child:
-                          const Text('Termin', style: TextStyle(fontSize: 12)),
+                      child: Text(
+                        AppLocalizations.of(context).trainerAppointmentAction,
+                        style: const TextStyle(fontSize: 12),
+                      ),
                     ),
                 ],
               ),
@@ -362,14 +368,14 @@ class _CallRequestBubble extends StatelessWidget {
     );
   }
 
-  String get _title {
+  String _title(AppLocalizations l10n) {
     if (isOwn) {
       return isModerator
-          ? 'Trainer-Anfrage gesendet'
-          : 'Video-Call-Anfrage gesendet';
+          ? l10n.chatCallRequestSentAsTrainer
+          : l10n.chatCallRequestSentAsClient;
     }
     return isModerator
-        ? 'Nutzer möchte einen Video-Call'
-        : 'Trainer möchte einen Video-Call';
+        ? l10n.chatCallRequestIncomingAsTrainer
+        : l10n.chatCallRequestIncomingAsClient;
   }
 }

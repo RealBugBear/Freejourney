@@ -1,10 +1,11 @@
+import 'package:corejourney/features/chat/domain/models/chat_channel.dart';
+import 'package:corejourney/features/chat/presentation/providers/chat_providers.dart';
+import 'package:corejourney/features/chat/presentation/screens/dm_screen.dart';
+import 'package:corejourney/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:corejourney/features/chat/presentation/screens/dm_screen.dart';
-import 'package:corejourney/features/chat/presentation/providers/chat_providers.dart';
-import 'package:corejourney/features/chat/domain/models/chat_channel.dart';
 
 ChatChannel _directChannel(String id) => ChatChannel(
       id: id,
@@ -31,12 +32,18 @@ Widget _wrap(List<ChatChannel> channels) {
     overrides: [
       chatChannelsProvider.overrideWith((_) => Future.value(channels)),
     ],
-    child: MaterialApp.router(routerConfig: router),
+    child: MaterialApp.router(
+      locale: const Locale('de'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      routerConfig: router,
+    ),
   );
 }
 
 void main() {
-  testWidgets('shows only direct channels, filters community out', (tester) async {
+  testWidgets('shows only direct channels, filters community out',
+      (tester) async {
     await tester.pumpWidget(_wrap([
       _directChannel('dm-1'),
       _communityChannel('comm-1'),
@@ -48,12 +55,18 @@ void main() {
   testWidgets('shows empty state when no direct channels', (tester) async {
     await tester.pumpWidget(_wrap([_communityChannel('comm-1')]));
     await tester.pumpAndSettle();
-    expect(find.text('Noch keine Nachrichten'), findsOneWidget);
+    expect(
+      find.text(lookupAppLocalizations(const Locale('de')).chatNoMessagesYet),
+      findsOneWidget,
+    );
   });
 
   testWidgets('shows empty state when channel list is empty', (tester) async {
     await tester.pumpWidget(_wrap([]));
     await tester.pumpAndSettle();
-    expect(find.text('Noch keine Nachrichten'), findsOneWidget);
+    expect(
+      find.text(lookupAppLocalizations(const Locale('de')).chatNoMessagesYet),
+      findsOneWidget,
+    );
   });
 }
