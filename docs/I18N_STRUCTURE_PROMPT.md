@@ -419,12 +419,8 @@ per `grep -rln "i18n_check" .` lokalisieren).
       `reflex_radar_chart.dart` (Leerzustand), `reflex_profile_provider.dart` (3 sichtbare),
       `reflex_profile_pdf_service.dart` (Rest laut Audit nach W0),
       `draft_persistence_service.dart` (Logs EN).
-- [ ] **B4 — Trainer komplett (~240):** alle 20 Dateien unter `lib/features/trainer/`
-      gemäß Tracker-Tabelle; größte zuerst: `trainer_dashboard_screen.dart` (44),
-      `trainer_provider.dart` (37), `trainer_client_detail_screen.dart` (38),
-      `calendar_service.dart` (19 — Kalender-Event-Texte in ARB, Semantik unverändert),
-      Application-Screens, Scheduler/Proposal, Kleinteile. Bei Bedarf in zwei Commits
-      (B4a Screens, B4b Provider/Services/Models) teilen.
+- [x] **B4 — Trainer komplett (~240):** alle Tracker-Dateien unter `lib/features/trainer/`
+      externalisiert; scoped Audit 0 a/b/c; Parity 1091/1091; 283/283 Tests.
 - [ ] **B5 — Chat komplett (~65):** alle Dateien unter `lib/features/chat/` gemäß Tabelle.
 - [ ] **B6 — Launch-versteckte Features:** `lib/features/experience/`,
       `lib/features/community/`, `lib/features/video/`, `lib/features/premium/data/premium_repository.dart`

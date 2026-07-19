@@ -7,7 +7,7 @@ ausführungsfertige Prompt für alle Restarbeiten (W0–W8); Sessions steigen do
 **Branch:** `i18n/english-localization` (abgezweigt von `main` @ `178d4bc`).
 **Diese Datei ist das Gedächtnis über Session-Grenzen hinweg** — nach jedem Arbeitsblock aktualisieren.
 
-**Nächster Block: W4/B4** (Trainer komplett, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
+**Nächster Block: W4/B5** (Chat komplett, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
 
 ## Phasen-Checkliste
 
@@ -173,26 +173,26 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | profile | features/profile/domain/models/profile.dart | 0 | 0 | 0  | verifiziert (lokalisierter Fallback durch Consumer) |
 | profile | features/profile/presentation/screens/profile_screen.dart | 0 | 0 | 0  | verifiziert (UI/Fehler/Datum/ICU DE/EN, Audit 0) |
 | profile | features/profile/presentation/screens/username_setup_screen.dart | 0 | 0 | 0  | verifiziert (UI/Validierung DE/EN, Audit 0) |
-| trainer | features/trainer/data/repositories/supabase_trainer_application_repository.dart | 0 | 2 | 0  | offen |
-| trainer | features/trainer/domain/models/appointment.dart | 2 | 0 | 0  | offen |
-| trainer | features/trainer/domain/models/trainer_application.dart | 6 | 0 | 0  | offen |
-| trainer | features/trainer/domain/models/trainer_client.dart | 1 | 0 | 0  | offen |
-| trainer | features/trainer/domain/models/trainer_profile.dart | 1 | 0 | 0  | offen |
-| trainer | features/trainer/domain/services/calendar_service.dart | 19 | 3 | 0  | offen |
+| trainer | features/trainer/data/repositories/supabase_trainer_application_repository.dart | 0 | 2 | 0  | verifiziert (B4; d-log EN, keine UI) |
+| trainer | features/trainer/domain/models/appointment.dart | 0 | 0 | 0  | verifiziert (B4; leere Fallbacks, Labels im UI via ARB) |
+| trainer | features/trainer/domain/models/trainer_application.dart | 0 | 0 | 0  | verifiziert (B4; `statusLabel(l10n)`, Audit 0) |
+| trainer | features/trainer/domain/models/trainer_client.dart | 0 | 0 | 0  | verifiziert (B4; leerer Namens-Fallback) |
+| trainer | features/trainer/domain/models/trainer_profile.dart | 0 | 0 | 0  | verifiziert (B4; leerer Namens-Fallback) |
+| trainer | features/trainer/domain/services/calendar_service.dart | 0 | 3 | 0  | verifiziert (B4; ICS-Titel via `lookupActiveAppLocalizations`, d-log EN) |
 | trainer | features/trainer/domain/services/trainer_notification_service.dart | 7 | 3 | 0  | verifiziert (B2 `f6e1012`, Alerts + Fallbackname ARB, Logs EN) |
-| trainer | features/trainer/presentation/providers/trainer_provider.dart | 37 | 1 | 0  | offen |
-| trainer | features/trainer/presentation/screens/appointment_proposal_screen.dart | 13 | 0 | 2  | offen |
-| trainer | features/trainer/presentation/screens/appointment_scheduler_screen.dart | 13 | 3 | 1  | offen |
-| trainer | features/trainer/presentation/screens/trainer_application_form_screen.dart | 15 | 0 | 0  | offen |
-| trainer | features/trainer/presentation/screens/trainer_application_intro_screen.dart | 13 | 0 | 0  | offen |
-| trainer | features/trainer/presentation/screens/trainer_application_status_screen.dart | 17 | 0 | 0  | offen |
-| trainer | features/trainer/presentation/screens/trainer_client_detail_screen.dart | 38 | 0 | 4  | offen |
-| trainer | features/trainer/presentation/screens/trainer_clients_screen.dart | 12 | 0 | 0  | offen |
-| trainer | features/trainer/presentation/screens/trainer_dashboard_screen.dart | 44 | 0 | 3  | offen |
-| trainer | features/trainer/presentation/screens/trainer_public_profile_screen.dart | 2 | 0 | 0  | offen |
-| trainer | features/trainer/presentation/screens/trainer_requests_screen.dart | 2 | 0 | 0  | offen |
-| trainer | features/trainer/presentation/widgets/osm_attribution.dart | 1 | 0 | 0  | offen |
-| trainer | features/trainer/presentation/widgets/trainer_location_picker_widget.dart | 1 | 0 | 0  | offen |
+| trainer | features/trainer/presentation/providers/trainer_provider.dart | 0 | 0 | 0  | verifiziert (B4; Debug/Fallbacks/Activate via ARB, Audit 0) |
+| trainer | features/trainer/presentation/screens/appointment_proposal_screen.dart | 0 | 0 | 0  | verifiziert (B4, Audit 0) |
+| trainer | features/trainer/presentation/screens/appointment_scheduler_screen.dart | 0 | 3 | 0  | verifiziert (B4; UI ARB, d-log EN, Audit 0 a/b/c) |
+| trainer | features/trainer/presentation/screens/trainer_application_form_screen.dart | 0 | 0 | 0  | verifiziert (B4, Audit 0) |
+| trainer | features/trainer/presentation/screens/trainer_application_intro_screen.dart | 0 | 0 | 0  | verifiziert (B4, Audit 0) |
+| trainer | features/trainer/presentation/screens/trainer_application_status_screen.dart | 0 | 0 | 0  | verifiziert (B4, Audit 0) |
+| trainer | features/trainer/presentation/screens/trainer_client_detail_screen.dart | 0 | 0 | 0  | verifiziert (B4; Bänder/Notizen/Datum locale-aware, Audit 0) |
+| trainer | features/trainer/presentation/screens/trainer_clients_screen.dart | 0 | 0 | 0  | verifiziert (B4; Paketnamen + Debug-Panel ARB, Audit 0) |
+| trainer | features/trainer/presentation/screens/trainer_dashboard_screen.dart | 0 | 0 | 0  | verifiziert (B4; Termine/Kalender/locale Dates, Audit 0) |
+| trainer | features/trainer/presentation/screens/trainer_public_profile_screen.dart | 0 | 0 | 0  | verifiziert (bereits ARB; B4 Audit 0) |
+| trainer | features/trainer/presentation/screens/trainer_requests_screen.dart | 0 | 0 | 0  | verifiziert (B4, Audit 0) |
+| trainer | features/trainer/presentation/widgets/osm_attribution.dart | 0 | 0 | 0  | verifiziert (B4; Attribution ARB, Audit 0) |
+| trainer | features/trainer/presentation/widgets/trainer_location_picker_widget.dart | 0 | 0 | 0  | verifiziert (B4; Tip ARB, Audit 0) |
 | chat | features/chat/data/repositories/supabase_chat_repository.dart | 3 | 4 | 0  | offen |
 | chat | features/chat/domain/models/chat_channel.dart | 3 | 0 | 0  | offen |
 | chat | features/chat/presentation/navigation/chat_navigation.dart | 2 | 0 | 0  | offen |
@@ -245,6 +245,19 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 
 ## Arbeitslog
+
+- **2026-07-19, B4 — Trainer komplett (`49c86be`):** ~157 neue ARB-Keys (**1091 DE = 1091 EN**).
+  Application-Intro/-Status/-Form, Dashboard, Clients-Liste + Debug-Panel,
+  Client-Detail, Requests, Scheduler/Proposal, OSM-Attribution, Location-Picker-Tip,
+  Kalender-ICS-Titel sowie `trainer_provider` (Connection-Check, Namens-Fallbacks,
+  Activate-Fehler, Chat-Partner-Labels) über ARB. Paket-Kurzlabels `trainerPkg*`;
+  Statuslabels via `statusLabel(AppLocalizations)` (Admin-Panel mitgezogen).
+  Modelle liefern leere Strings statt harter DE-Fallbacks; UI nutzt
+  `clientFallbackName`/`trainerFallbackName`/`appointmentSessionTitle`.
+  Discovery/Public-Profile waren bereits ARB-verdrahtet. Quality-Allowlist für
+  identische DE/EN-Strings (OSM, Diag-Zeilen, Paketkürzel). Belege: scoped Audit
+  **0 a/b/c** unter `lib/features/trainer/` (nur d-log), `make i18n-check` 1091/1091,
+  analyze 0 Fehler/0 Warnungen, **283/283 Tests grün**.
 
 - **2026-07-19, B3 — Assessment-UI & PDF (`cf5de93`):** 136 neue ARB-Keys (**934 DE = 934 EN**).
   Analysis-Placeholder, Dauerempfehlung, Reflexprofil-Fragebogen/-Ergebnis/-Demo,
