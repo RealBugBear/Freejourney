@@ -805,7 +805,7 @@ const List<Exercise> spinalGalantExercises = [
       'Wenn die Übung zu schwer ist oder Schmerzen auftreten: Kissen unter den Po legen'
     ],
     hintsEn: [
-      'If too difficult or painful: place a pillow under the hips to reduce the load'
+      'If you feel pain, stop the exercise. If the movement only feels too difficult, place a pillow under your hips to reduce the range.'
     ],
     executionGuideDe: 'Hüfte rotieren. Arme im rechten Winkel.',
     executionGuideEn: 'Rotate hips. Arms at right angles.',
@@ -894,8 +894,8 @@ const List<Exercise> tlrExercises = [
       'Bei Nackenproblemen: diese Übung nicht durchführen',
     ],
     hintsEn: [
-      'Keep most weight on the hands to protect the neck',
-      'With neck problems: do not perform this exercise',
+      'Keep most of your weight through your hands to reduce pressure on your neck.',
+      'If you have neck pain or another neck concern, skip this exercise and ask a qualified professional whether it is appropriate for you.',
     ],
     executionGuideDe: 'Nasenspitze führt. Langsam über den Kopf rollen.',
     executionGuideEn: 'Nose leads. Slowly roll over the head.',
@@ -951,7 +951,7 @@ const List<Exercise> tlrExercises = [
     packageId: 'tlr',
     sequenceNumber: 4,
     titleDe: 'Kopf heben und fallen lassen',
-    titleEn: 'Head Lift and Drop',
+    titleEn: 'Head Lift and Lower',
     positionInstructionsDe: [
       'Rückenlage',
       'Weiches flaches Kissen oder gefaltete Decke unter den Kopf legen',
@@ -971,9 +971,9 @@ const List<Exercise> tlrExercises = [
     ],
     movementInstructionsEn: [
       'While inhaling, gently lift the head',
-      'While exhaling, let the head drop',
-      'Do not press chin to chest — keep distance, head points up',
-      'Movement in the neck is important',
+      'As you exhale, gently lower your head.',
+      'Keep space between your chin and chest.',
+      'Keep the neck movement small and controlled.',
       '7 seconds, 3 seconds rest, 6 repetitions',
     ],
     hintsDe: [
@@ -982,10 +982,11 @@ const List<Exercise> tlrExercises = [
     ],
     hintsEn: [
       'Do not press chin to chest — maintain distance',
-      'Movement should be felt in the neck',
+      'Stop if you feel pain or discomfort in your neck.',
     ],
     executionGuideDe: 'Einatmen: Kopf heben. Ausatmen: fallen lassen.',
-    executionGuideEn: 'Inhale: lift head. Exhale: let drop.',
+    executionGuideEn:
+        'Inhale: gently lift your head. Exhale: gently lower it.',
     durationSeconds: 7,
     repetitions: 6,
     imagePath: 'assets/images/trainings/tlr/tlr4.jpeg',

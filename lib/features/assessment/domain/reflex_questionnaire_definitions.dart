@@ -664,7 +664,7 @@ const _childQuestionTextEn = <int, ({String textEn})>{
   106: (textEn: 'Does your child have epilepsy?'),
   107: (
     textEn:
-        'Has your child been diagnosed with an autism spectrum condition, or are they currently being evaluated for one?'
+        'Has your child been identified as being on the autism spectrum, or are they currently being evaluated for this?'
   ),
   108: (textEn: 'Does your child have trisomy 21 (Down syndrome)?'),
   109: (
@@ -699,7 +699,7 @@ const _childQuestionHelpTextEn = <int, ({String textEn})>{
 const _childQuestionTrainerFlagLabelEn = <int, ({String textEn})>{
   57: (textEn: 'ADHD / ADD'),
   106: (textEn: 'Epilepsy'),
-  107: (textEn: 'Autism spectrum diagnosis'),
+  107: (textEn: 'Autism spectrum — identified or under evaluation'),
   108: (textEn: 'Trisomy 21 / Down syndrome'),
   109: (textEn: 'Psychological / psychiatric care'),
 };

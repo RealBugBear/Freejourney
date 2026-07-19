@@ -138,7 +138,8 @@ void main() {
         ))),
       );
       expect(englishCopy, isNot(contains('FLR')));
-      expect(PrimitiveReflex.flr.label('en'), 'FPR');
+      expect(PrimitiveReflex.flr.label('en'), contains('FPR'));
+      expect(PrimitiveReflex.flr.shortLabel('en'), 'FPR');
       expect(PrimitiveReflex.flr.label('de'), 'FLR');
     });
 
@@ -172,7 +173,12 @@ void main() {
         },
       };
       expect(radarScoresFromAssessment(scores, 'de').single.label, 'FLR');
-      expect(radarScoresFromAssessment(scores, 'en').single.label, 'FPR');
+      expect(
+        radarScoresFromAssessment(scores, 'en').single.label,
+        contains('FPR'),
+      );
+      // The chart paints shortLabel, so it must stay compact in both languages.
+      expect(radarScoresFromAssessment(scores, 'en').single.shortLabel, 'FPR');
     });
   });
 }

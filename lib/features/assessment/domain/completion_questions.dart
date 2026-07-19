@@ -9,9 +9,9 @@ const String _defaultDe =
     'dich zu regulieren?';
 
 const String _defaultEn =
-    'Did you go through an intensified emotional or stressful time through the '
-    'training, and were you able to confront these themes — learning that your '
-    'emotional reaction does not always match reality — and begin to regulate yourself?';
+    'During the training, did you experience a more intense emotional or stressful '
+    'period? Were you able to face those themes, recognize that your emotional '
+    'response did not always match the situation, and begin to regulate yourself?';
 
 const Map<String, Map<String, String?>> _packageQuestions = {
   'moro': {
