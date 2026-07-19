@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -73,17 +74,18 @@ class _LanguageSelectionScreenState
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 36),
-              _LanguageButton(
-                label: l10n.languageGerman,
-                selected: _selectedCode == 'de',
-                onPressed: () => setState(() => _selectedCode = 'de'),
-              ),
-              const SizedBox(height: 12),
-              _LanguageButton(
-                label: l10n.languageEnglish,
-                selected: _selectedCode == 'en',
-                onPressed: () => setState(() => _selectedCode = 'en'),
-              ),
+              // One button per registry entry — adding a language here needs
+              // no code change, only an AppLanguages entry.
+              for (final language in AppLanguages.all) ...[
+                _LanguageButton(
+                  label: language.autonym,
+                  selected: _selectedCode == language.code,
+                  onPressed: () =>
+                      setState(() => _selectedCode = language.code),
+                ),
+                if (language != AppLanguages.all.last)
+                  const SizedBox(height: 12),
+              ],
               const Spacer(),
               FilledButton(
                 onPressed: _continue,

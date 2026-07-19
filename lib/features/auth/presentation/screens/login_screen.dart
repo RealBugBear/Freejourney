@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -387,9 +388,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 // Language toggle — always visible so non-German speakers can switch
                 const SizedBox(height: 32),
                 SegmentedButton<String>(
-                  segments: const [
-                    ButtonSegment(value: 'de', label: Text('🇩🇪 Deutsch')),
-                    ButtonSegment(value: 'en', label: Text('🇬🇧 English')),
+                  segments: [
+                    for (final language in AppLanguages.all)
+                      ButtonSegment(
+                        value: language.code,
+                        label: Text(
+                          '${language.flagEmoji} ${language.autonym}',
+                        ),
+                      ),
                   ],
                   selected: {currentLang},
                   onSelectionChanged: (s) =>

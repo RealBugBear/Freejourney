@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/training/domain/models/training_session.dart';
+import '../l10n/app_languages.dart';
 import 'profile_locale_sync_service.dart';
 
 // ── Keys ─────────────────────────────────────────────────────────────────────
@@ -116,13 +117,14 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
         0;
 
     // If no language has been saved yet (first launch), detect from device locale.
-    // We support 'de' and 'en'; everything else defaults to 'en'.
+    // The registry decides which languages are supported and what an
+    // unsupported device language falls back to.
     final savedLanguage = prefs.getString(languagePreferenceKey);
     final hasSelectedLanguage = prefs.containsKey(languagePreferenceKey);
     final languageCode = savedLanguage ??
-        (WidgetsBinding.instance.platformDispatcher.locale.languageCode == 'de'
-            ? 'de'
-            : 'en');
+        AppLanguages.resolveInitial(
+          WidgetsBinding.instance.platformDispatcher.locale.languageCode,
+        );
 
     return AppSettings(
       feedbackMode: TrainingFeedbackMode
@@ -151,6 +153,7 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
   }
 
   Future<void> setLanguage(String code) async {
+    assert(AppLanguages.isSupported(code), 'unsupported language code: $code');
     state = state.copyWith(languageCode: code, hasSelectedLanguage: true);
     await _prefs.setString(languagePreferenceKey, code);
     await syncCurrentLanguage();

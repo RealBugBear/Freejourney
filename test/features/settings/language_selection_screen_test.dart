@@ -1,3 +1,4 @@
+import 'package:corejourney/core/l10n/app_languages.dart';
 import 'package:corejourney/core/settings/profile_locale_sync_service.dart';
 import 'package:corejourney/core/settings/settings_provider.dart';
 import 'package:corejourney/features/settings/presentation/screens/language_selection_screen.dart';
@@ -96,5 +97,33 @@ void main() {
     expect(find.text('Choose your language'), findsOneWidget);
     expect(find.text('Continue'), findsOneWidget);
     expect(prefs.getString(languagePreferenceKey), 'de');
+  });
+
+  testWidgets('renders one button per registry entry', (tester) async {
+    SharedPreferences.setMockInitialValues({languagePreferenceKey: 'de'});
+    final prefs = await SharedPreferences.getInstance();
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsProvider.overrideWith((ref) => SettingsNotifier(prefs, null)),
+        ],
+        child: const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: LanguageSelectionScreen(),
+        ),
+      ),
+    );
+
+    // Iterates the registry rather than asserting a hardcoded count, so a
+    // newly registered language is covered without touching this test.
+    for (final language in AppLanguages.all) {
+      expect(
+        find.text(language.autonym),
+        findsOneWidget,
+        reason: 'missing picker button for ${language.code}',
+      );
+    }
   });
 }

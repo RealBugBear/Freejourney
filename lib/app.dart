@@ -10,6 +10,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'bootstrap/providers.dart';
 import 'config/launch_flags.dart';
+import 'core/l10n/app_languages.dart';
 import 'core/navigation/app_router.dart';
 import 'core/logging/app_logger.dart';
 import 'core/settings/settings_provider.dart';
@@ -242,10 +243,7 @@ class _CoreJourneyAppView extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('de'),
-        Locale('en'),
-      ],
+      supportedLocales: AppLanguages.locales,
     );
   }
 }

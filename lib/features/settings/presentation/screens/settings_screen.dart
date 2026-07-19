@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../bootstrap/providers.dart';
+import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/onboarding/onboarding_hint_provider.dart';
 import '../../../../core/settings/settings_provider.dart';
@@ -156,10 +157,9 @@ class SettingsScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: _SegmentedRow<String>(
-              options: const ['de', 'en'],
+              options: AppLanguages.all.map((l) => l.code).toList(),
               selected: settings.languageCode,
-              label: (code) =>
-                  code == 'de' ? l10n.languageGerman : l10n.languageEnglish,
+              label: (code) => AppLanguages.byCode(code).autonym,
               onChanged: notifier.setLanguage,
             ),
           ),

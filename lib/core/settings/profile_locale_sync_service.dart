@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../l10n/app_languages.dart';
 import '../logging/app_logger.dart';
 
 abstract interface class ProfileLocaleSyncService {
@@ -20,7 +21,12 @@ class SupabaseProfileLocaleSyncService implements ProfileLocaleSyncService {
     required String userId,
     required String languageCode,
   }) async {
-    final locale = languageCode.toLowerCase().startsWith('en') ? 'en' : 'de';
+    // The registry owns the fallback policy; `profiles.locale` only ever
+    // receives a code the app actually supports. Region subtags ("en-US")
+    // are reduced to the language subtag first.
+    final locale = AppLanguages.normalize(
+      languageCode.toLowerCase().split(RegExp('[-_]')).first,
+    );
 
     try {
       await _client
