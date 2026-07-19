@@ -7,7 +7,8 @@ ausführungsfertige Prompt für alle Restarbeiten (W0–W8); Sessions steigen do
 **Branch:** `i18n/english-localization` (abgezweigt von `main` @ `178d4bc`).
 **Diese Datei ist das Gedächtnis über Session-Grenzen hinweg** — nach jedem Arbeitsblock aktualisieren.
 
-**Nächster Block: W4/B2** (Hinweise & Client-Push, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
+**Nächster Block: W4/B3** (Assessment-UI & PDF, siehe `docs/I18N_STRUCTURE_PROMPT.md`;
+PDF-Entwurf liegt als `docs/i18n/wip/reflex_profile_pdf_localization.patch`)
 
 ## Phasen-Checkliste
 
@@ -179,7 +180,7 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | trainer | features/trainer/domain/models/trainer_client.dart | 1 | 0 | 0  | offen |
 | trainer | features/trainer/domain/models/trainer_profile.dart | 1 | 0 | 0  | offen |
 | trainer | features/trainer/domain/services/calendar_service.dart | 19 | 3 | 0  | offen |
-| trainer | features/trainer/domain/services/trainer_notification_service.dart | 7 | 3 | 0  | offen |
+| trainer | features/trainer/domain/services/trainer_notification_service.dart | 7 | 3 | 0  | verifiziert (B2 `f6e1012`, Alerts + Fallbackname ARB, Logs EN) |
 | trainer | features/trainer/presentation/providers/trainer_provider.dart | 37 | 1 | 0  | offen |
 | trainer | features/trainer/presentation/screens/appointment_proposal_screen.dart | 13 | 0 | 2  | offen |
 | trainer | features/trainer/presentation/screens/appointment_scheduler_screen.dart | 13 | 3 | 1  | offen |
@@ -217,27 +218,27 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | admin | features/admin/presentation/screens/admin_panel_screen.dart | 99 | 0 | 0  | offen |
 | dev_tools | features/dev_tools/presentation/screens/dev_tools_screen.dart | 36 | 7 | 0  | offen |
 | core/database | core/database/app_database.dart | 2 | 1 | 0  | verifiziert (B1 `d955d11`, Logs/Assert bereits EN) |
-| core/database | core/database/backup_exclusion.dart | 0 | 1 | 0  | offen |
+| core/database | core/database/backup_exclusion.dart | 0 | 1 | 0  | verifiziert (Log bereits EN) |
 | core/database | core/database/tables/exercises_table.dart | 0 | 0 | 2 bilingual-ok | offen |
-| core/logging | core/logging/logger_service.dart | 2 | 2 | 0  | offen |
-| core/monitoring | core/monitoring/sentry_service.dart | 1 | 2 | 0  | offen |
+| core/logging | core/logging/logger_service.dart | 2 | 2 | 0  | verifiziert (Logs bereits EN) |
+| core/monitoring | core/monitoring/sentry_service.dart | 1 | 2 | 0  | verifiziert (Log bereits EN) |
 | core/navigation | core/navigation/app_router.dart | 3 | 0 | 0  | verifiziert (B1 `d955d11`, Audit 0) |
 | core/navigation | core/navigation/app_shell.dart | 6 | 0 | 0  | verifiziert (B1 `d955d11`, Tab-Labels DE/EN, Audit 0) |
-| core/notifications | core/notifications/notification_service.dart | 2 | 4 | 1  | offen |
-| core/onboarding | core/onboarding/onboarding_hint_gate.dart | 3 | 0 | 0  | offen |
-| core/onboarding | core/onboarding/onboarding_hint_provider.dart | 20 | 0 | 0  | offen |
-| core/push | core/push/push_notification_service.dart | 11 | 16 | 0  | offen |
-| core/reminders | core/reminders/device_timezone_provider.dart | 2 | 0 | 0  | offen |
-| core/reminders | core/reminders/reminder_preferences_repository.dart | 0 | 5 | 0  | offen |
-| core/reminders | core/reminders/reminder_settings.dart | 1 | 0 | 0  | offen |
-| core/services | core/services/notification_service.dart | 30 | 3 | 0  | offen |
-| core/settings | core/settings/settings_provider.dart | 1 | 1 | 0  | offen |
-| core/sync | core/sync/exercises_sync_service.dart | 0 | 5 | 2 bilingual-ok | offen |
-| core/sync | core/sync/sync_service.dart | 1 | 14 | 0  | offen |
+| core/notifications | core/notifications/notification_service.dart | 2 | 4 | 1  | verifiziert (B2 `f6e1012`, title/body generisch, Channel-Name ARB) |
+| core/onboarding | core/onboarding/onboarding_hint_gate.dart | 3 | 0 | 0  | verifiziert (B2 `f6e1012`, Sheet-Aktionen ARB) |
+| core/onboarding | core/onboarding/onboarding_hint_provider.dart | 20 | 0 | 0  | verifiziert (B2 `f6e1012`, Content über AppLocalizations) |
+| core/push | core/push/push_notification_service.dart | 11 | 16 | 0  | verifiziert (B2 `f6e1012`, Fallback-Copy ARB; Markenname allowlisted) |
+| core/reminders | core/reminders/device_timezone_provider.dart | 2 | 0 | 0  | verifiziert (nur technische Werte/Logs, Audit 0 a/b/c) |
+| core/reminders | core/reminders/reminder_preferences_repository.dart | 0 | 5 | 0  | verifiziert (Logs bereits EN) |
+| core/reminders | core/reminders/reminder_settings.dart | 1 | 0 | 0  | verifiziert (B2 `f6e1012`, ungenutztes 'Home'-Label entfernt) |
+| core/services | core/services/notification_service.dart | 30 | 3 | 0  | verifiziert (B2 `f6e1012`, legacy ohne Aufrufer; Copy jetzt Pflichtparameter) |
+| core/settings | core/settings/settings_provider.dart | 1 | 1 | 0  | verifiziert (nur d-log/Assert, bereits EN) |
+| core/sync | core/sync/exercises_sync_service.dart | 0 | 5 | 2 bilingual-ok | verifiziert (Logs EN, Halten/Hold bilingual-ok) |
+| core/sync | core/sync/sync_service.dart | 1 | 14 | 0  | verifiziert (alle Funde d-log, bereits EN) |
 | core/widgets | core/widgets/error_retry_widget.dart | 1 | 0 | 0  | verifiziert (B1 `d955d11`, lokalisierter Default, Audit 0) |
 | lib/app.dart | app.dart | 6 | 2 | 4  | verifiziert (W2+B1 `d955d11`, Kalender-/Reminder-Copy DE/EN, Audit 0) |
 | lib/bootstrap | bootstrap/bootstrap.dart | 26 | 7 | 0  | verifiziert (B1, alle Funde d-log, bereits EN) |
-| lib/bootstrap | bootstrap/providers.dart | 0 | 3 | 0  | offen |
+| lib/bootstrap | bootstrap/providers.dart | 0 | 3 | 0  | verifiziert (nur Provider-Asserts, bereits EN) |
 | lib/main_development.dart | main_development.dart | 20 | 4 | 0  | verifiziert (B1 `d955d11`, Fehlertitel ARB; Boot-Status bewusst EN-technisch, Allowlist) |
 | lib/main_production.dart | main_production.dart | 2 | 1 | 0  | verifiziert (B1 `d955d11`, Startfehler DE/EN via Geraetesprache) |
 | lib/main_smoke.dart | main_smoke.dart | 1 | 0 | 0  | verifiziert (B1, technischer Smoke-Marker, Allowlist) |
@@ -245,6 +246,28 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 
 ## Arbeitslog
+
+- **2026-07-19, B2 — Hinweise & Client-Push (`f6e1012`):** 38 neue ARB-Keys
+  (**798 DE = 798 EN**): 19 Onboarding-Hints (4 Sheets als Titel+Body, 12 Bullet-Items,
+  3 Sheet-Aktionen), Android-Channel-Name, 10 Push-Fallback-Texte, 4 Trainer-Alerts
+  (Tag 25/28, mit `traineeName`-Platzhalter) plus `traineeFallbackName`. Neu
+  `lib/core/l10n/active_localizations.dart` — `lookupActiveAppLocalizations()` löst
+  in Headless-Kontexten (Push-Handler, Hintergrund-Services ohne lokalisierten Context)
+  die persistierte App-Sprache auf; bei Erstinstallation Gerätesprache wie im
+  `SettingsNotifier`. Live-`NotificationService`: `titleDe`/`bodyDe` → `title`/`body`
+  (drei Aufrufer nachgezogen), Android-Channel-Name kommt aus dem ARB statt hart
+  „Training Reminders“. `PushNotificationService`: die deutschen Inline-Ternaries für
+  Foreground-Fallbacks sind ein lokalisierter `switch` über `pushXxxTitle/Body`-Keys;
+  der Markenname „Reflex Journey“ als Default-Titel bleibt bewusst (Allowlist).
+  `TrainerNotificationService` (live, feuert nach Sync): Tag-25/28-Alerts und
+  Trainee-Fallbackname über ARB. Legacy `core/services/notification_service.dart`
+  (keine Produktions-Aufrufer): sämtliche deutsche Rest-Copy entfernt — Aufrufer müssen
+  `LocalNotificationCopy` übergeben; ungenutztes `'Home'`-Label in
+  `reminder_settings.dart` gestrichen. Reminder-/Settings-/Sync-/Logger-/Sentry-Dateien
+  brauchten keine Änderung (nur d-log, bereits EN). DE-Katalog byte-identisch bis auf
+  angehängte Keys. Belege: Parity- und Quality-Gate 798/798 grün, analyze 0 Fehler/
+  0 Warnungen (96 bekannte Infos), **283/283 Tests grün**; scoped Audit: keine
+  nicht-erlaubten a/b/c-Funde mehr in allen B2-Dateien.
 
 - **2026-07-19, B1 — Start & Gerüst (`d955d11`):** 10 neue ARB-Keys (**763 DE = 763 EN**).
   Bottom-Navigation nutzt bestehende Keys (`today`, `progressTitle`, `accompanimentTitle`,
