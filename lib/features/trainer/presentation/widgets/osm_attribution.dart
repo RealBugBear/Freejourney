@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,7 +12,7 @@ class OsmAttribution extends StatelessWidget {
   Widget build(BuildContext context) {
     // SimpleAttributionWidget stellt selbst "© " voran.
     return SimpleAttributionWidget(
-      source: const Text('OpenStreetMap contributors'),
+      source: Text(AppLocalizations.of(context).osmAttribution),
       onTap: () => launchUrl(
         Uri.parse('https://www.openstreetmap.org/copyright'),
         mode: LaunchMode.externalApplication,

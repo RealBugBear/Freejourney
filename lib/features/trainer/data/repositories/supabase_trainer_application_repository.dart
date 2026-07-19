@@ -83,11 +83,11 @@ class SupabaseTrainerApplicationRepository
       final List list when list.isNotEmpty =>
         list.first as Map<String, dynamic>,
       final Map<String, dynamic> map => map,
-      _ => throw StateError('Kein Aktivierungscode erzeugt.'),
+      _ => throw StateError('No activation code was created.'),
     };
     final code = row['code'] as String?;
     if (code == null || code.isEmpty) {
-      throw StateError('Kein Aktivierungscode erzeugt.');
+      throw StateError('No activation code was created.');
     }
     return code;
   }

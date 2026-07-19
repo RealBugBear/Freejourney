@@ -57,7 +57,7 @@ class _TrainerClientDetailScreenState
       orElse: () => TrainerClient(
         relationshipId: '',
         clientId: widget.clientId,
-        displayName: 'Client',
+        displayName: l10n.trainerClientFallback,
         currentDay: 1,
         dailyStreak: 0,
       ),
@@ -76,7 +76,7 @@ class _TrainerClientDetailScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(client?.displayName ?? 'Client'),
+        title: Text(client?.displayName ?? l10n.trainerClientFallback),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -97,7 +97,7 @@ class _TrainerClientDetailScreenState
                 const SizedBox(height: 24),
 
                 Text(
-                  'Freigegebene Reflexprofile',
+                  l10n.trainerSharedReflexProfiles,
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall
@@ -107,12 +107,12 @@ class _TrainerClientDetailScreenState
                 sharedProfilesAsync.when(
                   loading: () => const LinearProgressIndicator(),
                   error: (e, _) => Text(
-                    'Profile konnten nicht geladen werden: $e',
+                    l10n.trainerProfilesLoadFailed('$e'),
                     style: const TextStyle(color: AppColors.error),
                   ),
                   data: (sharedProfiles) => sharedProfiles.isEmpty
                       ? Text(
-                          'Keine Profile freigegeben.',
+                          l10n.trainerNoProfilesShared,
                           style: TextStyle(
                               color: Theme.of(context)
                                   .colorScheme
@@ -127,7 +127,7 @@ class _TrainerClientDetailScreenState
                                       padding: const EdgeInsets.only(
                                           left: 4, bottom: 16),
                                       child: Text(
-                                        '${profile.displayName}: Noch kein abgeschlossenes Reflexprofil.',
+                                        l10n.trainerNoCompletedReflexProfile(profile.displayName),
                                         style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -181,8 +181,8 @@ class _TrainerClientDetailScreenState
                 const SizedBox(height: 24),
 
                 _SectionTitle(
-                  title: 'Termine',
-                  actionLabel: 'Termin vorschlagen',
+                  title: l10n.trainerAppointmentsMetric,
+                  actionLabel: l10n.trainerProposeAppointment,
                   onAction: () => context.push(
                     Routes.appointmentScheduler
                         .replaceFirst(':clientId', client.clientId),
@@ -194,7 +194,7 @@ class _TrainerClientDetailScreenState
                 const SizedBox(height: 24),
 
                 Text(
-                  'Beobachtungen',
+                  l10n.trainerObservations,
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall
@@ -209,7 +209,7 @@ class _TrainerClientDetailScreenState
                   ),
                   data: (observations) => observations.isEmpty
                       ? Text(
-                          'Noch keine geteilten Beobachtungen.',
+                          l10n.trainerNoSharedObservations,
                           style: TextStyle(
                               color: Theme.of(context)
                                   .colorScheme
@@ -318,13 +318,13 @@ class _ReflexProfileNotesCardState
       _noteController.clear();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Reflexprofil-Notiz gespeichert.')),
+          SnackBar(content: Text(AppLocalizations.of(context).trainerReflexNoteSaved)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Notiz konnte nicht gespeichert werden: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context).trainerNoteSaveFailed('$e'))),
         );
       }
     } finally {
@@ -352,7 +352,7 @@ class _ReflexProfileNotesCardState
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'Reflexprofil-Notizen',
+                    AppLocalizations.of(context).trainerReflexNotesTitle,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
@@ -362,7 +362,7 @@ class _ReflexProfileNotesCardState
             ),
             const SizedBox(height: 6),
             Text(
-              'Diese Notizen haften am Profil und sind bei bestehender Freigabe auch für spätere Trainer als Übergabe sichtbar.',
+              AppLocalizations.of(context).trainerReflexNotesBody,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     height: 1.35,
@@ -374,7 +374,7 @@ class _ReflexProfileNotesCardState
               minLines: 2,
               maxLines: 5,
               decoration: InputDecoration(
-                hintText: 'Notiz zur Begleitung oder Übergabe',
+                hintText: AppLocalizations.of(context).trainerReflexNoteHint,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -392,20 +392,20 @@ class _ReflexProfileNotesCardState
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.add_comment_outlined),
-                label: const Text('Notiz speichern'),
+                label: Text(AppLocalizations.of(context).trainerSaveNote),
               ),
             ),
             const Divider(height: 28),
             notesAsync.when(
               loading: () => const LinearProgressIndicator(),
               error: (e, _) => Text(
-                'Notizen konnten nicht geladen werden: $e',
+                AppLocalizations.of(context).trainerNotesLoadFailed('$e'),
                 style: const TextStyle(color: AppColors.error),
               ),
               data: (notes) {
                 if (notes.isEmpty) {
                   return Text(
-                    'Noch keine Reflexprofil-Notizen.',
+                    AppLocalizations.of(context).trainerNoReflexNotes,
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant),
                   );
@@ -418,7 +418,7 @@ class _ReflexProfileNotesCardState
                         leading: const Icon(Icons.sticky_note_2_outlined),
                         title: Text(note.body),
                         subtitle: Text(
-                          DateFormat('dd.MM.yyyy · HH:mm', 'de_DE')
+                          DateFormat('dd.MM.yyyy · HH:mm', Localizations.localeOf(context).toString())
                               .format(note.createdAt),
                         ),
                       ),
@@ -448,7 +448,7 @@ class _ClientActionRow extends ConsumerWidget {
           onPressed: () =>
               openDirectChatWithUser(context, ref, client.clientId),
           icon: const Icon(Icons.chat_bubble_outline),
-          label: const Text('Nachricht'),
+          label: Text(AppLocalizations.of(context).trainerMessageAction),
         ),
         OutlinedButton.icon(
           onPressed: () => context.push(
@@ -459,7 +459,7 @@ class _ClientActionRow extends ConsumerWidget {
             extra: client,
           ),
           icon: const Icon(Icons.event_available_outlined),
-          label: const Text('Termin'),
+          label: Text(AppLocalizations.of(context).trainerAppointmentAction),
         ),
       ],
     );
@@ -516,7 +516,7 @@ class _KpiStrip extends StatelessWidget {
         const SizedBox(width: 8),
         _KpiChip(
           icon: Icons.radio_button_checked,
-          label: '${client.dailyStreak} Tage',
+          label: AppLocalizations.of(context).trainerDaysCount(client.dailyStreak),
           color: AppColors.warning,
         ),
         const SizedBox(width: 8),
@@ -577,7 +577,7 @@ class _ClientAppointmentsList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (appointments.isEmpty) {
       return Text(
-        'Noch keine geplanten Termine.',
+        AppLocalizations.of(context).trainerNoPlannedAppointments,
         style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
       );
     }
@@ -586,8 +586,8 @@ class _ClientAppointmentsList extends StatelessWidget {
       children: appointments.take(5).map((appointment) {
         final scheduledFor = appointment.scheduledFor;
         final date = scheduledFor == null
-            ? 'Termin vorgeschlagen'
-            : DateFormat('dd.MM.yyyy · HH:mm', 'de_DE').format(scheduledFor);
+            ? AppLocalizations.of(context).trainerAppointmentProposed
+            : DateFormat('dd.MM.yyyy · HH:mm', Localizations.localeOf(context).toString()).format(scheduledFor);
         final profileLabel = appointment.profileLabel;
         return ListTile(
           contentPadding: EdgeInsets.zero,
@@ -599,7 +599,7 @@ class _ClientAppointmentsList extends StatelessWidget {
               Text(date),
               if (profileLabel != null)
                 Text(
-                  'für $profileLabel',
+                  AppLocalizations.of(context).trainerAppointmentFor(profileLabel),
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).colorScheme.primary,
@@ -624,7 +624,7 @@ class _ObservationList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: observations.take(8).map((observation) {
-        final date = DateFormat('dd.MM.yyyy · HH:mm', 'de_DE')
+        final date = DateFormat('dd.MM.yyyy · HH:mm', Localizations.localeOf(context).toString())
             .format(observation.recordedAt);
         return ListTile(
           contentPadding: EdgeInsets.zero,
@@ -648,12 +648,13 @@ class _StatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final label = switch (status) {
-      'confirmed' => 'Bestätigt',
-      'proposed' => 'Vorschlag',
-      'cancelled' => 'Abgesagt',
-      'done' => 'Erledigt',
-      _ => 'Geplant',
+      'confirmed' => l10n.appointmentStatusConfirmed,
+      'proposed' => l10n.appointmentStatusProposal,
+      'cancelled' => l10n.appointmentStatusCancelled,
+      'done' => l10n.appointmentStatusCompletedShort,
+      _ => l10n.appointmentStatusPlanned,
     };
     final color = switch (status) {
       'confirmed' => AppColors.success,
@@ -693,7 +694,7 @@ class _SessionList extends StatelessWidget {
             size: 20,
           ),
           title:
-              Text('Tag ${s.dayNumber}', style: const TextStyle(fontSize: 14)),
+              Text(AppLocalizations.of(context).trainerDayNumber(s.dayNumber), style: const TextStyle(fontSize: 14)),
           trailing: Text(
             dayStr,
             style: TextStyle(
@@ -719,14 +720,16 @@ class _TappableProfileRow extends StatelessWidget {
     final assessment = profile.latestAssessment!;
 
     final age = profile.ageYears != null
-        ? '${profile.ageYears} Jahr${profile.ageYears == 1 ? '' : 'e'}'
+        ? AppLocalizations.of(context).trainerAgeYears(profile.ageYears!)
         : (profile.ageGroup ?? '');
-    final dateStr = DateFormat('dd.MM.yyyy', 'de_DE')
+    final dateStr = DateFormat('dd.MM.yyyy', Localizations.localeOf(context).toString())
         .format(assessment.completedAt ?? assessment.createdAt);
     final metaStr = [if (age.isNotEmpty) age, dateStr].join(' · ');
 
+    final l10n = AppLocalizations.of(context);
     final topBand = _topScoredBand(assessment);
-    final bandLabel = topBand != null ? _bandPillLabel(topBand) : null;
+    final bandLabel =
+        topBand != null ? _bandPillLabel(l10n, topBand) : null;
     final bandColor = topBand != null ? _bandPillColor(topBand, cs) : null;
 
     return Card(
@@ -827,9 +830,10 @@ ReflexScoreBand? _topScoredBand(ReflexProfileAssessment assessment) {
   return worst;
 }
 
-String _bandPillLabel(ReflexScoreBand band) => switch (band) {
-      ReflexScoreBand.strong => 'stark auffällig',
-      ReflexScoreBand.elevated => 'auffällig',
+String _bandPillLabel(AppLocalizations l10n, ReflexScoreBand band) =>
+    switch (band) {
+      ReflexScoreBand.strong => l10n.trainerBandStrongNoticeable,
+      ReflexScoreBand.elevated => l10n.scoreBandElevated,
       _ => '',
     };
 

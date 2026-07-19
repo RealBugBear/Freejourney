@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -91,9 +92,9 @@ class _TrainerLocationPickerWidgetState
                     color: Colors.black54,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Text(
-                    'Tippe auf die Karte',
-                    style: TextStyle(color: Colors.white),
+                  child: Text(
+                    AppLocalizations.of(context).trainerMapTapHint,
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),

@@ -40,7 +40,7 @@ class TrainerClient {
     return TrainerClient(
       relationshipId: json['relationship_id'] as String,
       clientId: json['client_id'] as String,
-      displayName: json['display_name'] as String? ?? 'Client',
+      displayName: json['display_name'] as String? ?? '',
       packageId: json['package_id'] as String?,
       currentDay: (json['current_day'] as num?)?.toInt() ?? 1,
       dailyStreak: (json['daily_streak'] as num?)?.toInt() ?? 0,

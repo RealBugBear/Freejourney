@@ -3323,4 +3323,591 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reflexProfileNameRequired => 'Please enter a name.';
+
+  @override
+  String get trainerWorkOverview => 'Work Overview';
+
+  @override
+  String get trainerWorkOverviewSubtitle =>
+      'Prioritized by package transitions, requests, appointments, and observations.';
+
+  @override
+  String get trainerPackageTransitions => 'Package Transitions';
+
+  @override
+  String get trainerOpenInvites => 'Open Invites';
+
+  @override
+  String get trainerNewRequests => 'New Requests';
+
+  @override
+  String get trainerAppointmentsMetric => 'Appointments';
+
+  @override
+  String get trainerNewObservations => 'New Observations';
+
+  @override
+  String trainerMoreInvitesOpen(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more invites open',
+      one: '1 more invite open',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trainerReviewSharedExperiences => 'Review Shared Experiences';
+
+  @override
+  String get trainerReviewSharedExperiencesBody =>
+      'Keep moderated experience posts from active packages in view.';
+
+  @override
+  String get trainerConnectionCheck => 'Check Trainer Connection';
+
+  @override
+  String get trainerConnectionChecking => 'Checking database…';
+
+  @override
+  String get trainerConnectionCheckError => 'Check failed';
+
+  @override
+  String get trainerConnectionTapToOpen => 'Tap to open';
+
+  @override
+  String get trainerConnectionRefresh => 'Refresh Check';
+
+  @override
+  String trainerConnectionCheckFailed(String error) {
+    return 'Check error: $error';
+  }
+
+  @override
+  String get trainerInviteCodeOnce =>
+      'One-time code — share it with your client';
+
+  @override
+  String get trainerInviteNew => 'New';
+
+  @override
+  String get trainerInviteCreating => 'Creating…';
+
+  @override
+  String trainerCodeCopiedWithValue(String code) {
+    return 'Code $code copied!';
+  }
+
+  @override
+  String get trainerLocationMissingTitle => 'Location Missing';
+
+  @override
+  String get trainerLocationMissingBody =>
+      'Your trainer profile is active, but it only appears in trainer search after a location is set. Only an approximate pin is shown publicly.';
+
+  @override
+  String get trainerSetLocation => 'Set Location';
+
+  @override
+  String get trainerLocationSaved => 'Location saved';
+
+  @override
+  String trainerLocationSaveFailed(String error) {
+    return 'Couldn\'t save the location: $error';
+  }
+
+  @override
+  String get trainerDay28Badge => 'Day 28 ✓';
+
+  @override
+  String trainerDaysLeft(int days) {
+    return '$days days left';
+  }
+
+  @override
+  String get trainerProposeAppointment => 'Propose Appointment';
+
+  @override
+  String trainerProposeNextPackage(int days) {
+    return '$days days left: propose an appointment for the next package\'s isometric training.';
+  }
+
+  @override
+  String get trainerOpenDetail => 'Open Details';
+
+  @override
+  String get trainerOpenChat => 'Open Chat';
+
+  @override
+  String get trainerClientFallback => 'Client';
+
+  @override
+  String get trainerSharedReflexProfiles => 'Shared Reflex Profiles';
+
+  @override
+  String trainerProfilesLoadFailed(String error) {
+    return 'Couldn\'t load profiles: $error';
+  }
+
+  @override
+  String get trainerNoProfilesShared => 'No profiles shared.';
+
+  @override
+  String trainerNoCompletedReflexProfile(String name) {
+    return '$name: No completed reflex profile yet.';
+  }
+
+  @override
+  String get trainerObservations => 'Observations';
+
+  @override
+  String get trainerNoSharedObservations => 'No shared observations yet.';
+
+  @override
+  String get trainerReflexNoteSaved => 'Reflex profile note saved.';
+
+  @override
+  String trainerNoteSaveFailed(String error) {
+    return 'Couldn\'t save the note: $error';
+  }
+
+  @override
+  String get trainerReflexNotesTitle => 'Reflex Profile Notes';
+
+  @override
+  String get trainerReflexNotesBody =>
+      'These notes stay with the profile and, while sharing is active, remain visible to later trainers as a handoff.';
+
+  @override
+  String get trainerReflexNoteHint => 'Note for guidance or handoff';
+
+  @override
+  String get trainerSaveNote => 'Save Note';
+
+  @override
+  String trainerNotesLoadFailed(String error) {
+    return 'Couldn\'t load notes: $error';
+  }
+
+  @override
+  String get trainerNoReflexNotes => 'No reflex profile notes yet.';
+
+  @override
+  String get trainerMessageAction => 'Message';
+
+  @override
+  String get trainerAppointmentAction => 'Appointment';
+
+  @override
+  String trainerDaysCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '$count day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trainerNoPlannedAppointments => 'No planned appointments yet.';
+
+  @override
+  String get trainerAppointmentProposed => 'Appointment proposed';
+
+  @override
+  String trainerAppointmentFor(String name) {
+    return 'for $name';
+  }
+
+  @override
+  String get appointmentStatusProposal => 'Proposal';
+
+  @override
+  String get appointmentStatusCompletedShort => 'Done';
+
+  @override
+  String trainerDayNumber(int day) {
+    return 'Day $day';
+  }
+
+  @override
+  String trainerAgeYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count years',
+      one: '$count year',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trainerBandStrongNoticeable => 'strongly elevated';
+
+  @override
+  String appointmentProposalSent(int count, String name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count appointment proposals sent to $name.',
+      one: '1 appointment proposal sent to $name.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get appointmentProposalSentHint =>
+      'The other person picks a suitable slot.';
+
+  @override
+  String appointmentVideoWith(String name) {
+    return 'Video appointment with $name';
+  }
+
+  @override
+  String get appointmentPickSlotsInterview =>
+      'Pick 2–4 open slots for the application interview.';
+
+  @override
+  String get appointmentPickSlotsClient =>
+      'Pick 2–4 open slots — your client will choose one.';
+
+  @override
+  String appointmentSlotsSelected(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count slots selected',
+      one: '1 slot selected',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get appointmentResetSlots => 'Reset';
+
+  @override
+  String get appointmentLocationOrVideo => 'Location or video call';
+
+  @override
+  String get appointmentSelectSlots => 'Select Slots';
+
+  @override
+  String appointmentSendProposal(int count) {
+    return 'Send Proposal ($count)';
+  }
+
+  @override
+  String get appointmentForOptional => 'Appointment for (optional)';
+
+  @override
+  String get appointmentForOptionalHint =>
+      'Select profiles if this appointment is for specific children.';
+
+  @override
+  String get trainerApplicationTitle => 'Trainer Application';
+
+  @override
+  String get trainerApplicationSubmittedStep => 'Application submitted';
+
+  @override
+  String get trainerApplicationBgCheckStep =>
+      'Enhanced background check (level 2) verified by visual review';
+
+  @override
+  String get trainerApplicationCodeStep => 'Activation code created';
+
+  @override
+  String get trainerApplicationOpenReview => 'Open Review Channel';
+
+  @override
+  String get trainerApplicationActivate => 'Activate Trainer';
+
+  @override
+  String get trainerApplicationApprovedTitle => 'Approved';
+
+  @override
+  String get trainerApplicationApprovedBody =>
+      'Your application was approved. Activate your verified trainer profile now.';
+
+  @override
+  String get trainerApplicationRejectedTitle => 'Rejected';
+
+  @override
+  String get trainerApplicationRejectedBody =>
+      'Your application was rejected. See details in the review channel.';
+
+  @override
+  String get trainerApplicationNeedsInfoTitle => 'More Info Needed';
+
+  @override
+  String get trainerApplicationNeedsInfoBody =>
+      'Admins need more information. Please check the review channel.';
+
+  @override
+  String get trainerApplicationInReviewBody =>
+      'Your application is in review. Admins will follow up in the review channel.';
+
+  @override
+  String get trainerApplicationNoneTitle => 'No Trainer Application Yet';
+
+  @override
+  String get trainerApplicationStart => 'Start Application';
+
+  @override
+  String get trainerApplicationFieldRequired => 'This field is required.';
+
+  @override
+  String get trainerApplicationFullName => 'Full name';
+
+  @override
+  String get trainerApplicationEmail => 'Email';
+
+  @override
+  String get trainerApplicationEmailInvalid => 'A valid email is required.';
+
+  @override
+  String get trainerApplicationPhoneOptional => 'Phone optional';
+
+  @override
+  String get trainerApplicationCityRegion => 'City / region';
+
+  @override
+  String get trainerApplicationBackground => 'Professional background';
+
+  @override
+  String get trainerApplicationMotivationOptional => 'Motivation optional';
+
+  @override
+  String get trainerApplicationPublicProfile => 'Public trainer profile';
+
+  @override
+  String get trainerApplicationDisplayNameOptional => 'Display name optional';
+
+  @override
+  String get trainerApplicationBioOptional => 'Bio optional';
+
+  @override
+  String get trainerApplicationLocationOptional => 'Location optional';
+
+  @override
+  String get trainerApplicationLocationHint =>
+      'If you set a location, your profile can appear in trainer search after approval. Only an approximate pin is shown publicly.';
+
+  @override
+  String get trainerApplicationSubmit => 'Submit Application';
+
+  @override
+  String get trainerBecomeTitle => 'Become a Trainer';
+
+  @override
+  String get trainerBecomeHeadline => 'Application and Review';
+
+  @override
+  String get trainerBecomeBody =>
+      'Reflex Journey trainers work in a sensitive setting. That is why we review every application manually before a trainer profile is activated.';
+
+  @override
+  String get trainerBecomeBackgroundTitle => 'Professional Background';
+
+  @override
+  String get trainerBecomeBackgroundBody =>
+      'Describe your training, experience, or practice in the relevant field.';
+
+  @override
+  String get trainerBecomeBgCheckTitle => 'Enhanced Background Check (Level 2)';
+
+  @override
+  String get trainerBecomeBgCheckBody =>
+      'In the review channel, admins request a visual check. The document is not uploaded or stored.';
+
+  @override
+  String get trainerBecomeReviewTitle => 'Admin Review Channel';
+
+  @override
+  String get trainerBecomeReviewBody =>
+      'After submitting, a protected communication channel with admins opens.';
+
+  @override
+  String get trainerBecomeImportant =>
+      'Important: The activation code is created only after a successful review.';
+
+  @override
+  String get appointmentProposalsTitle => 'Appointment Proposals';
+
+  @override
+  String get appointmentNoOpenProposals => 'No open appointment proposals.';
+
+  @override
+  String get appointmentAddToCalendarTitle => 'Add to Calendar?';
+
+  @override
+  String appointmentAddToCalendarBody(String when) {
+    return 'Should the appointment on $when be added to your calendar?';
+  }
+
+  @override
+  String get appointmentAddToCalendarConfirm => 'Yes, Add';
+
+  @override
+  String get appointmentConfirmedSnack => 'Appointment confirmed!';
+
+  @override
+  String get appointmentChooseSlot => 'Choose a suitable time:';
+
+  @override
+  String get appointmentConfirmSlot => 'Confirm Appointment';
+
+  @override
+  String get trainerRequestAccepted =>
+      'Request accepted. The client now appears in your overview.';
+
+  @override
+  String get trainerRequestDeclined => 'Request declined.';
+
+  @override
+  String trainerClientRegularDays(
+      String packageName, String dayLabel, int days) {
+    return '$packageName · $dayLabel · $days days consistent';
+  }
+
+  @override
+  String get trainerAppStatusSubmitted => 'Submitted';
+
+  @override
+  String get trainerAppStatusInReview => 'In Review';
+
+  @override
+  String get trainerAppStatusNeedsInfo => 'More Info Needed';
+
+  @override
+  String get trainerAppStatusApproved => 'Approved';
+
+  @override
+  String get trainerAppStatusRejected => 'Rejected';
+
+  @override
+  String get trainerAppStatusWithdrawn => 'Withdrawn';
+
+  @override
+  String calendarImportTitle(String title) {
+    return 'Import calendar entry for $title';
+  }
+
+  @override
+  String get osmAttribution => 'OpenStreetMap contributors';
+
+  @override
+  String get trainerMapTapHint => 'Tap the map';
+
+  @override
+  String get trainerFallbackName => 'Trainer';
+
+  @override
+  String get trainerYourTrainer => 'Your Trainer';
+
+  @override
+  String get trainerYourClient => 'Your Client';
+
+  @override
+  String get trainerChatFallback => 'Chat';
+
+  @override
+  String get trainerDiagNotSignedIn => 'auth.uid: not signed in';
+
+  @override
+  String trainerDiagAuthUid(String id) {
+    return 'auth.uid: $id';
+  }
+
+  @override
+  String trainerDiagEmail(String email) {
+    return 'email: $email';
+  }
+
+  @override
+  String trainerDiagProfileRole(String role) {
+    return 'profiles.role: $role';
+  }
+
+  @override
+  String trainerDiagProfileName(String name) {
+    return 'profiles.display_name: $name';
+  }
+
+  @override
+  String trainerDiagScopeError(String scope, String error) {
+    return '$scope: error $error';
+  }
+
+  @override
+  String trainerDiagRelationshipsTotal(int count) {
+    return 'relationships total: $count';
+  }
+
+  @override
+  String trainerDiagRelationshipsActive(int count) {
+    return 'relationships active: $count';
+  }
+
+  @override
+  String trainerDiagRelationshipStatuses(String statuses) {
+    return 'relationship statuses: $statuses';
+  }
+
+  @override
+  String get trainerDiagRelationshipClientIds => 'relationship client_ids:';
+
+  @override
+  String trainerDiagAppointmentsAsTrainer(int count) {
+    return 'appointments as trainer: $count';
+  }
+
+  @override
+  String get trainerDiagAppointmentTraineeIds => 'appointment trainee_ids:';
+
+  @override
+  String get trainerDiagReconcileOk => 'reconcile_trainer_clients: ok';
+
+  @override
+  String trainerDiagGetClientsRows(int count) {
+    return 'get_trainer_clients rows: $count';
+  }
+
+  @override
+  String trainerActivateFailed(String error) {
+    return 'Couldn\'t activate: $error';
+  }
+
+  @override
+  String get trainerNotSignedIn => 'Not signed in.';
+
+  @override
+  String get trainerPkgMoro => 'Moro';
+
+  @override
+  String get trainerPkgSpinalGalant => 'Spinal Galant';
+
+  @override
+  String get trainerPkgTlr => 'TLR';
+
+  @override
+  String get trainerPkgBabkin => 'Babkin';
+
+  @override
+  String get trainerPkgSuchSaug => 'Root/Suck';
+
+  @override
+  String get trainerPkgAtnr => 'ATNR';
+
+  @override
+  String get trainerPkgStnr => 'STNR';
+
+  @override
+  String get trainerPkgBabinski => 'Babinski';
+
+  @override
+  String get trainerPkgLandau => 'Landau';
 }

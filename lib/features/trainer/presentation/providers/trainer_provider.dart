@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../core/l10n/active_localizations.dart';
 import '../../../../features/auth/presentation/providers/auth_provider.dart';
 import '../../../assessment/domain/models/reflex_profile_assessment.dart';
 import '../../domain/models/appointment.dart';
@@ -96,6 +97,7 @@ final trainerRecentObservationsProvider =
   if (clients.isEmpty) return [];
 
   final namesById = {for (final client in clients) client.clientId: client};
+  final l10n = await lookupActiveAppLocalizations();
   final rows = await Supabase.instance.client
       .from('mood_checkins')
       .select('id, user_id, recorded_at, note, mood, energy, stress, source')
@@ -107,9 +109,11 @@ final trainerRecentObservationsProvider =
 
   return (rows as List).cast<Map<String, dynamic>>().map((row) {
     final clientId = row['user_id'] as String;
+    final name = namesById[clientId]?.displayName.trim();
     return TrainerClientObservation.fromJson(
       row,
-      clientName: namesById[clientId]?.displayName ?? 'Klient',
+      clientName:
+          (name != null && name.isNotEmpty) ? name : l10n.clientFallbackName,
     );
   }).toList();
 });
@@ -145,13 +149,14 @@ final trainerClientObservationsProvider =
 final trainerClientsDebugProvider = FutureProvider<String>((ref) async {
   ref.watch(authStateProvider);
 
+  final l10n = await lookupActiveAppLocalizations();
   final sb = Supabase.instance.client;
   final user = sb.auth.currentUser;
-  if (user == null) return 'auth.uid: nicht eingeloggt';
+  if (user == null) return l10n.trainerDiagNotSignedIn;
 
   final lines = <String>[
-    'auth.uid: ${user.id}',
-    'email: ${user.email ?? '-'}',
+    l10n.trainerDiagAuthUid(user.id),
+    l10n.trainerDiagEmail(user.email ?? '-'),
   ];
 
   try {
@@ -160,10 +165,12 @@ final trainerClientsDebugProvider = FutureProvider<String>((ref) async {
         .select('role, display_name')
         .eq('id', user.id)
         .maybeSingle();
-    lines.add('profiles.role: ${profile?['role'] ?? '-'}');
-    lines.add('profiles.display_name: ${profile?['display_name'] ?? '-'}');
+    lines.add(l10n.trainerDiagProfileRole('${profile?['role'] ?? '-'}'));
+    lines.add(
+      l10n.trainerDiagProfileName('${profile?['display_name'] ?? '-'}'),
+    );
   } catch (e) {
-    lines.add('profiles: Fehler $e');
+    lines.add(l10n.trainerDiagScopeError('profiles', '$e'));
   }
 
   try {
@@ -172,21 +179,25 @@ final trainerClientsDebugProvider = FutureProvider<String>((ref) async {
         .select('id, client_id, status, linked_at')
         .eq('trainer_id', user.id);
     final list = (relationships as List).cast<Map<String, dynamic>>();
-    lines.add('relationships gesamt: ${list.length}');
+    lines.add(l10n.trainerDiagRelationshipsTotal(list.length));
     lines.add(
-      'relationships active: ${list.where((r) => r['status'] == 'active').length}',
+      l10n.trainerDiagRelationshipsActive(
+        list.where((r) => r['status'] == 'active').length,
+      ),
     );
     if (list.isNotEmpty) {
       lines.add(
-        'relationship statuses: ${list.map((r) => r['status']).join(', ')}',
+        l10n.trainerDiagRelationshipStatuses(
+          list.map((r) => r['status']).join(', '),
+        ),
       );
-      lines.add('relationship client_ids:');
+      lines.add(l10n.trainerDiagRelationshipClientIds);
       for (final row in list.take(5)) {
         lines.add('- ${row['client_id']} (${row['status']})');
       }
     }
   } catch (e) {
-    lines.add('relationships: Fehler $e');
+    lines.add(l10n.trainerDiagScopeError('relationships', '$e'));
   }
 
   try {
@@ -195,35 +206,35 @@ final trainerClientsDebugProvider = FutureProvider<String>((ref) async {
         .select('id, trainee_id, status, scheduled_for')
         .eq('trainer_id', user.id);
     final list = (appointments as List).cast<Map<String, dynamic>>();
-    lines.add('appointments als trainer: ${list.length}');
+    lines.add(l10n.trainerDiagAppointmentsAsTrainer(list.length));
     if (list.isNotEmpty) {
-      lines.add('appointment trainee_ids:');
+      lines.add(l10n.trainerDiagAppointmentTraineeIds);
       for (final row in list.take(5)) {
         lines.add('- ${row['trainee_id']} (${row['status']})');
       }
     }
   } catch (e) {
-    lines.add('appointments: Fehler $e');
+    lines.add(l10n.trainerDiagScopeError('appointments', '$e'));
   }
 
   try {
     await sb.rpc('reconcile_trainer_clients');
-    lines.add('reconcile_trainer_clients: ok');
+    lines.add(l10n.trainerDiagReconcileOk);
   } catch (e) {
-    lines.add('reconcile_trainer_clients: Fehler $e');
+    lines.add(l10n.trainerDiagScopeError('reconcile_trainer_clients', '$e'));
   }
 
   try {
     final clients = await sb.rpc('get_trainer_clients');
     final list = clients as List;
-    lines.add('get_trainer_clients rows: ${list.length}');
+    lines.add(l10n.trainerDiagGetClientsRows(list.length));
     if (list.isNotEmpty) {
       for (final row in list.take(5)) {
         lines.add('- ${row['client_id']} ${row['display_name']}');
       }
     }
   } catch (e) {
-    lines.add('get_trainer_clients: Fehler $e');
+    lines.add(l10n.trainerDiagScopeError('get_trainer_clients', '$e'));
   }
 
   return lines.join('\n');
@@ -326,7 +337,7 @@ final trainerClientSharedProfilesProvider =
       final id = row['id'] as String;
       return TrainerSharedProfile(
         subjectProfileId: id,
-        displayName: row['display_name'] as String? ?? 'Profil',
+        displayName: row['display_name'] as String? ?? '',
         profileType: row['profile_type'] as String? ?? 'child',
         ageGroup: row['age_group'] as String?,
         ageYears: row['age_years'] as int?,
@@ -394,7 +405,9 @@ Future<void> addReflexSubjectProfileNote({
   required String body,
 }) async {
   final trainerId = Supabase.instance.client.auth.currentUser?.id;
-  if (trainerId == null) throw Exception('Nicht eingeloggt.');
+  if (trainerId == null) {
+    throw Exception((await lookupActiveAppLocalizations()).trainerNotSignedIn);
+  }
 
   await Supabase.instance.client.from('reflex_subject_profile_notes').insert({
     'subject_profile_id': subjectProfileId,
@@ -467,7 +480,7 @@ final appointmentsProvider = FutureProvider<List<Appointment>>((ref) async {
         traineeId == null ? null : clientNamesById[traineeId];
     final name = relationshipName?.trim().isNotEmpty == true
         ? relationshipName!.trim()
-        : (profile?['display_name'] as String?)?.trim() ?? 'Klient';
+        : (profile?['display_name'] as String?)?.trim() ?? '';
     final apptId = row['id'] as String;
     final linked = profilesByAppointment[apptId];
     return Appointment.fromJson({
@@ -498,7 +511,7 @@ final traineeProposalsProvider = FutureProvider<List<Appointment>>((ref) async {
   final list = (res as List).cast<Map<String, dynamic>>();
   return list.map((row) {
     final profile = row['profiles'] as Map<String, dynamic>?;
-    final trainerName = (profile?['display_name'] as String?) ?? 'Trainer';
+    final trainerName = (profile?['display_name'] as String?) ?? '';
     return Appointment.fromJson({...row, 'trainee_name': trainerName});
   }).toList();
 });
@@ -522,7 +535,7 @@ final traineeConfirmedAppointmentsProvider =
   final list = (res as List).cast<Map<String, dynamic>>();
   return list.map((row) {
     final profile = row['profiles'] as Map<String, dynamic>?;
-    final trainerName = (profile?['display_name'] as String?) ?? 'Trainer';
+    final trainerName = (profile?['display_name'] as String?) ?? '';
     return Appointment.fromJson({...row, 'trainee_name': trainerName});
   }).toList();
 });
@@ -556,8 +569,9 @@ Future<void> confirmProposedSlot(String appointmentId, DateTime chosen) async {
 /// only in Supabase project secrets.
 /// Returns null on success, or a localised error message on failure.
 Future<String?> activateTrainerRole(String enteredCode) async {
+  final l10n = await lookupActiveAppLocalizations();
   if (Supabase.instance.client.auth.currentUser == null) {
-    return 'Nicht eingeloggt.';
+    return l10n.trainerNotSignedIn;
   }
 
   try {
@@ -579,7 +593,7 @@ Future<String?> activateTrainerRole(String enteredCode) async {
     }
     return e.reasonPhrase ?? e.toString();
   } catch (e) {
-    return 'Fehler beim Aktivieren: $e';
+    return l10n.trainerActivateFailed('$e');
   }
 }
 
@@ -623,7 +637,7 @@ final clientTrainerProvider = FutureProvider<String?>((ref) async {
       .select('display_name')
       .eq('id', trainerId)
       .maybeSingle();
-  return (profile?['display_name'] as String?) ?? 'Trainer';
+  return (profile?['display_name'] as String?) ?? '';
 });
 
 /// Returns the user_id of the currently linked trainer (null if none).
@@ -696,7 +710,7 @@ final clientTrainerConnectionsProvider =
       trainerId: trainerId,
       displayName: (namesById[trainerId]?.isNotEmpty ?? false)
           ? namesById[trainerId]!
-          : 'Trainer',
+          : '',
       status: row['status'] as String? ?? 'pending',
       sourceType: row['source_type'] as String? ?? 'invite',
       createdAt: DateTime.parse(row['created_at'] as String).toLocal(),
@@ -753,7 +767,9 @@ final chatPartnerIdProvider =
 final chatPartnerNameProvider =
     FutureProvider.autoDispose.family<String, String>((ref, channelId) async {
   final userId = Supabase.instance.client.auth.currentUser?.id;
-  if (userId == null) return 'Chat';
+  if (userId == null) {
+    return (await lookupActiveAppLocalizations()).trainerChatFallback;
+  }
 
   // Step 1: get partner's user_id
   final rows = await Supabase.instance.client
@@ -763,7 +779,9 @@ final chatPartnerNameProvider =
       .neq('user_id', userId);
 
   final list = rows as List;
-  if (list.isEmpty) return 'Chat';
+  if (list.isEmpty) {
+    return (await lookupActiveAppLocalizations()).trainerChatFallback;
+  }
   final partnerId = list.first['user_id'] as String;
 
   // Step 2: fetch their display name
@@ -778,5 +796,6 @@ final chatPartnerNameProvider =
   }
 
   final role = profile?['role'] as String?;
-  return role == 'trainer' ? 'Dein Trainer' : 'Dein Nutzer';
+  final l10n = await lookupActiveAppLocalizations();
+  return role == 'trainer' ? l10n.trainerYourTrainer : l10n.trainerYourClient;
 });

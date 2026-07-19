@@ -49,7 +49,7 @@ class TrainerProfile {
 
     return TrainerProfile(
       id: json['id'] as String,
-      displayName: json['display_name'] as String? ?? 'Trainer',
+      displayName: json['display_name'] as String? ?? '',
       bio: json['bio'] as String?,
       photoUrl: json['photo_url'] as String?,
       distanceKm: (json['distance_km'] as num?)?.toDouble(),

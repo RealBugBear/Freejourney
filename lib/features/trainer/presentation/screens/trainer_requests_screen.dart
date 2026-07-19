@@ -61,8 +61,8 @@ class _RequestCardState extends ConsumerState<_RequestCard> {
           SnackBar(
             content: Text(
               accept
-                  ? 'Anfrage angenommen. Der Klient erscheint jetzt in deiner Übersicht.'
-                  : 'Anfrage abgelehnt.',
+                  ? AppLocalizations.of(context).trainerRequestAccepted
+                  : AppLocalizations.of(context).trainerRequestDeclined,
             ),
           ),
         );

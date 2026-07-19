@@ -11,17 +11,20 @@ import '../../../chat/presentation/navigation/chat_navigation.dart';
 import '../../domain/models/trainer_client.dart';
 import '../providers/trainer_provider.dart';
 
-const _packageNames = {
-  'moro': 'Moro',
-  'spinal_galant': 'Spinal Galant',
-  'tlr': 'TLR',
-  'babkin': 'Babkin',
-  'such_saug': 'Such-Saug',
-  'atnr': 'ATNR',
-  'stnr': 'STNR',
-  'babinski': 'Babinski',
-  'landau': 'Landau',
-};
+String _packageName(AppLocalizations l10n, String? packageId) {
+  return switch (packageId) {
+    'moro' => l10n.trainerPkgMoro,
+    'spinal_galant' => l10n.trainerPkgSpinalGalant,
+    'tlr' => l10n.trainerPkgTlr,
+    'babkin' => l10n.trainerPkgBabkin,
+    'such_saug' => l10n.trainerPkgSuchSaug,
+    'atnr' => l10n.trainerPkgAtnr,
+    'stnr' => l10n.trainerPkgStnr,
+    'babinski' => l10n.trainerPkgBabinski,
+    'landau' => l10n.trainerPkgLandau,
+    _ => packageId ?? '',
+  };
+}
 
 class TrainerClientsScreen extends ConsumerWidget {
   const TrainerClientsScreen({super.key});
@@ -193,6 +196,7 @@ class _TrainerClientsDebugPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final debugAsync = ref.watch(trainerClientsDebugProvider);
     final textStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
           fontFamily: 'monospace',
@@ -220,14 +224,14 @@ class _TrainerClientsDebugPanel extends ConsumerWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Diagnose Trainer-Verknüpfung',
+                      l10n.trainerConnectionCheck,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.w700,
                           ),
                     ),
                   ),
                   IconButton(
-                    tooltip: 'Diagnose aktualisieren',
+                    tooltip: l10n.trainerConnectionRefresh,
                     icon: const Icon(Icons.refresh, size: 18),
                     onPressed: () {
                       ref.invalidate(trainerClientsDebugProvider);
@@ -239,7 +243,7 @@ class _TrainerClientsDebugPanel extends ConsumerWidget {
               const SizedBox(height: 8),
               debugAsync.when(
                 loading: () => const LinearProgressIndicator(),
-                error: (e, _) => Text('Diagnose Fehler: $e', style: textStyle),
+                error: (e, _) => Text(l10n.trainerConnectionCheckFailed('$e'), style: textStyle),
                 data: (debug) => Text(debug, style: textStyle),
               ),
             ],
@@ -260,8 +264,9 @@ class _ClientTile extends ConsumerWidget {
     WidgetRef ref,
   ) {
     final l10n = AppLocalizations.of(context);
-    final packageName =
-        _packageNames[client.packageId] ?? client.packageId ?? '—';
+    final packageName = _packageName(l10n, client.packageId);
+    final packageLabel =
+        packageName.isEmpty ? (client.packageId ?? '—') : packageName;
     final daysSince = client.lastActivityDate != null
         ? DateTime.now().difference(client.lastActivityDate!).inDays
         : null;
@@ -312,7 +317,11 @@ class _ClientTile extends ConsumerWidget {
           const SizedBox(height: 2),
           Text(
             client.packageId != null
-                ? '$packageName · ${l10n.dayNumber(client.currentDay)} · ${client.dailyStreak} Tage regelmäßig'
+                ? l10n.trainerClientRegularDays(
+                    packageLabel,
+                    l10n.dayNumber(client.currentDay),
+                    client.dailyStreak,
+                  )
                 : l10n.packageLocked,
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -337,7 +346,7 @@ class _ClientTile extends ConsumerWidget {
           children: [
             IconButton(
               icon: const Icon(Icons.chat_bubble_outline, size: 20),
-              tooltip: 'Chat öffnen',
+              tooltip: l10n.trainerOpenChat,
               onPressed: () => _openClientChat(context, ref, client.clientId),
             ),
             const Icon(Icons.chevron_right),

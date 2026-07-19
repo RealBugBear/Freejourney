@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../core/l10n/active_localizations.dart';
 import '../../../../core/logging/app_logger.dart';
 
 class TimeSlot {
@@ -67,10 +68,11 @@ class CalendarService {
         flush: true,
       );
 
+      final l10n = await lookupActiveAppLocalizations();
       await Share.shareXFiles(
         [XFile(calendarFile.path, mimeType: 'text/calendar')],
         subject: title,
-        text: 'Kalendereintrag für $title importieren',
+        text: l10n.calendarImportTitle(title),
         sharePositionOrigin:
             sharePositionOrigin ?? const Rect.fromLTWH(1, 1, 1, 1),
         fileNameOverrides: [fileName],

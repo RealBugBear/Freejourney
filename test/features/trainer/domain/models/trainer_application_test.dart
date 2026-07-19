@@ -1,9 +1,12 @@
 import 'package:corejourney/features/trainer/domain/models/trainer_application.dart';
+import 'package:corejourney/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('TrainerApplication', () {
     test('parses approved application with activation code', () {
+      final l10n = lookupAppLocalizations(const Locale('de'));
       final application = TrainerApplication.fromJson({
         'id': 'application-1',
         'user_id': 'user-1',
@@ -35,7 +38,8 @@ void main() {
       expect(application.hasBackgroundCheck, isTrue);
       expect(application.canApprove, isFalse);
       expect(application.activationCode, 'ABCDEFGH');
-      expect(application.statusLabel, 'Freigegeben');
+      expect(application.statusLabel(l10n), l10n.trainerAppStatusApproved);
+      expect(application.statusLabel(l10n), 'Freigegeben');
     });
 
     test('submitted application can be approved only after background check',

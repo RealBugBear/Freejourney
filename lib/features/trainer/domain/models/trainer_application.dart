@@ -1,3 +1,5 @@
+import '../../../../l10n/app_localizations.dart';
+
 enum TrainerApplicationStatus {
   submitted,
   inReview,
@@ -68,14 +70,14 @@ class TrainerApplication {
   bool get canApprove =>
       isOpen && (!backgroundCheckRequired || hasBackgroundCheck);
 
-  String get statusLabel {
+  String statusLabel(AppLocalizations l10n) {
     return switch (status) {
-      TrainerApplicationStatus.submitted => 'Eingereicht',
-      TrainerApplicationStatus.inReview => 'In Prüfung',
-      TrainerApplicationStatus.needsMoreInfo => 'Rückfrage offen',
-      TrainerApplicationStatus.approved => 'Freigegeben',
-      TrainerApplicationStatus.rejected => 'Abgelehnt',
-      TrainerApplicationStatus.withdrawn => 'Zurückgezogen',
+      TrainerApplicationStatus.submitted => l10n.trainerAppStatusSubmitted,
+      TrainerApplicationStatus.inReview => l10n.trainerAppStatusInReview,
+      TrainerApplicationStatus.needsMoreInfo => l10n.trainerAppStatusNeedsInfo,
+      TrainerApplicationStatus.approved => l10n.trainerAppStatusApproved,
+      TrainerApplicationStatus.rejected => l10n.trainerAppStatusRejected,
+      TrainerApplicationStatus.withdrawn => l10n.trainerAppStatusWithdrawn,
     };
   }
 

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/appointment.dart';
 import '../../domain/services/calendar_service.dart';
 import '../providers/trainer_provider.dart';
@@ -17,7 +18,7 @@ class AppointmentProposalScreen extends ConsumerWidget {
     final proposalsAsync = ref.watch(traineeProposalsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Terminvorschläge')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).appointmentProposalsTitle)),
       body: proposalsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text(e.toString())),
@@ -31,7 +32,7 @@ class AppointmentProposalScreen extends ConsumerWidget {
                       size: 56, color: AppColors.textDisabled),
                   const SizedBox(height: 16),
                   Text(
-                    'Keine offenen Terminvorschläge.',
+                    AppLocalizations.of(context).appointmentNoOpenProposals,
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant),
                   ),
@@ -79,18 +80,23 @@ class _ProposalCardState extends State<_ProposalCard> {
         final add = await showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: const Text('Zum Kalender hinzufügen?'),
+            title: Text(AppLocalizations.of(context).appointmentAddToCalendarTitle),
             content: Text(
-              'Soll der Termin am ${DateFormat('E, d. MMM – HH:mm', 'de_DE').format(_chosen!)} in deinen Kalender eingetragen werden?',
+              AppLocalizations.of(context).appointmentAddToCalendarBody(
+                DateFormat(
+                  'E, d. MMM – HH:mm',
+                  Localizations.localeOf(context).toString(),
+                ).format(_chosen!),
+              ),
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('Nein'),
+                child: Text(AppLocalizations.of(context).no),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.pop(ctx, true),
-                child: const Text('Ja, hinzufügen'),
+                child: Text(AppLocalizations.of(context).appointmentAddToCalendarConfirm),
               ),
             ],
           ),
@@ -104,7 +110,7 @@ class _ProposalCardState extends State<_ProposalCard> {
       widget.onConfirmed();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Termin bestätigt!')),
+          SnackBar(content: Text(AppLocalizations.of(context).appointmentConfirmedSnack)),
         );
       }
       // Navigate away after confirming — pop if possible, else fall back to DMs
@@ -130,7 +136,14 @@ class _ProposalCardState extends State<_ProposalCard> {
     if (_chosen == null) return;
     try {
       await CalendarService.instance.createCalendarEvent(
-        title: '${widget.proposal.title} (mit ${widget.proposal.traineeName})',
+        title: AppLocalizations.of(context).appointmentCalendarEventTitle(
+          widget.proposal.title.isEmpty
+              ? AppLocalizations.of(context).appointmentSessionTitle
+              : widget.proposal.title,
+          widget.proposal.traineeName.isEmpty
+              ? AppLocalizations.of(context).clientFallbackName
+              : widget.proposal.traineeName,
+        ),
         start: _chosen!,
         duration: Duration(minutes: widget.proposal.durationMinutes),
         location: widget.proposal.location,
@@ -139,7 +152,7 @@ class _ProposalCardState extends State<_ProposalCard> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Kalender konnte nicht geöffnet werden: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context).appointmentCalendarOpenFailed('$e'))),
         );
       }
     }
@@ -174,13 +187,17 @@ class _ProposalCardState extends State<_ProposalCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      proposal
-                          .traineeName, // trainer name here (fromJson sets it)
+                      // traineeName holds trainer display name in trainee view.
+                      proposal.traineeName.isEmpty
+                          ? AppLocalizations.of(context).trainerFallbackName
+                          : proposal.traineeName,
                       style: const TextStyle(
                           fontWeight: FontWeight.w700, fontSize: 15),
                     ),
                     Text(
-                      proposal.title,
+                      proposal.title.isEmpty
+                          ? AppLocalizations.of(context).appointmentSessionTitle
+                          : proposal.title,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontSize: 12),
@@ -192,7 +209,7 @@ class _ProposalCardState extends State<_ProposalCard> {
 
             const SizedBox(height: 14),
             Text(
-              'Wähle einen passenden Termin:',
+              AppLocalizations.of(context).appointmentChooseSlot,
               style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 13,
@@ -204,7 +221,7 @@ class _ProposalCardState extends State<_ProposalCard> {
             ...proposal.proposedSlots.map((slot) {
               final isSelected = _chosen == slot;
               final label =
-                  DateFormat('EEE, d. MMM · HH:mm', 'de_DE').format(slot);
+                  DateFormat('EEE, d. MMM · HH:mm', Localizations.localeOf(context).toString()).format(slot);
               return GestureDetector(
                 onTap: () => setState(() => _chosen = slot),
                 child: Container(
@@ -266,7 +283,7 @@ class _ProposalCardState extends State<_ProposalCard> {
                         height: 18,
                         child: CircularProgressIndicator(
                             strokeWidth: 2, color: Colors.white))
-                    : const Text('Termin bestätigen',
+                    : Text(AppLocalizations.of(context).appointmentConfirmSlot,
                         style: TextStyle(fontWeight: FontWeight.w600)),
               ),
             ),

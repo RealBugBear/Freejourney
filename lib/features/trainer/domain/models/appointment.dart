@@ -70,8 +70,8 @@ class Appointment {
       id: json['id'] as String,
       trainerId: json['trainer_id'] as String,
       traineeId: json['trainee_id'] as String,
-      traineeName: json['trainee_name'] as String? ?? 'Klient',
-      title: json['title'] as String? ?? 'Isometrische Partnerübung',
+      traineeName: json['trainee_name'] as String? ?? '',
+      title: json['title'] as String? ?? '',
       scheduledFor:
           scheduledRaw != null ? _parseLocalDateTime(scheduledRaw) : null,
       proposedSlots: proposedSlots,

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../assessment/domain/reflex_questionnaire_definitions.dart';
 import '../../../chat/presentation/widgets/direct_messages_action.dart';
 import '../../../trainer/domain/models/trainer_application.dart';
@@ -1128,7 +1129,7 @@ class _TrainerApplicationCard extends ConsumerWidget {
                     children: [
                       Text(application.fullName,
                           style: Theme.of(context).textTheme.titleMedium),
-                      Text(application.statusLabel,
+                      Text(application.statusLabel(AppLocalizations.of(context)),
                           style: Theme.of(context).textTheme.bodySmall),
                       Text(application.email,
                           style: Theme.of(context).textTheme.bodySmall),

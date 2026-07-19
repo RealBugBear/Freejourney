@@ -1,9 +1,9 @@
 {
   "@@locale": "en",
-
   "appTitle": "Reflex Journey",
-  "@appTitle": { "description": "App title" },
-
+  "@appTitle": {
+    "description": "App title"
+  },
   "signIn": "Sign In",
   "signUp": "Sign Up",
   "signOut": "Sign Out",
@@ -24,55 +24,62 @@
   "resetPassword": "Reset Password",
   "passwordResetSent": "We've sent you a password reset email.",
   "signUpConfirmEmailSent": "Almost there! We've sent you an email to confirm your account. Please tap the link inside, then you can sign in.",
-
   "authErrorInvalidCredentials": "Email or password is incorrect.",
   "authErrorEmailInUse": "This email address is already registered.",
   "authErrorWeakPassword": "Password must be at least 8 characters.",
-
   "dashboard": "Dashboard",
   "startTraining": "Start Session",
   "currentDay": "Day {day} of {total}",
   "@currentDay": {
     "placeholders": {
-      "day": { "type": "int" },
-      "total": { "type": "int" }
+      "day": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "dailyStreak": "Regularity",
   "weeklyProgress": "{count} of {goal} this week",
   "@weeklyProgress": {
     "placeholders": {
-      "count": { "type": "int" },
-      "goal": { "type": "int" }
+      "count": {
+        "type": "int"
+      },
+      "goal": {
+        "type": "int"
+      }
     }
   },
   "goldenDay": "Golden Day",
   "daysRemaining": "{days} days remaining",
   "@daysRemaining": {
     "placeholders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
-
   "trainingMode": "Session Mode",
   "tutorialMode": "Tutorial",
   "routineMode": "Routine",
   "silentMode": "Silent",
   "hapticMode": "Haptic",
   "voiceCuesMode": "Voice & Cues",
-
   "exercisePosition": "Starting Position",
   "exerciseMovement": "Movement",
   "exerciseHints": "Tips",
   "exerciseReps": "{count} repetitions",
   "@exerciseReps": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "sessionComplete": "Session Complete",
   "sessionCompleteSubtitle": "You've completed today's session.",
-
   "moodCheckIn": "How are you feeling?",
   "moodLabel": "Mood",
   "energyLabel": "Energy",
@@ -80,7 +87,6 @@
   "moodSkip": "Skip",
   "moodSubmit": "Save",
   "moodChartEmpty": "Log a session to see your wellbeing over time.",
-
   "intakeAssessmentTitle": "Getting Started",
   "intakeWelcomeTitle": "Welcome to your Reflex Integration Program",
   "intakeWelcomeBody": "Reflex Journey guides you through the integration of prenatal reflexes — a process that can help transform deeply rooted physical and emotional patterns.",
@@ -93,7 +99,9 @@
   "durationRecommendation": "Recommended duration: {weeks} weeks",
   "@durationRecommendation": {
     "placeholders": {
-      "weeks": { "type": "int" }
+      "weeks": {
+        "type": "int"
+      }
     }
   },
   "adjustDuration": "Adjust Duration",
@@ -113,7 +121,6 @@
   "trainerOnboardingInviteInvalid": "Please enter the 6-character code.",
   "trainerOnboardingInviteFailed": "Could not connect with trainer.",
   "trainerOnboardingContinueAfterRequest": "Continue to duration recommendation",
-
   "completionQuestionnaireTitle": "Final Reflection",
   "completionCelebrationTitle": "Package Complete",
   "completionCelebrationSubtitle": "You have followed this package for the planned time.",
@@ -131,7 +138,6 @@
   "completionQuestion": "Since starting this package, have you noticed stronger emotional or stress-related reactions, and could you understand or regulate them a little more clearly?",
   "completionYes": "Yes, I'm ready",
   "completionNotYet": "Not yet",
-
   "packages": "Program",
   "packageLocked": "Locked",
   "packageCurrent": "Current",
@@ -151,7 +157,6 @@
   "paywallNotAvailable": "Purchases are not available in this version yet.",
   "paywallCancelNote": "Subscriptions can be canceled anytime.",
   "packageAvailable": "Available",
-
   "settings": "Settings",
   "settingsTraining": "Sessions",
   "settingsReminders": "Reminders",
@@ -165,29 +170,27 @@
   "moroRestartTitle": "Return to Moro?",
   "moroRestartBody": "Unlike many other reflexes, the Moro reflex can be reactivated by highly stressful or traumatic events, for example a car accident, the death of a loved one, or other intense shock experiences.\n\nIf you continue, your current package will be interrupted. You will restart Moro for 4 weeks. After completing Moro, you will return to the interrupted package and begin there again at day 1.",
   "moroRestartConfirm": "Restart Moro",
-
   "reminderEnabled": "Reminders enabled",
   "reminderWindow": "Reminder window",
   "quietHours": "Quiet hours",
   "reminderFrom": "From",
   "reminderTo": "To",
-
   "themeSystem": "System",
   "themeLight": "Light",
   "themeDark": "Dark",
-
   "weeklyGoalSessions": "{goal} sessions/week",
   "@weeklyGoalSessions": {
-    "placeholders": { "goal": { "type": "int" } }
+    "placeholders": {
+      "goal": {
+        "type": "int"
+      }
+    }
   },
-
   "settingsFeedback": "Session Feedback",
   "settingsAccount": "Account",
-
   "disclaimer": "Health Notice",
   "disclaimerText": "These units do not replace medical treatment. Please consult a doctor if you have health concerns. Listen to your body and take breaks when needed.",
   "disclaimerAccept": "Understood, continue",
-
   "errorGeneric": "Something went wrong. Please try again.",
   "errorNoNetwork": "No internet connection.",
   "retry": "Retry",
@@ -197,7 +200,6 @@
   "back": "Back",
   "save": "Save",
   "close": "Close",
-
   "trainerClients": "My Clients",
   "trainerNoClients": "No clients linked yet.",
   "trainerNoClientsHint": "Generate an invite code and share it with your client.",
@@ -209,7 +211,11 @@
   "trainerAtRisk": "at risk",
   "trainerLastActive": "{days}d ago",
   "@trainerLastActive": {
-    "placeholders": { "days": { "type": "int" } }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
   "trainerNotes": "Trainer Notes",
   "trainerNotesHint": "Private notes about this client...",
@@ -221,24 +227,33 @@
   "enterInviteCode": "Enter invite code",
   "connectToTrainerSuccess": "Connected to trainer!",
   "connectToTrainerError": "Invalid or expired invite code.",
-
   "loading": "Loading...",
   "skip": "Skip",
-
   "dayNumber": "Day {day}",
   "@dayNumber": {
-    "placeholders": { "day": { "type": "int" } }
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
   },
   "weeksCount": "{count} weeks",
   "@weeksCount": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "daysCount": "{count} days",
   "@daysCount": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "thisWeek": "This Week",
-
   "journal": "Journal",
   "journalEmptyTitle": "No entries yet.",
   "journalEmptySubtitle": "Write down what you observe in daily life — after a session or whenever you like.",
@@ -248,13 +263,10 @@
   "journalPostTrainingHint": "Have you noticed anything — in your sleep, your reactions, your body awareness?",
   "journalPlaceholder": "Write your observation here...",
   "journalLoadFailed": "Could not load entries.",
-
   "moodHistory": "Mood History",
   "profile": "Profile",
-
   "completionBannerTitle": "Package ready for assessment",
   "completionBannerSubtitle": "Answer the short questionnaire to complete this package or extend it by 7 days.",
-
   "settingsDataSync": "Data & Sync",
   "settingsTrainingModeDescription": "Tutorial is ideal when you're getting started. Routine is more compact.",
   "settingsAdvanced": "Advanced",
@@ -264,26 +276,35 @@
   "syncStatusOk": "All synced",
   "syncStatusPending": "{count} entries pending",
   "@syncStatusPending": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "syncStatusFailed": "{count} entries failed",
   "@syncStatusFailed": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "syncInProgress": "Syncing...",
   "syncNow": "Sync now",
-
   "errorSaveFailed": "Save failed. Please try again.",
   "errorLoadFailed": "Failed to load data.",
   "errorLoadFailedInline": "Failed to load",
-
   "validationRequired": "This field is required.",
   "validationInvalidEmail": "Please enter a valid email address.",
   "validationPasswordTooShort": "Password must be at least 8 characters.",
-
   "profileVersion": "Version {version}",
   "@profileVersion": {
-    "placeholders": { "version": { "type": "String" } }
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
   },
   "profileChangePassword": "Change Password",
   "profileChangePasswordSent": "Password reset email sent.",
@@ -311,8 +332,7 @@
   "redeemAccessCodeErrorExpired": "This code has expired.",
   "redeemAccessCodeErrorUnsupported": "This code type is not supported yet.",
   "redeemAccessCodeErrorUnauthorized": "Please sign in again and try once more.",
-  "redeemAccessCodeErrorUnknown": "Code redemption failed. Please try again."
-,
+  "redeemAccessCodeErrorUnknown": "Code redemption failed. Please try again.",
   "trainerDashboard": "Trainer Dashboard",
   "trainerTabTrainees": "Clients",
   "trainerTabCalendar": "Calendar",
@@ -326,7 +346,11 @@
   "appointmentSchedulerTitle": "Book Appointment",
   "appointmentWith": "Appointment with {name}",
   "@appointmentWith": {
-    "placeholders": { "name": { "type": "String" } }
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "appointmentSessionTitle": "Isometric Partner Exercise",
   "appointmentFreeSlotsTitle": "Free slots (next 14 days):",
@@ -345,7 +369,6 @@
   "appointmentStatusCancelled": "Canceled",
   "appointmentStatusDone": "Completed",
   "appointmentOpenInCalendar": "Open in Calendar",
-
   "trainerRequestsTitle": "Requests",
   "trainerRequestNoRequests": "No pending requests.",
   "trainerRequestAccept": "Accept",
@@ -353,7 +376,11 @@
   "trainerDiscoveryTitle": "Find Trainer",
   "trainerDiscoveryRadiusLabel": "{radius} km",
   "@trainerDiscoveryRadiusLabel": {
-    "placeholders": { "radius": { "type": "int" } }
+    "placeholders": {
+      "radius": {
+        "type": "int"
+      }
+    }
   },
   "trainerDiscoveryAll": "All",
   "trainerDiscoveryNearby": "Nearby",
@@ -381,7 +408,11 @@
   "trainerDiscoveryOfflineBanner": "You're offline — the map needs an internet connection.",
   "trainerDiscoveryDistanceLabel": "{distance} km away",
   "@trainerDiscoveryDistanceLabel": {
-    "placeholders": { "distance": { "type": "double" } }
+    "placeholders": {
+      "distance": {
+        "type": "double"
+      }
+    }
   },
   "trainerDiscoveryRequestAlreadySent": "Request already sent.",
   "trainerDiscoveryRequestAlreadyConnected": "You are already connected with this trainer.",
@@ -406,1013 +437,2325 @@
   "adminTrainerSuspendSuccess": "Trainer suspended.",
   "adminTrainerApprove": "Approve",
   "adminTrainerSuspend": "Suspend",
-
   "saving": "Saving…",
-  "@saving": {"description": "Generic in-progress label while a save operation runs"},
-
+  "@saving": {
+    "description": "Generic in-progress label while a save operation runs"
+  },
   "entryPointsTitle": "Many Paths Lead Here",
-  "@entryPointsTitle": {"description": "Onboarding entry-points screen: headline"},
+  "@entryPointsTitle": {
+    "description": "Onboarding entry-points screen: headline"
+  },
   "entryPointsSubtitle": "Reflex integration matters to very different people. See what sounds like you.",
-  "@entryPointsSubtitle": {"description": "Onboarding entry-points screen: intro below headline"},
+  "@entryPointsSubtitle": {
+    "description": "Onboarding entry-points screen: intro below headline"
+  },
   "entryPointsChipQuestion": "What sounds familiar to you? (optional, choose any)",
-  "@entryPointsChipQuestion": {"description": "Label above the multi-select chips"},
+  "@entryPointsChipQuestion": {
+    "description": "Label above the multi-select chips"
+  },
   "entryPointsSelectionNote": "Your selection doesn't change your training — it helps us understand who uses the app.",
-  "@entryPointsSelectionNote": {"description": "Note under the chips explaining the selection has no training effect"},
+  "@entryPointsSelectionNote": {
+    "description": "Note under the chips explaining the selection has no training effect"
+  },
   "entryPointsShowMore": "More",
-  "@entryPointsShowMore": {"description": "Expand toggle on an area card (arrow appended in code)"},
+  "@entryPointsShowMore": {
+    "description": "Expand toggle on an area card (arrow appended in code)"
+  },
   "entryPointsShowLess": "Less",
-  "@entryPointsShowLess": {"description": "Collapse toggle on an area card (arrow appended in code)"},
+  "@entryPointsShowLess": {
+    "description": "Collapse toggle on an area card (arrow appended in code)"
+  },
   "entryPointsBodyTitle": "Body & Tension",
-  "@entryPointsBodyTitle": {"description": "Area card: body/tension entry point — title"},
+  "@entryPointsBodyTitle": {
+    "description": "Area card: body/tension entry point — title"
+  },
   "entryPointsBodyTeaser": "Muscle tension, posture patterns, a therapist's recommendation",
-  "@entryPointsBodyTeaser": {"description": "Area card: body — one-line teaser"},
+  "@entryPointsBodyTeaser": {
+    "description": "Area card: body — one-line teaser"
+  },
   "entryPointsBodyDetail": "Active reflex patterns can keep muscles in constant tension — independent of outside triggers. Physical and occupational therapists often recommend reflex integration exercises alongside their own work when recurring patterns don't fully release.\n\nTypical signs: chronic back or neck tension, jaw tension, posture patterns that keep coming back.",
-  "@entryPointsBodyDetail": {"description": "Area card: body — expanded detail text"},
+  "@entryPointsBodyDetail": {
+    "description": "Area card: body — expanded detail text"
+  },
   "entryPointsBodyChip": "Body",
-  "@entryPointsBodyChip": {"description": "Area card: body — chip label"},
+  "@entryPointsBodyChip": {
+    "description": "Area card: body — chip label"
+  },
   "entryPointsBodySource": "See Goddard Blythe: Reflexes, Learning and Behavior",
-  "@entryPointsBodySource": {"description": "Area card: body — book citation (published edition titles per language)"},
+  "@entryPointsBodySource": {
+    "description": "Area card: body — book citation (published edition titles per language)"
+  },
   "entryPointsCoordinationTitle": "Coordination & Performance",
-  "@entryPointsCoordinationTitle": {"description": "Area card: coordination/performance — title"},
+  "@entryPointsCoordinationTitle": {
+    "description": "Area card: coordination/performance — title"
+  },
   "entryPointsCoordinationTeaser": "Movement quality, balance, athletic coordination",
-  "@entryPointsCoordinationTeaser": {"description": "Area card: coordination — one-line teaser"},
+  "@entryPointsCoordinationTeaser": {
+    "description": "Area card: coordination — one-line teaser"
+  },
   "entryPointsCoordinationDetail": "Unintegrated reflexes tie up motor resources — which can show up as limited coordination, slower reactions, or balance difficulties. Athletes use reflex integration to move past coordination limits that regular training alone doesn't reach.\n\nTypical signs: movements feel harder than they should, asymmetries, balance under pressure.",
-  "@entryPointsCoordinationDetail": {"description": "Area card: coordination — expanded detail text"},
+  "@entryPointsCoordinationDetail": {
+    "description": "Area card: coordination — expanded detail text"
+  },
   "entryPointsCoordinationChip": "Coordination",
-  "@entryPointsCoordinationChip": {"description": "Area card: coordination — chip label"},
+  "@entryPointsCoordinationChip": {
+    "description": "Area card: coordination — chip label"
+  },
   "entryPointsCoordinationSource": "See Blomberg: Movements That Heal",
-  "@entryPointsCoordinationSource": {"description": "Area card: coordination — book citation (published edition titles per language)"},
+  "@entryPointsCoordinationSource": {
+    "description": "Area card: coordination — book citation (published edition titles per language)"
+  },
   "entryPointsEmotionTitle": "Emotional Regulation & Inner Life",
-  "@entryPointsEmotionTitle": {"description": "Area card: emotional regulation — title"},
+  "@entryPointsEmotionTitle": {
+    "description": "Area card: emotional regulation — title"
+  },
   "entryPointsEmotionTeaser": "Stress responses, sensory sensitivity, self-awareness",
-  "@entryPointsEmotionTeaser": {"description": "Area card: emotional regulation — one-line teaser"},
+  "@entryPointsEmotionTeaser": {
+    "description": "Area card: emotional regulation — one-line teaser"
+  },
   "entryPointsEmotionDetail": "Some reflex patterns directly influence how the nervous system responds to stimulation — stress sensitivity, emotional reactivity, sensory overload. Rhythmic movement can help the nervous system settle and open access to inner states.\n\nTypical signs: quick emotional flooding, difficulty winding down, body tension under stress. This varies greatly from person to person.",
-  "@entryPointsEmotionDetail": {"description": "Area card: emotional regulation — expanded detail text"},
+  "@entryPointsEmotionDetail": {
+    "description": "Area card: emotional regulation — expanded detail text"
+  },
   "entryPointsEmotionChip": "Emotional Regulation",
-  "@entryPointsEmotionChip": {"description": "Area card: emotional regulation — chip label"},
+  "@entryPointsEmotionChip": {
+    "description": "Area card: emotional regulation — chip label"
+  },
   "entryPointsEmotionSource": "See Blomberg: Movements That Heal",
-  "@entryPointsEmotionSource": {"description": "Area card: emotional regulation — book citation"},
+  "@entryPointsEmotionSource": {
+    "description": "Area card: emotional regulation — book citation"
+  },
   "entryPointsChildTitle": "My Child: School & Development",
-  "@entryPointsChildTitle": {"description": "Area card: my child — title"},
+  "@entryPointsChildTitle": {
+    "description": "Area card: my child — title"
+  },
   "entryPointsChildTeaser": "Focus, learning, school — as a parent",
-  "@entryPointsChildTeaser": {"description": "Area card: my child — one-line teaser"},
+  "@entryPointsChildTeaser": {
+    "description": "Area card: my child — one-line teaser"
+  },
   "entryPointsChildDetail": "Early reflex patterns that were never fully integrated can show up later as difficulties with reading, writing, or concentration — often without a clear physical cause.\n\nTypical signs: your child struggles to keep up at school, finds it hard to focus, is restless in class, or finds fine motor tasks or reading a real effort.",
-  "@entryPointsChildDetail": {"description": "Area card: my child — expanded detail text"},
+  "@entryPointsChildDetail": {
+    "description": "Area card: my child — expanded detail text"
+  },
   "entryPointsChildChip": "My Child",
-  "@entryPointsChildChip": {"description": "Area card: my child — chip label"},
+  "@entryPointsChildChip": {
+    "description": "Area card: my child — chip label"
+  },
   "entryPointsChildSource": "See Goddard Blythe: Reflexes, Learning and Behavior",
-  "@entryPointsChildSource": {"description": "Area card: my child — book citation"},
+  "@entryPointsChildSource": {
+    "description": "Area card: my child — book citation"
+  },
   "entryPointsCuriosityTitle": "Curiosity & Exploration",
-  "@entryPointsCuriosityTitle": {"description": "Area card: curiosity — title"},
+  "@entryPointsCuriosityTitle": {
+    "description": "Area card: curiosity — title"
+  },
   "entryPointsCuriosityTeaser": "No specific concern — just exploring",
-  "@entryPointsCuriosityTeaser": {"description": "Area card: curiosity — one-line teaser"},
+  "@entryPointsCuriosityTeaser": {
+    "description": "Area card: curiosity — one-line teaser"
+  },
   "entryPointsCuriosityDetail": "Some people arrive without a specific symptom — they've heard about reflex integration and are curious what several weeks of rhythmic movement will change. That is a completely valid way to start.\n\nYou don't need to name a \"problem\" to begin the training.",
-  "@entryPointsCuriosityDetail": {"description": "Area card: curiosity — expanded detail text"},
+  "@entryPointsCuriosityDetail": {
+    "description": "Area card: curiosity — expanded detail text"
+  },
   "entryPointsCuriosityChip": "Just Curious",
-  "@entryPointsCuriosityChip": {"description": "Area card: curiosity — chip label"},
-
+  "@entryPointsCuriosityChip": {
+    "description": "Area card: curiosity — chip label"
+  },
   "forWhomTitle": "Who Are You Training For?",
-  "@forWhomTitle": {"description": "Profile choice screen: headline"},
+  "@forWhomTitle": {
+    "description": "Profile choice screen: headline"
+  },
   "forWhomSubtitle": "You can add more profiles at any time.",
-  "@forWhomSubtitle": {"description": "Profile choice screen: subline"},
+  "@forWhomSubtitle": {
+    "description": "Profile choice screen: subline"
+  },
   "forWhomSelfTitle": "For Myself",
-  "@forWhomSelfTitle": {"description": "Option card: train for myself — title"},
+  "@forWhomSelfTitle": {
+    "description": "Option card: train for myself — title"
+  },
   "forWhomSelfSubtitle": "Create your own adult profile",
-  "@forWhomSelfSubtitle": {"description": "Option card: train for myself — subtitle"},
+  "@forWhomSelfSubtitle": {
+    "description": "Option card: train for myself — subtitle"
+  },
   "forWhomChildTitle": "For My Child",
-  "@forWhomChildTitle": {"description": "Option card: train for my child — title"},
+  "@forWhomChildTitle": {
+    "description": "Option card: train for my child — title"
+  },
   "forWhomChildSubtitle": "Create a child profile",
-  "@forWhomChildSubtitle": {"description": "Option card: train for my child — subtitle"},
+  "@forWhomChildSubtitle": {
+    "description": "Option card: train for my child — subtitle"
+  },
   "forWhomChildNameLabel": "Name or nickname",
-  "@forWhomChildNameLabel": {"description": "Text field label for the child's name"},
+  "@forWhomChildNameLabel": {
+    "description": "Text field label for the child's name"
+  },
   "forWhomBirthDateLabel": "Date of birth *",
-  "@forWhomBirthDateLabel": {"description": "Birth date field label (asterisk = required)"},
+  "@forWhomBirthDateLabel": {
+    "description": "Birth date field label (asterisk = required)"
+  },
   "forWhomBirthDateHelper": "Required — used for age-based results",
-  "@forWhomBirthDateHelper": {"description": "Helper text under the birth date field"},
+  "@forWhomBirthDateHelper": {
+    "description": "Helper text under the birth date field"
+  },
   "forWhomBirthDatePickerHelp": "Select date of birth",
-  "@forWhomBirthDatePickerHelp": {"description": "Date picker helpText for the birth date"},
+  "@forWhomBirthDatePickerHelp": {
+    "description": "Date picker helpText for the birth date"
+  },
   "forWhomSelectDate": "Select date",
-  "@forWhomSelectDate": {"description": "Placeholder shown before a date was picked"},
+  "@forWhomSelectDate": {
+    "description": "Placeholder shown before a date was picked"
+  },
   "forWhomCreateChildProfile": "Create Child Profile",
-  "@forWhomCreateChildProfile": {"description": "Submit button to create the child profile"},
+  "@forWhomCreateChildProfile": {
+    "description": "Submit button to create the child profile"
+  },
   "forWhomMissingFields": "Please enter a name and date of birth.",
-  "@forWhomMissingFields": {"description": "Snackbar when name or birth date is missing"},
+  "@forWhomMissingFields": {
+    "description": "Snackbar when name or birth date is missing"
+  },
   "forWhomCreateError": "Could not create the profile: {error}",
-  "@forWhomCreateError": {"description": "Snackbar when profile creation fails", "placeholders": {"error": {"type": "String"}}},
+  "@forWhomCreateError": {
+    "description": "Snackbar when profile creation fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "forWhomReflexProfileSheetTitle": "Create a reflex profile for {name}?",
-  "@forWhomReflexProfileSheetTitle": {"description": "Bottom sheet title after profile creation", "placeholders": {"name": {"type": "String"}}},
+  "@forWhomReflexProfileSheetTitle": {
+    "description": "Bottom sheet title after profile creation",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "forWhomReflexProfileSheetBody": "The questionnaire takes about 10–15 minutes and helps us recommend the right training.",
-  "@forWhomReflexProfileSheetBody": {"description": "Bottom sheet body explaining the questionnaire"},
+  "@forWhomReflexProfileSheetBody": {
+    "description": "Bottom sheet body explaining the questionnaire"
+  },
   "forWhomStartReflexProfile": "Start the Reflex Profile Now",
-  "@forWhomStartReflexProfile": {"description": "Primary button: start the reflex profile questionnaire now"},
+  "@forWhomStartReflexProfile": {
+    "description": "Primary button: start the reflex profile questionnaire now"
+  },
   "forWhomLaterToTraining": "Later — Straight to Training",
-  "@forWhomLaterToTraining": {"description": "Secondary button: skip questionnaire, go to training"},
-
+  "@forWhomLaterToTraining": {
+    "description": "Secondary button: skip questionnaire, go to training"
+  },
   "gotIt": "Got It",
-  "@gotIt": {"description": "Generic acknowledgement button"},
+  "@gotIt": {
+    "description": "Generic acknowledgement button"
+  },
   "today": "Today",
-  "@today": {"description": "Generic label for today"},
-
+  "@today": {
+    "description": "Generic label for today"
+  },
   "packageShortMoro": "Moro",
-  "@packageShortMoro": {"description": "Short package name shown on dashboard"},
+  "@packageShortMoro": {
+    "description": "Short package name shown on dashboard"
+  },
   "packageShortSpinalGalant": "Spinal Galant",
-  "@packageShortSpinalGalant": {"description": "Short package name shown on dashboard"},
+  "@packageShortSpinalGalant": {
+    "description": "Short package name shown on dashboard"
+  },
   "packageShortTlr": "TLR",
-  "@packageShortTlr": {"description": "Short package name shown on dashboard"},
+  "@packageShortTlr": {
+    "description": "Short package name shown on dashboard"
+  },
   "packageShortBabkin": "Babkin",
-  "@packageShortBabkin": {"description": "Short package name shown on dashboard"},
+  "@packageShortBabkin": {
+    "description": "Short package name shown on dashboard"
+  },
   "packageShortSuchSaug": "Rooting-Sucking",
-  "@packageShortSuchSaug": {"description": "Short package name shown on dashboard"},
+  "@packageShortSuchSaug": {
+    "description": "Short package name shown on dashboard"
+  },
   "packageShortAtnr": "ATNR",
-  "@packageShortAtnr": {"description": "Short package name shown on dashboard"},
+  "@packageShortAtnr": {
+    "description": "Short package name shown on dashboard"
+  },
   "packageShortStnr": "STNR",
-  "@packageShortStnr": {"description": "Short package name shown on dashboard"},
+  "@packageShortStnr": {
+    "description": "Short package name shown on dashboard"
+  },
   "packageShortBabinski": "Babinski",
-  "@packageShortBabinski": {"description": "Short package name shown on dashboard"},
+  "@packageShortBabinski": {
+    "description": "Short package name shown on dashboard"
+  },
   "packageShortLandau": "Landau",
-  "@packageShortLandau": {"description": "Short package name shown on dashboard"},
-
+  "@packageShortLandau": {
+    "description": "Short package name shown on dashboard"
+  },
   "dashboardRoutineTipTitle": "You Know the Exercises Now",
-  "@dashboardRoutineTipTitle": {"description": "Bottom sheet suggesting routine mode: title"},
+  "@dashboardRoutineTipTitle": {
+    "description": "Bottom sheet suggesting routine mode: title"
+  },
   "dashboardRoutineTipBody": "Try Routine Mode — it guides you through the whole training hands-free, by audio.",
-  "@dashboardRoutineTipBody": {"description": "Bottom sheet suggesting routine mode: body"},
+  "@dashboardRoutineTipBody": {
+    "description": "Bottom sheet suggesting routine mode: body"
+  },
   "dashboardLogUnitTitle": "Log Session",
-  "@dashboardLogUnitTitle": {"description": "Log-session dialog title, also used as button label"},
+  "@dashboardLogUnitTitle": {
+    "description": "Log-session dialog title, also used as button label"
+  },
   "dashboardLogUnitBody": "Today's session will be logged. Right after, you can tune in and note down what you observe.",
-  "@dashboardLogUnitBody": {"description": "Log-session dialog body"},
+  "@dashboardLogUnitBody": {
+    "description": "Log-session dialog body"
+  },
   "dashboardLogUnitConfirm": "Log Today's Practice",
-  "@dashboardLogUnitConfirm": {"description": "Log-session dialog confirm button"},
+  "@dashboardLogUnitConfirm": {
+    "description": "Log-session dialog confirm button"
+  },
   "dashboardLogUnitSuccess": "Today's session has been logged.",
-  "@dashboardLogUnitSuccess": {"description": "Snackbar after logging today's session"},
+  "@dashboardLogUnitSuccess": {
+    "description": "Snackbar after logging today's session"
+  },
   "dashboardLogUnitError": "The session could not be logged: {error}",
-  "@dashboardLogUnitError": {"description": "Snackbar when logging fails", "placeholders": {"error": {"type": "String"}}},
+  "@dashboardLogUnitError": {
+    "description": "Snackbar when logging fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "reminderSessionTitle": "Time for Your Session",
-  "@reminderSessionTitle": {"description": "Local reminder notification title"},
+  "@reminderSessionTitle": {
+    "description": "Local reminder notification title"
+  },
   "reminderSessionBody": "Take a moment for today's session.",
-  "@reminderSessionBody": {"description": "Local reminder notification body"},
+  "@reminderSessionBody": {
+    "description": "Local reminder notification body"
+  },
   "dashboardJointTrainingTitle": "Train Together?",
-  "@dashboardJointTrainingTitle": {"description": "Joint-training dialog title (multiple child profiles)"},
+  "@dashboardJointTrainingTitle": {
+    "description": "Joint-training dialog title (multiple child profiles)"
+  },
   "dashboardJointTrainingBody": "These children have the same active package. After training, should the session be logged for them as well?",
-  "@dashboardJointTrainingBody": {"description": "Joint-training dialog body"},
+  "@dashboardJointTrainingBody": {
+    "description": "Joint-training dialog body"
+  },
   "dashboardJointTrainingOnlyThis": "Only This Profile",
-  "@dashboardJointTrainingOnlyThis": {"description": "Joint-training dialog: log only active profile"},
+  "@dashboardJointTrainingOnlyThis": {
+    "description": "Joint-training dialog: log only active profile"
+  },
   "dashboardJointTrainingTogether": "Log Together",
-  "@dashboardJointTrainingTogether": {"description": "Joint-training dialog: log for selected profiles too"},
+  "@dashboardJointTrainingTogether": {
+    "description": "Joint-training dialog: log for selected profiles too"
+  },
   "dashboardVorrunde": "Warm-Up Round",
-  "@dashboardVorrunde": {"description": "Headline when the warm-up round is the primary activity"},
+  "@dashboardVorrunde": {
+    "description": "Headline when the warm-up round is the primary activity"
+  },
   "dashboardPackageHeadline": "{name} Package",
-  "@dashboardPackageHeadline": {"description": "Headline for the active package", "placeholders": {"name": {"type": "String"}}},
+  "@dashboardPackageHeadline": {
+    "description": "Headline for the active package",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "dashboardNoActivePackage": "No Active Package Yet",
-  "@dashboardNoActivePackage": {"description": "Headline when no package is active"},
+  "@dashboardNoActivePackage": {
+    "description": "Headline when no package is active"
+  },
   "dashboardCompletedToday": "Completed Today",
-  "@dashboardCompletedToday": {"description": "Status chip when today's session is done"},
+  "@dashboardCompletedToday": {
+    "description": "Status chip when today's session is done"
+  },
   "dashboardVorrundeReady": "You've reached the four weeks of warm-up rounds. You can start Moro now.",
-  "@dashboardVorrundeReady": {"description": "Info text when warm-up phase is complete"},
+  "@dashboardVorrundeReady": {
+    "description": "Info text when warm-up phase is complete"
+  },
   "dashboardVorrundeIntro": "The warm-up round prepares you rhythmically for Moro. You can continue it or start Moro whenever you're ready.",
-  "@dashboardVorrundeIntro": {"description": "Info text while warm-up phase is running"},
+  "@dashboardVorrundeIntro": {
+    "description": "Info text while warm-up phase is running"
+  },
   "dashboardStartMoroNow": "Start Moro Now",
-  "@dashboardStartMoroNow": {"description": "Button: start Moro after warm-up complete"},
+  "@dashboardStartMoroNow": {
+    "description": "Button: start Moro after warm-up complete"
+  },
   "dashboardContinueVorrunde": "Continue Warm-Up",
-  "@dashboardContinueVorrunde": {"description": "Button: continue the warm-up round"},
+  "@dashboardContinueVorrunde": {
+    "description": "Button: continue the warm-up round"
+  },
   "dashboardStartMoroAnyway": "Start Moro Anyway",
-  "@dashboardStartMoroAnyway": {"description": "Button: start Moro before warm-up is complete"},
+  "@dashboardStartMoroAnyway": {
+    "description": "Button: start Moro before warm-up is complete"
+  },
   "dashboardDayOfTotal": "Day {current} of {total}",
-  "@dashboardDayOfTotal": {"description": "Chip: current day within package", "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+  "@dashboardDayOfTotal": {
+    "description": "Chip: current day within package",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "dashboardMovementCount": "{count, plural, one{1 movement} other{{count} movements}}",
-  "@dashboardMovementCount": {"description": "Chip: number of movements in today's session", "placeholders": {"count": {"type": "int"}}},
+  "@dashboardMovementCount": {
+    "description": "Chip: number of movements in today's session",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboardEstimatedMinutes": "approx. {minutes} min",
-  "@dashboardEstimatedMinutes": {"description": "Chip: estimated session duration", "placeholders": {"minutes": {"type": "int"}}},
+  "@dashboardEstimatedMinutes": {
+    "description": "Chip: estimated session duration",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "dashboardRegularityNote": "The movements deliberately stay the same. Regularity matters more than intensity.",
-  "@dashboardRegularityNote": {"description": "Note under the daily unit card"},
+  "@dashboardRegularityNote": {
+    "description": "Note under the daily unit card"
+  },
   "dashboardBeginUnit": "Begin Session",
-  "@dashboardBeginUnit": {"description": "Primary button: start today's session"},
+  "@dashboardBeginUnit": {
+    "description": "Primary button: start today's session"
+  },
   "dashboardDocumentExperience": "Log Your Experience",
-  "@dashboardDocumentExperience": {"description": "Button: open observation sheet"},
+  "@dashboardDocumentExperience": {
+    "description": "Button: open observation sheet"
+  },
   "dashboardDoneToday": "Done Today",
-  "@dashboardDoneToday": {"description": "Disabled button label when already logged today"},
+  "@dashboardDoneToday": {
+    "description": "Disabled button label when already logged today"
+  },
   "dashboardRoutineModeButton": "Routine Mode",
-  "@dashboardRoutineModeButton": {"description": "Button: start session in routine mode"},
+  "@dashboardRoutineModeButton": {
+    "description": "Button: start session in routine mode"
+  },
   "dashboardVorrundeCalm": "Calming Warm-Up",
-  "@dashboardVorrundeCalm": {"description": "Button: start warm-up round for calming"},
+  "@dashboardVorrundeCalm": {
+    "description": "Button: start warm-up round for calming"
+  },
   "dashboardDidBothToday": "Package training and warm-up done today",
-  "@dashboardDidBothToday": {"description": "Note when both package session and warm-up were done today"},
+  "@dashboardDidBothToday": {
+    "description": "Note when both package session and warm-up were done today"
+  },
   "dashboardDidVorrundeToday": "Warm-up done today",
-  "@dashboardDidVorrundeToday": {"description": "Note when only the warm-up was done today"},
+  "@dashboardDidVorrundeToday": {
+    "description": "Note when only the warm-up was done today"
+  },
   "dashboardCreateFirstProfileHint": "Create your first reflex profile to get started.",
-  "@dashboardCreateFirstProfileHint": {"description": "Empty state: no profile yet"},
+  "@dashboardCreateFirstProfileHint": {
+    "description": "Empty state: no profile yet"
+  },
   "dashboardCreateFirstProfile": "Create First Profile",
-  "@dashboardCreateFirstProfile": {"description": "Button: create first profile"},
+  "@dashboardCreateFirstProfile": {
+    "description": "Button: create first profile"
+  },
   "dashboardStartPackageHint": "Your profile is ready. Start a package now to build your rhythm.",
-  "@dashboardStartPackageHint": {"description": "Empty state: profile exists, no package"},
+  "@dashboardStartPackageHint": {
+    "description": "Empty state: profile exists, no package"
+  },
   "dashboardStartPackage": "Start Package",
-  "@dashboardStartPackage": {"description": "Button: start a package"},
+  "@dashboardStartPackage": {
+    "description": "Button: start a package"
+  },
   "dashboardImpulseRegularity": "Today isn't about perfection — it's about regularity.",
-  "@dashboardImpulseRegularity": {"description": "Daily impulse card (Monday)"},
+  "@dashboardImpulseRegularity": {
+    "description": "Daily impulse card (Monday)"
+  },
   "dashboardImpulseObserve": "Observe without judging.",
-  "@dashboardImpulseObserve": {"description": "Daily impulse card (Tuesday)"},
+  "@dashboardImpulseObserve": {
+    "description": "Daily impulse card (Tuesday)"
+  },
   "dashboardImpulseSlowIsEnough": "Slow and regular is enough.",
-  "@dashboardImpulseSlowIsEnough": {"description": "Daily impulse card (Wednesday)"},
+  "@dashboardImpulseSlowIsEnough": {
+    "description": "Daily impulse card (Wednesday)"
+  },
   "dashboardImpulseNextStep": "Here is your next calm step.",
-  "@dashboardImpulseNextStep": {"description": "Daily impulse card (Thursday)"},
+  "@dashboardImpulseNextStep": {
+    "description": "Daily impulse card (Thursday)"
+  },
   "dashboardImpulsePerceive": "Notice what is here today.",
-  "@dashboardImpulsePerceive": {"description": "Daily impulse card (Friday)"},
+  "@dashboardImpulsePerceive": {
+    "description": "Daily impulse card (Friday)"
+  },
   "dashboardImpulseRhythm": "A calm rhythm gives the body something to hold on to.",
-  "@dashboardImpulseRhythm": {"description": "Daily impulse card (Saturday)"},
+  "@dashboardImpulseRhythm": {
+    "description": "Daily impulse card (Saturday)"
+  },
   "dashboardImpulseShortUnit": "A short session beats pressure.",
-  "@dashboardImpulseShortUnit": {"description": "Daily impulse card (Sunday)"},
+  "@dashboardImpulseShortUnit": {
+    "description": "Daily impulse card (Sunday)"
+  },
   "dashboardPracticedOfWeek": "{count}/7 practiced",
-  "@dashboardPracticedOfWeek": {"description": "Weekly regularity strip: practiced days count", "placeholders": {"count": {"type": "int"}}},
+  "@dashboardPracticedOfWeek": {
+    "description": "Weekly regularity strip: practiced days count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboardProposalsOpen": "{count, plural, one{1 open appointment proposal} other{{count} open appointment proposals}}",
-  "@dashboardProposalsOpen": {"description": "Guidance notice: open appointment proposals", "placeholders": {"count": {"type": "int"}}},
+  "@dashboardProposalsOpen": {
+    "description": "Guidance notice: open appointment proposals",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboardNewMessages": "{count, plural, one{1 new message} other{{count} new messages}}",
-  "@dashboardNewMessages": {"description": "Guidance notice: unread messages", "placeholders": {"count": {"type": "int"}}},
+  "@dashboardNewMessages": {
+    "description": "Guidance notice: unread messages",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboardProposalBannerTitle": "{count, plural, one{New Appointment Proposal} other{{count} New Appointment Proposals}}",
-  "@dashboardProposalBannerTitle": {"description": "Appointment proposal banner title", "placeholders": {"count": {"type": "int"}}},
+  "@dashboardProposalBannerTitle": {
+    "description": "Appointment proposal banner title",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboardProposalBannerBody": "{name} suggested appointment times for you.",
-  "@dashboardProposalBannerBody": {"description": "Appointment proposal banner body", "placeholders": {"name": {"type": "String"}}},
+  "@dashboardProposalBannerBody": {
+    "description": "Appointment proposal banner body",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "dashboardSwitchProfile": "Switch Profile",
-  "@dashboardSwitchProfile": {"description": "Tooltip on the profile switcher"},
+  "@dashboardSwitchProfile": {
+    "description": "Tooltip on the profile switcher"
+  },
   "profileBadgeSelf": "Me",
-  "@profileBadgeSelf": {"description": "Badge marking the adult self profile in the switcher"},
+  "@profileBadgeSelf": {
+    "description": "Badge marking the adult self profile in the switcher"
+  },
   "profileBadgeChild": "Child",
-  "@profileBadgeChild": {"description": "Badge marking a child profile in the switcher"},
+  "@profileBadgeChild": {
+    "description": "Badge marking a child profile in the switcher"
+  },
   "dashboardAddProfile": "Add Profile",
-  "@dashboardAddProfile": {"description": "Menu item: add another profile"},
+  "@dashboardAddProfile": {
+    "description": "Menu item: add another profile"
+  },
   "trainingIntroTitle": "Welcome to Your Session",
-  "@trainingIntroTitle": {"description": "Headline on the training session introduction screen"},
+  "@trainingIntroTitle": {
+    "description": "Headline on the training session introduction screen"
+  },
   "trainingIntroDescription": "Today, you'll practice seven movements at a calm pace.",
-  "@trainingIntroDescription": {"description": "Description on the training session introduction screen"},
+  "@trainingIntroDescription": {
+    "description": "Description on the training session introduction screen"
+  },
   "trainingIntroRegularity": "Consistency matters more than intensity.",
-  "@trainingIntroRegularity": {"description": "Encouraging note on the training session introduction screen"},
+  "@trainingIntroRegularity": {
+    "description": "Encouraging note on the training session introduction screen"
+  },
   "trainingIntroMovementCount": "7 movements",
-  "@trainingIntroMovementCount": {"description": "Movement count in the training introduction info card"},
+  "@trainingIntroMovementCount": {
+    "description": "Movement count in the training introduction info card"
+  },
   "trainingIntroDuration": "About 15–20 minutes",
-  "@trainingIntroDuration": {"description": "Estimated duration in the training introduction info card"},
+  "@trainingIntroDuration": {
+    "description": "Estimated duration in the training introduction info card"
+  },
   "trainingIntroClothing": "Comfortable clothing recommended",
-  "@trainingIntroClothing": {"description": "Clothing recommendation in the training introduction info card"},
+  "@trainingIntroClothing": {
+    "description": "Clothing recommendation in the training introduction info card"
+  },
   "trainingProgressSemantics": "{total, plural, one{Progress: step {current} of 1.} other{Progress: step {current} of {total}.}}",
-  "@trainingProgressSemantics": {"description": "Accessibility label for progress through training instruction steps", "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+  "@trainingProgressSemantics": {
+    "description": "Accessibility label for progress through training instruction steps",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "trainingExitTooltip": "Exit Session",
-  "@trainingExitTooltip": {"description": "Tooltip for the button that exits an active training session"},
+  "@trainingExitTooltip": {
+    "description": "Tooltip for the button that exits an active training session"
+  },
   "trainingContinueToMovement": "Continue to Movement",
-  "@trainingContinueToMovement": {"description": "Button from position instructions to movement instructions"},
+  "@trainingContinueToMovement": {
+    "description": "Button from position instructions to movement instructions"
+  },
   "trainingHintTitle": "Tip",
-  "@trainingHintTitle": {"description": "Heading above an exercise hint"},
+  "@trainingHintTitle": {
+    "description": "Heading above an exercise hint"
+  },
   "trainingRepetitionCount": "{count, plural, one{1 repetition} other{{count} repetitions}}",
-  "@trainingRepetitionCount": {"description": "Number of repetitions shown before an exercise", "placeholders": {"count": {"type": "int"}}},
+  "@trainingRepetitionCount": {
+    "description": "Number of repetitions shown before an exercise",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "trainingStartExercise": "Start Exercise",
-  "@trainingStartExercise": {"description": "Button that starts the current exercise"},
+  "@trainingStartExercise": {
+    "description": "Button that starts the current exercise"
+  },
   "trainingAbortTitle": "Exit Session?",
-  "@trainingAbortTitle": {"description": "Title of the confirmation dialog for exiting training"},
+  "@trainingAbortTitle": {
+    "description": "Title of the confirmation dialog for exiting training"
+  },
   "trainingAbortBody": "Are you sure you want to exit this session? Your progress will be lost.",
-  "@trainingAbortBody": {"description": "Body of the confirmation dialog for exiting training"},
+  "@trainingAbortBody": {
+    "description": "Body of the confirmation dialog for exiting training"
+  },
   "trainingAbortStay": "Keep Training",
-  "@trainingAbortStay": {"description": "Button that dismisses the exit-training confirmation"},
+  "@trainingAbortStay": {
+    "description": "Button that dismisses the exit-training confirmation"
+  },
   "trainingAbortConfirm": "Exit Session",
-  "@trainingAbortConfirm": {"description": "Destructive button that confirms exiting training"},
+  "@trainingAbortConfirm": {
+    "description": "Destructive button that confirms exiting training"
+  },
   "trainingFeedbackModeActivated": "{label} mode enabled.",
-  "@trainingFeedbackModeActivated": {"description": "Accessibility announcement after changing the training feedback mode", "placeholders": {"label": {"type": "String"}}},
+  "@trainingFeedbackModeActivated": {
+    "description": "Accessibility announcement after changing the training feedback mode",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
   "trainingFeedbackVoice": "Voice",
-  "@trainingFeedbackVoice": {"description": "Voice feedback mode label"},
+  "@trainingFeedbackVoice": {
+    "description": "Voice feedback mode label"
+  },
   "trainingFeedbackSounds": "Sounds",
-  "@trainingFeedbackSounds": {"description": "Sound feedback mode label in the immersive player"},
+  "@trainingFeedbackSounds": {
+    "description": "Sound feedback mode label in the immersive player"
+  },
   "trainingFeedbackHaptics": "Haptics",
-  "@trainingFeedbackHaptics": {"description": "Haptic feedback mode label"},
+  "@trainingFeedbackHaptics": {
+    "description": "Haptic feedback mode label"
+  },
   "trainingFeedbackSilent": "Silent",
-  "@trainingFeedbackSilent": {"description": "Silent feedback mode label"},
+  "@trainingFeedbackSilent": {
+    "description": "Silent feedback mode label"
+  },
   "trainingTempoAnnouncement": "Tempo: {seconds} seconds.",
-  "@trainingTempoAnnouncement": {"description": "Accessibility announcement after changing exercise tempo", "placeholders": {"seconds": {"type": "String"}}},
+  "@trainingTempoAnnouncement": {
+    "description": "Accessibility announcement after changing exercise tempo",
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
   "trainingExerciseDurationSemantics": "Exercise duration: {seconds} seconds and {repetitions} repetitions.",
-  "@trainingExerciseDurationSemantics": {"description": "Accessibility summary of exercise duration and repetitions", "placeholders": {"seconds": {"type": "int"}, "repetitions": {"type": "int"}}},
+  "@trainingExerciseDurationSemantics": {
+    "description": "Accessibility summary of exercise duration and repetitions",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      },
+      "repetitions": {
+        "type": "int"
+      }
+    }
+  },
   "trainingRepeatCount": "Repeat {count}×",
-  "@trainingRepeatCount": {"description": "Compact repeat count beside the exercise duration", "placeholders": {"count": {"type": "int"}}},
+  "@trainingRepeatCount": {
+    "description": "Compact repeat count beside the exercise duration",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "trainingAnimationSemantics": "Exercise animation. It starts automatically and can be paused or restarted.",
-  "@trainingAnimationSemantics": {"description": "Accessibility description of the exercise animation controls"},
+  "@trainingAnimationSemantics": {
+    "description": "Accessibility description of the exercise animation controls"
+  },
   "trainingAutoplayHint": "Starts automatically. Pause if needed.",
-  "@trainingAutoplayHint": {"description": "Hint below an automatically starting exercise animation"},
+  "@trainingAutoplayHint": {
+    "description": "Hint below an automatically starting exercise animation"
+  },
   "trainingTempoFeedbackSummary": "Tempo: {seconds}s  •  Feedback: {feedback}",
-  "@trainingTempoFeedbackSummary": {"description": "Current tempo and feedback summary", "placeholders": {"seconds": {"type": "String"}, "feedback": {"type": "String"}}},
+  "@trainingTempoFeedbackSummary": {
+    "description": "Current tempo and feedback summary",
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      },
+      "feedback": {
+        "type": "String"
+      }
+    }
+  },
   "trainingFastTempoWarning": "Very fast tempo active. Focus on controlled movement.",
-  "@trainingFastTempoWarning": {"description": "Warning shown when a very fast exercise tempo is selected"},
+  "@trainingFastTempoWarning": {
+    "description": "Warning shown when a very fast exercise tempo is selected"
+  },
   "trainingAdaptiveSuggestion": "Adaptive suggestion active",
-  "@trainingAdaptiveSuggestion": {"description": "Note that an adaptively suggested tempo is active"},
+  "@trainingAdaptiveSuggestion": {
+    "description": "Note that an adaptively suggested tempo is active"
+  },
   "trainingTempoSlowerSemantics": "Slow Down Tempo",
-  "@trainingTempoSlowerSemantics": {"description": "Accessibility label for slowing the exercise tempo"},
+  "@trainingTempoSlowerSemantics": {
+    "description": "Accessibility label for slowing the exercise tempo"
+  },
   "trainingTempoFasterSemantics": "Speed Up Tempo",
-  "@trainingTempoFasterSemantics": {"description": "Accessibility label for increasing the exercise tempo"},
+  "@trainingTempoFasterSemantics": {
+    "description": "Accessibility label for increasing the exercise tempo"
+  },
   "trainingSecondsValue": "{seconds} seconds",
-  "@trainingSecondsValue": {"description": "Accessibility value for a duration in seconds", "placeholders": {"seconds": {"type": "String"}}},
+  "@trainingSecondsValue": {
+    "description": "Accessibility value for a duration in seconds",
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
   "trainingSlower": "Slower",
-  "@trainingSlower": {"description": "Button that slows the exercise tempo"},
+  "@trainingSlower": {
+    "description": "Button that slows the exercise tempo"
+  },
   "trainingFaster": "Faster",
-  "@trainingFaster": {"description": "Button that increases the exercise tempo"},
+  "@trainingFaster": {
+    "description": "Button that increases the exercise tempo"
+  },
   "trainingFeedbackChangeSemantics": "Change Feedback Mode",
-  "@trainingFeedbackChangeSemantics": {"description": "Accessibility label for cycling through feedback modes"},
+  "@trainingFeedbackChangeSemantics": {
+    "description": "Accessibility label for cycling through feedback modes"
+  },
   "trainingControlsHint": "Adjust tempo and feedback here with a tap.",
-  "@trainingControlsHint": {"description": "Hint below the exercise tempo and feedback controls"},
+  "@trainingControlsHint": {
+    "description": "Hint below the exercise tempo and feedback controls"
+  },
   "trainingCompleteExercise": "Complete Exercise",
-  "@trainingCompleteExercise": {"description": "Button and accessibility label for completing the final exercise"},
+  "@trainingCompleteExercise": {
+    "description": "Button and accessibility label for completing the final exercise"
+  },
   "trainingContinueNextExercise": "Continue to the Next Exercise",
-  "@trainingContinueNextExercise": {"description": "Button and accessibility label for continuing to the next exercise"},
+  "@trainingContinueNextExercise": {
+    "description": "Button and accessibility label for continuing to the next exercise"
+  },
   "trainingSwitchCueUpper": "SWITCH!",
-  "@trainingSwitchCueUpper": {"description": "Large uppercase cue shown when the user should switch sides"},
+  "@trainingSwitchCueUpper": {
+    "description": "Large uppercase cue shown when the user should switch sides"
+  },
   "trainingPauseCue": "Rest...",
-  "@trainingPauseCue": {"description": "Large cue shown during the rest between repetitions"},
+  "@trainingPauseCue": {
+    "description": "Large cue shown during the rest between repetitions"
+  },
   "trainingHoldCueUpper": "HOLD",
-  "@trainingHoldCueUpper": {"description": "Fallback uppercase hold cue"},
+  "@trainingHoldCueUpper": {
+    "description": "Fallback uppercase hold cue"
+  },
   "trainingExerciseOfTotalCompact": "Exercise {current} · {total} total",
-  "@trainingExerciseOfTotalCompact": {"description": "Compact immersive exercise counter", "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+  "@trainingExerciseOfTotalCompact": {
+    "description": "Compact immersive exercise counter",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "trainingPause": "Pause",
-  "@trainingPause": {"description": "Button label for pausing an exercise"},
+  "@trainingPause": {
+    "description": "Button label for pausing an exercise"
+  },
   "trainingRest": "Rest",
-  "@trainingRest": {"description": "Rest phase label between repetitions"},
+  "@trainingRest": {
+    "description": "Rest phase label between repetitions"
+  },
   "trainingResume": "Resume",
-  "@trainingResume": {"description": "Button label for resuming a paused exercise"},
+  "@trainingResume": {
+    "description": "Button label for resuming a paused exercise"
+  },
   "trainingRestart": "Restart",
-  "@trainingRestart": {"description": "Button label for restarting an exercise animation"},
+  "@trainingRestart": {
+    "description": "Button label for restarting an exercise animation"
+  },
   "trainingSecondsOf": "of {count} sec.",
-  "@trainingSecondsOf": {"description": "Seconds total below the current immersive beat", "placeholders": {"count": {"type": "int"}}},
+  "@trainingSecondsOf": {
+    "description": "Seconds total below the current immersive beat",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "trainingBeatsOf": "of {count} beats",
-  "@trainingBeatsOf": {"description": "Beat total below the current immersive beat", "placeholders": {"count": {"type": "int"}}},
+  "@trainingBeatsOf": {
+    "description": "Beat total below the current immersive beat",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "trainingHoldTime": "{seconds}s hold",
-  "@trainingHoldTime": {"description": "Current hold duration in the immersive exercise controls", "placeholders": {"seconds": {"type": "int"}}},
+  "@trainingHoldTime": {
+    "description": "Current hold duration in the immersive exercise controls",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
   "trainingSecondsPerBeat": "{seconds}s / beat",
-  "@trainingSecondsPerBeat": {"description": "Current seconds per beat in the immersive exercise controls", "placeholders": {"seconds": {"type": "String"}}},
+  "@trainingSecondsPerBeat": {
+    "description": "Current seconds per beat in the immersive exercise controls",
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
   "trainingMusic": "Music",
-  "@trainingMusic": {"description": "Music control and music picker title"},
+  "@trainingMusic": {
+    "description": "Music control and music picker title"
+  },
   "trainingMusicOn": "Music On",
-  "@trainingMusicOn": {"description": "Active music control label"},
+  "@trainingMusicOn": {
+    "description": "Active music control label"
+  },
   "trainingSessionExitUnsaved": "This session won't be saved. Are you sure you want to exit?",
-  "@trainingSessionExitUnsaved": {"description": "Confirmation text when leaving an unsaved training session"},
+  "@trainingSessionExitUnsaved": {
+    "description": "Confirmation text when leaving an unsaved training session"
+  },
   "trainingReminderSessionBody": "Take a moment for today's reflex integration session.",
-  "@trainingReminderSessionBody": {"description": "Daily reminder body rescheduled after completing a training session"},
+  "@trainingReminderSessionBody": {
+    "description": "Daily reminder body rescheduled after completing a training session"
+  },
   "trainingProfileSkipTitle": "Skip the Reflex Profile?",
-  "@trainingProfileSkipTitle": {"description": "Title of the confirmation dialog for skipping the reflex profile"},
+  "@trainingProfileSkipTitle": {
+    "description": "Title of the confirmation dialog for skipping the reflex profile"
+  },
   "trainingProfileSkipBody": "Continue without a personal reflex profile to assess your current starting point?",
-  "@trainingProfileSkipBody": {"description": "Body of the confirmation dialog for skipping the reflex profile"},
+  "@trainingProfileSkipBody": {
+    "description": "Body of the confirmation dialog for skipping the reflex profile"
+  },
   "trainingContinue": "Continue",
-  "@trainingContinue": {"description": "Button that confirms continuing without a reflex profile"},
+  "@trainingContinue": {
+    "description": "Button that confirms continuing without a reflex profile"
+  },
   "trainingActiveProfile": "Active Profile",
-  "@trainingActiveProfile": {"description": "Fallback name for the currently selected profile"},
+  "@trainingActiveProfile": {
+    "description": "Fallback name for the currently selected profile"
+  },
   "trainingStartPackage": "Start Package",
-  "@trainingStartPackage": {"description": "Title for the package start flow"},
+  "@trainingStartPackage": {
+    "description": "Title for the package start flow"
+  },
   "trainingStartForProfile": "Starting for {name}",
-  "@trainingStartForProfile": {"description": "Header identifying the profile for which a package is being started", "placeholders": {"name": {"type": "String"}}},
+  "@trainingStartForProfile": {
+    "description": "Header identifying the profile for which a package is being started",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "trainingWarmupBeforeMoroTitle": "Warm-Up Before Moro",
-  "@trainingWarmupBeforeMoroTitle": {"description": "Title of the warm-up decision before starting the Moro package"},
+  "@trainingWarmupBeforeMoroTitle": {
+    "description": "Title of the warm-up decision before starting the Moro package"
+  },
   "trainingWarmupBeforeMoroBody": "The warm-up round offers a calm, rhythmic way to prepare for the upcoming reflex integration exercises.\n\nYou can return to these exercises later whenever you want to settle and unwind.",
-  "@trainingWarmupBeforeMoroBody": {"description": "Explanation of the optional warm-up round before Moro"},
+  "@trainingWarmupBeforeMoroBody": {
+    "description": "Explanation of the optional warm-up round before Moro"
+  },
   "trainingStartWarmup": "Start Warm-Up",
-  "@trainingStartWarmup": {"description": "Button that starts the warm-up round"},
+  "@trainingStartWarmup": {
+    "description": "Button that starts the warm-up round"
+  },
   "trainingContinueWithPackage": "Continue Directly to the Package",
-  "@trainingContinueWithPackage": {"description": "Button that skips the warm-up and continues with the package"},
+  "@trainingContinueWithPackage": {
+    "description": "Button that skips the warm-up and continues with the package"
+  },
   "trainingUseReflexProfile": "Use a Reflex Profile",
-  "@trainingUseReflexProfile": {"description": "Title encouraging the user to complete a reflex profile first"},
+  "@trainingUseReflexProfile": {
+    "description": "Title encouraging the user to complete a reflex profile first"
+  },
   "trainingReflexProfileMissingBody": "{name} doesn't have completed reflex profile results yet. A completed profile makes the duration recommendation more specific and easier to understand.",
-  "@trainingReflexProfileMissingBody": {"description": "Explanation that the selected profile has no completed reflex profile results", "placeholders": {"name": {"type": "String"}}},
+  "@trainingReflexProfileMissingBody": {
+    "description": "Explanation that the selected profile has no completed reflex profile results",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "trainingStartReflexProfile": "Start Reflex Profile",
-  "@trainingStartReflexProfile": {"description": "Button that starts the reflex profile questionnaire"},
+  "@trainingStartReflexProfile": {
+    "description": "Button that starts the reflex profile questionnaire"
+  },
   "trainingSkipDeliberately": "Skip for Now",
-  "@trainingSkipDeliberately": {"description": "Button that deliberately skips the reflex profile"},
+  "@trainingSkipDeliberately": {
+    "description": "Button that deliberately skips the reflex profile"
+  },
   "trainingIsometricPartnerTitle": "Isometric Partner Exercises",
-  "@trainingIsometricPartnerTitle": {"description": "Title of the isometric partner exercise question"},
+  "@trainingIsometricPartnerTitle": {
+    "description": "Title of the isometric partner exercise question"
+  },
   "trainingIsometricPartnerQuestion": "Has {name} already done isometric partner exercises with a professional?",
-  "@trainingIsometricPartnerQuestion": {"description": "Question about prior isometric partner exercises with a professional", "placeholders": {"name": {"type": "String"}}},
+  "@trainingIsometricPartnerQuestion": {
+    "description": "Question about prior isometric partner exercises with a professional",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "trainingWarmupStillRunning": "The warm-up phase is still in progress. You can start Moro anyway; it is a recommendation, not a requirement.",
-  "@trainingWarmupStillRunning": {"description": "Information shown while the recommended warm-up phase is still running"},
+  "@trainingWarmupStillRunning": {
+    "description": "Information shown while the recommended warm-up phase is still running"
+  },
   "trainingWarmupReady": "The warm-up is ready. You can start Moro now.",
-  "@trainingWarmupReady": {"description": "Information shown when the warm-up phase is ready for Moro"},
+  "@trainingWarmupReady": {
+    "description": "Information shown when the warm-up phase is ready for Moro"
+  },
   "trainingConnectedWithoutIsometric": "You're connected with {name}. If you haven't done isometric partner exercises, the answer remains “No.”",
-  "@trainingConnectedWithoutIsometric": {"description": "Information for a connected trainer when no isometric partner exercises were completed", "placeholders": {"name": {"type": "String"}}},
+  "@trainingConnectedWithoutIsometric": {
+    "description": "Information for a connected trainer when no isometric partner exercises were completed",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "trainingTrainerRequestPending": "Your trainer request to {name} is pending.",
-  "@trainingTrainerRequestPending": {"description": "Information about a pending trainer connection request", "placeholders": {"name": {"type": "String"}}},
+  "@trainingTrainerRequestPending": {
+    "description": "Information about a pending trainer connection request",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "trainingFindTrainer": "Find a Trainer",
-  "@trainingFindTrainer": {"description": "Button for opening trainer discovery"},
+  "@trainingFindTrainer": {
+    "description": "Button for opening trainer discovery"
+  },
   "trainingWarmupWhileWaitingBody": "While you wait for a response or an appointment, you can use the warm-up round. It provides rhythmic preparation and is independent of the isometric partner exercises.",
-  "@trainingWarmupWhileWaitingBody": {"description": "Information about using the warm-up while waiting for a trainer"},
+  "@trainingWarmupWhileWaitingBody": {
+    "description": "Information about using the warm-up while waiting for a trainer"
+  },
   "trainingUseWarmup": "Use the Warm-Up",
-  "@trainingUseWarmup": {"description": "Button that starts the warm-up while waiting for a trainer"},
+  "@trainingUseWarmup": {
+    "description": "Button that starts the warm-up while waiting for a trainer"
+  },
   "trainingBeforeYouStart": "Before You Start",
-  "@trainingBeforeYouStart": {"description": "Eyebrow text on the warm-up interstitial"},
+  "@trainingBeforeYouStart": {
+    "description": "Eyebrow text on the warm-up interstitial"
+  },
   "trainingWarmupInterstitialBody": "The warm-up round helps you settle into the reflex training. Many people find it easier to focus on the exercises afterward.",
-  "@trainingWarmupInterstitialBody": {"description": "Warm-up interstitial description"},
+  "@trainingWarmupInterstitialBody": {
+    "description": "Warm-up interstitial description"
+  },
   "trainingStartWarmupNow": "Start the Warm-Up Now",
-  "@trainingStartWarmupNow": {"description": "Primary action on the warm-up interstitial"},
+  "@trainingStartWarmupNow": {
+    "description": "Primary action on the warm-up interstitial"
+  },
   "trainingRecommended": "recommended",
-  "@trainingRecommended": {"description": "Badge marking the warm-up as recommended"},
+  "@trainingRecommended": {
+    "description": "Badge marking the warm-up as recommended"
+  },
   "trainingWarmupSummary": "4 weeks · 6 daily exercises · about 8 min.",
-  "@trainingWarmupSummary": {"description": "Duration and daily exercise summary for the warm-up round"},
+  "@trainingWarmupSummary": {
+    "description": "Duration and daily exercise summary for the warm-up round"
+  },
   "trainingStartFirstPackageDirectly": "Start the First Package Directly",
-  "@trainingStartFirstPackageDirectly": {"description": "Action that skips the warm-up and starts the first package"},
+  "@trainingStartFirstPackageDirectly": {
+    "description": "Action that skips the warm-up and starts the first package"
+  },
   "trainingWarmupAvailableLater": "You can complete the warm-up at any time.",
-  "@trainingWarmupAvailableLater": {"description": "Note that the warm-up can be completed later"},
+  "@trainingWarmupAvailableLater": {
+    "description": "Note that the warm-up can be completed later"
+  },
   "trainingCongratulations": "Congratulations!",
-  "@trainingCongratulations": {"description": "Celebratory heading after completing a training session"},
+  "@trainingCongratulations": {
+    "description": "Celebratory heading after completing a training session"
+  },
   "trainingCompletedTodayBody": "You've successfully completed\ntoday's training.",
-  "@trainingCompletedTodayBody": {"description": "Completion message after today's training session"},
+  "@trainingCompletedTodayBody": {
+    "description": "Completion message after today's training session"
+  },
   "trainingCompletedToday": "Completed Today",
-  "@trainingCompletedToday": {"description": "Heading above completed-session statistics"},
+  "@trainingCompletedToday": {
+    "description": "Heading above completed-session statistics"
+  },
   "trainingExercisesLabel": "Exercises",
-  "@trainingExercisesLabel": {"description": "Standalone exercises statistic label"},
+  "@trainingExercisesLabel": {
+    "description": "Standalone exercises statistic label"
+  },
   "trainingMinutesLabel": "Minutes",
-  "@trainingMinutesLabel": {"description": "Standalone minutes statistic label"},
+  "@trainingMinutesLabel": {
+    "description": "Standalone minutes statistic label"
+  },
   "trainingKeepGoing": "Keep going! Consistency makes a difference.",
-  "@trainingKeepGoing": {"description": "Encouraging message after completing a session"},
+  "@trainingKeepGoing": {
+    "description": "Encouraging message after completing a session"
+  },
   "trainingExerciseOfTotal": "Exercise {current} of {total}",
-  "@trainingExerciseOfTotal": {"description": "Exercise position in the current session", "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+  "@trainingExerciseOfTotal": {
+    "description": "Exercise position in the current session",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "trainingProgressStepCounter": "{current} of {total}",
-  "@trainingProgressStepCounter": {"description": "Step counter below the full progress bar", "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+  "@trainingProgressStepCounter": {
+    "description": "Step counter below the full progress bar",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "trainingProgressPercentComplete": "{percent}% complete! 🎉",
-  "@trainingProgressPercentComplete": {"description": "Completed percentage below the full progress bar", "placeholders": {"percent": {"type": "int"}}},
+  "@trainingProgressPercentComplete": {
+    "description": "Completed percentage below the full progress bar",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "trainingProgressAlmostThere": "Fantastic! You're almost there! 🏆",
-  "@trainingProgressAlmostThere": {"description": "Encouragement shown at ninety percent progress"},
+  "@trainingProgressAlmostThere": {
+    "description": "Encouragement shown at ninety percent progress"
+  },
   "trainingProgressGreat": "Great work! You've got this! 💪",
-  "@trainingProgressGreat": {"description": "Encouragement shown at seventy-five percent progress"},
+  "@trainingProgressGreat": {
+    "description": "Encouragement shown at seventy-five percent progress"
+  },
   "trainingProgressHalfway": "Nice! You're past halfway! 🎯",
-  "@trainingProgressHalfway": {"description": "Encouragement shown at halfway progress"},
+  "@trainingProgressHalfway": {
+    "description": "Encouragement shown at halfway progress"
+  },
   "trainingProgressKeepGoing": "Well done! Keep going! ⭐",
-  "@trainingProgressKeepGoing": {"description": "Encouragement shown at twenty-five percent progress"},
+  "@trainingProgressKeepGoing": {
+    "description": "Encouragement shown at twenty-five percent progress"
+  },
   "trainingProgressLetsGo": "Let's go! You've got this! 🚀",
-  "@trainingProgressLetsGo": {"description": "Encouragement shown near the start of training"},
+  "@trainingProgressLetsGo": {
+    "description": "Encouragement shown near the start of training"
+  },
   "trainingVideo": "Video",
-  "@trainingVideo": {"description": "Video label and action"},
+  "@trainingVideo": {
+    "description": "Video label and action"
+  },
   "trainingRepetitionsAbbreviated": "{count}× reps",
-  "@trainingRepetitionsAbbreviated": {"description": "Abbreviated repetition count in the exercise transition", "placeholders": {"count": {"type": "int"}}},
+  "@trainingRepetitionsAbbreviated": {
+    "description": "Abbreviated repetition count in the exercise transition",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "trainingSecondsPerRep": "{seconds} sec / rep",
-  "@trainingSecondsPerRep": {"description": "Seconds per repetition in the exercise transition", "placeholders": {"seconds": {"type": "int"}}},
+  "@trainingSecondsPerRep": {
+    "description": "Seconds per repetition in the exercise transition",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
   "trainingPositionLabel": "Position",
-  "@trainingPositionLabel": {"description": "Short position section heading in the exercise transition"},
+  "@trainingPositionLabel": {
+    "description": "Short position section heading in the exercise transition"
+  },
   "trainingStartsInSeconds": "Starts in {seconds} s",
-  "@trainingStartsInSeconds": {"description": "Countdown before an exercise starts", "placeholders": {"seconds": {"type": "int"}}},
+  "@trainingStartsInSeconds": {
+    "description": "Countdown before an exercise starts",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
   "trainingStartNow": "Start Now",
-  "@trainingStartNow": {"description": "Button that starts an exercise immediately"},
+  "@trainingStartNow": {
+    "description": "Button that starts an exercise immediately"
+  },
   "trainingAnnouncementPlaying": "Announcement playing...",
-  "@trainingAnnouncementPlaying": {"description": "Status while the spoken exercise announcement is playing"},
+  "@trainingAnnouncementPlaying": {
+    "description": "Status while the spoken exercise announcement is playing"
+  },
   "trainingVideoPreparing": "Preparing video...",
-  "@trainingVideoPreparing": {"description": "Fallback status while an exercise video is being prepared"},
+  "@trainingVideoPreparing": {
+    "description": "Fallback status while an exercise video is being prepared"
+  },
   "trainingMusicOff": "Off",
-  "@trainingMusicOff": {"description": "Option that turns in-app music off"},
+  "@trainingMusicOff": {
+    "description": "Option that turns in-app music off"
+  },
   "trainingMusicVolume": "Volume",
-  "@trainingMusicVolume": {"description": "In-app music volume control label"},
+  "@trainingMusicVolume": {
+    "description": "In-app music volume control label"
+  },
   "trainingMusicAmbientFlow": "Ambient Flow",
-  "@trainingMusicAmbientFlow": {"description": "Display name of the Ambient Flow music track"},
+  "@trainingMusicAmbientFlow": {
+    "description": "Display name of the Ambient Flow music track"
+  },
   "trainingMusicQuietNature": "Quiet Nature",
-  "@trainingMusicQuietNature": {"description": "Display name of the Quiet Nature music track"},
+  "@trainingMusicQuietNature": {
+    "description": "Display name of the Quiet Nature music track"
+  },
   "trainingMusicDeepTones": "Deep Tones",
-  "@trainingMusicDeepTones": {"description": "Display name of the Deep Tones music track"},
+  "@trainingMusicDeepTones": {
+    "description": "Display name of the Deep Tones music track"
+  },
   "trainingOwnMusicMixNote": "Your own music (Spotify, etc.) will keep playing—the session sounds mix in underneath.",
-  "@trainingOwnMusicMixNote": {"description": "Note explaining how in-app sounds mix with the user's own music"},
+  "@trainingOwnMusicMixNote": {
+    "description": "Note explaining how in-app sounds mix with the user's own music"
+  },
   "trainingShortBreak": "Short Break",
-  "@trainingShortBreak": {"description": "Heading during the short break between exercises"},
+  "@trainingShortBreak": {
+    "description": "Heading during the short break between exercises"
+  },
   "trainingNextExercise": "Next Exercise:",
-  "@trainingNextExercise": {"description": "Label introducing the next exercise during a break"},
+  "@trainingNextExercise": {
+    "description": "Label introducing the next exercise during a break"
+  },
   "trainingTutorialSubtitle": "Guided",
-  "@trainingTutorialSubtitle": {"description": "Subtitle describing tutorial training mode"},
+  "@trainingTutorialSubtitle": {
+    "description": "Subtitle describing tutorial training mode"
+  },
   "trainingRoutineSubtitle": "Hands-free",
-  "@trainingRoutineSubtitle": {"description": "Subtitle describing routine training mode"},
+  "@trainingRoutineSubtitle": {
+    "description": "Subtitle describing routine training mode"
+  },
   "trainingDurationAndRepetitions": "{seconds}s · {repetitions} reps",
-  "@trainingDurationAndRepetitions": {"description": "Compact exercise duration and repetition summary", "placeholders": {"seconds": {"type": "int"}, "repetitions": {"type": "int"}}},
+  "@trainingDurationAndRepetitions": {
+    "description": "Compact exercise duration and repetition summary",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      },
+      "repetitions": {
+        "type": "int"
+      }
+    }
+  },
   "trainingCompletedExerciseCount": "{count, plural, one{1 exercise} other{{count} exercises}}",
-  "@trainingCompletedExerciseCount": {"description": "Number of exercises completed in the session outro", "placeholders": {"count": {"type": "int"}}},
+  "@trainingCompletedExerciseCount": {
+    "description": "Number of exercises completed in the session outro",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "trainingSecondsAbbreviation": "sec",
-  "@trainingSecondsAbbreviation": {"description": "Short seconds label inside the exercise timer"},
+  "@trainingSecondsAbbreviation": {
+    "description": "Short seconds label inside the exercise timer"
+  },
   "trainingAndAgain": "And again",
-  "@trainingAndAgain": {"description": "Spoken cue before the next repetition"},
+  "@trainingAndAgain": {
+    "description": "Spoken cue before the next repetition"
+  },
   "trainingSwitchArmCross": "Switch arm cross",
-  "@trainingSwitchArmCross": {"description": "Spoken cue to switch the arm cross midway through an exercise"},
+  "@trainingSwitchArmCross": {
+    "description": "Spoken cue to switch the arm cross midway through an exercise"
+  },
   "trainingSwitchCue": "Switch",
-  "@trainingSwitchCue": {"description": "Short spoken cue to switch sides"},
-
+  "@trainingSwitchCue": {
+    "description": "Short spoken cue to switch sides"
+  },
   "delete": "Delete",
-  "@delete": {"description": "Generic delete action"},
-
+  "@delete": {
+    "description": "Generic delete action"
+  },
   "packagesNameMoro": "Moro Reflex",
-  "@packagesNameMoro": {"description": "Full Moro package name in the package sequence"},
+  "@packagesNameMoro": {
+    "description": "Full Moro package name in the package sequence"
+  },
   "packagesNameSpinalGalant": "Spinal Galant + Amphibian",
-  "@packagesNameSpinalGalant": {"description": "Full spinal Galant package name in the package sequence"},
+  "@packagesNameSpinalGalant": {
+    "description": "Full spinal Galant package name in the package sequence"
+  },
   "packagesNameTlr": "Tonic Labyrinthine Reflex (TLR)",
-  "@packagesNameTlr": {"description": "Full tonic labyrinthine reflex package name in the package sequence"},
+  "@packagesNameTlr": {
+    "description": "Full tonic labyrinthine reflex package name in the package sequence"
+  },
   "packagesNameBabkin": "Babkin + Plantar + Grasp",
-  "@packagesNameBabkin": {"description": "Full Babkin package name in the package sequence"},
+  "@packagesNameBabkin": {
+    "description": "Full Babkin package name in the package sequence"
+  },
   "packagesNameSuchSaug": "Rooting-Sucking Reflex",
-  "@packagesNameSuchSaug": {"description": "Full rooting-sucking package name in the package sequence"},
+  "@packagesNameSuchSaug": {
+    "description": "Full rooting-sucking package name in the package sequence"
+  },
   "packagesNameAtnr": "ATNR",
-  "@packagesNameAtnr": {"description": "Full ATNR package name in the package sequence"},
+  "@packagesNameAtnr": {
+    "description": "Full ATNR package name in the package sequence"
+  },
   "packagesNameStnr": "STNR",
-  "@packagesNameStnr": {"description": "Full STNR package name in the package sequence"},
+  "@packagesNameStnr": {
+    "description": "Full STNR package name in the package sequence"
+  },
   "packagesNameBabinski": "Babinski Reflex",
-  "@packagesNameBabinski": {"description": "Full Babinski package name in the package sequence"},
+  "@packagesNameBabinski": {
+    "description": "Full Babinski package name in the package sequence"
+  },
   "packagesNameLandau": "Landau Reflex",
-  "@packagesNameLandau": {"description": "Full Landau package name in the package sequence"},
+  "@packagesNameLandau": {
+    "description": "Full Landau package name in the package sequence"
+  },
   "packagesDevSelectionAvailable": "Developer selection available",
-  "@packagesDevSelectionAvailable": {"description": "Package subtitle shown when developer package switching is available"},
+  "@packagesDevSelectionAvailable": {
+    "description": "Package subtitle shown when developer package switching is available"
+  },
   "packagesFixedSequenceStatus": "Part of your fixed package sequence",
-  "@packagesFixedSequenceStatus": {"description": "Package subtitle for an available package in the fixed sequence"},
-
+  "@packagesFixedSequenceStatus": {
+    "description": "Package subtitle for an available package in the fixed sequence"
+  },
   "journalMoodAndEntry": "Mood + Entry",
-  "@journalMoodAndEntry": {"description": "Journal action for recording mood and an entry"},
+  "@journalMoodAndEntry": {
+    "description": "Journal action for recording mood and an entry"
+  },
   "journalEntryOnly": "Entry Only",
-  "@journalEntryOnly": {"description": "Journal action for recording an entry without mood"},
+  "@journalEntryOnly": {
+    "description": "Journal action for recording an entry without mood"
+  },
   "journalEntriesHeading": "Entries",
-  "@journalEntriesHeading": {"description": "Heading above the journal timeline"},
+  "@journalEntriesHeading": {
+    "description": "Heading above the journal timeline"
+  },
   "journalEntrySummary": "{entryCount} total · {entriesThisWeek, plural, =0{0 this week} one{1 this week} other{{entriesThisWeek} this week}}",
-  "@journalEntrySummary": {"description": "Journal entry total and entries recorded during the last week", "placeholders": {"entryCount": {"type": "int"}, "entriesThisWeek": {"type": "int"}}},
+  "@journalEntrySummary": {
+    "description": "Journal entry total and entries recorded during the last week",
+    "placeholders": {
+      "entryCount": {
+        "type": "int"
+      },
+      "entriesThisWeek": {
+        "type": "int"
+      }
+    }
+  },
   "journalTimelineEmptyTitle": "No Entries Yet",
-  "@journalTimelineEmptyTitle": {"description": "Empty journal timeline title"},
+  "@journalTimelineEmptyTitle": {
+    "description": "Empty journal timeline title"
+  },
   "journalTimelineEmptyBody": "Your notes appear here in a compact timeline. Your history stays on the dashboard.",
-  "@journalTimelineEmptyBody": {"description": "Empty journal timeline explanation"},
+  "@journalTimelineEmptyBody": {
+    "description": "Empty journal timeline explanation"
+  },
   "journalDeleteEntryTitle": "Delete Entry?",
-  "@journalDeleteEntryTitle": {"description": "Confirmation dialog title before deleting a journal entry"},
+  "@journalDeleteEntryTitle": {
+    "description": "Confirmation dialog title before deleting a journal entry"
+  },
   "journalDeleteEntryBody": "This entry will be permanently deleted.",
-  "@journalDeleteEntryBody": {"description": "Confirmation dialog body before deleting a journal entry"},
+  "@journalDeleteEntryBody": {
+    "description": "Confirmation dialog body before deleting a journal entry"
+  },
   "journalEntryTypeNote": "Note",
-  "@journalEntryTypeNote": {"description": "Type label shown on a journal note"},
+  "@journalEntryTypeNote": {
+    "description": "Type label shown on a journal note"
+  },
   "journalShowLess": "Show Less",
-  "@journalShowLess": {"description": "Action that collapses a long journal entry"},
+  "@journalShowLess": {
+    "description": "Action that collapses a long journal entry"
+  },
   "journalShowMore": "Show More",
-  "@journalShowMore": {"description": "Action that expands a long journal entry"},
-
+  "@journalShowMore": {
+    "description": "Action that expands a long journal entry"
+  },
   "progressTitle": "History",
-  "@progressTitle": {"description": "Progress history screen title"},
+  "@progressTitle": {
+    "description": "Progress history screen title"
+  },
   "progressLoadFailed": "Could not load history.",
-  "@progressLoadFailed": {"description": "Error shown when the progress history cannot be loaded"},
+  "@progressLoadFailed": {
+    "description": "Error shown when the progress history cannot be loaded"
+  },
   "progressAddObservation": "Add Observation",
-  "@progressAddObservation": {"description": "Button for recording a new observation"},
+  "@progressAddObservation": {
+    "description": "Button for recording a new observation"
+  },
   "progressWellbeingTitle": "Wellbeing Over Time",
-  "@progressWellbeingTitle": {"description": "Title above the wellbeing history chart"},
+  "@progressWellbeingTitle": {
+    "description": "Title above the wellbeing history chart"
+  },
   "progressWellbeingDescription": "A calm view of mood, energy, and stress over time.",
-  "@progressWellbeingDescription": {"description": "Description below the wellbeing history title"},
+  "@progressWellbeingDescription": {
+    "description": "Description below the wellbeing history title"
+  },
   "progressWellbeingSeries": "Wellbeing",
-  "@progressWellbeingSeries": {"description": "Default wellbeing chart series label when no profiles exist"},
+  "@progressWellbeingSeries": {
+    "description": "Default wellbeing chart series label when no profiles exist"
+  },
   "progressWellbeingEmpty": "No entries in the selected period yet.",
-  "@progressWellbeingEmpty": {"description": "Empty state inside the wellbeing history chart"},
+  "@progressWellbeingEmpty": {
+    "description": "Empty state inside the wellbeing history chart"
+  },
   "progressRange30Days": "30d",
-  "@progressRange30Days": {"description": "Thirty-day range filter label"},
+  "@progressRange30Days": {
+    "description": "Thirty-day range filter label"
+  },
   "progressRange90Days": "90d",
-  "@progressRange90Days": {"description": "Ninety-day range filter label"},
+  "@progressRange90Days": {
+    "description": "Ninety-day range filter label"
+  },
   "progressRangeOneYear": "1y",
-  "@progressRangeOneYear": {"description": "One-year range filter label"},
+  "@progressRangeOneYear": {
+    "description": "One-year range filter label"
+  },
   "progressRangeAll": "All",
-  "@progressRangeAll": {"description": "All-time range filter label"},
+  "@progressRangeAll": {
+    "description": "All-time range filter label"
+  },
   "progressReflexProfilesTitle": "Reflex Profiles",
-  "@progressReflexProfilesTitle": {"description": "Heading above reflex profile cards"},
+  "@progressReflexProfilesTitle": {
+    "description": "Heading above reflex profile cards"
+  },
   "progressReflexProfilesLoadFailed": "Could not load reflex profiles: {error}",
-  "@progressReflexProfilesLoadFailed": {"description": "Error shown when reflex profiles cannot be loaded", "placeholders": {"error": {"type": "String"}}},
+  "@progressReflexProfilesLoadFailed": {
+    "description": "Error shown when reflex profiles cannot be loaded",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "progressNoReflexProfileBody": "No reflex profile yet. It shows indication levels at a glance.",
-  "@progressNoReflexProfileBody": {"description": "Explanation shown when no reflex profile exists"},
+  "@progressNoReflexProfileBody": {
+    "description": "Explanation shown when no reflex profile exists"
+  },
   "progressStartReflexProfile": "Start Reflex Profile",
-  "@progressStartReflexProfile": {"description": "Button that starts a reflex profile"},
+  "@progressStartReflexProfile": {
+    "description": "Button that starts a reflex profile"
+  },
   "progressProfileDetails": "Details",
-  "@progressProfileDetails": {"description": "Action label on a reflex profile card with results"},
+  "@progressProfileDetails": {
+    "description": "Action label on a reflex profile card with results"
+  },
   "progressProfileAgeYears": "{years, plural, one{{years} year} other{{years} years}}",
-  "@progressProfileAgeYears": {"description": "Age shown on a reflex profile card", "placeholders": {"years": {"type": "int"}}},
+  "@progressProfileAgeYears": {
+    "description": "Age shown on a reflex profile card",
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
   "progressNoAssessmentProfile": "No Profile\nYet",
-  "@progressNoAssessmentProfile": {"description": "Placeholder inside a profile card without an assessment"},
+  "@progressNoAssessmentProfile": {
+    "description": "Placeholder inside a profile card without an assessment"
+  },
   "progressAddAnotherProfile": "Another\nProfile",
-  "@progressAddAnotherProfile": {"description": "Card for adding another reflex profile"},
+  "@progressAddAnotherProfile": {
+    "description": "Card for adding another reflex profile"
+  },
   "progressCurrentPackageTitle": "Current Package",
-  "@progressCurrentPackageTitle": {"description": "Heading above current package progress"},
+  "@progressCurrentPackageTitle": {
+    "description": "Heading above current package progress"
+  },
   "progressCurrentPackageDay": "{packageName} · Day {currentDay} of {totalDays}",
-  "@progressCurrentPackageDay": {"description": "Current package name and day progress", "placeholders": {"packageName": {"type": "String"}, "currentDay": {"type": "int"}, "totalDays": {"type": "int"}}},
+  "@progressCurrentPackageDay": {
+    "description": "Current package name and day progress",
+    "placeholders": {
+      "packageName": {
+        "type": "String"
+      },
+      "currentDay": {
+        "type": "int"
+      },
+      "totalDays": {
+        "type": "int"
+      }
+    }
+  },
   "progressNoNextFixedPackage": "No fixed package follows this one.",
-  "@progressNoNextFixedPackage": {"description": "Message when the current package is last in the fixed sequence"},
+  "@progressNoNextFixedPackage": {
+    "description": "Message when the current package is last in the fixed sequence"
+  },
   "progressNextFixedPackage": "Next fixed package: {packageName}",
-  "@progressNextFixedPackage": {"description": "Name of the next package in the fixed sequence", "placeholders": {"packageName": {"type": "String"}}},
+  "@progressNextFixedPackage": {
+    "description": "Name of the next package in the fixed sequence",
+    "placeholders": {
+      "packageName": {
+        "type": "String"
+      }
+    }
+  },
   "progressViewPackageSequence": "View Package Sequence",
-  "@progressViewPackageSequence": {"description": "Button that opens the package sequence"},
+  "@progressViewPackageSequence": {
+    "description": "Button that opens the package sequence"
+  },
   "progressObservationsTitle": "Observations",
-  "@progressObservationsTitle": {"description": "Heading above recent observations"},
+  "@progressObservationsTitle": {
+    "description": "Heading above recent observations"
+  },
   "progressObservationsEmptySummary": "No observations recorded yet.",
-  "@progressObservationsEmptySummary": {"description": "Summary shown when there are no observations"},
+  "@progressObservationsEmptySummary": {
+    "description": "Summary shown when there are no observations"
+  },
   "progressObservationCount": "{count, plural, one{1 entry in the current period} other{{count} entries in the current period}}",
-  "@progressObservationCount": {"description": "Number of observation entries in the current period", "placeholders": {"count": {"type": "int"}}},
+  "@progressObservationCount": {
+    "description": "Number of observation entries in the current period",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "progressObservationsEmptyBody": "After a session or anytime in between, you can record observations about your body, mood, energy, and sleep.",
-  "@progressObservationsEmptyBody": {"description": "Explanation shown when no observations have been recorded"},
-
+  "@progressObservationsEmptyBody": {
+    "description": "Explanation shown when no observations have been recorded"
+  },
   "goldenDayTitle": "Golden Day 🎉",
-  "@goldenDayTitle": {"description": "Golden Day screen title"},
+  "@goldenDayTitle": {
+    "description": "Golden Day screen title"
+  },
   "goldenDayCongratulations": "Congratulations!",
-  "@goldenDayCongratulations": {"description": "Golden Day congratulatory heading"},
+  "@goldenDayCongratulations": {
+    "description": "Golden Day congratulatory heading"
+  },
   "goldenDayCompletionMessage": "You completed the 4-week training!",
-  "@goldenDayCompletionMessage": {"description": "Message shown after completing four weeks of training"},
+  "@goldenDayCompletionMessage": {
+    "description": "Message shown after completing four weeks of training"
+  },
   "goldenDayFeelingPrompt": "How do you feel?",
-  "@goldenDayFeelingPrompt": {"description": "Golden Day prompt asking how the user feels"},
+  "@goldenDayFeelingPrompt": {
+    "description": "Golden Day prompt asking how the user feels"
+  },
   "goldenDayReadyForMore": "Ready for More!",
-  "@goldenDayReadyForMore": {"description": "Golden Day action to continue with more training"},
+  "@goldenDayReadyForMore": {
+    "description": "Golden Day action to continue with more training"
+  },
   "goldenDayPracticeMore": "Practice a Little More",
-  "@goldenDayPracticeMore": {"description": "Golden Day action to keep practicing the current track"},
-
+  "@goldenDayPracticeMore": {
+    "description": "Golden Day action to keep practicing the current track"
+  },
   "anonymous": "Anonymous",
-  "@anonymous": {"description": "Generic anonymous display name and option"},
+  "@anonymous": {
+    "description": "Generic anonymous display name and option"
+  },
   "edit": "Edit",
-  "@edit": {"description": "Generic edit action"},
+  "@edit": {
+    "description": "Generic edit action"
+  },
   "submit": "Submit",
-  "@submit": {"description": "Generic submit action"},
+  "@submit": {
+    "description": "Generic submit action"
+  },
   "noThanks": "No, Thanks",
-  "@noThanks": {"description": "Generic action declining an optional prompt"},
+  "@noThanks": {
+    "description": "Generic action declining an optional prompt"
+  },
   "continueAction": "Continue",
-  "@continueAction": {"description": "Generic continue action"},
-
+  "@continueAction": {
+    "description": "Generic continue action"
+  },
   "accompanimentTitle": "Guidance",
-  "@accompanimentTitle": {"description": "Guidance screen title"},
+  "@accompanimentTitle": {
+    "description": "Guidance screen title"
+  },
   "accompanimentConnectBody": "Paste the invite link or enter the 6-character code you received from your trainer.",
-  "@accompanimentConnectBody": {"description": "Instructions for connecting to a trainer by invite link or code"},
+  "@accompanimentConnectBody": {
+    "description": "Instructions for connecting to a trainer by invite link or code"
+  },
   "accompanimentInviteLinkOrCodeLabel": "Invite Link or Code",
-  "@accompanimentInviteLinkOrCodeLabel": {"description": "Input label for a trainer invite link or code"},
+  "@accompanimentInviteLinkOrCodeLabel": {
+    "description": "Input label for a trainer invite link or code"
+  },
   "accompanimentInviteLinkOrCodeHint": "A1B2C3 or https://...",
-  "@accompanimentInviteLinkOrCodeHint": {"description": "Example trainer invite code or link"},
+  "@accompanimentInviteLinkOrCodeHint": {
+    "description": "Example trainer invite code or link"
+  },
   "accompanimentConnectInvalidInvite": "Enter a valid 6-character code or invite link.",
-  "@accompanimentConnectInvalidInvite": {"description": "Validation error for an invalid trainer invite"},
+  "@accompanimentConnectInvalidInvite": {
+    "description": "Validation error for an invalid trainer invite"
+  },
   "accompanimentConnectFailed": "Could not connect: {error}",
-  "@accompanimentConnectFailed": {"description": "Error shown when a trainer connection fails", "placeholders": {"error": {"type": "String"}}},
+  "@accompanimentConnectFailed": {
+    "description": "Error shown when a trainer connection fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "accompanimentConnectAction": "Connect",
-  "@accompanimentConnectAction": {"description": "Action connecting to a trainer"},
+  "@accompanimentConnectAction": {
+    "description": "Action connecting to a trainer"
+  },
   "accompanimentConnectedSuccess": "You're now connected to your trainer.",
-  "@accompanimentConnectedSuccess": {"description": "Confirmation after connecting to a trainer"},
+  "@accompanimentConnectedSuccess": {
+    "description": "Confirmation after connecting to a trainer"
+  },
   "accompanimentSwitchTitle": "Switch Trainers",
-  "@accompanimentSwitchTitle": {"description": "Title and section heading for switching trainers"},
+  "@accompanimentSwitchTitle": {
+    "description": "Title and section heading for switching trainers"
+  },
   "accompanimentSwitchBody": "After you switch, your new trainer will see your history. Your previous trainer will no longer see you in their client list.",
-  "@accompanimentSwitchBody": {"description": "Dialog explanation before switching trainers"},
+  "@accompanimentSwitchBody": {
+    "description": "Dialog explanation before switching trainers"
+  },
   "accompanimentSwitchInvalidInvite": "Enter a valid invite link or code.",
-  "@accompanimentSwitchInvalidInvite": {"description": "Validation error while switching trainers"},
+  "@accompanimentSwitchInvalidInvite": {
+    "description": "Validation error while switching trainers"
+  },
   "accompanimentSwitchConfirm": "Confirm Switch",
-  "@accompanimentSwitchConfirm": {"description": "Action confirming a trainer switch"},
+  "@accompanimentSwitchConfirm": {
+    "description": "Action confirming a trainer switch"
+  },
   "accompanimentSwitchUpdated": "Guidance updated.",
-  "@accompanimentSwitchUpdated": {"description": "Confirmation after switching trainers"},
+  "@accompanimentSwitchUpdated": {
+    "description": "Confirmation after switching trainers"
+  },
   "accompanimentSwitchFailed": "Could not save the change: {error}",
-  "@accompanimentSwitchFailed": {"description": "Error shown when switching trainers fails", "placeholders": {"error": {"type": "String"}}},
+  "@accompanimentSwitchFailed": {
+    "description": "Error shown when switching trainers fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "accompanimentWithdrawTitle": "Withdraw Request?",
-  "@accompanimentWithdrawTitle": {"description": "Confirmation title before withdrawing a trainer request"},
+  "@accompanimentWithdrawTitle": {
+    "description": "Confirmation title before withdrawing a trainer request"
+  },
   "accompanimentWithdrawBody": "Your request to {name} will be withdrawn. You can request another trainer later.",
-  "@accompanimentWithdrawBody": {"description": "Confirmation body before withdrawing a trainer request", "placeholders": {"name": {"type": "String"}}},
+  "@accompanimentWithdrawBody": {
+    "description": "Confirmation body before withdrawing a trainer request",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "accompanimentWithdrawAction": "Withdraw Request",
-  "@accompanimentWithdrawAction": {"description": "Action withdrawing a pending trainer request"},
+  "@accompanimentWithdrawAction": {
+    "description": "Action withdrawing a pending trainer request"
+  },
   "accompanimentWithdrawSuccess": "Request withdrawn.",
-  "@accompanimentWithdrawSuccess": {"description": "Confirmation after withdrawing a trainer request"},
+  "@accompanimentWithdrawSuccess": {
+    "description": "Confirmation after withdrawing a trainer request"
+  },
   "accompanimentWithdrawFailed": "Could not withdraw request: {error}",
-  "@accompanimentWithdrawFailed": {"description": "Error shown when a trainer request cannot be withdrawn", "placeholders": {"error": {"type": "String"}}},
+  "@accompanimentWithdrawFailed": {
+    "description": "Error shown when a trainer request cannot be withdrawn",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "accompanimentSharedExperiencesTitle": "Shared Experiences",
-  "@accompanimentSharedExperiencesTitle": {"description": "Title for the shared experiences action card"},
+  "@accompanimentSharedExperiencesTitle": {
+    "description": "Title for the shared experiences action card"
+  },
   "accompanimentSharedExperiencesBody": "View moderated observations from ongoing packages.",
-  "@accompanimentSharedExperiencesBody": {"description": "Description of shared package observations"},
+  "@accompanimentSharedExperiencesBody": {
+    "description": "Description of shared package observations"
+  },
   "accompanimentSharedExperiencesAction": "View Experiences",
-  "@accompanimentSharedExperiencesAction": {"description": "Action opening shared experiences"},
+  "@accompanimentSharedExperiencesAction": {
+    "description": "Action opening shared experiences"
+  },
   "accompanimentProfessionalTitle": "Professional Guidance",
-  "@accompanimentProfessionalTitle": {"description": "Heading explaining professional trainer guidance"},
+  "@accompanimentProfessionalTitle": {
+    "description": "Heading explaining professional trainer guidance"
+  },
   "accompanimentProfessionalBody": "Some exercises are done with a partner. The focus is not strength training, but clearly noticing direction, movement, and resistance. A qualified trainer can guide you through these exercises.",
-  "@accompanimentProfessionalBody": {"description": "Explanation of partner exercises and trainer guidance"},
+  "@accompanimentProfessionalBody": {
+    "description": "Explanation of partner exercises and trainer guidance"
+  },
   "accompanimentPackageStartNote": "Especially relevant at the start of a package.",
-  "@accompanimentPackageStartNote": {"description": "Note that trainer guidance is especially relevant early in a package"},
+  "@accompanimentPackageStartNote": {
+    "description": "Note that trainer guidance is especially relevant early in a package"
+  },
   "accompanimentDailySessionsNote": "Your daily rhythmic sessions remain self-guided.",
-  "@accompanimentDailySessionsNote": {"description": "Note that daily rhythmic sessions remain self-guided"},
+  "@accompanimentDailySessionsNote": {
+    "description": "Note that daily rhythmic sessions remain self-guided"
+  },
   "accompanimentNoTrainerTitle": "No Trainer Connected Yet",
-  "@accompanimentNoTrainerTitle": {"description": "Heading when no trainer guidance is connected"},
+  "@accompanimentNoTrainerTitle": {
+    "description": "Heading when no trainer guidance is connected"
+  },
   "accompanimentNoTrainerBody": "You can keep practicing your package on your own and find professional guidance for partner exercises or conversations when you need it.",
-  "@accompanimentNoTrainerBody": {"description": "Explanation when no trainer is connected"},
+  "@accompanimentNoTrainerBody": {
+    "description": "Explanation when no trainer is connected"
+  },
   "accompanimentEnterInviteLink": "Enter Invite Link",
-  "@accompanimentEnterInviteLink": {"description": "Action entering a trainer invite link"},
+  "@accompanimentEnterInviteLink": {
+    "description": "Action entering a trainer invite link"
+  },
   "accompanimentContinueWithoutTrainer": "Continue Without a Trainer",
-  "@accompanimentContinueWithoutTrainer": {"description": "Action continuing without a trainer"},
+  "@accompanimentContinueWithoutTrainer": {
+    "description": "Action continuing without a trainer"
+  },
   "accompanimentProfileSharingTitle": "Reflex Profile Sharing",
-  "@accompanimentProfileSharingTitle": {"description": "Heading for sharing reflex profiles with a connected trainer"},
+  "@accompanimentProfileSharingTitle": {
+    "description": "Heading for sharing reflex profiles with a connected trainer"
+  },
   "accompanimentProfileSharingBody": "You decide whether your connected trainer can see completed reflex profiles. Access lasts only while this guidance connection is active.",
-  "@accompanimentProfileSharingBody": {"description": "Explanation of reflex profile sharing with a connected trainer"},
+  "@accompanimentProfileSharingBody": {
+    "description": "Explanation of reflex profile sharing with a connected trainer"
+  },
   "accompanimentProfileSharingLoadFailed": "Could not load sharing: {error}",
-  "@accompanimentProfileSharingLoadFailed": {"description": "Error shown when reflex profile sharing cannot be loaded", "placeholders": {"error": {"type": "String"}}},
+  "@accompanimentProfileSharingLoadFailed": {
+    "description": "Error shown when reflex profile sharing cannot be loaded",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "accompanimentProfileShared": "Your connected trainer can see this reflex profile.",
-  "@accompanimentProfileShared": {"description": "Status when a reflex profile is shared with the connected trainer"},
+  "@accompanimentProfileShared": {
+    "description": "Status when a reflex profile is shared with the connected trainer"
+  },
   "accompanimentProfileNotShared": "Not shared with your connected trainer.",
-  "@accompanimentProfileNotShared": {"description": "Status when a reflex profile is not shared with the connected trainer"},
+  "@accompanimentProfileNotShared": {
+    "description": "Status when a reflex profile is not shared with the connected trainer"
+  },
   "accompanimentProfileSharingSaveFailed": "Could not save reflex profile sharing: {error}",
-  "@accompanimentProfileSharingSaveFailed": {"description": "Error shown when reflex profile sharing cannot be saved", "placeholders": {"error": {"type": "String"}}},
+  "@accompanimentProfileSharingSaveFailed": {
+    "description": "Error shown when reflex profile sharing cannot be saved",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "accompanimentProposalCount": "{count, plural, one{1 Open Appointment Proposal} other{{count} Open Appointment Proposals}}",
-  "@accompanimentProposalCount": {"description": "Number of open appointment proposals", "placeholders": {"count": {"type": "int"}}},
+  "@accompanimentProposalCount": {
+    "description": "Number of open appointment proposals",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "accompanimentProposalsLoading": "Loading appointment proposals...",
-  "@accompanimentProposalsLoading": {"description": "Status while appointment proposals load"},
+  "@accompanimentProposalsLoading": {
+    "description": "Status while appointment proposals load"
+  },
   "accompanimentProposalsBody": "Choose a time that works for you.",
-  "@accompanimentProposalsBody": {"description": "Prompt to choose an appointment proposal"},
+  "@accompanimentProposalsBody": {
+    "description": "Prompt to choose an appointment proposal"
+  },
   "accompanimentViewProposals": "View Proposals",
-  "@accompanimentViewProposals": {"description": "Action opening appointment proposals"},
+  "@accompanimentViewProposals": {
+    "description": "Action opening appointment proposals"
+  },
   "accompanimentPendingRequestTitle": "Request Pending with {name}",
-  "@accompanimentPendingRequestTitle": {"description": "Heading for a pending trainer request", "placeholders": {"name": {"type": "String"}}},
+  "@accompanimentPendingRequestTitle": {
+    "description": "Heading for a pending trainer request",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "accompanimentExtraPendingRequests": "{count, plural, one{{count} more request pending} other{{count} more requests pending}}",
-  "@accompanimentExtraPendingRequests": {"description": "Number of additional pending trainer requests", "placeholders": {"count": {"type": "int"}}},
+  "@accompanimentExtraPendingRequests": {
+    "description": "Number of additional pending trainer requests",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "accompanimentPendingRequestAcceptedNotice": "We'll let you know when the request is accepted.",
-  "@accompanimentPendingRequestAcceptedNotice": {"description": "Notice shown while a trainer request is pending"},
+  "@accompanimentPendingRequestAcceptedNotice": {
+    "description": "Notice shown while a trainer request is pending"
+  },
   "accompanimentMoreTrainers": "More Trainers",
-  "@accompanimentMoreTrainers": {"description": "Action finding additional trainers"},
+  "@accompanimentMoreTrainers": {
+    "description": "Action finding additional trainers"
+  },
   "accompanimentInviteLinkShort": "Invite Link",
-  "@accompanimentInviteLinkShort": {"description": "Short action label for entering an invite link"},
+  "@accompanimentInviteLinkShort": {
+    "description": "Short action label for entering an invite link"
+  },
   "accompanimentActiveGuidance": "Active Guidance",
-  "@accompanimentActiveGuidance": {"description": "Status label for an active trainer connection"},
+  "@accompanimentActiveGuidance": {
+    "description": "Status label for an active trainer connection"
+  },
   "accompanimentMessage": "Message",
-  "@accompanimentMessage": {"description": "Action messaging the connected trainer"},
+  "@accompanimentMessage": {
+    "description": "Action messaging the connected trainer"
+  },
   "accompanimentAppointmentProposals": "Appointment Proposals",
-  "@accompanimentAppointmentProposals": {"description": "Action opening appointment proposals"},
+  "@accompanimentAppointmentProposals": {
+    "description": "Action opening appointment proposals"
+  },
   "accompanimentNextAppointments": "Upcoming Appointments",
-  "@accompanimentNextAppointments": {"description": "Heading above upcoming appointments"},
+  "@accompanimentNextAppointments": {
+    "description": "Heading above upcoming appointments"
+  },
   "accompanimentNoAppointments": "No appointments scheduled yet.",
-  "@accompanimentNoAppointments": {"description": "Empty state when no upcoming appointments are scheduled"},
+  "@accompanimentNoAppointments": {
+    "description": "Empty state when no upcoming appointments are scheduled"
+  },
   "accompanimentSwitchAccessBody": "When you switch, your new trainer can see your history. Your previous trainer loses access to your client profile.",
-  "@accompanimentSwitchAccessBody": {"description": "Explanation of trainer access after switching guidance"},
+  "@accompanimentSwitchAccessBody": {
+    "description": "Explanation of trainer access after switching guidance"
+  },
   "accompanimentEnterCode": "Enter Code",
-  "@accompanimentEnterCode": {"description": "Action entering a trainer invite code"},
+  "@accompanimentEnterCode": {
+    "description": "Action entering a trainer invite code"
+  },
   "accompanimentAppointmentForProfile": "for {profileName}",
-  "@accompanimentAppointmentForProfile": {"description": "Profile associated with an appointment", "placeholders": {"profileName": {"type": "String"}}},
-
+  "@accompanimentAppointmentForProfile": {
+    "description": "Profile associated with an appointment",
+    "placeholders": {
+      "profileName": {
+        "type": "String"
+      }
+    }
+  },
   "moodWriteNote": "Write a Note",
-  "@moodWriteNote": {"description": "Action and heading for writing a standalone mood note"},
+  "@moodWriteNote": {
+    "description": "Action and heading for writing a standalone mood note"
+  },
   "moodNoActiveProgram": "No active program found.",
-  "@moodNoActiveProgram": {"description": "Error shown when a mood entry has no active program"},
+  "@moodNoActiveProgram": {
+    "description": "Error shown when a mood entry has no active program"
+  },
   "moodCommunityShareTitle": "Submit a Shared Experience?",
-  "@moodCommunityShareTitle": {"description": "Confirmation title for sharing a mood observation"},
+  "@moodCommunityShareTitle": {
+    "description": "Confirmation title for sharing a mood observation"
+  },
   "moodCommunityShareBody": "Would you like to submit this observation as a shared experience?",
-  "@moodCommunityShareBody": {"description": "Confirmation body for sharing a mood observation"},
+  "@moodCommunityShareBody": {
+    "description": "Confirmation body for sharing a mood observation"
+  },
   "moodEditEntry": "Edit Entry",
-  "@moodEditEntry": {"description": "Heading for editing a mood entry"},
+  "@moodEditEntry": {
+    "description": "Heading for editing a mood entry"
+  },
   "moodLogMood": "Log Mood",
-  "@moodLogMood": {"description": "Heading for recording a mood entry"},
+  "@moodLogMood": {
+    "description": "Heading for recording a mood entry"
+  },
   "moodForWhom": "Who Is This For?",
-  "@moodForWhom": {"description": "Label above the subject profile picker in a mood entry"},
+  "@moodForWhom": {
+    "description": "Label above the subject profile picker in a mood entry"
+  },
   "moodGeneral": "General",
-  "@moodGeneral": {"description": "General option in the mood subject profile picker"},
+  "@moodGeneral": {
+    "description": "General option in the mood subject profile picker"
+  },
   "moodMetricSelectionHint": "Tap a value to select it, or leave it blank.",
-  "@moodMetricSelectionHint": {"description": "Hint explaining that mood metrics are optional"},
+  "@moodMetricSelectionHint": {
+    "description": "Hint explaining that mood metrics are optional"
+  },
   "moodNoteBody": "Whatever your mood, write down what's on your mind right now.",
-  "@moodNoteBody": {"description": "Description in the standalone note sheet"},
+  "@moodNoteBody": {
+    "description": "Description in the standalone note sheet"
+  },
   "moodNoteHint": "Your thoughts...",
-  "@moodNoteHint": {"description": "Placeholder for a standalone mood note"},
+  "@moodNoteHint": {
+    "description": "Placeholder for a standalone mood note"
+  },
   "moodExperienceSaveFailed": "Could not save: {error}",
-  "@moodExperienceSaveFailed": {"description": "Error shown when a post-training experience cannot be saved", "placeholders": {"error": {"type": "String"}}},
+  "@moodExperienceSaveFailed": {
+    "description": "Error shown when a post-training experience cannot be saved",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "moodExperienceSessionNote": "Session: {values}",
-  "@moodExperienceSessionNote": {"description": "Stored note line containing selected session impressions", "placeholders": {"values": {"type": "String"}}},
+  "@moodExperienceSessionNote": {
+    "description": "Stored note line containing selected session impressions",
+    "placeholders": {
+      "values": {
+        "type": "String"
+      }
+    }
+  },
   "moodExperienceSinceLastSessionNote": "Since the last session: {values}",
-  "@moodExperienceSinceLastSessionNote": {"description": "Stored note line containing observations since the previous session", "placeholders": {"values": {"type": "String"}}},
+  "@moodExperienceSinceLastSessionNote": {
+    "description": "Stored note line containing observations since the previous session",
+    "placeholders": {
+      "values": {
+        "type": "String"
+      }
+    }
+  },
   "moodExperienceTitle": "How Did the Session Feel?",
-  "@moodExperienceTitle": {"description": "Post-training experience sheet title"},
+  "@moodExperienceTitle": {
+    "description": "Post-training experience sheet title"
+  },
   "moodExperienceDescription": "What did you notice during this session or since your last one?",
-  "@moodExperienceDescription": {"description": "Post-training experience sheet description"},
+  "@moodExperienceDescription": {
+    "description": "Post-training experience sheet description"
+  },
   "moodExperienceImpressionCalm": "calm",
-  "@moodExperienceImpressionCalm": {"description": "Calm session impression chip"},
+  "@moodExperienceImpressionCalm": {
+    "description": "Calm session impression chip"
+  },
   "moodExperienceImpressionPleasant": "pleasant",
-  "@moodExperienceImpressionPleasant": {"description": "Pleasant session impression chip"},
+  "@moodExperienceImpressionPleasant": {
+    "description": "Pleasant session impression chip"
+  },
   "moodExperienceImpressionTired": "tired",
-  "@moodExperienceImpressionTired": {"description": "Tired session impression chip"},
+  "@moodExperienceImpressionTired": {
+    "description": "Tired session impression chip"
+  },
   "moodExperienceImpressionRestless": "restless",
-  "@moodExperienceImpressionRestless": {"description": "Restless session impression chip"},
+  "@moodExperienceImpressionRestless": {
+    "description": "Restless session impression chip"
+  },
   "moodExperienceImpressionEmotional": "emotional",
-  "@moodExperienceImpressionEmotional": {"description": "Emotional session impression chip"},
+  "@moodExperienceImpressionEmotional": {
+    "description": "Emotional session impression chip"
+  },
   "moodExperienceImpressionPhysicallyUncomfortable": "physically uncomfortable",
-  "@moodExperienceImpressionPhysicallyUncomfortable": {"description": "Physically uncomfortable session impression chip"},
+  "@moodExperienceImpressionPhysicallyUncomfortable": {
+    "description": "Physically uncomfortable session impression chip"
+  },
   "moodExperienceImpressionUnsure": "hard to tell",
-  "@moodExperienceImpressionUnsure": {"description": "Hard-to-assess session impression chip"},
+  "@moodExperienceImpressionUnsure": {
+    "description": "Hard-to-assess session impression chip"
+  },
   "moodExperienceSinceLastTitle": "What Have You Noticed Since Your Last Session?",
-  "@moodExperienceSinceLastTitle": {"description": "Question about observations since the previous session"},
+  "@moodExperienceSinceLastTitle": {
+    "description": "Question about observations since the previous session"
+  },
   "moodExperienceSinceMoreCalm": "calmer",
-  "@moodExperienceSinceMoreCalm": {"description": "More calm observation chip"},
+  "@moodExperienceSinceMoreCalm": {
+    "description": "More calm observation chip"
+  },
   "moodExperienceSinceMoreEnergy": "more energy",
-  "@moodExperienceSinceMoreEnergy": {"description": "More energy observation chip"},
+  "@moodExperienceSinceMoreEnergy": {
+    "description": "More energy observation chip"
+  },
   "moodExperienceSinceLessEnergy": "less energy",
-  "@moodExperienceSinceLessEnergy": {"description": "Less energy observation chip"},
+  "@moodExperienceSinceLessEnergy": {
+    "description": "Less energy observation chip"
+  },
   "moodExperienceSinceMoodChanged": "mood fluctuated",
-  "@moodExperienceSinceMoodChanged": {"description": "Mood fluctuated observation chip"},
+  "@moodExperienceSinceMoodChanged": {
+    "description": "Mood fluctuated observation chip"
+  },
   "moodExperienceSinceMoreEmotional": "more emotional than usual",
-  "@moodExperienceSinceMoreEmotional": {"description": "More emotional observation chip"},
+  "@moodExperienceSinceMoreEmotional": {
+    "description": "More emotional observation chip"
+  },
   "moodExperienceSinceMoreSensitive": "more sensitive to stimuli",
-  "@moodExperienceSinceMoreSensitive": {"description": "More sensitive observation chip"},
+  "@moodExperienceSinceMoreSensitive": {
+    "description": "More sensitive observation chip"
+  },
   "moodExperienceSinceBetterSleep": "better sleep",
-  "@moodExperienceSinceBetterSleep": {"description": "Better sleep observation chip"},
+  "@moodExperienceSinceBetterSleep": {
+    "description": "Better sleep observation chip"
+  },
   "moodExperienceSinceRestlessSleep": "restless sleep",
-  "@moodExperienceSinceRestlessSleep": {"description": "Restless sleep observation chip"},
+  "@moodExperienceSinceRestlessSleep": {
+    "description": "Restless sleep observation chip"
+  },
   "moodExperienceSinceBodyTension": "physical tension",
-  "@moodExperienceSinceBodyTension": {"description": "Physical tension observation chip"},
+  "@moodExperienceSinceBodyTension": {
+    "description": "Physical tension observation chip"
+  },
   "moodExperienceSinceNothingNotable": "nothing notable",
-  "@moodExperienceSinceNothingNotable": {"description": "Nothing notable observation chip"},
+  "@moodExperienceSinceNothingNotable": {
+    "description": "Nothing notable observation chip"
+  },
   "moodExperienceOwnObservationHint": "Add your own observation... (optional)",
-  "@moodExperienceOwnObservationHint": {"description": "Placeholder for a custom post-training observation"},
+  "@moodExperienceOwnObservationHint": {
+    "description": "Placeholder for a custom post-training observation"
+  },
   "moodExperienceShare": "Submit as a Shared Experience",
-  "@moodExperienceShare": {"description": "Option to submit a post-training observation as a shared experience"},
+  "@moodExperienceShare": {
+    "description": "Option to submit a post-training observation as a shared experience"
+  },
   "moodExperienceShareAnonymously": "Submit Anonymously",
-  "@moodExperienceShareAnonymously": {"description": "Option to share a post-training experience anonymously"},
-
+  "@moodExperienceShareAnonymously": {
+    "description": "Option to share a post-training experience anonymously"
+  },
   "themeSystemDescription": "Follows your system setting",
-  "@themeSystemDescription": {"description": "Description of the system theme option"},
+  "@themeSystemDescription": {
+    "description": "Description of the system theme option"
+  },
   "themeLightDescription": "Always use the light theme",
-  "@themeLightDescription": {"description": "Description of the light theme option"},
+  "@themeLightDescription": {
+    "description": "Description of the light theme option"
+  },
   "themeDarkDescription": "Always use the dark theme",
-  "@themeDarkDescription": {"description": "Description of the dark theme option"},
+  "@themeDarkDescription": {
+    "description": "Description of the dark theme option"
+  },
   "themeChanged": "Theme changed to “{title}”",
-  "@themeChanged": {"description": "Confirmation after changing the app theme", "placeholders": {"title": {"type": "String"}}},
-
+  "@themeChanged": {
+    "description": "Confirmation after changing the app theme",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "profileTrainingProfilesSection": "Training Profiles",
-  "@profileTrainingProfilesSection": {"description": "Profile screen section for training subject profiles"},
+  "@profileTrainingProfilesSection": {
+    "description": "Profile screen section for training subject profiles"
+  },
   "profileJournalItemTitle": "Journal",
-  "@profileJournalItemTitle": {"description": "Profile screen journal navigation item"},
+  "@profileJournalItemTitle": {
+    "description": "Profile screen journal navigation item"
+  },
   "profileJournalSubtitle": "Your entries and reflections",
-  "@profileJournalSubtitle": {"description": "Profile screen journal navigation subtitle"},
+  "@profileJournalSubtitle": {
+    "description": "Profile screen journal navigation subtitle"
+  },
   "profileTrainerSection": "Trainer",
-  "@profileTrainerSection": {"description": "Profile screen trainer section heading"},
+  "@profileTrainerSection": {
+    "description": "Profile screen trainer section heading"
+  },
   "profileManageGuidance": "Manage Guidance",
-  "@profileManageGuidance": {"description": "Profile screen action for managing guidance"},
+  "@profileManageGuidance": {
+    "description": "Profile screen action for managing guidance"
+  },
   "profileConnectedWith": "Connected to {name}",
-  "@profileConnectedWith": {"description": "Profile screen subtitle naming the connected trainer", "placeholders": {"name": {"type": "String"}}},
+  "@profileConnectedWith": {
+    "description": "Profile screen subtitle naming the connected trainer",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "profileFindManageTrainer": "Find trainers and manage requests and appointments",
-  "@profileFindManageTrainer": {"description": "Profile screen guidance navigation subtitle without a connected trainer"},
+  "@profileFindManageTrainer": {
+    "description": "Profile screen guidance navigation subtitle without a connected trainer"
+  },
   "profileWorkspaceSection": "Workspace",
-  "@profileWorkspaceSection": {"description": "Profile screen professional workspace section"},
+  "@profileWorkspaceSection": {
+    "description": "Profile screen professional workspace section"
+  },
   "profileAdminPanel": "Admin Panel",
-  "@profileAdminPanel": {"description": "Profile screen admin panel navigation item"},
+  "@profileAdminPanel": {
+    "description": "Profile screen admin panel navigation item"
+  },
   "profileMessages": "Messages",
-  "@profileMessages": {"description": "Profile screen messages navigation item"},
+  "@profileMessages": {
+    "description": "Profile screen messages navigation item"
+  },
   "profileReviewChannels": "Trainer applications and review channels",
-  "@profileReviewChannels": {"description": "Profile screen admin messages subtitle"},
+  "@profileReviewChannels": {
+    "description": "Profile screen admin messages subtitle"
+  },
   "profileTrainerArea": "Trainer Area",
-  "@profileTrainerArea": {"description": "Profile screen trainer workspace navigation item"},
+  "@profileTrainerArea": {
+    "description": "Profile screen trainer workspace navigation item"
+  },
   "profileProfessionalAccessSection": "Professional Access",
-  "@profileProfessionalAccessSection": {"description": "Profile screen professional access section"},
+  "@profileProfessionalAccessSection": {
+    "description": "Profile screen professional access section"
+  },
   "profileBecomeTrainer": "Become a Trainer",
-  "@profileBecomeTrainer": {"description": "Profile screen action to apply as a trainer"},
+  "@profileBecomeTrainer": {
+    "description": "Profile screen action to apply as a trainer"
+  },
   "profileApplicationSubtitle": "Submit your application for review",
-  "@profileApplicationSubtitle": {"description": "Profile screen trainer application subtitle"},
+  "@profileApplicationSubtitle": {
+    "description": "Profile screen trainer application subtitle"
+  },
   "profileAccountSection": "Account",
-  "@profileAccountSection": {"description": "Profile screen account section"},
+  "@profileAccountSection": {
+    "description": "Profile screen account section"
+  },
   "profileSubjectProfilesLoadFailed": "Could not load profiles: {error}",
-  "@profileSubjectProfilesLoadFailed": {"description": "Error shown when training subject profiles cannot be loaded", "placeholders": {"error": {"type": "String"}}},
+  "@profileSubjectProfilesLoadFailed": {
+    "description": "Error shown when training subject profiles cannot be loaded",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "profileCreateFirst": "Create Your First Profile",
-  "@profileCreateFirst": {"description": "Action creating the first training subject profile"},
+  "@profileCreateFirst": {
+    "description": "Action creating the first training subject profile"
+  },
   "profileEditTooltip": "Edit Profile",
-  "@profileEditTooltip": {"description": "Tooltip for editing a training subject profile"},
+  "@profileEditTooltip": {
+    "description": "Tooltip for editing a training subject profile"
+  },
   "profileActivate": "Activate",
-  "@profileActivate": {"description": "Action activating a training subject profile"},
+  "@profileActivate": {
+    "description": "Action activating a training subject profile"
+  },
   "profileAdd": "Add Profile",
-  "@profileAdd": {"description": "Action adding a training subject profile"},
+  "@profileAdd": {
+    "description": "Action adding a training subject profile"
+  },
   "profileSaved": "Profile saved.",
-  "@profileSaved": {"description": "Confirmation after saving a training subject profile"},
+  "@profileSaved": {
+    "description": "Confirmation after saving a training subject profile"
+  },
   "profileSaveFailed": "Could not save profile: {error}",
-  "@profileSaveFailed": {"description": "Error shown when a training subject profile cannot be saved", "placeholders": {"error": {"type": "String"}}},
+  "@profileSaveFailed": {
+    "description": "Error shown when a training subject profile cannot be saved",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "profileAdult": "Adult Profile",
-  "@profileAdult": {"description": "Adult training subject profile type"},
+  "@profileAdult": {
+    "description": "Adult training subject profile type"
+  },
   "profileChild": "Child Profile",
-  "@profileChild": {"description": "Child training subject profile type"},
+  "@profileChild": {
+    "description": "Child training subject profile type"
+  },
   "profileAgeYears": "{years, plural, one{{years} year old} other{{years} years old}}",
-  "@profileAgeYears": {"description": "Age of a training subject profile", "placeholders": {"years": {"type": "int"}}},
+  "@profileAgeYears": {
+    "description": "Age of a training subject profile",
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
   "profileSelectBirthDateHelp": "Select Date of Birth",
-  "@profileSelectBirthDateHelp": {"description": "Date picker help text for a subject profile birth date"},
+  "@profileSelectBirthDateHelp": {
+    "description": "Date picker help text for a subject profile birth date"
+  },
   "profileNameRequired": "Enter a name.",
-  "@profileNameRequired": {"description": "Validation error when a subject profile name is empty"},
+  "@profileNameRequired": {
+    "description": "Validation error when a subject profile name is empty"
+  },
   "profileBirthDateRequired": "Enter a date of birth.",
-  "@profileBirthDateRequired": {"description": "Validation error when a child subject profile has no birth date"},
+  "@profileBirthDateRequired": {
+    "description": "Validation error when a child subject profile has no birth date"
+  },
   "profileEditTitle": "Edit Profile",
-  "@profileEditTitle": {"description": "Subject profile edit dialog title"},
+  "@profileEditTitle": {
+    "description": "Subject profile edit dialog title"
+  },
   "profileChildNameLabel": "Name or Nickname",
-  "@profileChildNameLabel": {"description": "Name field label for a child subject profile"},
+  "@profileChildNameLabel": {
+    "description": "Name field label for a child subject profile"
+  },
   "profileNameLabel": "Profile Name",
-  "@profileNameLabel": {"description": "Name field label for an adult subject profile"},
+  "@profileNameLabel": {
+    "description": "Name field label for an adult subject profile"
+  },
   "profileBirthDateLabel": "Date of Birth",
-  "@profileBirthDateLabel": {"description": "Subject profile birth date field label"},
+  "@profileBirthDateLabel": {
+    "description": "Subject profile birth date field label"
+  },
   "profileSelectDate": "Select Date",
-  "@profileSelectDate": {"description": "Prompt to select a subject profile birth date"},
+  "@profileSelectDate": {
+    "description": "Prompt to select a subject profile birth date"
+  },
   "profileDisplayNameLabel": "Display Name",
-  "@profileDisplayNameLabel": {"description": "Profile display name field heading"},
+  "@profileDisplayNameLabel": {
+    "description": "Profile display name field heading"
+  },
   "profileCommunityDisplayNameHint": "Shown in the community feed when you share experiences.",
-  "@profileCommunityDisplayNameHint": {"description": "Explanation of the profile display name when community features are enabled"},
+  "@profileCommunityDisplayNameHint": {
+    "description": "Explanation of the profile display name when community features are enabled"
+  },
   "profileTrainerDisplayNameHint": "Visible to your trainer, for example in chat.",
-  "@profileTrainerDisplayNameHint": {"description": "Explanation of the profile display name when community features are disabled"},
+  "@profileTrainerDisplayNameHint": {
+    "description": "Explanation of the profile display name when community features are disabled"
+  },
   "profileMinimumCharacters": "At least {count} characters",
-  "@profileMinimumCharacters": {"description": "Minimum display name length validation", "placeholders": {"count": {"type": "int"}}},
+  "@profileMinimumCharacters": {
+    "description": "Minimum display name length validation",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "profileMaximumCharacters": "No more than {count} characters",
-  "@profileMaximumCharacters": {"description": "Maximum display name length validation", "placeholders": {"count": {"type": "int"}}},
+  "@profileMaximumCharacters": {
+    "description": "Maximum display name length validation",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "profileAtNotAllowed": "@ is not allowed",
-  "@profileAtNotAllowed": {"description": "Validation error when a profile name contains an at sign"},
+  "@profileAtNotAllowed": {
+    "description": "Validation error when a profile name contains an at sign"
+  },
   "profileSaveFailedShort": "Could not save",
-  "@profileSaveFailedShort": {"description": "Short error shown when a profile display name cannot be saved"},
+  "@profileSaveFailedShort": {
+    "description": "Short error shown when a profile display name cannot be saved"
+  },
   "profileContactNameRequired": "Enter a contact name.",
-  "@profileContactNameRequired": {"description": "Validation error when the initial contact name is empty"},
+  "@profileContactNameRequired": {
+    "description": "Validation error when the initial contact name is empty"
+  },
   "profileContactNameQuestion": "What Should We Call You?",
-  "@profileContactNameQuestion": {"description": "Initial contact name setup heading"},
+  "@profileContactNameQuestion": {
+    "description": "Initial contact name setup heading"
+  },
   "profileContactNameBody": "Your contact name is visible to trainers and in the training area.",
-  "@profileContactNameBody": {"description": "Initial contact name explanation without community features"},
+  "@profileContactNameBody": {
+    "description": "Initial contact name explanation without community features"
+  },
   "profileContactNameBodyWithCommunity": "Your contact name is visible to trainers and in the training area. It can be different from your community name.",
-  "@profileContactNameBodyWithCommunity": {"description": "Initial contact name explanation with community features"},
+  "@profileContactNameBodyWithCommunity": {
+    "description": "Initial contact name explanation with community features"
+  },
   "profileContactNameHint": "e.g., Maria or the Miller family",
-  "@profileContactNameHint": {"description": "Example initial contact name"},
+  "@profileContactNameHint": {
+    "description": "Example initial contact name"
+  },
   "tabTrainer": "Trainer",
-  "@tabTrainer": {"description": "Bottom navigation tab label for the trainer area"},
+  "@tabTrainer": {
+    "description": "Bottom navigation tab label for the trainer area"
+  },
   "tabAdmin": "Admin",
-  "@tabAdmin": {"description": "Bottom navigation tab label for the admin panel"},
+  "@tabAdmin": {
+    "description": "Bottom navigation tab label for the admin panel"
+  },
   "routeNotFound": "Page not found: {error}",
   "@routeNotFound": {
     "description": "Router error screen when no route matches",
-    "placeholders": {"error": {"type": "String"}}
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   },
   "startupCouldNotStart": "Reflex Journey could not start. Please restart the app or reinstall.",
-  "@startupCouldNotStart": {"description": "Full-screen message when app initialization fails at launch"},
+  "@startupCouldNotStart": {
+    "description": "Full-screen message when app initialization fails at launch"
+  },
   "startupBootstrapFailedTitle": "Bootstrap failed",
-  "@startupBootstrapFailedTitle": {"description": "Heading on the development boot screen when initialization fails"},
+  "@startupBootstrapFailedTitle": {
+    "description": "Heading on the development boot screen when initialization fails"
+  },
   "clientFallbackName": "Client",
-  "@clientFallbackName": {"description": "Generic client display name when the real name is unavailable"},
+  "@clientFallbackName": {
+    "description": "Generic client display name when the real name is unavailable"
+  },
   "appointmentCalendarFallbackTitle": "Isometric partner exercise",
-  "@appointmentCalendarFallbackTitle": {"description": "Calendar event title when the appointment payload has none"},
+  "@appointmentCalendarFallbackTitle": {
+    "description": "Calendar event title when the appointment payload has none"
+  },
   "appointmentCalendarEventTitle": "{title} (with {name})",
   "@appointmentCalendarEventTitle": {
     "description": "Calendar event title combining appointment title and client name",
-    "placeholders": {"title": {"type": "String"}, "name": {"type": "String"}}
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "appointmentCalendarAdded": "The appointment with {name} was added to your calendar.",
   "@appointmentCalendarAdded": {
     "description": "Snackbar after a confirmed appointment was written to the device calendar",
-    "placeholders": {"name": {"type": "String"}}
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "appointmentCalendarOpenFailed": "Could not open the calendar: {error}",
   "@appointmentCalendarOpenFailed": {
     "description": "Snackbar when writing a confirmed appointment to the device calendar fails",
-    "placeholders": {"error": {"type": "String"}}
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   },
   "hintDashboardBody": "This is where you manage your daily rhythm and record what you notice.",
-  "@hintDashboardBody": {"description": "Onboarding hint body for the dashboard tab"},
+  "@hintDashboardBody": {
+    "description": "Onboarding hint body for the dashboard tab"
+  },
   "hintDashboardItemStart": "Start your guided session or routine mode.",
-  "@hintDashboardItemStart": {"description": "Dashboard onboarding hint bullet: starting a session"},
+  "@hintDashboardItemStart": {
+    "description": "Dashboard onboarding hint bullet: starting a session"
+  },
   "hintDashboardItemLog": "Log a session if you practiced today.",
-  "@hintDashboardItemLog": {"description": "Dashboard onboarding hint bullet: logging a session"},
+  "@hintDashboardItemLog": {
+    "description": "Dashboard onboarding hint bullet: logging a session"
+  },
   "hintDashboardItemNote": "Capture your experiences right after the session.",
-  "@hintDashboardItemNote": {"description": "Dashboard onboarding hint bullet: capturing experiences"},
+  "@hintDashboardItemNote": {
+    "description": "Dashboard onboarding hint bullet: capturing experiences"
+  },
   "hintProgressBody": "Your history helps you spot patterns without overrating individual days.",
-  "@hintProgressBody": {"description": "Onboarding hint body for the history tab"},
+  "@hintProgressBody": {
+    "description": "Onboarding hint body for the history tab"
+  },
   "hintProgressItemOverview": "See training days, observations, and entries together.",
-  "@hintProgressItemOverview": {"description": "History onboarding hint bullet: combined overview"},
+  "@hintProgressItemOverview": {
+    "description": "History onboarding hint bullet: combined overview"
+  },
   "hintProgressItemObserve": "Add observations whenever you notice something.",
-  "@hintProgressItemObserve": {"description": "History onboarding hint bullet: adding observations"},
+  "@hintProgressItemObserve": {
+    "description": "History onboarding hint bullet: adding observations"
+  },
   "hintProgressItemJournal": "Open individual journal entries for more context.",
-  "@hintProgressItemJournal": {"description": "History onboarding hint bullet: journal entries"},
+  "@hintProgressItemJournal": {
+    "description": "History onboarding hint bullet: journal entries"
+  },
   "hintAccompanimentBody": "Everything related to trainers, communication, and appointments lives here.",
-  "@hintAccompanimentBody": {"description": "Onboarding hint body for the guidance tab"},
+  "@hintAccompanimentBody": {
+    "description": "Onboarding hint body for the guidance tab"
+  },
   "hintAccompanimentItemTrainer": "Find trainers or manage your active guidance.",
-  "@hintAccompanimentItemTrainer": {"description": "Guidance onboarding hint bullet: finding trainers"},
+  "@hintAccompanimentItemTrainer": {
+    "description": "Guidance onboarding hint bullet: finding trainers"
+  },
   "hintAccompanimentItemChat": "Open messages and stay in touch with your trainer.",
-  "@hintAccompanimentItemChat": {"description": "Guidance onboarding hint bullet: messages"},
+  "@hintAccompanimentItemChat": {
+    "description": "Guidance onboarding hint bullet: messages"
+  },
   "hintAccompanimentItemAppointments": "See appointment proposals and scheduled appointments.",
-  "@hintAccompanimentItemAppointments": {"description": "Guidance onboarding hint bullet: appointments"},
+  "@hintAccompanimentItemAppointments": {
+    "description": "Guidance onboarding hint bullet: appointments"
+  },
   "hintProfileBody": "Your profile holds your account, settings, and administrative access.",
-  "@hintProfileBody": {"description": "Onboarding hint body for the profile tab"},
+  "@hintProfileBody": {
+    "description": "Onboarding hint body for the profile tab"
+  },
   "hintProfileItemSettings": "Adjust language, appearance, and reminders.",
-  "@hintProfileItemSettings": {"description": "Profile onboarding hint bullet: settings"},
+  "@hintProfileItemSettings": {
+    "description": "Profile onboarding hint bullet: settings"
+  },
   "hintProfileItemAccount": "Manage your account, password, and profile information.",
-  "@hintProfileItemAccount": {"description": "Profile onboarding hint bullet: account management"},
+  "@hintProfileItemAccount": {
+    "description": "Profile onboarding hint bullet: account management"
+  },
   "hintProfileItemRoles": "Open the trainer or admin areas if they are enabled for you.",
-  "@hintProfileItemRoles": {"description": "Profile onboarding hint bullet: role-gated areas"},
+  "@hintProfileItemRoles": {
+    "description": "Profile onboarding hint bullet: role-gated areas"
+  },
   "hintDontShowAgain": "Don't show this again",
-  "@hintDontShowAgain": {"description": "Onboarding hint sheet checkbox to hide the hint permanently"},
+  "@hintDontShowAgain": {
+    "description": "Onboarding hint sheet checkbox to hide the hint permanently"
+  },
   "hintGotIt": "Got it",
-  "@hintGotIt": {"description": "Onboarding hint sheet confirm button"},
+  "@hintGotIt": {
+    "description": "Onboarding hint sheet confirm button"
+  },
   "hintShowLater": "Show me again later",
-  "@hintShowLater": {"description": "Onboarding hint sheet button to keep showing the hint"},
+  "@hintShowLater": {
+    "description": "Onboarding hint sheet button to keep showing the hint"
+  },
   "notificationChannelTrainingReminders": "Training Reminders",
-  "@notificationChannelTrainingReminders": {"description": "Android notification channel name shown in system settings"},
+  "@notificationChannelTrainingReminders": {
+    "description": "Android notification channel name shown in system settings"
+  },
   "pushVideoCallTitle": "Incoming video call",
-  "@pushVideoCallTitle": {"description": "Foreground push fallback title for an incoming video call"},
+  "@pushVideoCallTitle": {
+    "description": "Foreground push fallback title for an incoming video call"
+  },
   "pushVideoCallBody": "Tap to open the call.",
-  "@pushVideoCallBody": {"description": "Foreground push fallback body for an incoming video call"},
+  "@pushVideoCallBody": {
+    "description": "Foreground push fallback body for an incoming video call"
+  },
   "pushCallRequestTitle": "Video call request",
-  "@pushCallRequestTitle": {"description": "Foreground push fallback title for a video call request"},
+  "@pushCallRequestTitle": {
+    "description": "Foreground push fallback title for a video call request"
+  },
   "pushCallRequestBody": "A client wants to start a video call.",
-  "@pushCallRequestBody": {"description": "Foreground push fallback body for a video call request"},
+  "@pushCallRequestBody": {
+    "description": "Foreground push fallback body for a video call request"
+  },
   "pushAppointmentProposalTitle": "New appointment proposals",
-  "@pushAppointmentProposalTitle": {"description": "Foreground push fallback title for new appointment proposals"},
+  "@pushAppointmentProposalTitle": {
+    "description": "Foreground push fallback title for new appointment proposals"
+  },
   "pushAppointmentProposalBody": "Choose a time that works for you.",
-  "@pushAppointmentProposalBody": {"description": "Foreground push fallback body for new appointment proposals"},
+  "@pushAppointmentProposalBody": {
+    "description": "Foreground push fallback body for new appointment proposals"
+  },
   "pushAppointmentConfirmedTitle": "Appointment confirmed",
-  "@pushAppointmentConfirmedTitle": {"description": "Foreground push fallback title for a confirmed appointment"},
+  "@pushAppointmentConfirmedTitle": {
+    "description": "Foreground push fallback title for a confirmed appointment"
+  },
   "pushAppointmentConfirmedBody": "Tap to add the appointment to your calendar.",
-  "@pushAppointmentConfirmedBody": {"description": "Foreground push fallback body for a confirmed appointment"},
+  "@pushAppointmentConfirmedBody": {
+    "description": "Foreground push fallback body for a confirmed appointment"
+  },
   "pushTrainingReminderTitle": "Training reminder",
-  "@pushTrainingReminderTitle": {"description": "Foreground push fallback title for a training reminder"},
+  "@pushTrainingReminderTitle": {
+    "description": "Foreground push fallback title for a training reminder"
+  },
   "pushTrainingReminderBody": "Tap to open your training.",
-  "@pushTrainingReminderBody": {"description": "Foreground push fallback body for a training reminder"},
+  "@pushTrainingReminderBody": {
+    "description": "Foreground push fallback body for a training reminder"
+  },
   "trainerAlertPrepareTitle": "Prepare appointment — {traineeName}",
   "@trainerAlertPrepareTitle": {
     "description": "Trainer notification title when a trainee reaches day 25",
     "placeholders": {
-      "traineeName": { "type": "String" }
+      "traineeName": {
+        "type": "String"
+      }
     }
   },
   "trainerAlertPrepareBody": "{traineeName} is at day 25. The isometric partner exercise is due in about 3 days.",
   "@trainerAlertPrepareBody": {
     "description": "Trainer notification body when a trainee reaches day 25",
     "placeholders": {
-      "traineeName": { "type": "String" }
+      "traineeName": {
+        "type": "String"
+      }
     }
   },
   "trainerAlertDay28Title": "{traineeName} has reached day 28!",
   "@trainerAlertDay28Title": {
     "description": "Trainer notification title when a trainee reaches day 28",
     "placeholders": {
-      "traineeName": { "type": "String" }
+      "traineeName": {
+        "type": "String"
+      }
     }
   },
   "trainerAlertDay28Body": "Book the appointment for the isometric partner exercise now.",
-  "@trainerAlertDay28Body": {"description": "Trainer notification body when a trainee reaches day 28"},
+  "@trainerAlertDay28Body": {
+    "description": "Trainer notification body when a trainee reaches day 28"
+  },
   "traineeFallbackName": "Your trainee",
-  "@traineeFallbackName": {"description": "Fallback name when a trainee has no display name or email"},
+  "@traineeFallbackName": {
+    "description": "Fallback name when a trainee has no display name or email"
+  },
   "answerUnknown": "I don't know",
   "@answerUnknown": {
     "description": "Yes/no/unknown answer option"
@@ -2077,5 +3420,805 @@
   "reflexProfileNameRequired": "Please enter a name.",
   "@reflexProfileNameRequired": {
     "description": "Validation when subject display name is empty"
+  },
+  "trainerWorkOverview": "Work Overview",
+  "@trainerWorkOverview": {
+    "description": "Trainer dashboard overview title"
+  },
+  "trainerWorkOverviewSubtitle": "Prioritized by package transitions, requests, appointments, and observations.",
+  "@trainerWorkOverviewSubtitle": {
+    "description": "Trainer dashboard overview subtitle"
+  },
+  "trainerPackageTransitions": "Package Transitions",
+  "@trainerPackageTransitions": {
+    "description": "Overview metric"
+  },
+  "trainerOpenInvites": "Open Invites",
+  "@trainerOpenInvites": {
+    "description": "Overview metric / section"
+  },
+  "trainerNewRequests": "New Requests",
+  "@trainerNewRequests": {
+    "description": "Overview metric"
+  },
+  "trainerAppointmentsMetric": "Appointments",
+  "@trainerAppointmentsMetric": {
+    "description": "Overview metric"
+  },
+  "trainerNewObservations": "New Observations",
+  "@trainerNewObservations": {
+    "description": "Overview metric / section"
+  },
+  "trainerMoreInvitesOpen": "{count, plural, =1{1 more invite open} other{{count} more invites open}}",
+  "@trainerMoreInvitesOpen": {
+    "description": "Collapsed open invites count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trainerReviewSharedExperiences": "Review Shared Experiences",
+  "@trainerReviewSharedExperiences": {
+    "description": "Dashboard CTA to moderated experiences"
+  },
+  "trainerReviewSharedExperiencesBody": "Keep moderated experience posts from active packages in view.",
+  "@trainerReviewSharedExperiencesBody": {
+    "description": "Dashboard shared experiences body"
+  },
+  "trainerConnectionCheck": "Check Trainer Connection",
+  "@trainerConnectionCheck": {
+    "description": "Debug panel title (avoid claim-word diagnose)"
+  },
+  "trainerConnectionChecking": "Checking database…",
+  "@trainerConnectionChecking": {
+    "description": "Debug loading"
+  },
+  "trainerConnectionCheckError": "Check failed",
+  "@trainerConnectionCheckError": {
+    "description": "Debug error state"
+  },
+  "trainerConnectionTapToOpen": "Tap to open",
+  "@trainerConnectionTapToOpen": {
+    "description": "Debug collapsed hint"
+  },
+  "trainerConnectionRefresh": "Refresh Check",
+  "@trainerConnectionRefresh": {
+    "description": "Debug refresh tooltip"
+  },
+  "trainerConnectionCheckFailed": "Check error: {error}",
+  "@trainerConnectionCheckFailed": {
+    "description": "Debug error with detail",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerInviteCodeOnce": "One-time code — share it with your client",
+  "@trainerInviteCodeOnce": {
+    "description": "Invite code helper"
+  },
+  "trainerInviteNew": "New",
+  "@trainerInviteNew": {
+    "description": "Regenerate invite code button"
+  },
+  "trainerInviteCreating": "Creating…",
+  "@trainerInviteCreating": {
+    "description": "Invite code creating state"
+  },
+  "trainerCodeCopiedWithValue": "Code {code} copied!",
+  "@trainerCodeCopiedWithValue": {
+    "description": "SnackBar after copying invite code",
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerLocationMissingTitle": "Location Missing",
+  "@trainerLocationMissingTitle": {
+    "description": "Location banner title"
+  },
+  "trainerLocationMissingBody": "Your trainer profile is active, but it only appears in trainer search after a location is set. Only an approximate pin is shown publicly.",
+  "@trainerLocationMissingBody": {
+    "description": "Location banner body"
+  },
+  "trainerSetLocation": "Set Location",
+  "@trainerSetLocation": {
+    "description": "Expand location picker CTA"
+  },
+  "trainerLocationSaved": "Location saved",
+  "@trainerLocationSaved": {
+    "description": "Location save snackbar"
+  },
+  "trainerLocationSaveFailed": "Couldn't save the location: {error}",
+  "@trainerLocationSaveFailed": {
+    "description": "Location save error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerDay28Badge": "Day 28 ✓",
+  "@trainerDay28Badge": {
+    "description": "Client card day-28 badge"
+  },
+  "trainerDaysLeft": "{days} days left",
+  "@trainerDaysLeft": {
+    "description": "Days remaining badge",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "trainerProposeAppointment": "Propose Appointment",
+  "@trainerProposeAppointment": {
+    "description": "Propose appointment CTA"
+  },
+  "trainerProposeNextPackage": "{days} days left: propose an appointment for the next package's isometric training.",
+  "@trainerProposeNextPackage": {
+    "description": "Package transition hint",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "trainerOpenDetail": "Open Details",
+  "@trainerOpenDetail": {
+    "description": "Open client detail tooltip"
+  },
+  "trainerOpenChat": "Open Chat",
+  "@trainerOpenChat": {
+    "description": "Open chat tooltip"
+  },
+  "trainerClientFallback": "Client",
+  "@trainerClientFallback": {
+    "description": "Fallback client label on detail screen"
+  },
+  "trainerSharedReflexProfiles": "Shared Reflex Profiles",
+  "@trainerSharedReflexProfiles": {
+    "description": "Shared profiles section"
+  },
+  "trainerProfilesLoadFailed": "Couldn't load profiles: {error}",
+  "@trainerProfilesLoadFailed": {
+    "description": "Profiles load error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerNoProfilesShared": "No profiles shared.",
+  "@trainerNoProfilesShared": {
+    "description": "Empty shared profiles"
+  },
+  "trainerNoCompletedReflexProfile": "{name}: No completed reflex profile yet.",
+  "@trainerNoCompletedReflexProfile": {
+    "description": "Profile without completed assessment",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerObservations": "Observations",
+  "@trainerObservations": {
+    "description": "Observations section title"
+  },
+  "trainerNoSharedObservations": "No shared observations yet.",
+  "@trainerNoSharedObservations": {
+    "description": "Empty observations"
+  },
+  "trainerReflexNoteSaved": "Reflex profile note saved.",
+  "@trainerReflexNoteSaved": {
+    "description": "Note saved snackbar"
+  },
+  "trainerNoteSaveFailed": "Couldn't save the note: {error}",
+  "@trainerNoteSaveFailed": {
+    "description": "Note save error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerReflexNotesTitle": "Reflex Profile Notes",
+  "@trainerReflexNotesTitle": {
+    "description": "Notes section title"
+  },
+  "trainerReflexNotesBody": "These notes stay with the profile and, while sharing is active, remain visible to later trainers as a handoff.",
+  "@trainerReflexNotesBody": {
+    "description": "Notes section body"
+  },
+  "trainerReflexNoteHint": "Note for guidance or handoff",
+  "@trainerReflexNoteHint": {
+    "description": "Note field hint"
+  },
+  "trainerSaveNote": "Save Note",
+  "@trainerSaveNote": {
+    "description": "Save note button"
+  },
+  "trainerNotesLoadFailed": "Couldn't load notes: {error}",
+  "@trainerNotesLoadFailed": {
+    "description": "Notes load error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerNoReflexNotes": "No reflex profile notes yet.",
+  "@trainerNoReflexNotes": {
+    "description": "Empty notes"
+  },
+  "trainerMessageAction": "Message",
+  "@trainerMessageAction": {
+    "description": "Message action label"
+  },
+  "trainerAppointmentAction": "Appointment",
+  "@trainerAppointmentAction": {
+    "description": "Appointment action label"
+  },
+  "trainerDaysCount": "{count, plural, =1{{count} day} other{{count} days}}",
+  "@trainerDaysCount": {
+    "description": "Day count label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trainerNoPlannedAppointments": "No planned appointments yet.",
+  "@trainerNoPlannedAppointments": {
+    "description": "Empty appointments"
+  },
+  "trainerAppointmentProposed": "Appointment proposed",
+  "@trainerAppointmentProposed": {
+    "description": "Proposed appointment status line"
+  },
+  "trainerAppointmentFor": "for {name}",
+  "@trainerAppointmentFor": {
+    "description": "Appointment subject line",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "appointmentStatusProposal": "Proposal",
+  "@appointmentStatusProposal": {
+    "description": "Appointment status: proposal"
+  },
+  "appointmentStatusCompletedShort": "Done",
+  "@appointmentStatusCompletedShort": {
+    "description": "Appointment status short: done"
+  },
+  "trainerDayNumber": "Day {day}",
+  "@trainerDayNumber": {
+    "description": "Session day chip",
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "trainerAgeYears": "{count, plural, =1{{count} year} other{{count} years}}",
+  "@trainerAgeYears": {
+    "description": "Age in years",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trainerBandStrongNoticeable": "strongly elevated",
+  "@trainerBandStrongNoticeable": {
+    "description": "Trainer-facing score band stronger than elevated"
+  },
+  "appointmentProposalSent": "{count, plural, =1{1 appointment proposal sent to {name}.} other{{count} appointment proposals sent to {name}.}}",
+  "@appointmentProposalSent": {
+    "description": "Proposal sent confirmation",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "appointmentProposalSentHint": "The other person picks a suitable slot.",
+  "@appointmentProposalSentHint": {
+    "description": "After proposal hint"
+  },
+  "appointmentVideoWith": "Video appointment with {name}",
+  "@appointmentVideoWith": {
+    "description": "Video appointment title",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "appointmentPickSlotsInterview": "Pick 2–4 open slots for the application interview.",
+  "@appointmentPickSlotsInterview": {
+    "description": "Interview scheduling help"
+  },
+  "appointmentPickSlotsClient": "Pick 2–4 open slots — your client will choose one.",
+  "@appointmentPickSlotsClient": {
+    "description": "Client scheduling help"
+  },
+  "appointmentSlotsSelected": "{count, plural, =1{1 slot selected} other{{count} slots selected}}",
+  "@appointmentSlotsSelected": {
+    "description": "Selected slots count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "appointmentResetSlots": "Reset",
+  "@appointmentResetSlots": {
+    "description": "Reset slot selection"
+  },
+  "appointmentLocationOrVideo": "Location or video call",
+  "@appointmentLocationOrVideo": {
+    "description": "Location field label"
+  },
+  "appointmentSelectSlots": "Select Slots",
+  "@appointmentSelectSlots": {
+    "description": "Select slots CTA disabled"
+  },
+  "appointmentSendProposal": "Send Proposal ({count})",
+  "@appointmentSendProposal": {
+    "description": "Send proposal CTA",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "appointmentForOptional": "Appointment for (optional)",
+  "@appointmentForOptional": {
+    "description": "Subject profile picker title"
+  },
+  "appointmentForOptionalHint": "Select profiles if this appointment is for specific children.",
+  "@appointmentForOptionalHint": {
+    "description": "Subject profile picker hint"
+  },
+  "trainerApplicationTitle": "Trainer Application",
+  "@trainerApplicationTitle": {
+    "description": "Application screens title"
+  },
+  "trainerApplicationSubmittedStep": "Application submitted",
+  "@trainerApplicationSubmittedStep": {
+    "description": "Status timeline step"
+  },
+  "trainerApplicationBgCheckStep": "Enhanced background check (level 2) verified by visual review",
+  "@trainerApplicationBgCheckStep": {
+    "description": "Status timeline step"
+  },
+  "trainerApplicationCodeStep": "Activation code created",
+  "@trainerApplicationCodeStep": {
+    "description": "Status timeline step"
+  },
+  "trainerApplicationOpenReview": "Open Review Channel",
+  "@trainerApplicationOpenReview": {
+    "description": "Open review chat CTA"
+  },
+  "trainerApplicationActivate": "Activate Trainer",
+  "@trainerApplicationActivate": {
+    "description": "Activate CTA"
+  },
+  "trainerApplicationApprovedTitle": "Approved",
+  "@trainerApplicationApprovedTitle": {
+    "description": "Status title approved"
+  },
+  "trainerApplicationApprovedBody": "Your application was approved. Activate your verified trainer profile now.",
+  "@trainerApplicationApprovedBody": {
+    "description": "Status body approved"
+  },
+  "trainerApplicationRejectedTitle": "Rejected",
+  "@trainerApplicationRejectedTitle": {
+    "description": "Status title rejected"
+  },
+  "trainerApplicationRejectedBody": "Your application was rejected. See details in the review channel.",
+  "@trainerApplicationRejectedBody": {
+    "description": "Status body rejected"
+  },
+  "trainerApplicationNeedsInfoTitle": "More Info Needed",
+  "@trainerApplicationNeedsInfoTitle": {
+    "description": "Status title needs more info"
+  },
+  "trainerApplicationNeedsInfoBody": "Admins need more information. Please check the review channel.",
+  "@trainerApplicationNeedsInfoBody": {
+    "description": "Status body needs more info"
+  },
+  "trainerApplicationInReviewBody": "Your application is in review. Admins will follow up in the review channel.",
+  "@trainerApplicationInReviewBody": {
+    "description": "Status body in review"
+  },
+  "trainerApplicationNoneTitle": "No Trainer Application Yet",
+  "@trainerApplicationNoneTitle": {
+    "description": "Empty application state"
+  },
+  "trainerApplicationStart": "Start Application",
+  "@trainerApplicationStart": {
+    "description": "Start application CTA"
+  },
+  "trainerApplicationFieldRequired": "This field is required.",
+  "@trainerApplicationFieldRequired": {
+    "description": "Form validation"
+  },
+  "trainerApplicationFullName": "Full name",
+  "@trainerApplicationFullName": {
+    "description": "Form label"
+  },
+  "trainerApplicationEmail": "Email",
+  "@trainerApplicationEmail": {
+    "description": "Form label"
+  },
+  "trainerApplicationEmailInvalid": "A valid email is required.",
+  "@trainerApplicationEmailInvalid": {
+    "description": "Email validation"
+  },
+  "trainerApplicationPhoneOptional": "Phone optional",
+  "@trainerApplicationPhoneOptional": {
+    "description": "Form label"
+  },
+  "trainerApplicationCityRegion": "City / region",
+  "@trainerApplicationCityRegion": {
+    "description": "Form label"
+  },
+  "trainerApplicationBackground": "Professional background",
+  "@trainerApplicationBackground": {
+    "description": "Form label"
+  },
+  "trainerApplicationMotivationOptional": "Motivation optional",
+  "@trainerApplicationMotivationOptional": {
+    "description": "Form label"
+  },
+  "trainerApplicationPublicProfile": "Public trainer profile",
+  "@trainerApplicationPublicProfile": {
+    "description": "Form section"
+  },
+  "trainerApplicationDisplayNameOptional": "Display name optional",
+  "@trainerApplicationDisplayNameOptional": {
+    "description": "Form label"
+  },
+  "trainerApplicationBioOptional": "Bio optional",
+  "@trainerApplicationBioOptional": {
+    "description": "Form label"
+  },
+  "trainerApplicationLocationOptional": "Location optional",
+  "@trainerApplicationLocationOptional": {
+    "description": "Form label"
+  },
+  "trainerApplicationLocationHint": "If you set a location, your profile can appear in trainer search after approval. Only an approximate pin is shown publicly.",
+  "@trainerApplicationLocationHint": {
+    "description": "Form location hint"
+  },
+  "trainerApplicationSubmit": "Submit Application",
+  "@trainerApplicationSubmit": {
+    "description": "Submit form CTA"
+  },
+  "trainerBecomeTitle": "Become a Trainer",
+  "@trainerBecomeTitle": {
+    "description": "Intro app bar"
+  },
+  "trainerBecomeHeadline": "Application and Review",
+  "@trainerBecomeHeadline": {
+    "description": "Intro headline"
+  },
+  "trainerBecomeBody": "Reflex Journey trainers work in a sensitive setting. That is why we review every application manually before a trainer profile is activated.",
+  "@trainerBecomeBody": {
+    "description": "Intro body"
+  },
+  "trainerBecomeBackgroundTitle": "Professional Background",
+  "@trainerBecomeBackgroundTitle": {
+    "description": "Intro card title"
+  },
+  "trainerBecomeBackgroundBody": "Describe your training, experience, or practice in the relevant field.",
+  "@trainerBecomeBackgroundBody": {
+    "description": "Intro card body"
+  },
+  "trainerBecomeBgCheckTitle": "Enhanced Background Check (Level 2)",
+  "@trainerBecomeBgCheckTitle": {
+    "description": "Intro card title"
+  },
+  "trainerBecomeBgCheckBody": "In the review channel, admins request a visual check. The document is not uploaded or stored.",
+  "@trainerBecomeBgCheckBody": {
+    "description": "Intro card body"
+  },
+  "trainerBecomeReviewTitle": "Admin Review Channel",
+  "@trainerBecomeReviewTitle": {
+    "description": "Intro card title"
+  },
+  "trainerBecomeReviewBody": "After submitting, a protected communication channel with admins opens.",
+  "@trainerBecomeReviewBody": {
+    "description": "Intro card body"
+  },
+  "trainerBecomeImportant": "Important: The activation code is created only after a successful review.",
+  "@trainerBecomeImportant": {
+    "description": "Intro important note"
+  },
+  "appointmentProposalsTitle": "Appointment Proposals",
+  "@appointmentProposalsTitle": {
+    "description": "Proposal screen title"
+  },
+  "appointmentNoOpenProposals": "No open appointment proposals.",
+  "@appointmentNoOpenProposals": {
+    "description": "Empty proposals"
+  },
+  "appointmentAddToCalendarTitle": "Add to Calendar?",
+  "@appointmentAddToCalendarTitle": {
+    "description": "Calendar dialog title"
+  },
+  "appointmentAddToCalendarBody": "Should the appointment on {when} be added to your calendar?",
+  "@appointmentAddToCalendarBody": {
+    "description": "Calendar dialog body",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "appointmentAddToCalendarConfirm": "Yes, Add",
+  "@appointmentAddToCalendarConfirm": {
+    "description": "Calendar dialog confirm"
+  },
+  "appointmentConfirmedSnack": "Appointment confirmed!",
+  "@appointmentConfirmedSnack": {
+    "description": "Confirmed snackbar"
+  },
+  "appointmentChooseSlot": "Choose a suitable time:",
+  "@appointmentChooseSlot": {
+    "description": "Slot picker prompt"
+  },
+  "appointmentConfirmSlot": "Confirm Appointment",
+  "@appointmentConfirmSlot": {
+    "description": "Confirm selected slot"
+  },
+  "trainerRequestAccepted": "Request accepted. The client now appears in your overview.",
+  "@trainerRequestAccepted": {
+    "description": "Accept snackbar"
+  },
+  "trainerRequestDeclined": "Request declined.",
+  "@trainerRequestDeclined": {
+    "description": "Decline snackbar"
+  },
+  "trainerClientRegularDays": "{packageName} · {dayLabel} · {days} days consistent",
+  "@trainerClientRegularDays": {
+    "description": "Client list subtitle",
+    "placeholders": {
+      "packageName": {
+        "type": "String"
+      },
+      "dayLabel": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "trainerAppStatusSubmitted": "Submitted",
+  "@trainerAppStatusSubmitted": {
+    "description": "Application status"
+  },
+  "trainerAppStatusInReview": "In Review",
+  "@trainerAppStatusInReview": {
+    "description": "Application status"
+  },
+  "trainerAppStatusNeedsInfo": "More Info Needed",
+  "@trainerAppStatusNeedsInfo": {
+    "description": "Application status"
+  },
+  "trainerAppStatusApproved": "Approved",
+  "@trainerAppStatusApproved": {
+    "description": "Application status"
+  },
+  "trainerAppStatusRejected": "Rejected",
+  "@trainerAppStatusRejected": {
+    "description": "Application status"
+  },
+  "trainerAppStatusWithdrawn": "Withdrawn",
+  "@trainerAppStatusWithdrawn": {
+    "description": "Application status"
+  },
+  "calendarImportTitle": "Import calendar entry for {title}",
+  "@calendarImportTitle": {
+    "description": "ICS share sheet title",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "osmAttribution": "OpenStreetMap contributors",
+  "@osmAttribution": {
+    "description": "Map attribution"
+  },
+  "trainerMapTapHint": "Tap the map",
+  "@trainerMapTapHint": {
+    "description": "Location picker hint"
+  },
+  "trainerFallbackName": "Trainer",
+  "@trainerFallbackName": {
+    "description": "Fallback trainer display name"
+  },
+  "trainerYourTrainer": "Your Trainer",
+  "@trainerYourTrainer": {
+    "description": "Chat channel title for client"
+  },
+  "trainerYourClient": "Your Client",
+  "@trainerYourClient": {
+    "description": "Chat channel title for trainer"
+  },
+  "trainerChatFallback": "Chat",
+  "@trainerChatFallback": {
+    "description": "Chat fallback title"
+  },
+  "trainerDiagNotSignedIn": "auth.uid: not signed in",
+  "@trainerDiagNotSignedIn": {
+    "description": "Debug line"
+  },
+  "trainerDiagAuthUid": "auth.uid: {id}",
+  "@trainerDiagAuthUid": {
+    "description": "Debug line",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerDiagEmail": "email: {email}",
+  "@trainerDiagEmail": {
+    "description": "Debug line",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerDiagProfileRole": "profiles.role: {role}",
+  "@trainerDiagProfileRole": {
+    "description": "Debug line",
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerDiagProfileName": "profiles.display_name: {name}",
+  "@trainerDiagProfileName": {
+    "description": "Debug line",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerDiagScopeError": "{scope}: error {error}",
+  "@trainerDiagScopeError": {
+    "description": "Debug error line",
+    "placeholders": {
+      "scope": {
+        "type": "String"
+      },
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerDiagRelationshipsTotal": "relationships total: {count}",
+  "@trainerDiagRelationshipsTotal": {
+    "description": "Debug line",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trainerDiagRelationshipsActive": "relationships active: {count}",
+  "@trainerDiagRelationshipsActive": {
+    "description": "Debug line",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trainerDiagRelationshipStatuses": "relationship statuses: {statuses}",
+  "@trainerDiagRelationshipStatuses": {
+    "description": "Debug line",
+    "placeholders": {
+      "statuses": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerDiagRelationshipClientIds": "relationship client_ids:",
+  "@trainerDiagRelationshipClientIds": {
+    "description": "Debug line"
+  },
+  "trainerDiagAppointmentsAsTrainer": "appointments as trainer: {count}",
+  "@trainerDiagAppointmentsAsTrainer": {
+    "description": "Debug line",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trainerDiagAppointmentTraineeIds": "appointment trainee_ids:",
+  "@trainerDiagAppointmentTraineeIds": {
+    "description": "Debug line"
+  },
+  "trainerDiagReconcileOk": "reconcile_trainer_clients: ok",
+  "@trainerDiagReconcileOk": {
+    "description": "Debug line"
+  },
+  "trainerDiagGetClientsRows": "get_trainer_clients rows: {count}",
+  "@trainerDiagGetClientsRows": {
+    "description": "Debug line",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trainerActivateFailed": "Couldn't activate: {error}",
+  "@trainerActivateFailed": {
+    "description": "Activation error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "trainerNotSignedIn": "Not signed in.",
+  "@trainerNotSignedIn": {
+    "description": "Auth error shown in trainer flows"
+  },
+  "trainerPkgMoro": "Moro",
+  "@trainerPkgMoro": {
+    "description": "Short Moro package label on trainer clients list"
+  },
+  "trainerPkgSpinalGalant": "Spinal Galant",
+  "@trainerPkgSpinalGalant": {
+    "description": "Short spinal Galant label as shown on trainer clients list"
+  },
+  "trainerPkgTlr": "TLR",
+  "@trainerPkgTlr": {
+    "description": "Short TLR package label on trainer clients list"
+  },
+  "trainerPkgBabkin": "Babkin",
+  "@trainerPkgBabkin": {
+    "description": "Short Babkin package label on trainer clients list"
+  },
+  "trainerPkgSuchSaug": "Root/Suck",
+  "@trainerPkgSuchSaug": {
+    "description": "Short rooting-sucking package label on trainer clients list"
+  },
+  "trainerPkgAtnr": "ATNR",
+  "@trainerPkgAtnr": {
+    "description": "Short ATNR package label on trainer clients list"
+  },
+  "trainerPkgStnr": "STNR",
+  "@trainerPkgStnr": {
+    "description": "Short STNR package label on trainer clients list"
+  },
+  "trainerPkgBabinski": "Babinski",
+  "@trainerPkgBabinski": {
+    "description": "Short Babinski package label on trainer clients list"
+  },
+  "trainerPkgLandau": "Landau",
+  "@trainerPkgLandau": {
+    "description": "Short Landau package label on trainer clients list"
   }
 }

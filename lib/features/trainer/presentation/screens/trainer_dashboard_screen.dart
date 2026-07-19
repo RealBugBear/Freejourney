@@ -232,6 +232,7 @@ class _TrainerPriorityOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
@@ -241,14 +242,14 @@ class _TrainerPriorityOverview extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Arbeitsübersicht',
+              l10n.trainerWorkOverview,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
             ),
             const SizedBox(height: 4),
             Text(
-              'Priorisiert nach Paketübergängen, Anfragen, Terminen und Beobachtungen.',
+              l10n.trainerWorkOverviewSubtitle,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: cs.onSurfaceVariant,
                     height: 1.35,
@@ -261,31 +262,31 @@ class _TrainerPriorityOverview extends StatelessWidget {
               children: [
                 _PriorityTile(
                   icon: Icons.flag_outlined,
-                  label: 'Paketübergänge',
+                  label: l10n.trainerPackageTransitions,
                   value: _transitionCount,
                   highlighted: _transitionCount > 0,
                 ),
                 _PriorityTile(
                   icon: Icons.link_outlined,
-                  label: 'Offene Einladungen',
+                  label: l10n.trainerOpenInvites,
                   value: openInviteCount,
                 ),
                 _PriorityTile(
                   icon: Icons.inbox_outlined,
-                  label: 'Neue Anfragen',
+                  label: l10n.trainerNewRequests,
                   value: incomingRequestCount,
                   highlighted: incomingRequestCount > 0,
                   onTap: onOpenRequests,
                 ),
                 _PriorityTile(
                   icon: Icons.event_available_outlined,
-                  label: 'Termine',
+                  label: l10n.trainerAppointmentsMetric,
                   value: _upcomingAppointmentCount,
                   onTap: onOpenCalendar,
                 ),
                 _PriorityTile(
                   icon: Icons.edit_note_outlined,
-                  label: 'Neue Beobachtungen',
+                  label: l10n.trainerNewObservations,
                   value: observationCount,
                   highlighted: observationCount > 0,
                 ),
@@ -370,6 +371,7 @@ class _OpenInvitesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     if (openInvites.isEmpty) return const SizedBox.shrink();
     final visible = openInvites.take(3).toList();
 
@@ -381,7 +383,7 @@ class _OpenInvitesCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Offene Einladungen',
+              l10n.trainerOpenInvites,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -392,7 +394,7 @@ class _OpenInvitesCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 6),
                 child: Text(
-                  '${openInvites.length - visible.length} weitere Einladung${openInvites.length - visible.length == 1 ? '' : 'en'} offen',
+                  l10n.trainerMoreInvitesOpen(openInvites.length - visible.length),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -412,7 +414,10 @@ class _InviteCodeRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final created = DateFormat('dd.MM.yyyy', 'de_DE').format(invite.createdAt);
+    final created = DateFormat(
+      'dd.MM.yyyy',
+      Localizations.localeOf(context).toString(),
+    ).format(invite.createdAt);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
@@ -447,6 +452,7 @@ class _RecentObservationsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     if (observations.isEmpty) return const SizedBox.shrink();
 
     return Card(
@@ -457,7 +463,7 @@ class _RecentObservationsCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Neue Beobachtungen',
+              l10n.trainerNewObservations,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -492,8 +498,10 @@ class _ObservationPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final date =
-        DateFormat('dd.MM. HH:mm', 'de_DE').format(observation.recordedAt);
+    final date = DateFormat(
+      'dd.MM. HH:mm',
+      Localizations.localeOf(context).toString(),
+    ).format(observation.recordedAt);
 
     return ListTile(
       contentPadding: EdgeInsets.zero,
@@ -514,13 +522,14 @@ class _SharedExperienceReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       child: ListTile(
         leading: const Icon(Icons.rate_review_outlined),
-        title: const Text('Geteilte Erfahrungen prüfen'),
-        subtitle: const Text(
-          'Moderierte Erfahrungsbeiträge aus laufenden Paketen im Blick behalten.',
+        title: Text(l10n.trainerReviewSharedExperiences),
+        subtitle: Text(
+          l10n.trainerReviewSharedExperiencesBody,
         ),
         trailing: const Icon(Icons.chevron_right),
         onTap: () => context.push(Routes.community),
@@ -534,6 +543,7 @@ class _TrainerClientsDebugPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final debugAsync = ref.watch(trainerClientsDebugProvider);
     final textStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
           fontFamily: 'monospace',
@@ -556,14 +566,14 @@ class _TrainerClientsDebugPanel extends ConsumerWidget {
             childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
             leading: const Icon(Icons.bug_report_outlined, size: 18),
             title: Text(
-              'Diagnose Trainer-Verknüpfung',
+              l10n.trainerConnectionCheck,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
             ),
             subtitle: debugAsync.when(
-              loading: () => const Text('Prüfe Datenbank...'),
-              error: (e, _) => const Text('Fehler in der Diagnose'),
+              loading: () => Text(l10n.trainerConnectionChecking),
+              error: (e, _) => Text(l10n.trainerConnectionCheckError),
               data: (debug) {
                 String? rowsLine;
                 for (final line in debug.split('\n')) {
@@ -572,11 +582,11 @@ class _TrainerClientsDebugPanel extends ConsumerWidget {
                     break;
                   }
                 }
-                return Text(rowsLine ?? 'Zum Öffnen antippen');
+                return Text(rowsLine ?? l10n.trainerConnectionTapToOpen);
               },
             ),
             trailing: IconButton(
-              tooltip: 'Diagnose aktualisieren',
+              tooltip: l10n.trainerConnectionRefresh,
               icon: const Icon(Icons.refresh, size: 18),
               onPressed: () {
                 ref.invalidate(trainerClientsDebugProvider);
@@ -586,7 +596,7 @@ class _TrainerClientsDebugPanel extends ConsumerWidget {
             children: [
               debugAsync.when(
                 loading: () => const LinearProgressIndicator(),
-                error: (e, _) => Text('Diagnose Fehler: $e', style: textStyle),
+                error: (e, _) => Text(l10n.trainerConnectionCheckFailed('$e'), style: textStyle),
                 data: (debug) => Text(debug, style: textStyle),
               ),
             ],
@@ -619,6 +629,7 @@ class _InviteBannerState extends State<_InviteBanner> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
@@ -655,7 +666,7 @@ class _InviteBannerState extends State<_InviteBanner> {
             const SizedBox(height: 4),
             Center(
               child: Text(
-                'Einmaliger Code — teile ihn mit deinem Klienten',
+                l10n.trainerInviteCodeOnce,
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     fontSize: 11),
@@ -668,7 +679,7 @@ class _InviteBannerState extends State<_InviteBanner> {
                 Expanded(
                   child: OutlinedButton.icon(
                     icon: const Icon(Icons.copy, size: 16),
-                    label: const Text('Code kopieren'),
+                    label: Text(widget.l10n.trainerCopyCode),
                     onPressed: () => _copyCode(context),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.primary,
@@ -683,7 +694,7 @@ class _InviteBannerState extends State<_InviteBanner> {
                           height: 14,
                           child: CircularProgressIndicator(strokeWidth: 2))
                       : const Icon(Icons.refresh, size: 16),
-                  label: const Text('Neu'),
+                  label: Text(widget.l10n.trainerInviteNew),
                   onPressed: _loading ? null : () => _generate(context),
                   style: OutlinedButton.styleFrom(
                       foregroundColor:
@@ -704,7 +715,7 @@ class _InviteBannerState extends State<_InviteBanner> {
                             strokeWidth: 2, color: Colors.white))
                     : const Icon(Icons.add_link, size: 18),
                 label: Text(_loading
-                    ? 'Wird erstellt…'
+                    ? widget.l10n.trainerInviteCreating
                     : widget.l10n.trainerGenerateCode),
                 onPressed: _loading ? null : () => _generate(context),
                 style: ElevatedButton.styleFrom(
@@ -749,7 +760,7 @@ class _InviteBannerState extends State<_InviteBanner> {
     if (_code == null) return;
     Clipboard.setData(ClipboardData(text: _code!));
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Code $_formattedCode kopiert!')),
+      SnackBar(content: Text(widget.l10n.trainerCodeCopiedWithValue(_formattedCode))),
     );
   }
 }
@@ -770,6 +781,7 @@ class _DiscoveryVisibilityCardState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final profileAsync = ref.watch(ownTrainerProfileProvider);
 
     return profileAsync.when(
@@ -806,7 +818,7 @@ class _DiscoveryVisibilityCardState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Standort fehlt',
+                          l10n.trainerLocationMissingTitle,
                           style:
                               Theme.of(context).textTheme.titleSmall?.copyWith(
                                     fontWeight: FontWeight.w700,
@@ -814,7 +826,7 @@ class _DiscoveryVisibilityCardState
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Dein Trainerprofil ist aktiv, erscheint aber erst in der Trainersuche, wenn ein Standort gesetzt ist. Öffentlich wird nur ein ungefährer Pin angezeigt.',
+                          l10n.trainerLocationMissingBody,
                           style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
@@ -851,7 +863,7 @@ class _DiscoveryVisibilityCardState
                           ? Icons.keyboard_arrow_up
                           : Icons.location_on_outlined,
                     ),
-                    label: Text(_expanded ? 'Schließen' : 'Standort setzen'),
+                    label: Text(_expanded ? l10n.close : l10n.trainerSetLocation),
                   ),
                   if (_expanded) ...[
                     const SizedBox(width: 8),
@@ -866,7 +878,7 @@ class _DiscoveryVisibilityCardState
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
                           : const Icon(Icons.check),
-                      label: const Text('Speichern'),
+                      label: Text(l10n.save),
                     ),
                   ],
                 ],
@@ -883,6 +895,7 @@ class _DiscoveryVisibilityCardState
     if (location == null) return;
 
     setState(() => _saving = true);
+    final l10n = AppLocalizations.of(context);
     try {
       await ref.read(trainerProfileRepositoryProvider).updateLocation(
             location.latitude,
@@ -891,14 +904,13 @@ class _DiscoveryVisibilityCardState
       ref.invalidate(ownTrainerProfileProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Standort gespeichert')),
+          SnackBar(content: Text(l10n.trainerLocationSaved)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('Standort konnte nicht gespeichert werden: $e')),
+          SnackBar(content: Text(l10n.trainerLocationSaveFailed('$e'))),
         );
       }
     } finally {
@@ -933,6 +945,7 @@ class _ClientCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final progress = client.currentDay / 28.0;
 
     Color badgeColor;
@@ -941,15 +954,15 @@ class _ClientCard extends ConsumerWidget {
 
     if (_isComplete) {
       badgeColor = AppColors.success;
-      badgeLabel = 'Tag 28 ✓';
+      badgeLabel = l10n.trainerDay28Badge;
       buttonLabel = _needsAppointment
           ? l10n.trainerAppointmentMissing
           : l10n.trainerScheduleAppointment;
     } else if (_isNearCompletion) {
       badgeColor = AppColors.warning;
-      badgeLabel = '${client.remainingTrainingDays} Tage übrig';
+      badgeLabel = l10n.trainerDaysLeft(client.remainingTrainingDays);
       buttonLabel = _needsAppointment
-          ? 'Termin vorschlagen'
+          ? l10n.trainerProposeAppointment
           : l10n.trainerScheduleAppointment;
     } else {
       badgeColor = AppColors.primary;
@@ -1045,7 +1058,7 @@ class _ClientCard extends ConsumerWidget {
                   ),
                 ),
                 child: Text(
-                  'Noch ${client.remainingTrainingDays} Tage: Termin für das isometrische Training des nächsten Pakets vorschlagen.',
+                  l10n.trainerProposeNextPackage(client.remainingTrainingDays),
                   style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 13,
@@ -1060,7 +1073,7 @@ class _ClientCard extends ConsumerWidget {
               children: [
                 IconButton(
                   icon: const Icon(Icons.insights_outlined, size: 20),
-                  tooltip: 'Detail öffnen',
+                  tooltip: l10n.trainerOpenDetail,
                   onPressed: () => context.push(
                     Routes.trainerClientDetail.replaceFirst(
                       ':clientId',
@@ -1071,7 +1084,7 @@ class _ClientCard extends ConsumerWidget {
                 const SizedBox(width: 4),
                 IconButton(
                   icon: const Icon(Icons.chat_bubble_outline, size: 20),
-                  tooltip: 'Chat öffnen',
+                  tooltip: l10n.trainerOpenChat,
                   onPressed: () =>
                       _openClientChat(context, ref, client.clientId),
                 ),
@@ -1205,8 +1218,9 @@ class _AppointmentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final date = appointment.scheduledFor != null
-        ? DateFormat('E, d. MMM · HH:mm', 'de_DE')
+        ? DateFormat('E, d. MMM · HH:mm', Localizations.localeOf(context).toString())
             .format(appointment.scheduledFor!)
         : '–';
 
@@ -1218,7 +1232,9 @@ class _AppointmentTile extends StatelessWidget {
             Icon(Icons.calendar_today_outlined, size: 20, color: _statusColor),
       ),
       title: Text(
-        appointment.traineeName,
+        appointment.traineeName.isEmpty
+            ? l10n.clientFallbackName
+            : appointment.traineeName,
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       subtitle: Column(
@@ -1270,8 +1286,15 @@ class _AppointmentTile extends StatelessWidget {
     }
 
     try {
+      final calL10n = AppLocalizations.of(context);
+      final traineeLabel = appt.traineeName.isEmpty
+          ? calL10n.clientFallbackName
+          : appt.traineeName;
       await CalendarService.instance.createCalendarEvent(
-        title: '${appt.title} (mit ${appt.traineeName})',
+        title: calL10n.appointmentCalendarEventTitle(
+          appt.title,
+          traineeLabel,
+        ),
         start: appt.scheduledFor!,
         duration: Duration(minutes: appt.durationMinutes),
         location: appt.location,
@@ -1280,7 +1303,11 @@ class _AppointmentTile extends StatelessWidget {
       );
     } catch (e) {
       messenger.showSnackBar(
-        SnackBar(content: Text('Kalender konnte nicht geöffnet werden: $e')),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context).appointmentCalendarOpenFailed('$e'),
+          ),
+        ),
       );
     }
   }

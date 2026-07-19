@@ -5703,6 +5703,949 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Bitte gib einen Namen an.'**
   String get reflexProfileNameRequired;
+
+  /// Trainer dashboard overview title
+  ///
+  /// In de, this message translates to:
+  /// **'Arbeitsübersicht'**
+  String get trainerWorkOverview;
+
+  /// Trainer dashboard overview subtitle
+  ///
+  /// In de, this message translates to:
+  /// **'Priorisiert nach Paketübergängen, Anfragen, Terminen und Beobachtungen.'**
+  String get trainerWorkOverviewSubtitle;
+
+  /// Overview metric
+  ///
+  /// In de, this message translates to:
+  /// **'Paketübergänge'**
+  String get trainerPackageTransitions;
+
+  /// Overview metric / section
+  ///
+  /// In de, this message translates to:
+  /// **'Offene Einladungen'**
+  String get trainerOpenInvites;
+
+  /// Overview metric
+  ///
+  /// In de, this message translates to:
+  /// **'Neue Anfragen'**
+  String get trainerNewRequests;
+
+  /// Overview metric
+  ///
+  /// In de, this message translates to:
+  /// **'Termine'**
+  String get trainerAppointmentsMetric;
+
+  /// Overview metric / section
+  ///
+  /// In de, this message translates to:
+  /// **'Neue Beobachtungen'**
+  String get trainerNewObservations;
+
+  /// Collapsed open invites count
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, =1{1 weitere Einladung offen} other{{count} weitere Einladungen offen}}'**
+  String trainerMoreInvitesOpen(int count);
+
+  /// Dashboard CTA to moderated experiences
+  ///
+  /// In de, this message translates to:
+  /// **'Geteilte Erfahrungen prüfen'**
+  String get trainerReviewSharedExperiences;
+
+  /// Dashboard shared experiences body
+  ///
+  /// In de, this message translates to:
+  /// **'Moderierte Erfahrungsbeiträge aus laufenden Paketen im Blick behalten.'**
+  String get trainerReviewSharedExperiencesBody;
+
+  /// Debug panel title (avoid claim-word diagnose)
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer-Verknüpfung prüfen'**
+  String get trainerConnectionCheck;
+
+  /// Debug loading
+  ///
+  /// In de, this message translates to:
+  /// **'Prüfe Datenbank...'**
+  String get trainerConnectionChecking;
+
+  /// Debug error state
+  ///
+  /// In de, this message translates to:
+  /// **'Fehler bei der Prüfung'**
+  String get trainerConnectionCheckError;
+
+  /// Debug collapsed hint
+  ///
+  /// In de, this message translates to:
+  /// **'Zum Öffnen antippen'**
+  String get trainerConnectionTapToOpen;
+
+  /// Debug refresh tooltip
+  ///
+  /// In de, this message translates to:
+  /// **'Prüfung aktualisieren'**
+  String get trainerConnectionRefresh;
+
+  /// Debug error with detail
+  ///
+  /// In de, this message translates to:
+  /// **'Prüfungsfehler: {error}'**
+  String trainerConnectionCheckFailed(String error);
+
+  /// Invite code helper
+  ///
+  /// In de, this message translates to:
+  /// **'Einmaliger Code — teile ihn mit deinem Klienten'**
+  String get trainerInviteCodeOnce;
+
+  /// Regenerate invite code button
+  ///
+  /// In de, this message translates to:
+  /// **'Neu'**
+  String get trainerInviteNew;
+
+  /// Invite code creating state
+  ///
+  /// In de, this message translates to:
+  /// **'Wird erstellt…'**
+  String get trainerInviteCreating;
+
+  /// SnackBar after copying invite code
+  ///
+  /// In de, this message translates to:
+  /// **'Code {code} kopiert!'**
+  String trainerCodeCopiedWithValue(String code);
+
+  /// Location banner title
+  ///
+  /// In de, this message translates to:
+  /// **'Standort fehlt'**
+  String get trainerLocationMissingTitle;
+
+  /// Location banner body
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Trainerprofil ist aktiv, erscheint aber erst in der Trainersuche, wenn ein Standort gesetzt ist. Öffentlich wird nur ein ungefährer Pin angezeigt.'**
+  String get trainerLocationMissingBody;
+
+  /// Expand location picker CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Standort setzen'**
+  String get trainerSetLocation;
+
+  /// Location save snackbar
+  ///
+  /// In de, this message translates to:
+  /// **'Standort gespeichert'**
+  String get trainerLocationSaved;
+
+  /// Location save error
+  ///
+  /// In de, this message translates to:
+  /// **'Standort konnte nicht gespeichert werden: {error}'**
+  String trainerLocationSaveFailed(String error);
+
+  /// Client card day-28 badge
+  ///
+  /// In de, this message translates to:
+  /// **'Tag 28 ✓'**
+  String get trainerDay28Badge;
+
+  /// Days remaining badge
+  ///
+  /// In de, this message translates to:
+  /// **'{days} Tage übrig'**
+  String trainerDaysLeft(int days);
+
+  /// Propose appointment CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Termin vorschlagen'**
+  String get trainerProposeAppointment;
+
+  /// Package transition hint
+  ///
+  /// In de, this message translates to:
+  /// **'Noch {days} Tage: Termin für das isometrische Training des nächsten Pakets vorschlagen.'**
+  String trainerProposeNextPackage(int days);
+
+  /// Open client detail tooltip
+  ///
+  /// In de, this message translates to:
+  /// **'Detail öffnen'**
+  String get trainerOpenDetail;
+
+  /// Open chat tooltip
+  ///
+  /// In de, this message translates to:
+  /// **'Chat öffnen'**
+  String get trainerOpenChat;
+
+  /// Fallback client label on detail screen
+  ///
+  /// In de, this message translates to:
+  /// **'Client'**
+  String get trainerClientFallback;
+
+  /// Shared profiles section
+  ///
+  /// In de, this message translates to:
+  /// **'Freigegebene Reflexprofile'**
+  String get trainerSharedReflexProfiles;
+
+  /// Profiles load error
+  ///
+  /// In de, this message translates to:
+  /// **'Profile konnten nicht geladen werden: {error}'**
+  String trainerProfilesLoadFailed(String error);
+
+  /// Empty shared profiles
+  ///
+  /// In de, this message translates to:
+  /// **'Keine Profile freigegeben.'**
+  String get trainerNoProfilesShared;
+
+  /// Profile without completed assessment
+  ///
+  /// In de, this message translates to:
+  /// **'{name}: Noch kein abgeschlossenes Reflexprofil.'**
+  String trainerNoCompletedReflexProfile(String name);
+
+  /// Observations section title
+  ///
+  /// In de, this message translates to:
+  /// **'Beobachtungen'**
+  String get trainerObservations;
+
+  /// Empty observations
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine geteilten Beobachtungen.'**
+  String get trainerNoSharedObservations;
+
+  /// Note saved snackbar
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil-Notiz gespeichert.'**
+  String get trainerReflexNoteSaved;
+
+  /// Note save error
+  ///
+  /// In de, this message translates to:
+  /// **'Notiz konnte nicht gespeichert werden: {error}'**
+  String trainerNoteSaveFailed(String error);
+
+  /// Notes section title
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil-Notizen'**
+  String get trainerReflexNotesTitle;
+
+  /// Notes section body
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Notizen haften am Profil und sind bei bestehender Freigabe auch für spätere Trainer als Übergabe sichtbar.'**
+  String get trainerReflexNotesBody;
+
+  /// Note field hint
+  ///
+  /// In de, this message translates to:
+  /// **'Notiz zur Begleitung oder Übergabe'**
+  String get trainerReflexNoteHint;
+
+  /// Save note button
+  ///
+  /// In de, this message translates to:
+  /// **'Notiz speichern'**
+  String get trainerSaveNote;
+
+  /// Notes load error
+  ///
+  /// In de, this message translates to:
+  /// **'Notizen konnten nicht geladen werden: {error}'**
+  String trainerNotesLoadFailed(String error);
+
+  /// Empty notes
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine Reflexprofil-Notizen.'**
+  String get trainerNoReflexNotes;
+
+  /// Message action label
+  ///
+  /// In de, this message translates to:
+  /// **'Nachricht'**
+  String get trainerMessageAction;
+
+  /// Appointment action label
+  ///
+  /// In de, this message translates to:
+  /// **'Termin'**
+  String get trainerAppointmentAction;
+
+  /// Day count label
+  ///
+  /// In de, this message translates to:
+  /// **'{count} Tage'**
+  String trainerDaysCount(int count);
+
+  /// Empty appointments
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine geplanten Termine.'**
+  String get trainerNoPlannedAppointments;
+
+  /// Proposed appointment status line
+  ///
+  /// In de, this message translates to:
+  /// **'Termin vorgeschlagen'**
+  String get trainerAppointmentProposed;
+
+  /// Appointment subject line
+  ///
+  /// In de, this message translates to:
+  /// **'für {name}'**
+  String trainerAppointmentFor(String name);
+
+  /// Appointment status: proposal
+  ///
+  /// In de, this message translates to:
+  /// **'Vorschlag'**
+  String get appointmentStatusProposal;
+
+  /// Appointment status short: done
+  ///
+  /// In de, this message translates to:
+  /// **'Erledigt'**
+  String get appointmentStatusCompletedShort;
+
+  /// Session day chip
+  ///
+  /// In de, this message translates to:
+  /// **'Tag {day}'**
+  String trainerDayNumber(int day);
+
+  /// Age in years
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, =1{{count} Jahr} other{{count} Jahre}}'**
+  String trainerAgeYears(int count);
+
+  /// Trainer-facing score band stronger than elevated
+  ///
+  /// In de, this message translates to:
+  /// **'stark auffällig'**
+  String get trainerBandStrongNoticeable;
+
+  /// Proposal sent confirmation
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, =1{1 Terminvorschlag an {name} gesendet.} other{{count} Terminvorschläge an {name} gesendet.}}'**
+  String appointmentProposalSent(int count, String name);
+
+  /// After proposal hint
+  ///
+  /// In de, this message translates to:
+  /// **'Die andere Person wählt einen passenden Slot aus.'**
+  String get appointmentProposalSentHint;
+
+  /// Video appointment title
+  ///
+  /// In de, this message translates to:
+  /// **'Video-Termin mit {name}'**
+  String appointmentVideoWith(String name);
+
+  /// Interview scheduling help
+  ///
+  /// In de, this message translates to:
+  /// **'Wähle 2–4 freie Slots für das Bewerbungsgespräch aus.'**
+  String get appointmentPickSlotsInterview;
+
+  /// Client scheduling help
+  ///
+  /// In de, this message translates to:
+  /// **'Wähle 2–4 freie Slots aus — dein Klient sucht sich einen aus.'**
+  String get appointmentPickSlotsClient;
+
+  /// Selected slots count
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, =1{1 Slot ausgewählt} other{{count} Slots ausgewählt}}'**
+  String appointmentSlotsSelected(int count);
+
+  /// Reset slot selection
+  ///
+  /// In de, this message translates to:
+  /// **'Zurücksetzen'**
+  String get appointmentResetSlots;
+
+  /// Location field label
+  ///
+  /// In de, this message translates to:
+  /// **'Ort oder Video-Call'**
+  String get appointmentLocationOrVideo;
+
+  /// Select slots CTA disabled
+  ///
+  /// In de, this message translates to:
+  /// **'Slots auswählen'**
+  String get appointmentSelectSlots;
+
+  /// Send proposal CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Vorschlag senden ({count})'**
+  String appointmentSendProposal(int count);
+
+  /// Subject profile picker title
+  ///
+  /// In de, this message translates to:
+  /// **'Termin für (optional)'**
+  String get appointmentForOptional;
+
+  /// Subject profile picker hint
+  ///
+  /// In de, this message translates to:
+  /// **'Wähle Profile aus, wenn dieser Termin für bestimmte Kinder ist.'**
+  String get appointmentForOptionalHint;
+
+  /// Application screens title
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer-Bewerbung'**
+  String get trainerApplicationTitle;
+
+  /// Status timeline step
+  ///
+  /// In de, this message translates to:
+  /// **'Bewerbung eingereicht'**
+  String get trainerApplicationSubmittedStep;
+
+  /// Status timeline step
+  ///
+  /// In de, this message translates to:
+  /// **'Führungszeugnis Stufe 2 per Sichtprüfung geprüft'**
+  String get trainerApplicationBgCheckStep;
+
+  /// Status timeline step
+  ///
+  /// In de, this message translates to:
+  /// **'Aktivierungscode erzeugt'**
+  String get trainerApplicationCodeStep;
+
+  /// Open review chat CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Review-Kanal öffnen'**
+  String get trainerApplicationOpenReview;
+
+  /// Activate CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer aktivieren'**
+  String get trainerApplicationActivate;
+
+  /// Status title approved
+  ///
+  /// In de, this message translates to:
+  /// **'Freigegeben'**
+  String get trainerApplicationApprovedTitle;
+
+  /// Status body approved
+  ///
+  /// In de, this message translates to:
+  /// **'Deine Bewerbung wurde freigegeben. Aktiviere jetzt dein verifiziertes Trainerprofil.'**
+  String get trainerApplicationApprovedBody;
+
+  /// Status title rejected
+  ///
+  /// In de, this message translates to:
+  /// **'Abgelehnt'**
+  String get trainerApplicationRejectedTitle;
+
+  /// Status body rejected
+  ///
+  /// In de, this message translates to:
+  /// **'Deine Bewerbung wurde abgelehnt. Details findest du im Review-Kanal.'**
+  String get trainerApplicationRejectedBody;
+
+  /// Status title needs more info
+  ///
+  /// In de, this message translates to:
+  /// **'Rückfrage offen'**
+  String get trainerApplicationNeedsInfoTitle;
+
+  /// Status body needs more info
+  ///
+  /// In de, this message translates to:
+  /// **'Die Admins benötigen weitere Informationen. Bitte prüfe den Review-Kanal.'**
+  String get trainerApplicationNeedsInfoBody;
+
+  /// Status body in review
+  ///
+  /// In de, this message translates to:
+  /// **'Deine Bewerbung ist im Review. Die Admins melden sich im Review-Kanal zur weiteren Prüfung.'**
+  String get trainerApplicationInReviewBody;
+
+  /// Empty application state
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine Trainer-Bewerbung'**
+  String get trainerApplicationNoneTitle;
+
+  /// Start application CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Bewerbung starten'**
+  String get trainerApplicationStart;
+
+  /// Form validation
+  ///
+  /// In de, this message translates to:
+  /// **'Dieses Feld ist erforderlich.'**
+  String get trainerApplicationFieldRequired;
+
+  /// Form label
+  ///
+  /// In de, this message translates to:
+  /// **'Vollständiger Name'**
+  String get trainerApplicationFullName;
+
+  /// Form label
+  ///
+  /// In de, this message translates to:
+  /// **'E-Mail'**
+  String get trainerApplicationEmail;
+
+  /// Email validation
+  ///
+  /// In de, this message translates to:
+  /// **'Gültige E-Mail erforderlich.'**
+  String get trainerApplicationEmailInvalid;
+
+  /// Form label
+  ///
+  /// In de, this message translates to:
+  /// **'Telefon optional'**
+  String get trainerApplicationPhoneOptional;
+
+  /// Form label
+  ///
+  /// In de, this message translates to:
+  /// **'Stadt / Region'**
+  String get trainerApplicationCityRegion;
+
+  /// Form label
+  ///
+  /// In de, this message translates to:
+  /// **'Beruflicher Hintergrund'**
+  String get trainerApplicationBackground;
+
+  /// Form label
+  ///
+  /// In de, this message translates to:
+  /// **'Motivation optional'**
+  String get trainerApplicationMotivationOptional;
+
+  /// Form section
+  ///
+  /// In de, this message translates to:
+  /// **'Öffentliches Trainerprofil'**
+  String get trainerApplicationPublicProfile;
+
+  /// Form label
+  ///
+  /// In de, this message translates to:
+  /// **'Anzeigename optional'**
+  String get trainerApplicationDisplayNameOptional;
+
+  /// Form label
+  ///
+  /// In de, this message translates to:
+  /// **'Bio optional'**
+  String get trainerApplicationBioOptional;
+
+  /// Form label
+  ///
+  /// In de, this message translates to:
+  /// **'Standort optional'**
+  String get trainerApplicationLocationOptional;
+
+  /// Form location hint
+  ///
+  /// In de, this message translates to:
+  /// **'Wenn du einen Standort setzt, kann dein Profil nach Freigabe in der Trainer-Suche erscheinen. Öffentlich wird nur ein ungefährer Pin angezeigt.'**
+  String get trainerApplicationLocationHint;
+
+  /// Submit form CTA
+  ///
+  /// In de, this message translates to:
+  /// **'Bewerbung einreichen'**
+  String get trainerApplicationSubmit;
+
+  /// Intro app bar
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer werden'**
+  String get trainerBecomeTitle;
+
+  /// Intro headline
+  ///
+  /// In de, this message translates to:
+  /// **'Bewerbung und Prüfung'**
+  String get trainerBecomeHeadline;
+
+  /// Intro body
+  ///
+  /// In de, this message translates to:
+  /// **'Reflex Journey-Trainer arbeiten in einem sensiblen Umfeld. Deshalb prüfen wir jede Bewerbung manuell, bevor ein Trainerprofil freigeschaltet wird.'**
+  String get trainerBecomeBody;
+
+  /// Intro card title
+  ///
+  /// In de, this message translates to:
+  /// **'Fachlicher Hintergrund'**
+  String get trainerBecomeBackgroundTitle;
+
+  /// Intro card body
+  ///
+  /// In de, this message translates to:
+  /// **'Beschreibe deine Ausbildung, Erfahrung oder Praxis im relevanten Bereich.'**
+  String get trainerBecomeBackgroundBody;
+
+  /// Intro card title
+  ///
+  /// In de, this message translates to:
+  /// **'Erweitertes Führungszeugnis Stufe 2'**
+  String get trainerBecomeBgCheckTitle;
+
+  /// Intro card body
+  ///
+  /// In de, this message translates to:
+  /// **'Im Review-Kanal fordern Admins die Sichtprüfung an. Das Dokument wird nicht hochgeladen oder gespeichert.'**
+  String get trainerBecomeBgCheckBody;
+
+  /// Intro card title
+  ///
+  /// In de, this message translates to:
+  /// **'Admin-Review-Kanal'**
+  String get trainerBecomeReviewTitle;
+
+  /// Intro card body
+  ///
+  /// In de, this message translates to:
+  /// **'Nach dem Absenden öffnet sich ein geschützter Kommunikationskanal mit den Admins.'**
+  String get trainerBecomeReviewBody;
+
+  /// Intro important note
+  ///
+  /// In de, this message translates to:
+  /// **'Wichtig: Der Aktivierungscode wird erst nach erfolgreicher Prüfung erzeugt.'**
+  String get trainerBecomeImportant;
+
+  /// Proposal screen title
+  ///
+  /// In de, this message translates to:
+  /// **'Terminvorschläge'**
+  String get appointmentProposalsTitle;
+
+  /// Empty proposals
+  ///
+  /// In de, this message translates to:
+  /// **'Keine offenen Terminvorschläge.'**
+  String get appointmentNoOpenProposals;
+
+  /// Calendar dialog title
+  ///
+  /// In de, this message translates to:
+  /// **'Zum Kalender hinzufügen?'**
+  String get appointmentAddToCalendarTitle;
+
+  /// Calendar dialog body
+  ///
+  /// In de, this message translates to:
+  /// **'Soll der Termin am {when} in deinen Kalender eingetragen werden?'**
+  String appointmentAddToCalendarBody(String when);
+
+  /// Calendar dialog confirm
+  ///
+  /// In de, this message translates to:
+  /// **'Ja, hinzufügen'**
+  String get appointmentAddToCalendarConfirm;
+
+  /// Confirmed snackbar
+  ///
+  /// In de, this message translates to:
+  /// **'Termin bestätigt!'**
+  String get appointmentConfirmedSnack;
+
+  /// Slot picker prompt
+  ///
+  /// In de, this message translates to:
+  /// **'Wähle einen passenden Termin:'**
+  String get appointmentChooseSlot;
+
+  /// Confirm selected slot
+  ///
+  /// In de, this message translates to:
+  /// **'Termin bestätigen'**
+  String get appointmentConfirmSlot;
+
+  /// Accept snackbar
+  ///
+  /// In de, this message translates to:
+  /// **'Anfrage angenommen. Der Klient erscheint jetzt in deiner Übersicht.'**
+  String get trainerRequestAccepted;
+
+  /// Decline snackbar
+  ///
+  /// In de, this message translates to:
+  /// **'Anfrage abgelehnt.'**
+  String get trainerRequestDeclined;
+
+  /// Client list subtitle
+  ///
+  /// In de, this message translates to:
+  /// **'{packageName} · {dayLabel} · {days} Tage regelmäßig'**
+  String trainerClientRegularDays(
+      String packageName, String dayLabel, int days);
+
+  /// Application status
+  ///
+  /// In de, this message translates to:
+  /// **'Eingereicht'**
+  String get trainerAppStatusSubmitted;
+
+  /// Application status
+  ///
+  /// In de, this message translates to:
+  /// **'In Prüfung'**
+  String get trainerAppStatusInReview;
+
+  /// Application status
+  ///
+  /// In de, this message translates to:
+  /// **'Rückfrage offen'**
+  String get trainerAppStatusNeedsInfo;
+
+  /// Application status
+  ///
+  /// In de, this message translates to:
+  /// **'Freigegeben'**
+  String get trainerAppStatusApproved;
+
+  /// Application status
+  ///
+  /// In de, this message translates to:
+  /// **'Abgelehnt'**
+  String get trainerAppStatusRejected;
+
+  /// Application status
+  ///
+  /// In de, this message translates to:
+  /// **'Zurückgezogen'**
+  String get trainerAppStatusWithdrawn;
+
+  /// ICS share sheet title
+  ///
+  /// In de, this message translates to:
+  /// **'Kalendereintrag für {title} importieren'**
+  String calendarImportTitle(String title);
+
+  /// Map attribution
+  ///
+  /// In de, this message translates to:
+  /// **'OpenStreetMap contributors'**
+  String get osmAttribution;
+
+  /// Location picker hint
+  ///
+  /// In de, this message translates to:
+  /// **'Tippe auf die Karte'**
+  String get trainerMapTapHint;
+
+  /// Fallback trainer display name
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer'**
+  String get trainerFallbackName;
+
+  /// Chat channel title for client
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Trainer'**
+  String get trainerYourTrainer;
+
+  /// Chat channel title for trainer
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Nutzer'**
+  String get trainerYourClient;
+
+  /// Chat fallback title
+  ///
+  /// In de, this message translates to:
+  /// **'Chat'**
+  String get trainerChatFallback;
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'auth.uid: nicht eingeloggt'**
+  String get trainerDiagNotSignedIn;
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'auth.uid: {id}'**
+  String trainerDiagAuthUid(String id);
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'email: {email}'**
+  String trainerDiagEmail(String email);
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'profiles.role: {role}'**
+  String trainerDiagProfileRole(String role);
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'profiles.display_name: {name}'**
+  String trainerDiagProfileName(String name);
+
+  /// Debug error line
+  ///
+  /// In de, this message translates to:
+  /// **'{scope}: Fehler {error}'**
+  String trainerDiagScopeError(String scope, String error);
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'relationships gesamt: {count}'**
+  String trainerDiagRelationshipsTotal(int count);
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'relationships active: {count}'**
+  String trainerDiagRelationshipsActive(int count);
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'relationship statuses: {statuses}'**
+  String trainerDiagRelationshipStatuses(String statuses);
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'relationship client_ids:'**
+  String get trainerDiagRelationshipClientIds;
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'appointments als trainer: {count}'**
+  String trainerDiagAppointmentsAsTrainer(int count);
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'appointment trainee_ids:'**
+  String get trainerDiagAppointmentTraineeIds;
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'reconcile_trainer_clients: ok'**
+  String get trainerDiagReconcileOk;
+
+  /// Debug line
+  ///
+  /// In de, this message translates to:
+  /// **'get_trainer_clients rows: {count}'**
+  String trainerDiagGetClientsRows(int count);
+
+  /// Activation error
+  ///
+  /// In de, this message translates to:
+  /// **'Fehler beim Aktivieren: {error}'**
+  String trainerActivateFailed(String error);
+
+  /// Auth error shown in trainer flows
+  ///
+  /// In de, this message translates to:
+  /// **'Nicht eingeloggt.'**
+  String get trainerNotSignedIn;
+
+  /// Short Moro package label on trainer clients list
+  ///
+  /// In de, this message translates to:
+  /// **'Moro'**
+  String get trainerPkgMoro;
+
+  /// Short spinal Galant label as shown on trainer clients list
+  ///
+  /// In de, this message translates to:
+  /// **'Spinal Galant'**
+  String get trainerPkgSpinalGalant;
+
+  /// Short TLR package label on trainer clients list
+  ///
+  /// In de, this message translates to:
+  /// **'TLR'**
+  String get trainerPkgTlr;
+
+  /// Short Babkin package label on trainer clients list
+  ///
+  /// In de, this message translates to:
+  /// **'Babkin'**
+  String get trainerPkgBabkin;
+
+  /// Short rooting-sucking package label on trainer clients list
+  ///
+  /// In de, this message translates to:
+  /// **'Such-Saug'**
+  String get trainerPkgSuchSaug;
+
+  /// Short ATNR package label on trainer clients list
+  ///
+  /// In de, this message translates to:
+  /// **'ATNR'**
+  String get trainerPkgAtnr;
+
+  /// Short STNR package label on trainer clients list
+  ///
+  /// In de, this message translates to:
+  /// **'STNR'**
+  String get trainerPkgStnr;
+
+  /// Short Babinski package label on trainer clients list
+  ///
+  /// In de, this message translates to:
+  /// **'Babinski'**
+  String get trainerPkgBabinski;
+
+  /// Short Landau package label on trainer clients list
+  ///
+  /// In de, this message translates to:
+  /// **'Landau'**
+  String get trainerPkgLandau;
 }
 
 class _AppLocalizationsDelegate

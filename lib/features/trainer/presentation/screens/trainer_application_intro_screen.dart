@@ -3,14 +3,16 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class TrainerApplicationIntroScreen extends StatelessWidget {
   const TrainerApplicationIntroScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Trainer werden')),
+      appBar: AppBar(title: Text(l10n.trainerBecomeTitle)),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -21,33 +23,26 @@ class TrainerApplicationIntroScreen extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            'Bewerbung und Prüfung',
+            l10n.trainerBecomeHeadline,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 12),
-          const Text(
-            'Reflex Journey-Trainer arbeiten in einem sensiblen Umfeld. Deshalb '
-            'prüfen wir jede Bewerbung manuell, bevor ein Trainerprofil '
-            'freigeschaltet wird.',
-          ),
+          Text(l10n.trainerBecomeBody),
           const SizedBox(height: 20),
-          const _RequirementTile(
+          _RequirementTile(
             icon: Icons.work_outline,
-            title: 'Fachlicher Hintergrund',
-            body:
-                'Beschreibe deine Ausbildung, Erfahrung oder Praxis im relevanten Bereich.',
+            title: l10n.trainerBecomeBackgroundTitle,
+            body: l10n.trainerBecomeBackgroundBody,
           ),
-          const _RequirementTile(
+          _RequirementTile(
             icon: Icons.admin_panel_settings_outlined,
-            title: 'Erweitertes Führungszeugnis Stufe 2',
-            body:
-                'Im Review-Kanal fordern Admins die Sichtprüfung an. Das Dokument wird nicht hochgeladen oder gespeichert.',
+            title: l10n.trainerBecomeBgCheckTitle,
+            body: l10n.trainerBecomeBgCheckBody,
           ),
-          const _RequirementTile(
+          _RequirementTile(
             icon: Icons.chat_bubble_outline,
-            title: 'Admin-Review-Kanal',
-            body:
-                'Nach dem Absenden öffnet sich ein geschützter Kommunikationskanal mit den Admins.',
+            title: l10n.trainerBecomeReviewTitle,
+            body: l10n.trainerBecomeReviewBody,
           ),
           const SizedBox(height: 16),
           Container(
@@ -56,15 +51,13 @@ class TrainerApplicationIntroScreen extends StatelessWidget {
               color: AppColors.warning.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Text(
-              'Wichtig: Der Aktivierungscode wird erst nach erfolgreicher Prüfung erzeugt.',
-            ),
+            child: Text(l10n.trainerBecomeImportant),
           ),
           const SizedBox(height: 24),
           FilledButton.icon(
             onPressed: () => context.push(Routes.trainerApplicationForm),
             icon: const Icon(Icons.arrow_forward),
-            label: const Text('Bewerbung starten'),
+            label: Text(l10n.trainerApplicationStart),
           ),
         ],
       ),

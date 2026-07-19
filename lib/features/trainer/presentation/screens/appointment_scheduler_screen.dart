@@ -220,7 +220,7 @@ class _AppointmentSchedulerScreenState
                     size: 64, color: AppColors.primary),
                 const SizedBox(height: 16),
                 Text(
-                  '${_selectedSlots.length} Terminvorschlag${_selectedSlots.length > 1 ? "schläge" : ""} an ${widget.client.displayName} gesendet.',
+                  l10n.appointmentProposalSent(_selectedSlots.length, widget.client.displayName),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: AppColors.primary,
@@ -229,7 +229,7 @@ class _AppointmentSchedulerScreenState
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Die andere Person wählt einen passenden Slot aus.',
+                  l10n.appointmentProposalSentHint,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant),
@@ -254,7 +254,7 @@ class _AppointmentSchedulerScreenState
           // ── Header ───────────────────────────────────────────────────────
           Text(
             _isReviewFlow
-                ? 'Video-Termin mit ${widget.client.displayName}'
+                ? l10n.appointmentVideoWith(widget.client.displayName)
                 : l10n.appointmentWith(widget.client.displayName),
             style: Theme.of(context)
                 .textTheme
@@ -263,8 +263,8 @@ class _AppointmentSchedulerScreenState
           ),
           Text(
             _isReviewFlow
-                ? 'Wähle 2–4 freie Slots für das Bewerbungsgespräch aus.'
-                : 'Wähle 2–4 freie Slots aus — dein Klient sucht sich einen aus.',
+                ? l10n.appointmentPickSlotsInterview
+                : l10n.appointmentPickSlotsClient,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
@@ -286,7 +286,7 @@ class _AppointmentSchedulerScreenState
                       color: AppColors.primary, size: 18),
                   const SizedBox(width: 8),
                   Text(
-                    '${_selectedSlots.length} Slot${_selectedSlots.length > 1 ? "s" : ""} ausgewählt',
+                    l10n.appointmentSlotsSelected(_selectedSlots.length),
                     style: const TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
@@ -296,7 +296,7 @@ class _AppointmentSchedulerScreenState
                   GestureDetector(
                     onTap: () => setState(() => _selectedSlots.clear()),
                     child: Text(
-                      'Zurücksetzen',
+                      l10n.appointmentResetSlots,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontSize: 12),
@@ -389,7 +389,7 @@ class _AppointmentSchedulerScreenState
             controller: _locationCtrl,
             decoration: InputDecoration(
               labelText: _isReviewFlow && kVideoCallsEnabled
-                  ? 'Ort oder Video-Call'
+                  ? l10n.appointmentLocationOrVideo
                   : l10n.appointmentLocationLabel,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
@@ -430,8 +430,8 @@ class _AppointmentSchedulerScreenState
                   : const Icon(Icons.send_rounded, size: 18),
               label: Text(
                 _selectedSlots.isEmpty
-                    ? 'Slots auswählen'
-                    : 'Vorschlag senden (${_selectedSlots.length})',
+                    ? l10n.appointmentSelectSlots
+                    : l10n.appointmentSendProposal(_selectedSlots.length),
                 style: const TextStyle(fontSize: 16),
               ),
             ),
@@ -470,7 +470,7 @@ class _ProfileSelector extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Termin für (optional)',
+              AppLocalizations.of(context).appointmentForOptional,
               style: Theme.of(context)
                   .textTheme
                   .titleSmall
@@ -478,7 +478,7 @@ class _ProfileSelector extends ConsumerWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              'Wähle Profile aus, wenn dieser Termin für bestimmte Kinder ist.',
+              AppLocalizations.of(context).appointmentForOptionalHint,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -533,7 +533,7 @@ class _SlotGrid extends StatelessWidget {
       children: byDay.entries.map((entry) {
         final daySlots = entry.value;
         final dayLabel =
-            DateFormat('EEE, d. MMM', 'de_DE').format(daySlots.first.start);
+            DateFormat('EEE, d. MMM', Localizations.localeOf(context).toString()).format(daySlots.first.start);
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),

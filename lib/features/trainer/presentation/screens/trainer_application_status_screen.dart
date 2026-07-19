@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../domain/models/trainer_application.dart';
 import '../providers/trainer_application_provider.dart';
 import '../providers/trainer_provider.dart'
     show activateTrainerRole, userRoleProvider;
@@ -13,10 +15,11 @@ class TrainerApplicationStatusScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final applicationAsync = ref.watch(ownTrainerApplicationProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Trainer-Bewerbung')),
+      appBar: AppBar(title: Text(l10n.trainerApplicationTitle)),
       body: applicationAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => _ErrorState(
@@ -37,26 +40,26 @@ class TrainerApplicationStatusScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(20),
               children: [
                 Text(
-                  application.statusLabel,
+                  application.statusLabel(l10n),
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  _statusBody(application.statusLabel),
+                  _statusBody(l10n, application.status),
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 20),
-                const _CheckRow(
+                _CheckRow(
                   checked: true,
-                  title: 'Bewerbung eingereicht',
+                  title: l10n.trainerApplicationSubmittedStep,
                 ),
                 _CheckRow(
                   checked: application.hasBackgroundCheck,
-                  title: 'Führungszeugnis Stufe 2 per Sichtprüfung geprüft',
+                  title: l10n.trainerApplicationBgCheckStep,
                 ),
                 _CheckRow(
                   checked: application.activationCode != null,
-                  title: 'Aktivierungscode erzeugt',
+                  title: l10n.trainerApplicationCodeStep,
                 ),
                 if (application.reviewChannelId != null) ...[
                   const SizedBox(height: 20),
@@ -68,7 +71,7 @@ class TrainerApplicationStatusScreen extends ConsumerWidget {
                       ),
                     ),
                     icon: const Icon(Icons.chat_bubble_outline),
-                    label: const Text('Review-Kanal öffnen'),
+                    label: Text(l10n.trainerApplicationOpenReview),
                   ),
                 ],
                 if (application.activationCode != null) ...[
@@ -89,12 +92,14 @@ class TrainerApplicationStatusScreen extends ConsumerWidget {
                       ref.invalidate(ownTrainerApplicationProvider);
                       if (context.mounted) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (context.mounted) context.go(Routes.trainerDashboard);
+                          if (context.mounted) {
+                            context.go(Routes.trainerDashboard);
+                          }
                         });
                       }
                     },
                     icon: const Icon(Icons.verified_outlined),
-                    label: const Text('Trainer aktivieren'),
+                    label: Text(l10n.trainerApplicationActivate),
                   ),
                 ],
               ],
@@ -105,16 +110,16 @@ class TrainerApplicationStatusScreen extends ConsumerWidget {
     );
   }
 
-  String _statusBody(String label) {
-    return switch (label) {
-      'Freigegeben' =>
-        'Deine Bewerbung wurde freigegeben. Aktiviere jetzt dein verifiziertes Trainerprofil.',
-      'Abgelehnt' =>
-        'Deine Bewerbung wurde abgelehnt. Details findest du im Review-Kanal.',
-      'Rückfrage offen' =>
-        'Die Admins benötigen weitere Informationen. Bitte prüfe den Review-Kanal.',
-      _ =>
-        'Deine Bewerbung ist im Review. Die Admins melden sich im Review-Kanal zur weiteren Prüfung.',
+  String _statusBody(
+    AppLocalizations l10n,
+    TrainerApplicationStatus status,
+  ) {
+    return switch (status) {
+      TrainerApplicationStatus.approved => l10n.trainerApplicationApprovedBody,
+      TrainerApplicationStatus.rejected => l10n.trainerApplicationRejectedBody,
+      TrainerApplicationStatus.needsMoreInfo =>
+        l10n.trainerApplicationNeedsInfoBody,
+      _ => l10n.trainerApplicationInReviewBody,
     };
   }
 }
@@ -130,7 +135,9 @@ class _CheckRow extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: Icon(
         checked ? Icons.check_circle : Icons.radio_button_unchecked,
-        color: checked ? AppColors.success : Theme.of(context).colorScheme.onSurfaceVariant,
+        color: checked
+            ? AppColors.success
+            : Theme.of(context).colorScheme.onSurfaceVariant,
       ),
       title: Text(title),
     );
@@ -142,24 +149,27 @@ class _NoApplicationState extends StatelessWidget {
   final VoidCallback onStart;
 
   @override
-  Widget build(BuildContext context) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.assignment_outlined, size: 56),
-              const SizedBox(height: 12),
-              const Text('Noch keine Trainer-Bewerbung'),
-              const SizedBox(height: 16),
-              FilledButton(
-                onPressed: onStart,
-                child: const Text('Bewerbung starten'),
-              ),
-            ],
-          ),
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.assignment_outlined, size: 56),
+            const SizedBox(height: 12),
+            Text(l10n.trainerApplicationNoneTitle),
+            const SizedBox(height: 16),
+            FilledButton(
+              onPressed: onStart,
+              child: Text(l10n.trainerApplicationStart),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _ErrorState extends StatelessWidget {
@@ -168,18 +178,20 @@ class _ErrorState extends StatelessWidget {
   final VoidCallback onRetry;
 
   @override
-  Widget build(BuildContext context) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(message, textAlign: TextAlign.center),
-              const SizedBox(height: 12),
-              TextButton(
-                  onPressed: onRetry, child: const Text('Erneut versuchen')),
-            ],
-          ),
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(message, textAlign: TextAlign.center),
+            const SizedBox(height: 12),
+            TextButton(onPressed: onRetry, child: Text(l10n.retry)),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }

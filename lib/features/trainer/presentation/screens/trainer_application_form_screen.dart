@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../providers/trainer_application_provider.dart';
 import '../widgets/trainer_location_picker_widget.dart';
 
@@ -88,14 +89,11 @@ class _TrainerApplicationFormScreenState
     return trimmed.isEmpty ? null : trimmed;
   }
 
-  String? _required(String? value) => value == null || value.trim().isEmpty
-      ? 'Dieses Feld ist erforderlich.'
-      : null;
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Trainer-Bewerbung')),
+      appBar: AppBar(title: Text(l10n.trainerApplicationTitle)),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -104,71 +102,82 @@ class _TrainerApplicationFormScreenState
             TextFormField(
               controller: _fullNameController,
               decoration:
-                  const InputDecoration(labelText: 'Vollständiger Name'),
-              validator: _required,
+                  InputDecoration(labelText: l10n.trainerApplicationFullName),
+              validator: (value) => value == null || value.trim().isEmpty
+                  ? l10n.trainerApplicationFieldRequired
+                  : null,
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _emailController,
-              decoration: const InputDecoration(labelText: 'E-Mail'),
+              decoration:
+                  InputDecoration(labelText: l10n.trainerApplicationEmail),
               keyboardType: TextInputType.emailAddress,
               validator: (value) => value == null || !value.contains('@')
-                  ? 'Gültige E-Mail erforderlich.'
+                  ? l10n.trainerApplicationEmailInvalid
                   : null,
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _phoneController,
-              decoration: const InputDecoration(labelText: 'Telefon optional'),
+              decoration: InputDecoration(
+                labelText: l10n.trainerApplicationPhoneOptional,
+              ),
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _cityController,
-              decoration: const InputDecoration(labelText: 'Stadt / Region'),
+              decoration: InputDecoration(
+                labelText: l10n.trainerApplicationCityRegion,
+              ),
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _backgroundController,
-              decoration:
-                  const InputDecoration(labelText: 'Beruflicher Hintergrund'),
+              decoration: InputDecoration(
+                labelText: l10n.trainerApplicationBackground,
+              ),
               maxLines: 4,
-              validator: _required,
+              validator: (value) => value == null || value.trim().isEmpty
+                  ? l10n.trainerApplicationFieldRequired
+                  : null,
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _motivationController,
-              decoration:
-                  const InputDecoration(labelText: 'Motivation optional'),
+              decoration: InputDecoration(
+                labelText: l10n.trainerApplicationMotivationOptional,
+              ),
               maxLines: 3,
             ),
             const SizedBox(height: 24),
             Text(
-              'Öffentliches Trainerprofil',
+              l10n.trainerApplicationPublicProfile,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
             TextFormField(
               controller: _displayNameController,
-              decoration: const InputDecoration(
-                labelText: 'Anzeigename optional',
+              decoration: InputDecoration(
+                labelText: l10n.trainerApplicationDisplayNameOptional,
               ),
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _bioController,
-              decoration: const InputDecoration(labelText: 'Bio optional'),
+              decoration: InputDecoration(
+                labelText: l10n.trainerApplicationBioOptional,
+              ),
               maxLines: 3,
             ),
             const SizedBox(height: 16),
             Text(
-              'Standort optional',
+              l10n.trainerApplicationLocationOptional,
               style: Theme.of(context).textTheme.titleSmall,
             ),
             const SizedBox(height: 6),
-            const Text(
-              'Wenn du einen Standort setzt, kann dein Profil nach Freigabe in der Trainer-Suche erscheinen. Öffentlich wird nur ein ungefährer Pin angezeigt.',
-            ),
+            Text(l10n.trainerApplicationLocationHint),
             const SizedBox(height: 8),
             SizedBox(
               height: 240,
@@ -197,7 +206,7 @@ class _TrainerApplicationFormScreenState
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.send_outlined),
-              label: const Text('Bewerbung einreichen'),
+              label: Text(l10n.trainerApplicationSubmit),
             ),
           ],
         ),
