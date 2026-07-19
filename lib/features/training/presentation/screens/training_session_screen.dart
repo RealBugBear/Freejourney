@@ -144,8 +144,8 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
     if (settings.remindersEnabled) {
       await NotificationService.instance.suppressTodayAndReschedule(
         startMinutes: settings.reminderStartMinutes,
-        titleDe: l10n.reminderSessionTitle,
-        bodyDe: l10n.trainingReminderSessionBody,
+        title: l10n.reminderSessionTitle,
+        body: l10n.trainingReminderSessionBody,
       );
     }
 

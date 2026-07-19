@@ -4676,6 +4676,216 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Kalender konnte nicht geöffnet werden: {error}'**
   String appointmentCalendarOpenFailed(String error);
+
+  /// Onboarding hint body for the dashboard tab
+  ///
+  /// In de, this message translates to:
+  /// **'Hier steuerst du deinen täglichen Rhythmus und dokumentierst, was du wahrnimmst.'**
+  String get hintDashboardBody;
+
+  /// Dashboard onboarding hint bullet: starting a session
+  ///
+  /// In de, this message translates to:
+  /// **'Starte deine geführte Einheit oder den Routine-Modus.'**
+  String get hintDashboardItemStart;
+
+  /// Dashboard onboarding hint bullet: logging a session
+  ///
+  /// In de, this message translates to:
+  /// **'Trage eine Einheit ein, wenn du heute geübt hast.'**
+  String get hintDashboardItemLog;
+
+  /// Dashboard onboarding hint bullet: capturing experiences
+  ///
+  /// In de, this message translates to:
+  /// **'Halte Erfahrungen direkt nach der Einheit fest.'**
+  String get hintDashboardItemNote;
+
+  /// Onboarding hint body for the history tab
+  ///
+  /// In de, this message translates to:
+  /// **'Der Verlauf hilft dir, Muster zu sehen, ohne einzelne Tage zu überbewerten.'**
+  String get hintProgressBody;
+
+  /// History onboarding hint bullet: combined overview
+  ///
+  /// In de, this message translates to:
+  /// **'Sieh Trainingstage, Beobachtungen und Einträge zusammen.'**
+  String get hintProgressItemOverview;
+
+  /// History onboarding hint bullet: adding observations
+  ///
+  /// In de, this message translates to:
+  /// **'Ergänze Beobachtungen, wenn dir etwas auffällt.'**
+  String get hintProgressItemObserve;
+
+  /// History onboarding hint bullet: journal entries
+  ///
+  /// In de, this message translates to:
+  /// **'Öffne einzelne Journal-Einträge für mehr Kontext.'**
+  String get hintProgressItemJournal;
+
+  /// Onboarding hint body for the guidance tab
+  ///
+  /// In de, this message translates to:
+  /// **'Hier liegt alles, was mit Trainer, Kommunikation und Terminen zu tun hat.'**
+  String get hintAccompanimentBody;
+
+  /// Guidance onboarding hint bullet: finding trainers
+  ///
+  /// In de, this message translates to:
+  /// **'Finde Trainer oder verwalte deine aktive Begleitung.'**
+  String get hintAccompanimentItemTrainer;
+
+  /// Guidance onboarding hint bullet: messages
+  ///
+  /// In de, this message translates to:
+  /// **'Öffne Nachrichten und bleib mit deinem Trainer im Kontakt.'**
+  String get hintAccompanimentItemChat;
+
+  /// Guidance onboarding hint bullet: appointments
+  ///
+  /// In de, this message translates to:
+  /// **'Sieh Terminvorschläge und geplante Termine an.'**
+  String get hintAccompanimentItemAppointments;
+
+  /// Onboarding hint body for the profile tab
+  ///
+  /// In de, this message translates to:
+  /// **'Im Profil findest du Konto, Einstellungen und administrative Zugänge.'**
+  String get hintProfileBody;
+
+  /// Profile onboarding hint bullet: settings
+  ///
+  /// In de, this message translates to:
+  /// **'Passe Sprache, Darstellung und Erinnerungen an.'**
+  String get hintProfileItemSettings;
+
+  /// Profile onboarding hint bullet: account management
+  ///
+  /// In de, this message translates to:
+  /// **'Verwalte Account, Passwort und Profilinformationen.'**
+  String get hintProfileItemAccount;
+
+  /// Profile onboarding hint bullet: role-gated areas
+  ///
+  /// In de, this message translates to:
+  /// **'Öffne Trainer- oder Admin-Bereiche, wenn sie für dich freigeschaltet sind.'**
+  String get hintProfileItemRoles;
+
+  /// Onboarding hint sheet checkbox to hide the hint permanently
+  ///
+  /// In de, this message translates to:
+  /// **'Nicht mehr anzeigen'**
+  String get hintDontShowAgain;
+
+  /// Onboarding hint sheet confirm button
+  ///
+  /// In de, this message translates to:
+  /// **'Verstanden'**
+  String get hintGotIt;
+
+  /// Onboarding hint sheet button to keep showing the hint
+  ///
+  /// In de, this message translates to:
+  /// **'Später nochmal zeigen'**
+  String get hintShowLater;
+
+  /// Android notification channel name shown in system settings
+  ///
+  /// In de, this message translates to:
+  /// **'Training-Erinnerungen'**
+  String get notificationChannelTrainingReminders;
+
+  /// Foreground push fallback title for an incoming video call
+  ///
+  /// In de, this message translates to:
+  /// **'Eingehender Video-Call'**
+  String get pushVideoCallTitle;
+
+  /// Foreground push fallback body for an incoming video call
+  ///
+  /// In de, this message translates to:
+  /// **'Tippe, um den Anruf zu öffnen.'**
+  String get pushVideoCallBody;
+
+  /// Foreground push fallback title for a video call request
+  ///
+  /// In de, this message translates to:
+  /// **'Video-Call Anfrage'**
+  String get pushCallRequestTitle;
+
+  /// Foreground push fallback body for a video call request
+  ///
+  /// In de, this message translates to:
+  /// **'Ein Klient möchte einen Video-Call starten.'**
+  String get pushCallRequestBody;
+
+  /// Foreground push fallback title for new appointment proposals
+  ///
+  /// In de, this message translates to:
+  /// **'Neue Terminvorschläge'**
+  String get pushAppointmentProposalTitle;
+
+  /// Foreground push fallback body for new appointment proposals
+  ///
+  /// In de, this message translates to:
+  /// **'Wähle einen passenden Termin aus.'**
+  String get pushAppointmentProposalBody;
+
+  /// Foreground push fallback title for a confirmed appointment
+  ///
+  /// In de, this message translates to:
+  /// **'Termin bestätigt'**
+  String get pushAppointmentConfirmedTitle;
+
+  /// Foreground push fallback body for a confirmed appointment
+  ///
+  /// In de, this message translates to:
+  /// **'Tippe, um den Termin in deinen Kalender einzutragen.'**
+  String get pushAppointmentConfirmedBody;
+
+  /// Foreground push fallback title for a training reminder
+  ///
+  /// In de, this message translates to:
+  /// **'Training-Erinnerung'**
+  String get pushTrainingReminderTitle;
+
+  /// Foreground push fallback body for a training reminder
+  ///
+  /// In de, this message translates to:
+  /// **'Tippe, um dein Training zu öffnen.'**
+  String get pushTrainingReminderBody;
+
+  /// Trainer notification title when a trainee reaches day 25
+  ///
+  /// In de, this message translates to:
+  /// **'Termin vorbereiten — {traineeName}'**
+  String trainerAlertPrepareTitle(String traineeName);
+
+  /// Trainer notification body when a trainee reaches day 25
+  ///
+  /// In de, this message translates to:
+  /// **'{traineeName} ist bei Tag 25. In ~3 Tagen ist die Isometrische Partnerübung fällig.'**
+  String trainerAlertPrepareBody(String traineeName);
+
+  /// Trainer notification title when a trainee reaches day 28
+  ///
+  /// In de, this message translates to:
+  /// **'{traineeName} hat Tag 28 erreicht!'**
+  String trainerAlertDay28Title(String traineeName);
+
+  /// Trainer notification body when a trainee reaches day 28
+  ///
+  /// In de, this message translates to:
+  /// **'Jetzt Termin für die Isometrische Partnerübung buchen.'**
+  String get trainerAlertDay28Body;
+
+  /// Fallback name when a trainee has no display name or email
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Trainee'**
+  String get traineeFallbackName;
 }
 
 class _AppLocalizationsDelegate

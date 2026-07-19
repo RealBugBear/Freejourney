@@ -12,6 +12,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../config/app_config.dart';
 import '../../config/launch_flags.dart';
 import '../../firebase_options.dart';
+import '../l10n/active_localizations.dart';
 import '../logging/app_logger.dart';
 import '../notifications/notification_service.dart';
 
@@ -222,30 +223,27 @@ class PushNotificationService {
       appLogger.i('Call push suppressed: kVideoCallsEnabled is false');
       return;
     }
+    // Data-only pushes carry no display copy; fall back to localized
+    // defaults in the active app language (no BuildContext here).
+    final l10n = await lookupActiveAppLocalizations();
     final title = message.notification?.title ??
-        (type == 'video_call'
-            ? 'Eingehender Video-Call'
-            : type == 'call_request'
-                ? 'Video-Call Anfrage'
-                : type == 'appointment_proposal'
-                    ? 'Neue Terminvorschläge'
-                    : type == 'appointment_confirmed'
-                        ? 'Termin bestätigt'
-                        : type == 'training_reminder'
-                            ? 'Training-Erinnerung'
-                            : 'Reflex Journey');
+        switch (type) {
+          'video_call' => l10n.pushVideoCallTitle,
+          'call_request' => l10n.pushCallRequestTitle,
+          'appointment_proposal' => l10n.pushAppointmentProposalTitle,
+          'appointment_confirmed' => l10n.pushAppointmentConfirmedTitle,
+          'training_reminder' => l10n.pushTrainingReminderTitle,
+          _ => 'Reflex Journey',
+        };
     final body = message.notification?.body ??
-        (type == 'video_call'
-            ? 'Tippe, um den Anruf zu öffnen.'
-            : type == 'call_request'
-                ? 'Ein Klient möchte einen Video-Call starten.'
-                : type == 'appointment_proposal'
-                    ? 'Wähle einen passenden Termin aus.'
-                    : type == 'appointment_confirmed'
-                        ? 'Tippe, um den Termin in deinen Kalender einzutragen.'
-                        : type == 'training_reminder'
-                            ? 'Tippe, um dein Training zu öffnen.'
-                            : '');
+        switch (type) {
+          'video_call' => l10n.pushVideoCallBody,
+          'call_request' => l10n.pushCallRequestBody,
+          'appointment_proposal' => l10n.pushAppointmentProposalBody,
+          'appointment_confirmed' => l10n.pushAppointmentConfirmedBody,
+          'training_reminder' => l10n.pushTrainingReminderBody,
+          _ => '',
+        };
 
     await NotificationService.instance.showInstantNotification(
       id: DateTime.now().millisecondsSinceEpoch.remainder(100000),

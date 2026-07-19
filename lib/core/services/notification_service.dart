@@ -17,6 +17,22 @@ class ReminderDiagnostics {
   });
 }
 
+/// Display copy for one local notification. The service itself carries no
+/// language; callers resolve these strings from the ARB catalogs.
+class LocalNotificationCopy {
+  final String title;
+  final String body;
+  final String channelName;
+  final String channelDescription;
+
+  const LocalNotificationCopy({
+    required this.title,
+    required this.body,
+    required this.channelName,
+    required this.channelDescription,
+  });
+}
+
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
   factory NotificationService() => _instance;
@@ -76,7 +92,10 @@ class NotificationService {
     return iosGranted && androidGranted;
   }
 
-  Future<void> scheduleDailyReminder(DateTime lastTrainingTime) async {
+  Future<void> scheduleDailyReminder(
+    DateTime lastTrainingTime, {
+    required LocalNotificationCopy copy,
+  }) async {
     final now = tz.TZDateTime.now(tz.local);
     final scheduledLocal = computeNextDailyReminderDateForTesting(
       now: now,
@@ -100,18 +119,18 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       dailyReminderId,
-      'Zeit für deine Einheit',
-      'Nimm dir Zeit für deine heutige Reflexintegrations-Einheit.',
+      copy.title,
+      copy.body,
       scheduledDate,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
           'daily_reminder',
-          'Tägliche Erinnerung',
-          channelDescription: 'Erinnerung an die tägliche Einheit',
+          copy.channelName,
+          channelDescription: copy.channelDescription,
           importance: Importance.max,
           priority: Priority.high,
         ),
-        iOS: DarwinNotificationDetails(),
+        iOS: const DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
@@ -120,9 +139,9 @@ class NotificationService {
   Future<void> scheduleReminderWindow({
     required DateTime date,
     required HabitWindow window,
+    required LocalNotificationCopy copy,
     QuietHours? quietHours,
     int baseId = 100,
-    String? message,
   }) async {
     final quiet = quietHours ??
         const QuietHours(
@@ -142,18 +161,18 @@ class NotificationService {
 
       await flutterLocalNotificationsPlugin.zonedSchedule(
         baseId,
-        'Zeit für deine Einheit',
-        message ?? 'Dein bevorzugtes Einheitsfenster hat begonnen.',
+        copy.title,
+        copy.body,
         scheduledDate,
-        const NotificationDetails(
+        NotificationDetails(
           android: AndroidNotificationDetails(
             'daily_reminder_window',
-            'Einheitsfenster',
-            channelDescription: 'Erinnerungen innerhalb des Wunschzeitraums',
+            copy.channelName,
+            channelDescription: copy.channelDescription,
             importance: Importance.max,
             priority: Priority.high,
           ),
-          iOS: DarwinNotificationDetails(),
+          iOS: const DarwinNotificationDetails(),
         ),
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       );
@@ -164,7 +183,7 @@ class NotificationService {
     required HabitWindow window,
     required QuietHours quietHours,
     required DateTime firstDate,
-    String? message,
+    required LocalNotificationCopy copy,
   }) async {
     final now = tz.TZDateTime.now(tz.local);
     var start = tz.TZDateTime(
@@ -188,18 +207,18 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       dailyReminderId,
-      'Zeit für deine Einheit',
-      message ?? 'Dein bevorzugtes Einheitsfenster hat begonnen.',
+      copy.title,
+      copy.body,
       start,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
           'daily_reminder_window',
-          'Einheitsfenster',
-          channelDescription: 'Erinnerungen innerhalb des Wunschzeitraums',
+          copy.channelName,
+          channelDescription: copy.channelDescription,
           importance: Importance.max,
           priority: Priority.high,
         ),
-        iOS: DarwinNotificationDetails(),
+        iOS: const DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
@@ -214,6 +233,9 @@ class NotificationService {
   Future<void> scheduleWeeklyTouchpoints({
     required DateTime weekStart,
     required UserPreferences preferences,
+    required LocalNotificationCopy kickoffCopy,
+    required LocalNotificationCopy midweekCopy,
+    required LocalNotificationCopy closeoutCopy,
   }) async {
     if (preferences.silentMode) return;
 
@@ -228,16 +250,16 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       200,
-      'Starte deine Woche',
-      'Plane deine Einheiten für diese Woche in einem ruhigen Rhythmus.',
+      kickoffCopy.title,
+      kickoffCopy.body,
       kickoff,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
           'weekly_kickoff',
-          'Wöchentlicher Start',
-          channelDescription: 'Montagmorgens die Woche planen',
+          kickoffCopy.channelName,
+          channelDescription: kickoffCopy.channelDescription,
         ),
-        iOS: DarwinNotificationDetails(),
+        iOS: const DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
@@ -246,16 +268,16 @@ class NotificationService {
       final midweek = kickoff.add(const Duration(days: 2));
       await flutterLocalNotificationsPlugin.zonedSchedule(
         201,
-        'Wo stehst du diese Woche?',
-        'Mittwochs-Check-in: Was braucht es, um 5/7 zu schaffen?',
+        midweekCopy.title,
+        midweekCopy.body,
         midweek,
-        const NotificationDetails(
+        NotificationDetails(
           android: AndroidNotificationDetails(
             'weekly_midweek',
-            'Wochenmitte',
-            channelDescription: 'Motivations-Check-in am Mittwoch',
+            midweekCopy.channelName,
+            channelDescription: midweekCopy.channelDescription,
           ),
-          iOS: DarwinNotificationDetails(),
+          iOS: const DarwinNotificationDetails(),
         ),
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       );
@@ -264,22 +286,25 @@ class NotificationService {
     final closeout = kickoff.add(const Duration(days: 6, hours: 11));
     await flutterLocalNotificationsPlugin.zonedSchedule(
       202,
-      'Wochenausklang',
-      'Schließe die Woche ab und bereite die nächste vor.',
+      closeoutCopy.title,
+      closeoutCopy.body,
       closeout,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
           'weekly_closeout',
-          'Wochenausklang',
-          channelDescription: 'Sonntags-Zusammenfassung und Ausblick',
+          closeoutCopy.channelName,
+          channelDescription: closeoutCopy.channelDescription,
         ),
-        iOS: DarwinNotificationDetails(),
+        iOS: const DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 
-  Future<void> scheduleMakeUpPlan(DateTime date) async {
+  Future<void> scheduleMakeUpPlan(
+    DateTime date, {
+    required LocalNotificationCopy copy,
+  }) async {
     final scheduledDate = tz.TZDateTime(
       tz.local,
       date.year,
@@ -291,16 +316,16 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       300,
-      'Noch ist Zeit für heute',
-      'Eine kurze 15-Minuten-Einheit bewahrt deinen 5/7-Puffer.',
+      copy.title,
+      copy.body,
       scheduledDate,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
           'daily_makeup',
-          'Aufhol-Erinnerung',
-          channelDescription: 'Ermutigung für eine Recovery-Session',
+          copy.channelName,
+          channelDescription: copy.channelDescription,
         ),
-        iOS: DarwinNotificationDetails(),
+        iOS: const DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );

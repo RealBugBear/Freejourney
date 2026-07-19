@@ -2707,4 +2707,134 @@ class AppLocalizationsDe extends AppLocalizations {
   String appointmentCalendarOpenFailed(String error) {
     return 'Kalender konnte nicht geöffnet werden: $error';
   }
+
+  @override
+  String get hintDashboardBody =>
+      'Hier steuerst du deinen täglichen Rhythmus und dokumentierst, was du wahrnimmst.';
+
+  @override
+  String get hintDashboardItemStart =>
+      'Starte deine geführte Einheit oder den Routine-Modus.';
+
+  @override
+  String get hintDashboardItemLog =>
+      'Trage eine Einheit ein, wenn du heute geübt hast.';
+
+  @override
+  String get hintDashboardItemNote =>
+      'Halte Erfahrungen direkt nach der Einheit fest.';
+
+  @override
+  String get hintProgressBody =>
+      'Der Verlauf hilft dir, Muster zu sehen, ohne einzelne Tage zu überbewerten.';
+
+  @override
+  String get hintProgressItemOverview =>
+      'Sieh Trainingstage, Beobachtungen und Einträge zusammen.';
+
+  @override
+  String get hintProgressItemObserve =>
+      'Ergänze Beobachtungen, wenn dir etwas auffällt.';
+
+  @override
+  String get hintProgressItemJournal =>
+      'Öffne einzelne Journal-Einträge für mehr Kontext.';
+
+  @override
+  String get hintAccompanimentBody =>
+      'Hier liegt alles, was mit Trainer, Kommunikation und Terminen zu tun hat.';
+
+  @override
+  String get hintAccompanimentItemTrainer =>
+      'Finde Trainer oder verwalte deine aktive Begleitung.';
+
+  @override
+  String get hintAccompanimentItemChat =>
+      'Öffne Nachrichten und bleib mit deinem Trainer im Kontakt.';
+
+  @override
+  String get hintAccompanimentItemAppointments =>
+      'Sieh Terminvorschläge und geplante Termine an.';
+
+  @override
+  String get hintProfileBody =>
+      'Im Profil findest du Konto, Einstellungen und administrative Zugänge.';
+
+  @override
+  String get hintProfileItemSettings =>
+      'Passe Sprache, Darstellung und Erinnerungen an.';
+
+  @override
+  String get hintProfileItemAccount =>
+      'Verwalte Account, Passwort und Profilinformationen.';
+
+  @override
+  String get hintProfileItemRoles =>
+      'Öffne Trainer- oder Admin-Bereiche, wenn sie für dich freigeschaltet sind.';
+
+  @override
+  String get hintDontShowAgain => 'Nicht mehr anzeigen';
+
+  @override
+  String get hintGotIt => 'Verstanden';
+
+  @override
+  String get hintShowLater => 'Später nochmal zeigen';
+
+  @override
+  String get notificationChannelTrainingReminders => 'Training-Erinnerungen';
+
+  @override
+  String get pushVideoCallTitle => 'Eingehender Video-Call';
+
+  @override
+  String get pushVideoCallBody => 'Tippe, um den Anruf zu öffnen.';
+
+  @override
+  String get pushCallRequestTitle => 'Video-Call Anfrage';
+
+  @override
+  String get pushCallRequestBody =>
+      'Ein Klient möchte einen Video-Call starten.';
+
+  @override
+  String get pushAppointmentProposalTitle => 'Neue Terminvorschläge';
+
+  @override
+  String get pushAppointmentProposalBody => 'Wähle einen passenden Termin aus.';
+
+  @override
+  String get pushAppointmentConfirmedTitle => 'Termin bestätigt';
+
+  @override
+  String get pushAppointmentConfirmedBody =>
+      'Tippe, um den Termin in deinen Kalender einzutragen.';
+
+  @override
+  String get pushTrainingReminderTitle => 'Training-Erinnerung';
+
+  @override
+  String get pushTrainingReminderBody => 'Tippe, um dein Training zu öffnen.';
+
+  @override
+  String trainerAlertPrepareTitle(String traineeName) {
+    return 'Termin vorbereiten — $traineeName';
+  }
+
+  @override
+  String trainerAlertPrepareBody(String traineeName) {
+    return '$traineeName ist bei Tag 25. In ~3 Tagen ist die Isometrische Partnerübung fällig.';
+  }
+
+  @override
+  String trainerAlertDay28Title(String traineeName) {
+    return '$traineeName hat Tag 28 erreicht!';
+  }
+
+  @override
+  String get trainerAlertDay28Body =>
+      'Jetzt Termin für die Isometrische Partnerübung buchen.';
+
+  @override
+  String get traineeFallbackName => 'Dein Trainee';
 }

@@ -194,8 +194,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       if (settings.remindersEnabled) {
         await NotificationService.instance.suppressTodayAndReschedule(
           startMinutes: settings.reminderStartMinutes,
-          titleDe: l10n.reminderSessionTitle,
-          bodyDe: l10n.reminderSessionBody,
+          title: l10n.reminderSessionTitle,
+          body: l10n.reminderSessionBody,
         );
       }
 

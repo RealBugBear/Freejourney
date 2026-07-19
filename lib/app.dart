@@ -412,7 +412,7 @@ Future<void> _syncReminderState(
   final l10n = lookupAppLocalizations(Locale(next.languageCode));
   await ns.scheduleReminder(
     startMinutes: next.reminderStartMinutes,
-    titleDe: l10n.reminderSessionTitle,
-    bodyDe: l10n.reminderSessionBody,
+    title: l10n.reminderSessionTitle,
+    body: l10n.reminderSessionBody,
   );
 }

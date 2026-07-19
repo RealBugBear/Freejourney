@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../features/auth/presentation/providers/auth_provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../settings/settings_provider.dart';
 
 enum AppOnboardingHint {
@@ -42,83 +43,76 @@ extension AppOnboardingHintContent on AppOnboardingHint {
         AppOnboardingHint.profile => 'profile',
       };
 
-  OnboardingHintContent get content => switch (this) {
-        AppOnboardingHint.dashboard => const OnboardingHintContent(
-            title: 'Heute',
-            body:
-                'Hier steuerst du deinen täglichen Rhythmus und dokumentierst, was du wahrnimmst.',
+  OnboardingHintContent content(AppLocalizations l10n) => switch (this) {
+        AppOnboardingHint.dashboard => OnboardingHintContent(
+            title: l10n.today,
+            body: l10n.hintDashboardBody,
             items: [
               OnboardingHintItem(
                 iconName: 'play',
-                text: 'Starte deine geführte Einheit oder den Routine-Modus.',
+                text: l10n.hintDashboardItemStart,
               ),
               OnboardingHintItem(
                 iconName: 'check',
-                text: 'Trage eine Einheit ein, wenn du heute geübt hast.',
+                text: l10n.hintDashboardItemLog,
               ),
               OnboardingHintItem(
                 iconName: 'note',
-                text: 'Halte Erfahrungen direkt nach der Einheit fest.',
+                text: l10n.hintDashboardItemNote,
               ),
             ],
           ),
-        AppOnboardingHint.progress => const OnboardingHintContent(
-            title: 'Verlauf',
-            body:
-                'Der Verlauf hilft dir, Muster zu sehen, ohne einzelne Tage zu überbewerten.',
+        AppOnboardingHint.progress => OnboardingHintContent(
+            title: l10n.progressTitle,
+            body: l10n.hintProgressBody,
             items: [
               OnboardingHintItem(
                 iconName: 'chart',
-                text:
-                    'Sieh Trainingstage, Beobachtungen und Einträge zusammen.',
+                text: l10n.hintProgressItemOverview,
               ),
               OnboardingHintItem(
                 iconName: 'note',
-                text: 'Ergänze Beobachtungen, wenn dir etwas auffällt.',
+                text: l10n.hintProgressItemObserve,
               ),
               OnboardingHintItem(
                 iconName: 'book',
-                text: 'Öffne einzelne Journal-Einträge für mehr Kontext.',
+                text: l10n.hintProgressItemJournal,
               ),
             ],
           ),
-        AppOnboardingHint.accompaniment => const OnboardingHintContent(
-            title: 'Begleitung',
-            body:
-                'Hier liegt alles, was mit Trainer, Kommunikation und Terminen zu tun hat.',
+        AppOnboardingHint.accompaniment => OnboardingHintContent(
+            title: l10n.accompanimentTitle,
+            body: l10n.hintAccompanimentBody,
             items: [
               OnboardingHintItem(
                 iconName: 'trainer',
-                text: 'Finde Trainer oder verwalte deine aktive Begleitung.',
+                text: l10n.hintAccompanimentItemTrainer,
               ),
               OnboardingHintItem(
                 iconName: 'chat',
-                text:
-                    'Öffne Nachrichten und bleib mit deinem Trainer im Kontakt.',
+                text: l10n.hintAccompanimentItemChat,
               ),
               OnboardingHintItem(
                 iconName: 'calendar',
-                text: 'Sieh Terminvorschläge und geplante Termine an.',
+                text: l10n.hintAccompanimentItemAppointments,
               ),
             ],
           ),
-        AppOnboardingHint.profile => const OnboardingHintContent(
-            title: 'Profil',
-            body:
-                'Im Profil findest du Konto, Einstellungen und administrative Zugänge.',
+        AppOnboardingHint.profile => OnboardingHintContent(
+            title: l10n.profile,
+            body: l10n.hintProfileBody,
             items: [
               OnboardingHintItem(
                 iconName: 'settings',
-                text: 'Passe Sprache, Darstellung und Erinnerungen an.',
+                text: l10n.hintProfileItemSettings,
               ),
               OnboardingHintItem(
                 iconName: 'account',
-                text: 'Verwalte Account, Passwort und Profilinformationen.',
+                text: l10n.hintProfileItemAccount,
               ),
               OnboardingHintItem(
                 iconName: 'work',
-                text:
-                    'Öffne Trainer- oder Admin-Bereiche, wenn sie für dich freigeschaltet sind.',
+                text: l10n.hintProfileItemRoles,
               ),
             ],
           ),

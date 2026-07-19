@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../theme/app_colors.dart';
 import 'onboarding_hint_provider.dart';
 
@@ -76,7 +77,8 @@ class _OnboardingHintSheetState extends State<_OnboardingHintSheet> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final content = widget.hint.content;
+    final l10n = AppLocalizations.of(context);
+    final content = widget.hint.content(l10n);
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
 
     return Padding(
@@ -145,18 +147,18 @@ class _OnboardingHintSheetState extends State<_OnboardingHintSheet> {
               value: _dontShowAgain,
               contentPadding: EdgeInsets.zero,
               controlAffinity: ListTileControlAffinity.leading,
-              title: const Text('Nicht mehr anzeigen'),
+              title: Text(l10n.hintDontShowAgain),
               onChanged: (value) =>
                   setState(() => _dontShowAgain = value ?? false),
             ),
             const SizedBox(height: 8),
             FilledButton(
               onPressed: () => Navigator.pop(context, _dontShowAgain),
-              child: const Text('Verstanden'),
+              child: Text(l10n.hintGotIt),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Später nochmal zeigen'),
+              child: Text(l10n.hintShowLater),
             ),
           ],
         ),

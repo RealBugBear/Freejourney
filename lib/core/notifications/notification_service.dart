@@ -4,13 +4,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../l10n/active_localizations.dart';
 import '../logging/app_logger.dart';
 
 // Stable notification ID for the daily training reminder.
 const _kReminderId = 1;
 
 const _kAndroidChannelId = 'training_reminders';
-const _kAndroidChannelName = 'Training Reminders';
 
 class NotificationService {
   NotificationService._();
@@ -100,8 +100,8 @@ class NotificationService {
   /// today's reminder is skipped.
   Future<void> scheduleReminder({
     required int startMinutes,
-    required String titleDe,
-    required String bodyDe,
+    required String title,
+    required String body,
     bool fromTomorrow = false,
   }) async {
     if (!_enabled) return;
@@ -126,22 +126,22 @@ class NotificationService {
       fireTime = fireTime.add(const Duration(days: 1));
     }
 
-    const androidDetails = AndroidNotificationDetails(
+    final androidDetails = AndroidNotificationDetails(
       _kAndroidChannelId,
-      _kAndroidChannelName,
+      await _channelName(),
       importance: Importance.defaultImportance,
       priority: Priority.defaultPriority,
     );
     const iosDetails = DarwinNotificationDetails();
-    const details = NotificationDetails(
+    final details = NotificationDetails(
       android: androidDetails,
       iOS: iosDetails,
     );
 
     await _plugin.zonedSchedule(
       _kReminderId,
-      titleDe,
-      bodyDe,
+      title,
+      body,
       fireTime,
       details,
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
@@ -170,32 +170,37 @@ class NotificationService {
     String? payload,
   }) async {
     if (!_enabled || !_initialized) return;
-    const androidDetails = AndroidNotificationDetails(
+    final androidDetails = AndroidNotificationDetails(
       _kAndroidChannelId,
-      _kAndroidChannelName,
+      await _channelName(),
       importance: Importance.high,
       priority: Priority.high,
     );
     const iosDetails = DarwinNotificationDetails();
-    const details = NotificationDetails(
+    final details = NotificationDetails(
       android: androidDetails,
       iOS: iosDetails,
     );
     await _plugin.show(id, title, body, details, payload: payload);
   }
 
+  /// The Android channel name is user-visible in system settings; resolve
+  /// it from the active app language (channel names update on re-creation).
+  Future<String> _channelName() async =>
+      (await lookupActiveAppLocalizations()).notificationChannelTrainingReminders;
+
   /// Called after a successful training session. Cancels today's pending
   /// reminder and reschedules from tomorrow.
   Future<void> suppressTodayAndReschedule({
     required int startMinutes,
-    required String titleDe,
-    required String bodyDe,
+    required String title,
+    required String body,
   }) async {
     if (!_enabled || !_initialized) return;
     await scheduleReminder(
       startMinutes: startMinutes,
-      titleDe: titleDe,
-      bodyDe: bodyDe,
+      title: title,
+      body: body,
       fromTomorrow: true,
     );
     appLogger.d('Reminder suppressed for today, rescheduled from tomorrow');

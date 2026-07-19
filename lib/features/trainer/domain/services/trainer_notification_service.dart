@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../core/l10n/active_localizations.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/notifications/notification_service.dart';
 
@@ -26,22 +27,23 @@ class TrainerNotificationService {
     if (completedDayNumber != 25 && completedDayNumber != 28) return;
 
     try {
-      final relation = await _getRelation(traineeId);
+      // Runs headless after sync — resolve the active app language directly.
+      final l10n = await lookupActiveAppLocalizations();
+      final relation = await _getRelation(traineeId, l10n.traineeFallbackName);
       if (relation == null) return;
 
       if (completedDayNumber == 25) {
         await _notify(
           traineeId: traineeId,
-          title: 'Termin vorbereiten — ${relation.traineeName}',
-          body:
-              '${relation.traineeName} ist bei Tag 25. In ~3 Tagen ist die Isometrische Partnerübung fällig.',
+          title: l10n.trainerAlertPrepareTitle(relation.traineeName),
+          body: l10n.trainerAlertPrepareBody(relation.traineeName),
           trigger: 'early_warning',
         );
       } else {
         await _notify(
           traineeId: traineeId,
-          title: '${relation.traineeName} hat Tag 28 erreicht!',
-          body: 'Jetzt Termin für die Isometrische Partnerübung buchen.',
+          title: l10n.trainerAlertDay28Title(relation.traineeName),
+          body: l10n.trainerAlertDay28Body,
           trigger: 'completion_day',
         );
       }
@@ -52,7 +54,10 @@ class TrainerNotificationService {
 
   // ── Internal ─────────────────────────────────────────────────────────────────
 
-  Future<_TrainerRelation?> _getRelation(String traineeId) async {
+  Future<_TrainerRelation?> _getRelation(
+    String traineeId,
+    String fallbackName,
+  ) async {
     try {
       // Check the current user is the trainer of this trainee
       final currentUserId = _client.auth.currentUser?.id;
@@ -73,7 +78,7 @@ class TrainerNotificationService {
       final profile = row['profiles'] as Map<String, dynamic>?;
       final traineeName = (profile?['display_name'] as String?) ??
           (profile?['email'] as String?)?.split('@').first ??
-          'Dein Trainee';
+          fallbackName;
 
       return _TrainerRelation(
         trainerId: row['trainer_id'] as String,

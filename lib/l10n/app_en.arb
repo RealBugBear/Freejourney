@@ -1327,5 +1327,90 @@
   "@appointmentCalendarOpenFailed": {
     "description": "Snackbar when writing a confirmed appointment to the device calendar fails",
     "placeholders": {"error": {"type": "String"}}
-  }
+  },
+  "hintDashboardBody": "This is where you manage your daily rhythm and record what you notice.",
+  "@hintDashboardBody": {"description": "Onboarding hint body for the dashboard tab"},
+  "hintDashboardItemStart": "Start your guided session or routine mode.",
+  "@hintDashboardItemStart": {"description": "Dashboard onboarding hint bullet: starting a session"},
+  "hintDashboardItemLog": "Log a session if you practiced today.",
+  "@hintDashboardItemLog": {"description": "Dashboard onboarding hint bullet: logging a session"},
+  "hintDashboardItemNote": "Capture your experiences right after the session.",
+  "@hintDashboardItemNote": {"description": "Dashboard onboarding hint bullet: capturing experiences"},
+  "hintProgressBody": "Your history helps you spot patterns without overrating individual days.",
+  "@hintProgressBody": {"description": "Onboarding hint body for the history tab"},
+  "hintProgressItemOverview": "See training days, observations, and entries together.",
+  "@hintProgressItemOverview": {"description": "History onboarding hint bullet: combined overview"},
+  "hintProgressItemObserve": "Add observations whenever you notice something.",
+  "@hintProgressItemObserve": {"description": "History onboarding hint bullet: adding observations"},
+  "hintProgressItemJournal": "Open individual journal entries for more context.",
+  "@hintProgressItemJournal": {"description": "History onboarding hint bullet: journal entries"},
+  "hintAccompanimentBody": "Everything related to trainers, communication, and appointments lives here.",
+  "@hintAccompanimentBody": {"description": "Onboarding hint body for the guidance tab"},
+  "hintAccompanimentItemTrainer": "Find trainers or manage your active guidance.",
+  "@hintAccompanimentItemTrainer": {"description": "Guidance onboarding hint bullet: finding trainers"},
+  "hintAccompanimentItemChat": "Open messages and stay in touch with your trainer.",
+  "@hintAccompanimentItemChat": {"description": "Guidance onboarding hint bullet: messages"},
+  "hintAccompanimentItemAppointments": "See appointment proposals and scheduled appointments.",
+  "@hintAccompanimentItemAppointments": {"description": "Guidance onboarding hint bullet: appointments"},
+  "hintProfileBody": "Your profile holds your account, settings, and administrative access.",
+  "@hintProfileBody": {"description": "Onboarding hint body for the profile tab"},
+  "hintProfileItemSettings": "Adjust language, appearance, and reminders.",
+  "@hintProfileItemSettings": {"description": "Profile onboarding hint bullet: settings"},
+  "hintProfileItemAccount": "Manage your account, password, and profile information.",
+  "@hintProfileItemAccount": {"description": "Profile onboarding hint bullet: account management"},
+  "hintProfileItemRoles": "Open the trainer or admin areas if they are enabled for you.",
+  "@hintProfileItemRoles": {"description": "Profile onboarding hint bullet: role-gated areas"},
+  "hintDontShowAgain": "Don't show this again",
+  "@hintDontShowAgain": {"description": "Onboarding hint sheet checkbox to hide the hint permanently"},
+  "hintGotIt": "Got it",
+  "@hintGotIt": {"description": "Onboarding hint sheet confirm button"},
+  "hintShowLater": "Show me again later",
+  "@hintShowLater": {"description": "Onboarding hint sheet button to keep showing the hint"},
+  "notificationChannelTrainingReminders": "Training Reminders",
+  "@notificationChannelTrainingReminders": {"description": "Android notification channel name shown in system settings"},
+  "pushVideoCallTitle": "Incoming video call",
+  "@pushVideoCallTitle": {"description": "Foreground push fallback title for an incoming video call"},
+  "pushVideoCallBody": "Tap to open the call.",
+  "@pushVideoCallBody": {"description": "Foreground push fallback body for an incoming video call"},
+  "pushCallRequestTitle": "Video call request",
+  "@pushCallRequestTitle": {"description": "Foreground push fallback title for a video call request"},
+  "pushCallRequestBody": "A client wants to start a video call.",
+  "@pushCallRequestBody": {"description": "Foreground push fallback body for a video call request"},
+  "pushAppointmentProposalTitle": "New appointment proposals",
+  "@pushAppointmentProposalTitle": {"description": "Foreground push fallback title for new appointment proposals"},
+  "pushAppointmentProposalBody": "Choose a time that works for you.",
+  "@pushAppointmentProposalBody": {"description": "Foreground push fallback body for new appointment proposals"},
+  "pushAppointmentConfirmedTitle": "Appointment confirmed",
+  "@pushAppointmentConfirmedTitle": {"description": "Foreground push fallback title for a confirmed appointment"},
+  "pushAppointmentConfirmedBody": "Tap to add the appointment to your calendar.",
+  "@pushAppointmentConfirmedBody": {"description": "Foreground push fallback body for a confirmed appointment"},
+  "pushTrainingReminderTitle": "Training reminder",
+  "@pushTrainingReminderTitle": {"description": "Foreground push fallback title for a training reminder"},
+  "pushTrainingReminderBody": "Tap to open your training.",
+  "@pushTrainingReminderBody": {"description": "Foreground push fallback body for a training reminder"},
+  "trainerAlertPrepareTitle": "Prepare appointment — {traineeName}",
+  "@trainerAlertPrepareTitle": {
+    "description": "Trainer notification title when a trainee reaches day 25",
+    "placeholders": {
+      "traineeName": { "type": "String" }
+    }
+  },
+  "trainerAlertPrepareBody": "{traineeName} is at day 25. The isometric partner exercise is due in about 3 days.",
+  "@trainerAlertPrepareBody": {
+    "description": "Trainer notification body when a trainee reaches day 25",
+    "placeholders": {
+      "traineeName": { "type": "String" }
+    }
+  },
+  "trainerAlertDay28Title": "{traineeName} has reached day 28!",
+  "@trainerAlertDay28Title": {
+    "description": "Trainer notification title when a trainee reaches day 28",
+    "placeholders": {
+      "traineeName": { "type": "String" }
+    }
+  },
+  "trainerAlertDay28Body": "Book the appointment for the isometric partner exercise now.",
+  "@trainerAlertDay28Body": {"description": "Trainer notification body when a trainee reaches day 28"},
+  "traineeFallbackName": "Your trainee",
+  "@traineeFallbackName": {"description": "Fallback name when a trainee has no display name or email"}
 }

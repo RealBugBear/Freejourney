@@ -45,7 +45,6 @@ class ReminderSettings {
         HabitWindow(
           start: TimeOfDay(hour: startHour, minute: startMinute),
           end: TimeOfDay(hour: endHour, minute: endMinute),
-          locationLabel: 'Home',
         ),
       ],
       quietHours: QuietHours(
