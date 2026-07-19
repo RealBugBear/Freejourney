@@ -246,7 +246,7 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 ## Arbeitslog
 
-- **2026-07-19, B5 — Chat komplett ():** 37 neue ARB-Keys (**1128 DE = 1128 EN**).
+- **2026-07-19, B5 — Chat komplett (`927a344`):** 37 neue ARB-Keys (**1128 DE = 1128 EN**).
   Inbox, DM, Channel-Screen, Bubbles, Input-Bar, Typing-Indicator, Navigation und
   Call-Request-Persistenz über ARB. `ChatChannel.channelDisplayName(l10n)`;
   Community/Experience-Aufrufer mitgezogen (Compile). Reuse von
