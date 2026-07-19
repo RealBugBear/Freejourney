@@ -94,9 +94,15 @@ present all blocked items together at the end.
   the redirect pattern (`communityGateRedirect`, `paywallGateRedirect`) — gated routes
   redirect to dashboard, never crash.
 - **Launch flags:** `lib/config/launch_flags.dart` — compile-time `const bool` only
-  (`kCommunityEnabled`, `kVideoCallsEnabled`, `kPaywallEnabled`). No remote config. Hidden
-  features stay compiled and tested ("sleeping, not dead"). Each flag's doc comment lists
-  every gated surface and the reactivation preconditions — keep those comments current.
+  (`kCommunityEnabled`, `kVideoCallsEnabled`, `kPaywallEnabled`) for ordinary product
+  features. Hidden features stay compiled and tested ("sleeping, not dead"). Each flag's
+  doc comment lists every gated surface and the reactivation preconditions — keep those
+  comments current. **Narrow approved exception (PM-D12, Founder 2026-07-19):** paid
+  `premium`/`studio` surfaces may use server-side `sales_rollout` and `feature_rollout`
+  states because a compile flag cannot stop sales without a store update. This is not a
+  general remote-config system: writes are service-role-only, clients read only,
+  unavailable/unconfigured state means sales off while existing valid access is left
+  unchanged, and compile flags remain the only gate for everything else.
 - **Localization:** every user-facing string goes into `lib/l10n/app_en.arb` (template)
   AND `app_de.arb`, then `flutter gen-l10n`. Generated `app_localizations*.dart` are
   committed. German copy addresses the user as "du".

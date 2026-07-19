@@ -322,15 +322,45 @@
   "profileDeleteAccountConfirm": "Delete permanently",
   "profileDeleteAccountSuccess": "Account deleted.",
   "profileDeleteAccountError": "Could not delete account. Please contact support.",
-  "redeemAccessCodeTitle": "Redeem founding code",
-  "redeemAccessCodeSubtitle": "Unlock all paid packages with your code.",
+  "redeemAccessCodeTitle": "Redeem access code",
+  "redeemAccessCodeSubtitle": "Use a benefit code for Premium or Studio.",
+  "redeemAccessCodeDialogBody": "A code may grant Premium or Studio access directly or identify a store offer.",
   "redeemAccessCodeHint": "Enter code",
   "redeemAccessCodeAction": "Redeem",
-  "redeemAccessCodeSuccess": "Code redeemed. Premium access is now active.",
+  "redeemAccessCodeSuccess": "Code redeemed. Premium access is active. This is not a subscription and there is no automatic charge.",
+  "redeemAccessCodeBenefitPremium": "Premium",
+  "redeemAccessCodeBenefitStudio": "Studio",
+  "redeemAccessCodeInternalGrantSuccess": "Code redeemed. {benefit} access is active. This is not a subscription and there is no automatic charge.",
+  "@redeemAccessCodeInternalGrantSuccess": {
+    "placeholders": {
+      "benefit": {
+        "type": "String"
+      }
+    }
+  },
+  "redeemAccessCodeInternalGrantUntil": "Code redeemed. {benefit} access is active until {date}. This is not a subscription and there is no automatic charge.",
+  "@redeemAccessCodeInternalGrantUntil": {
+    "placeholders": {
+      "benefit": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "redeemAccessCodeStoreOfferPending": "Store offer recognized. Access is not active yet. The offer flow will be available in a later version.",
+  "redeemAccessCodeUnknownBenefit": "The code was recognized, but access could not be confirmed. No access was activated. Please contact support.",
   "redeemAccessCodeErrorInvalid": "This code is invalid.",
   "redeemAccessCodeErrorUsed": "This code has already been redeemed.",
   "redeemAccessCodeErrorExpired": "This code has expired.",
   "redeemAccessCodeErrorUnsupported": "This code type is not supported yet.",
+  "redeemAccessCodeErrorCampaignInactive": "This benefit campaign is no longer active.",
+  "redeemAccessCodeErrorRoleNotEligible": "This code is not available for your account role.",
+  "redeemAccessCodeErrorLimitReached": "This code has reached its redemption limit.",
+  "redeemAccessCodeErrorOfferUnavailable": "No store offer is available for this code on your device.",
+  "redeemAccessCodeErrorInvalidPlatform": "This code cannot be redeemed on this device.",
+  "redeemAccessCodeErrorServiceUnavailable": "Code redemption is temporarily unavailable. Please try again later.",
   "redeemAccessCodeErrorUnauthorized": "Please sign in again and try once more.",
   "redeemAccessCodeErrorUnknown": "Code redemption failed. Please try again.",
   "trainerDashboard": "Trainer Dashboard",

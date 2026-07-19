@@ -1433,14 +1433,20 @@ abstract class AppLocalizations {
   /// No description provided for @redeemAccessCodeTitle.
   ///
   /// In de, this message translates to:
-  /// **'Gründungscode einlösen'**
+  /// **'Zugangscode einlösen'**
   String get redeemAccessCodeTitle;
 
   /// No description provided for @redeemAccessCodeSubtitle.
   ///
   /// In de, this message translates to:
-  /// **'Schalte mit deinem Code alle kostenpflichtigen Pakete frei.'**
+  /// **'Nutze einen Vorteilscode für Premium oder Studio.'**
   String get redeemAccessCodeSubtitle;
+
+  /// No description provided for @redeemAccessCodeDialogBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Ein Code kann Premium- oder Studio-Zugang direkt freischalten oder auf ein Store-Angebot verweisen.'**
+  String get redeemAccessCodeDialogBody;
 
   /// No description provided for @redeemAccessCodeHint.
   ///
@@ -1457,8 +1463,44 @@ abstract class AppLocalizations {
   /// No description provided for @redeemAccessCodeSuccess.
   ///
   /// In de, this message translates to:
-  /// **'Code eingelöst. Premium-Zugang ist aktiv.'**
+  /// **'Code eingelöst. Premium-Zugang ist aktiv. Dies ist kein Abo und es erfolgt keine automatische Belastung.'**
   String get redeemAccessCodeSuccess;
+
+  /// No description provided for @redeemAccessCodeBenefitPremium.
+  ///
+  /// In de, this message translates to:
+  /// **'Premium'**
+  String get redeemAccessCodeBenefitPremium;
+
+  /// No description provided for @redeemAccessCodeBenefitStudio.
+  ///
+  /// In de, this message translates to:
+  /// **'Studio'**
+  String get redeemAccessCodeBenefitStudio;
+
+  /// No description provided for @redeemAccessCodeInternalGrantSuccess.
+  ///
+  /// In de, this message translates to:
+  /// **'Code eingelöst. {benefit}-Zugang ist aktiv. Dies ist kein Abo und es erfolgt keine automatische Belastung.'**
+  String redeemAccessCodeInternalGrantSuccess(String benefit);
+
+  /// No description provided for @redeemAccessCodeInternalGrantUntil.
+  ///
+  /// In de, this message translates to:
+  /// **'Code eingelöst. {benefit}-Zugang ist bis {date} aktiv. Dies ist kein Abo und es erfolgt keine automatische Belastung.'**
+  String redeemAccessCodeInternalGrantUntil(String benefit, String date);
+
+  /// No description provided for @redeemAccessCodeStoreOfferPending.
+  ///
+  /// In de, this message translates to:
+  /// **'Store-Angebot erkannt. Der Zugang ist noch nicht aktiv. Der Angebotsablauf ist in einer späteren Version verfügbar.'**
+  String get redeemAccessCodeStoreOfferPending;
+
+  /// No description provided for @redeemAccessCodeUnknownBenefit.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Code wurde erkannt, aber der Zugang konnte nicht bestätigt werden. Es wurde kein Zugang aktiviert. Bitte kontaktiere den Support.'**
+  String get redeemAccessCodeUnknownBenefit;
 
   /// No description provided for @redeemAccessCodeErrorInvalid.
   ///
@@ -1483,6 +1525,42 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Dieser Code-Typ wird noch nicht unterstützt.'**
   String get redeemAccessCodeErrorUnsupported;
+
+  /// No description provided for @redeemAccessCodeErrorCampaignInactive.
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Vorteilskampagne ist nicht mehr aktiv.'**
+  String get redeemAccessCodeErrorCampaignInactive;
+
+  /// No description provided for @redeemAccessCodeErrorRoleNotEligible.
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Code ist für deine Kontorolle nicht verfügbar.'**
+  String get redeemAccessCodeErrorRoleNotEligible;
+
+  /// No description provided for @redeemAccessCodeErrorLimitReached.
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Code hat sein Einlöselimit erreicht.'**
+  String get redeemAccessCodeErrorLimitReached;
+
+  /// No description provided for @redeemAccessCodeErrorOfferUnavailable.
+  ///
+  /// In de, this message translates to:
+  /// **'Für diesen Code ist auf deinem Gerät kein Store-Angebot verfügbar.'**
+  String get redeemAccessCodeErrorOfferUnavailable;
+
+  /// No description provided for @redeemAccessCodeErrorInvalidPlatform.
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Code kann auf diesem Gerät nicht eingelöst werden.'**
+  String get redeemAccessCodeErrorInvalidPlatform;
+
+  /// No description provided for @redeemAccessCodeErrorServiceUnavailable.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Code-Einlösung ist vorübergehend nicht verfügbar. Bitte versuche es später erneut.'**
+  String get redeemAccessCodeErrorServiceUnavailable;
 
   /// No description provided for @redeemAccessCodeErrorUnauthorized.
   ///

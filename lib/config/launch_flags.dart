@@ -5,6 +5,13 @@
 /// wieder her. Der dahinterliegende Code bleibt kompiliert und getestet —
 /// er schläft nur.
 ///
+/// Eng begrenzte Ausnahme (PM-D12, Founder-Go 2026-07-19): Nur bezahlte
+/// `premium`-/`studio`-Flächen dürfen zusätzlich serverseitige
+/// `sales_rollout`-/`feature_rollout`-Zustände lesen. Das ist keine allgemeine
+/// Remote-Config: Clients schreiben nie, fehlende Konfiguration stoppt neue
+/// Verkäufe und lässt bestehenden gültigen Zugang unverändert. Für alle
+/// anderen Features bleiben diese Compile-Flags die einzige Gate-Mechanik.
+///
 /// WICHTIG vor dem Reaktivieren von [kCommunityEnabled]: Melde-Funktion und
 /// Nutzer-Blockieren (T02/T03, Apple Guideline 1.2) MÜSSEN vorher umgesetzt
 /// sein — siehe docs/LAUNCH_TASK_PROMPTS.md.
@@ -33,11 +40,12 @@ const bool kCommunityEnabled = false;
 /// Flag AUS = heutiges Launch-Verhalten: die ersten drei Pakete sind frei,
 /// spätere im UI gesperrt, Route `/paywall` leitet aufs Dashboard um.
 /// Flag AN = Paket 1 (Moro) frei, Paket 2+ nur mit Entitlement
-/// (`profiles.is_premium`, gesetzt ausschließlich server-seitig — DB-Trigger
-/// `trg_prevent_direct_premium_change`); Paketübergang und gesperrte Pakete
-/// führen zum Paywall-Screen (Trio: Monat/Jahr/Lifetime).
+/// (effektiver serverseitiger Multi-Grant-Status; die
+/// `profiles.is_premium`-Felder bleiben nur Legacy-Projektion); Paketübergang
+/// und gesperrte Pakete führen zum Paywall-Screen
+/// (Trio: Monat/Jahr/Lifetime).
 ///
 /// VOR Aktivierung MÜSSEN vorliegen: R8-Trigger (Founder), Bestandsschutz-
 /// Kommunikation, AGB/Widerruf (Anwalts-Baustein 8), T25 (RevenueCat/IAP,
-/// echter Kaufweg) und die live angewendete Migration 2026070701.
+/// echter Kaufweg) und alle erforderlichen T25-Migrationen live angewendet.
 const bool kPaywallEnabled = false;

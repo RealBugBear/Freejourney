@@ -755,11 +755,15 @@ class AppLocalizationsDe extends AppLocalizations {
       'Konto konnte nicht gelöscht werden. Bitte kontaktiere den Support.';
 
   @override
-  String get redeemAccessCodeTitle => 'Gründungscode einlösen';
+  String get redeemAccessCodeTitle => 'Zugangscode einlösen';
 
   @override
   String get redeemAccessCodeSubtitle =>
-      'Schalte mit deinem Code alle kostenpflichtigen Pakete frei.';
+      'Nutze einen Vorteilscode für Premium oder Studio.';
+
+  @override
+  String get redeemAccessCodeDialogBody =>
+      'Ein Code kann Premium- oder Studio-Zugang direkt freischalten oder auf ein Store-Angebot verweisen.';
 
   @override
   String get redeemAccessCodeHint => 'Code eingeben';
@@ -769,7 +773,31 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get redeemAccessCodeSuccess =>
-      'Code eingelöst. Premium-Zugang ist aktiv.';
+      'Code eingelöst. Premium-Zugang ist aktiv. Dies ist kein Abo und es erfolgt keine automatische Belastung.';
+
+  @override
+  String get redeemAccessCodeBenefitPremium => 'Premium';
+
+  @override
+  String get redeemAccessCodeBenefitStudio => 'Studio';
+
+  @override
+  String redeemAccessCodeInternalGrantSuccess(String benefit) {
+    return 'Code eingelöst. $benefit-Zugang ist aktiv. Dies ist kein Abo und es erfolgt keine automatische Belastung.';
+  }
+
+  @override
+  String redeemAccessCodeInternalGrantUntil(String benefit, String date) {
+    return 'Code eingelöst. $benefit-Zugang ist bis $date aktiv. Dies ist kein Abo und es erfolgt keine automatische Belastung.';
+  }
+
+  @override
+  String get redeemAccessCodeStoreOfferPending =>
+      'Store-Angebot erkannt. Der Zugang ist noch nicht aktiv. Der Angebotsablauf ist in einer späteren Version verfügbar.';
+
+  @override
+  String get redeemAccessCodeUnknownBenefit =>
+      'Der Code wurde erkannt, aber der Zugang konnte nicht bestätigt werden. Es wurde kein Zugang aktiviert. Bitte kontaktiere den Support.';
 
   @override
   String get redeemAccessCodeErrorInvalid => 'Dieser Code ist ungültig.';
@@ -784,6 +812,30 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get redeemAccessCodeErrorUnsupported =>
       'Dieser Code-Typ wird noch nicht unterstützt.';
+
+  @override
+  String get redeemAccessCodeErrorCampaignInactive =>
+      'Diese Vorteilskampagne ist nicht mehr aktiv.';
+
+  @override
+  String get redeemAccessCodeErrorRoleNotEligible =>
+      'Dieser Code ist für deine Kontorolle nicht verfügbar.';
+
+  @override
+  String get redeemAccessCodeErrorLimitReached =>
+      'Dieser Code hat sein Einlöselimit erreicht.';
+
+  @override
+  String get redeemAccessCodeErrorOfferUnavailable =>
+      'Für diesen Code ist auf deinem Gerät kein Store-Angebot verfügbar.';
+
+  @override
+  String get redeemAccessCodeErrorInvalidPlatform =>
+      'Dieser Code kann auf diesem Gerät nicht eingelöst werden.';
+
+  @override
+  String get redeemAccessCodeErrorServiceUnavailable =>
+      'Die Code-Einlösung ist vorübergehend nicht verfügbar. Bitte versuche es später erneut.';
 
   @override
   String get redeemAccessCodeErrorUnauthorized =>

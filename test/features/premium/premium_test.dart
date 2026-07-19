@@ -138,12 +138,269 @@ void main() {
     });
 
     test('Cache-Roundtrip erhält den Status', () {
-      final original = _active(PremiumType.yearly,
-          until: DateTime.utc(2027, 1, 1));
+      final original =
+          _active(PremiumType.yearly, until: DateTime.utc(2027, 1, 1));
       final restored = Entitlement.fromProfileRow(original.toCacheJson());
       expect(restored.isPremium, original.isPremium);
       expect(restored.type, original.type);
       expect(restored.validUntil, original.validUntil);
+    });
+  });
+
+  group('account-effective Premium + Studio status', () {
+    test('parses canonical RPC object and exposes independent grant origins',
+        () {
+      final account = AccountEntitlements.fromRpc({
+        'premium': {
+          'is_active': true,
+          'expires_at': null,
+          'is_permanent': true,
+          'source': 'benefit_code',
+        },
+        'studio': {
+          'is_active': true,
+          'expires_at': '2026-08-01T00:00:00Z',
+          'is_permanent': false,
+          'source': 'pilot',
+        },
+      });
+
+      expect(account.premium.isActiveAt(now), isTrue);
+      expect(account.premium.grantOrigins, [GrantOrigin.benefitCode]);
+      expect(account.studio.isActiveAt(now), isTrue);
+      expect(account.studio.grantOrigins, [GrantOrigin.pilot]);
+      expect(account.premium.toLegacyPremium().type, PremiumType.code);
+    });
+
+    test('active code survives an expired store row for the same key', () {
+      final account = AccountEntitlements.fromRpc([
+        {
+          'entitlement_key': 'premium',
+          'is_active': false,
+          'expires_at': '2026-07-01T00:00:00Z',
+          'is_permanent': false,
+          'source': 'revenuecat',
+        },
+        {
+          'entitlement_key': 'premium',
+          'is_active': true,
+          'expires_at': null,
+          'is_permanent': true,
+          'source': 'benefit_code',
+        },
+      ]);
+
+      expect(account.premium.isActiveAt(now), isTrue);
+      expect(account.premium.isPermanent, isTrue);
+      expect(account.premium.expiresAt, isNull);
+    });
+
+    test('expired review grant stays inactive without affecting Premium', () {
+      final account = AccountEntitlements.fromRpc({
+        'premium': {
+          'is_active': true,
+          'expires_at': null,
+          'is_permanent': true,
+          'source': 'admin',
+        },
+        'studio': {
+          'is_active': true,
+          'expires_at': '2026-07-06T00:00:00Z',
+          'source': 'review',
+        },
+      }).evaluatedAt(now);
+
+      expect(account.premium.isActive, isTrue);
+      expect(account.studio.isActive, isFalse);
+    });
+
+    test('malformed active RPC rows fail closed before entering the cache', () {
+      final missingFiniteExpiry = AccountEntitlements.fromRpc({
+        'premium': {
+          'is_active': true,
+          'is_permanent': false,
+          'source': 'revenuecat',
+        },
+        'studio': {
+          'is_active': true,
+          'is_permanent': true,
+          'expires_at': 'not-a-timestamp',
+          'source': 'pilot',
+        },
+      });
+
+      expect(missingFiniteExpiry.premium.isActive, isFalse);
+      expect(missingFiniteExpiry.premium.isPermanent, isFalse);
+      expect(missingFiniteExpiry.studio.isActive, isFalse);
+      expect(missingFiniteExpiry.studio.isPermanent, isFalse);
+    });
+  });
+
+  group('bounded offline entitlement cache', () {
+    final verifiedAt = DateTime.utc(2026, 7, 7);
+
+    CachedAccountEntitlements cacheWith({DateTime? premiumExpiry}) =>
+        CachedAccountEntitlements(
+          verifiedAt: verifiedAt,
+          entitlements: AccountEntitlements(
+            premium: EffectiveEntitlement(
+              key: EntitlementKey.premium,
+              isActive: true,
+              isPermanent: premiumExpiry == null,
+              expiresAt: premiumExpiry,
+              grantOrigins: const [GrantOrigin.benefitCode],
+            ),
+            studio: EffectiveEntitlement.studioNone,
+          ),
+        );
+
+    test('allows a verified permanent grant for at most 72 hours', () {
+      final cache = cacheWith();
+      expect(
+        cache
+            .readAt(verifiedAt.add(const Duration(hours: 72)))
+            ?.premium
+            .isActive,
+        isTrue,
+      );
+      expect(
+        cache.readAt(
+          verifiedAt.add(const Duration(hours: 72, milliseconds: 1)),
+        ),
+        isNull,
+      );
+    });
+
+    test('never keeps access active past expires_at inside the 72h window', () {
+      final expiry = verifiedAt.add(const Duration(hours: 12));
+      final cache = cacheWith(premiumExpiry: expiry);
+
+      expect(
+        cache
+            .readAt(expiry.subtract(const Duration(milliseconds: 1)))
+            ?.premium
+            .isActive,
+        isTrue,
+      );
+      expect(cache.readAt(expiry)?.premium.isActive, isFalse);
+    });
+
+    test('cache JSON roundtrip retains verification time and both keys', () {
+      final original = cacheWith(
+        premiumExpiry: verifiedAt.add(const Duration(hours: 24)),
+      );
+      final restored = CachedAccountEntitlements.fromJson(original.toJson());
+
+      expect(restored.verifiedAt, verifiedAt);
+      expect(
+        restored
+            .readAt(verifiedAt.add(const Duration(hours: 1)))
+            ?.premium
+            .grantOrigins,
+        [GrantOrigin.benefitCode],
+      );
+      expect(restored.entitlements.studio.key, EntitlementKey.studio);
+    });
+
+    test('cache persists local verification instants as UTC', () {
+      final localVerifiedAt = DateTime(2026, 7, 7, 12, 30);
+      final original = CachedAccountEntitlements(
+        verifiedAt: localVerifiedAt,
+        entitlements: AccountEntitlements.none,
+      );
+
+      final json = original.toJson();
+      final restored = CachedAccountEntitlements.fromJson(json);
+
+      expect(json['verified_at'], endsWith('Z'));
+      expect(restored.verifiedAt.isUtc, isTrue);
+      expect(restored.verifiedAt, localVerifiedAt.toUtc());
+    });
+
+    test('future-dated cache fails closed', () {
+      expect(
+        cacheWith().readAt(verifiedAt.subtract(const Duration(seconds: 1))),
+        isNull,
+      );
+    });
+  });
+
+  group('paid rollout separation', () {
+    const activePremium = EffectiveEntitlement(
+      key: EntitlementKey.premium,
+      isActive: true,
+      isPermanent: true,
+    );
+
+    test('sales off blocks a new sale but never revokes valid feature access',
+        () {
+      const rollout = PaidRollout(
+        key: EntitlementKey.premium,
+        salesAudience: RolloutAudience.off,
+        featureAudience: RolloutAudience.public,
+      );
+
+      expect(rollout.canStartSale(), isFalse);
+      expect(
+        rollout.hasFeatureAccess(entitlement: activePremium, now: now),
+        isTrue,
+      );
+    });
+
+    test('incident_disabled is a separate explicit access stop', () {
+      final rollouts = PaidRollouts.fromRpc({
+        'premium': {
+          'sales_rollout': 'off',
+          'feature_rollout': 'incident_disabled',
+          'sales_configured': true,
+          'feature_configured': true,
+        },
+        'studio': {
+          'sales_rollout': 'cohort',
+          'feature_rollout': null,
+          'sales_configured': true,
+          'feature_configured': false,
+        },
+      });
+
+      expect(rollouts.premium.incidentDisabled, isTrue);
+      expect(
+        rollouts.premium.hasFeatureAccess(entitlement: activePremium, now: now),
+        isFalse,
+      );
+      expect(rollouts.studio.featureAudience, RolloutAudience.public);
+      expect(rollouts.studio.featureConfigured, isFalse);
+    });
+
+    test('unconfigured safe default fails closed only for sales', () {
+      expect(PaidRollouts.safeDefault.premium.canStartSale(), isFalse);
+      expect(
+        PaidRollouts.safeDefault.premium
+            .hasFeatureAccess(entitlement: activePremium, now: now),
+        isTrue,
+      );
+    });
+
+    test('unconfigured values cannot open sales or disable valid access', () {
+      final rollouts = PaidRollouts.fromRpc({
+        'premium': {
+          'sales_rollout': 'public',
+          'feature_rollout': 'incident_disabled',
+          'incident_disabled': true,
+          'sales_configured': false,
+          'feature_configured': false,
+        },
+      });
+
+      expect(rollouts.premium.canStartSale(), isFalse);
+      expect(rollouts.premium.incidentDisabled, isFalse);
+      expect(
+        rollouts.premium.hasFeatureAccess(
+          entitlement: activePremium,
+          now: now,
+        ),
+        isTrue,
+      );
     });
   });
 

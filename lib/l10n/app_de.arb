@@ -322,15 +322,45 @@
   "profileDeleteAccountConfirm": "Dauerhaft löschen",
   "profileDeleteAccountSuccess": "Konto gelöscht.",
   "profileDeleteAccountError": "Konto konnte nicht gelöscht werden. Bitte kontaktiere den Support.",
-  "redeemAccessCodeTitle": "Gründungscode einlösen",
-  "redeemAccessCodeSubtitle": "Schalte mit deinem Code alle kostenpflichtigen Pakete frei.",
+  "redeemAccessCodeTitle": "Zugangscode einlösen",
+  "redeemAccessCodeSubtitle": "Nutze einen Vorteilscode für Premium oder Studio.",
+  "redeemAccessCodeDialogBody": "Ein Code kann Premium- oder Studio-Zugang direkt freischalten oder auf ein Store-Angebot verweisen.",
   "redeemAccessCodeHint": "Code eingeben",
   "redeemAccessCodeAction": "Einlösen",
-  "redeemAccessCodeSuccess": "Code eingelöst. Premium-Zugang ist aktiv.",
+  "redeemAccessCodeSuccess": "Code eingelöst. Premium-Zugang ist aktiv. Dies ist kein Abo und es erfolgt keine automatische Belastung.",
+  "redeemAccessCodeBenefitPremium": "Premium",
+  "redeemAccessCodeBenefitStudio": "Studio",
+  "redeemAccessCodeInternalGrantSuccess": "Code eingelöst. {benefit}-Zugang ist aktiv. Dies ist kein Abo und es erfolgt keine automatische Belastung.",
+  "@redeemAccessCodeInternalGrantSuccess": {
+    "placeholders": {
+      "benefit": {
+        "type": "String"
+      }
+    }
+  },
+  "redeemAccessCodeInternalGrantUntil": "Code eingelöst. {benefit}-Zugang ist bis {date} aktiv. Dies ist kein Abo und es erfolgt keine automatische Belastung.",
+  "@redeemAccessCodeInternalGrantUntil": {
+    "placeholders": {
+      "benefit": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "redeemAccessCodeStoreOfferPending": "Store-Angebot erkannt. Der Zugang ist noch nicht aktiv. Der Angebotsablauf ist in einer späteren Version verfügbar.",
+  "redeemAccessCodeUnknownBenefit": "Der Code wurde erkannt, aber der Zugang konnte nicht bestätigt werden. Es wurde kein Zugang aktiviert. Bitte kontaktiere den Support.",
   "redeemAccessCodeErrorInvalid": "Dieser Code ist ungültig.",
   "redeemAccessCodeErrorUsed": "Dieser Code wurde bereits eingelöst.",
   "redeemAccessCodeErrorExpired": "Dieser Code ist abgelaufen.",
   "redeemAccessCodeErrorUnsupported": "Dieser Code-Typ wird noch nicht unterstützt.",
+  "redeemAccessCodeErrorCampaignInactive": "Diese Vorteilskampagne ist nicht mehr aktiv.",
+  "redeemAccessCodeErrorRoleNotEligible": "Dieser Code ist für deine Kontorolle nicht verfügbar.",
+  "redeemAccessCodeErrorLimitReached": "Dieser Code hat sein Einlöselimit erreicht.",
+  "redeemAccessCodeErrorOfferUnavailable": "Für diesen Code ist auf deinem Gerät kein Store-Angebot verfügbar.",
+  "redeemAccessCodeErrorInvalidPlatform": "Dieser Code kann auf diesem Gerät nicht eingelöst werden.",
+  "redeemAccessCodeErrorServiceUnavailable": "Die Code-Einlösung ist vorübergehend nicht verfügbar. Bitte versuche es später erneut.",
   "redeemAccessCodeErrorUnauthorized": "Bitte melde dich erneut an und versuche es noch einmal.",
   "redeemAccessCodeErrorUnknown": "Code konnte nicht eingelöst werden. Bitte erneut versuchen.",
   "trainerDashboard": "Trainer-Dashboard",

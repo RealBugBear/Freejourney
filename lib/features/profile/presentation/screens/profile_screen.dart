@@ -14,6 +14,7 @@ import '../../../../features/assessment/presentation/providers/reflex_profile_pr
 import '../../../../features/auth/presentation/providers/auth_provider.dart';
 import '../../../../features/chat/presentation/widgets/direct_messages_action.dart';
 import '../../../../features/premium/data/premium_repository.dart';
+import '../../../../features/premium/domain/entitlement.dart';
 import '../../../../features/premium/presentation/providers/premium_provider.dart';
 import '../../../../features/trainer/presentation/providers/trainer_provider.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -242,27 +243,8 @@ class ProfileScreen extends ConsumerWidget {
     try {
       final submittedCode = await showDialog<String>(
         context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text(l10n.redeemAccessCodeTitle),
-          content: TextField(
-            controller: controller,
-            textCapitalization: TextCapitalization.characters,
-            autocorrect: false,
-            enableSuggestions: false,
-            decoration: InputDecoration(
-              labelText: l10n.redeemAccessCodeHint,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: Text(l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, controller.text),
-              child: Text(l10n.redeemAccessCodeAction),
-            ),
-          ],
+        builder: (ctx) => RedeemAccessCodeDialog(
+          controller: controller,
         ),
       );
 
@@ -272,27 +254,28 @@ class ProfileScreen extends ConsumerWidget {
         return;
       }
 
-      await ref.read(premiumRepositoryProvider).redeemAccessCode(submittedCode);
+      final result = await ref
+          .read(premiumRepositoryProvider)
+          .redeemAccessCode(submittedCode);
       ref.invalidate(entitlementProvider);
+      ref.invalidate(effectiveEntitlementsProvider);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.redeemAccessCodeSuccess)),
+          SnackBar(
+            content: Text(
+              redeemAccessCodeSuccessMessage(
+                l10n,
+                result,
+                Localizations.localeOf(context),
+              ),
+            ),
+          ),
         );
       }
     } on RedeemAccessCodeException catch (e) {
       if (!context.mounted) return;
-      final message = switch (e.error) {
-        RedeemAccessCodeError.invalidCode => l10n.redeemAccessCodeErrorInvalid,
-        RedeemAccessCodeError.alreadyRedeemed => l10n.redeemAccessCodeErrorUsed,
-        RedeemAccessCodeError.expired => l10n.redeemAccessCodeErrorExpired,
-        RedeemAccessCodeError.unsupported =>
-          l10n.redeemAccessCodeErrorUnsupported,
-        RedeemAccessCodeError.unauthorized =>
-          l10n.redeemAccessCodeErrorUnauthorized,
-        RedeemAccessCodeError.unknown => l10n.redeemAccessCodeErrorUnknown,
-      };
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
+        SnackBar(content: Text(redeemAccessCodeErrorMessage(l10n, e.error))),
       );
     } catch (_) {
       if (context.mounted) {
@@ -305,6 +288,107 @@ class ProfileScreen extends ConsumerWidget {
     }
   }
 }
+
+/// Existing profile redemption dialog, extracted only to make its bilingual
+/// and large-text behavior directly testable. It does not add a route or a
+/// paid surface.
+class RedeemAccessCodeDialog extends StatelessWidget {
+  const RedeemAccessCodeDialog({
+    required this.controller,
+    super.key,
+  });
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return AlertDialog(
+      title: Text(l10n.redeemAccessCodeTitle),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.redeemAccessCodeDialogBody),
+            const SizedBox(height: 16),
+            TextField(
+              controller: controller,
+              textCapitalization: TextCapitalization.characters,
+              autocorrect: false,
+              enableSuggestions: false,
+              decoration: InputDecoration(
+                labelText: l10n.redeemAccessCodeHint,
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, controller.text),
+          child: Text(l10n.redeemAccessCodeAction),
+        ),
+      ],
+    );
+  }
+}
+
+String redeemAccessCodeSuccessMessage(
+  AppLocalizations l10n,
+  RedeemAccessCodeResult result,
+  Locale locale,
+) {
+  if (result.benefitKind == BenefitKind.storeOffer) {
+    return l10n.redeemAccessCodeStoreOfferPending;
+  }
+  if (!result.grantsAccess || result.entitlementKey == null) {
+    return l10n.redeemAccessCodeUnknownBenefit;
+  }
+
+  final benefit = switch (result.entitlementKey!) {
+    EntitlementKey.premium => l10n.redeemAccessCodeBenefitPremium,
+    EntitlementKey.studio => l10n.redeemAccessCodeBenefitStudio,
+  };
+  final expiresAt = result.expiresAt;
+  if (expiresAt != null) {
+    final formatted =
+        DateFormat.yMMMd(locale.toLanguageTag()).format(expiresAt);
+    return l10n.redeemAccessCodeInternalGrantUntil(benefit, formatted);
+  }
+  return l10n.redeemAccessCodeInternalGrantSuccess(benefit);
+}
+
+String redeemAccessCodeErrorMessage(
+  AppLocalizations l10n,
+  RedeemAccessCodeError error,
+) =>
+    switch (error) {
+      RedeemAccessCodeError.invalidCode => l10n.redeemAccessCodeErrorInvalid,
+      RedeemAccessCodeError.alreadyRedeemed => l10n.redeemAccessCodeErrorUsed,
+      RedeemAccessCodeError.expired => l10n.redeemAccessCodeErrorExpired,
+      RedeemAccessCodeError.unsupported =>
+        l10n.redeemAccessCodeErrorUnsupported,
+      RedeemAccessCodeError.campaignInactive =>
+        l10n.redeemAccessCodeErrorCampaignInactive,
+      RedeemAccessCodeError.roleNotEligible =>
+        l10n.redeemAccessCodeErrorRoleNotEligible,
+      RedeemAccessCodeError.redemptionLimitReached =>
+        l10n.redeemAccessCodeErrorLimitReached,
+      RedeemAccessCodeError.offerUnavailable =>
+        l10n.redeemAccessCodeErrorOfferUnavailable,
+      RedeemAccessCodeError.invalidPlatform =>
+        l10n.redeemAccessCodeErrorInvalidPlatform,
+      RedeemAccessCodeError.benefitCodeSecretMissing =>
+        l10n.redeemAccessCodeErrorServiceUnavailable,
+      RedeemAccessCodeError.unauthorized =>
+        l10n.redeemAccessCodeErrorUnauthorized,
+      RedeemAccessCodeError.unknown => l10n.redeemAccessCodeErrorUnknown,
+    };
 
 class _SubjectProfilesSection extends ConsumerWidget {
   const _SubjectProfilesSection();

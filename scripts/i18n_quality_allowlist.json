@@ -28,6 +28,8 @@
     "progressRange30Days": "30d is an intentionally shared compact duration label.",
     "progressRange90Days": "90d is an intentionally shared compact duration label.",
     "progressRangeAll": "All is the existing German UI label and is idiomatic English.",
+    "redeemAccessCodeBenefitPremium": "Premium is the locale-independent entitlement name.",
+    "redeemAccessCodeBenefitStudio": "Studio is the locale-independent entitlement name.",
     "routineMode": "Routine is the established product-mode label in both locales.",
     "silentMode": "Silent is an intentionally shared product-mode name.",
     "stressLabel": "Stress is spelled identically and has the same meaning in both languages.",

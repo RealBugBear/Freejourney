@@ -742,11 +742,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not delete account. Please contact support.';
 
   @override
-  String get redeemAccessCodeTitle => 'Redeem founding code';
+  String get redeemAccessCodeTitle => 'Redeem access code';
 
   @override
   String get redeemAccessCodeSubtitle =>
-      'Unlock all paid packages with your code.';
+      'Use a benefit code for Premium or Studio.';
+
+  @override
+  String get redeemAccessCodeDialogBody =>
+      'A code may grant Premium or Studio access directly or identify a store offer.';
 
   @override
   String get redeemAccessCodeHint => 'Enter code';
@@ -756,7 +760,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get redeemAccessCodeSuccess =>
-      'Code redeemed. Premium access is now active.';
+      'Code redeemed. Premium access is active. This is not a subscription and there is no automatic charge.';
+
+  @override
+  String get redeemAccessCodeBenefitPremium => 'Premium';
+
+  @override
+  String get redeemAccessCodeBenefitStudio => 'Studio';
+
+  @override
+  String redeemAccessCodeInternalGrantSuccess(String benefit) {
+    return 'Code redeemed. $benefit access is active. This is not a subscription and there is no automatic charge.';
+  }
+
+  @override
+  String redeemAccessCodeInternalGrantUntil(String benefit, String date) {
+    return 'Code redeemed. $benefit access is active until $date. This is not a subscription and there is no automatic charge.';
+  }
+
+  @override
+  String get redeemAccessCodeStoreOfferPending =>
+      'Store offer recognized. Access is not active yet. The offer flow will be available in a later version.';
+
+  @override
+  String get redeemAccessCodeUnknownBenefit =>
+      'The code was recognized, but access could not be confirmed. No access was activated. Please contact support.';
 
   @override
   String get redeemAccessCodeErrorInvalid => 'This code is invalid.';
@@ -771,6 +799,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get redeemAccessCodeErrorUnsupported =>
       'This code type is not supported yet.';
+
+  @override
+  String get redeemAccessCodeErrorCampaignInactive =>
+      'This benefit campaign is no longer active.';
+
+  @override
+  String get redeemAccessCodeErrorRoleNotEligible =>
+      'This code is not available for your account role.';
+
+  @override
+  String get redeemAccessCodeErrorLimitReached =>
+      'This code has reached its redemption limit.';
+
+  @override
+  String get redeemAccessCodeErrorOfferUnavailable =>
+      'No store offer is available for this code on your device.';
+
+  @override
+  String get redeemAccessCodeErrorInvalidPlatform =>
+      'This code cannot be redeemed on this device.';
+
+  @override
+  String get redeemAccessCodeErrorServiceUnavailable =>
+      'Code redemption is temporarily unavailable. Please try again later.';
 
   @override
   String get redeemAccessCodeErrorUnauthorized =>
