@@ -1,8 +1,13 @@
 # I18N-EN Tracker — Vollständige englische Lokalisierung
 
 **Auftrag:** `docs/TRANSLATION_EN_PROMPT.md` (Quelle der Wahrheit für Regeln, Style Guide, Definition of Done).
+**Endspurt + Mehrsprachen-Fundament:** `docs/I18N_STRUCTURE_PROMPT.md` (2026-07-19) — der
+ausführungsfertige Prompt für alle Restarbeiten (W0–W8); Sessions steigen dort beim
+„Nächsten Block“ ein. Künftige Sprachen: `docs/I18N_ADD_LANGUAGE.md` (entsteht in W7).
 **Branch:** `i18n/english-localization` (abgezweigt von `main` @ `178d4bc`).
 **Diese Datei ist das Gedächtnis über Session-Grenzen hinweg** — nach jedem Arbeitsblock aktualisieren.
+
+**Nächster Block: W0** (In-flight-Batch verifizieren + landen, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
 
 ## Phasen-Checkliste
 
@@ -240,6 +245,16 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 
 ## Arbeitslog
+
+- **2026-07-19, Struktur-Prompt:** Vollständige Standortbestimmung (749 sichtbare Hardcodes
+  offen, davon 479 deutsch, 11 Formatstellen; 36 `== 'de'`-Ternaries; W0-Batch uncommitted;
+  `app.dart:409` trägt noch alte Inline-Reminder-Texte). Daraus den ausführungsfertigen
+  Prompt `docs/I18N_STRUCTURE_PROMPT.md` geschrieben: zentrale `AppLanguages`-Registry +
+  `pickLocalized`-Resolver (Code fertig vorgegeben), N-Sprachen-Gates, Batch-Plan B1–B7 für
+  die Rest-Externalisierung, Gate-Scharfschaltung, Runbook `I18N_ADD_LANGUAGE.md`,
+  Abschlussreport — inkl. Anti-Stall-Protokoll (Commit-oder-Revert, Tracker-Pflicht,
+  mechanische Reihenfolge), damit Folgesessions nicht mehr liegen bleiben. Ausführung ist
+  für günstigere Modell-Sessions (Opus 4.8) ausgelegt.
 
 - **2026-07-15, Begleitung/Mood/Settings/Profil:** 145 semantische Keys ergänzt
   (**753 DE = 753 EN**, jeweils mit Metadaten). Der scoped Audit meldet in allen
