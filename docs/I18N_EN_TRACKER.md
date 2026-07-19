@@ -7,7 +7,7 @@ ausführungsfertige Prompt für alle Restarbeiten (W0–W8); Sessions steigen do
 **Branch:** `i18n/english-localization` (abgezweigt von `main` @ `178d4bc`).
 **Diese Datei ist das Gedächtnis über Session-Grenzen hinweg** — nach jedem Arbeitsblock aktualisieren.
 
-**Nächster Block: W4/B1** (Rest-Externalisierung in Batches, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
+**Nächster Block: W4/B2** (Hinweise & Client-Push, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
 
 ## Phasen-Checkliste
 
@@ -216,13 +216,13 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | admin | features/admin/presentation/providers/admin_provider.dart | 9 | 0 | 0  | offen |
 | admin | features/admin/presentation/screens/admin_panel_screen.dart | 99 | 0 | 0  | offen |
 | dev_tools | features/dev_tools/presentation/screens/dev_tools_screen.dart | 36 | 7 | 0  | offen |
-| core/database | core/database/app_database.dart | 2 | 1 | 0  | offen |
+| core/database | core/database/app_database.dart | 2 | 1 | 0  | verifiziert (B1 `d955d11`, Logs/Assert bereits EN) |
 | core/database | core/database/backup_exclusion.dart | 0 | 1 | 0  | offen |
 | core/database | core/database/tables/exercises_table.dart | 0 | 0 | 2 bilingual-ok | offen |
 | core/logging | core/logging/logger_service.dart | 2 | 2 | 0  | offen |
 | core/monitoring | core/monitoring/sentry_service.dart | 1 | 2 | 0  | offen |
-| core/navigation | core/navigation/app_router.dart | 3 | 0 | 0  | offen |
-| core/navigation | core/navigation/app_shell.dart | 6 | 0 | 0  | offen |
+| core/navigation | core/navigation/app_router.dart | 3 | 0 | 0  | verifiziert (B1 `d955d11`, Audit 0) |
+| core/navigation | core/navigation/app_shell.dart | 6 | 0 | 0  | verifiziert (B1 `d955d11`, Tab-Labels DE/EN, Audit 0) |
 | core/notifications | core/notifications/notification_service.dart | 2 | 4 | 1  | offen |
 | core/onboarding | core/onboarding/onboarding_hint_gate.dart | 3 | 0 | 0  | offen |
 | core/onboarding | core/onboarding/onboarding_hint_provider.dart | 20 | 0 | 0  | offen |
@@ -234,17 +234,36 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | core/settings | core/settings/settings_provider.dart | 1 | 1 | 0  | offen |
 | core/sync | core/sync/exercises_sync_service.dart | 0 | 5 | 2 bilingual-ok | offen |
 | core/sync | core/sync/sync_service.dart | 1 | 14 | 0  | offen |
-| core/widgets | core/widgets/error_retry_widget.dart | 1 | 0 | 0  | offen |
-| lib/app.dart | app.dart | 6 | 2 | 4  | offen |
-| lib/bootstrap | bootstrap/bootstrap.dart | 26 | 7 | 0  | offen |
+| core/widgets | core/widgets/error_retry_widget.dart | 1 | 0 | 0  | verifiziert (B1 `d955d11`, lokalisierter Default, Audit 0) |
+| lib/app.dart | app.dart | 6 | 2 | 4  | verifiziert (W2+B1 `d955d11`, Kalender-/Reminder-Copy DE/EN, Audit 0) |
+| lib/bootstrap | bootstrap/bootstrap.dart | 26 | 7 | 0  | verifiziert (B1, alle Funde d-log, bereits EN) |
 | lib/bootstrap | bootstrap/providers.dart | 0 | 3 | 0  | offen |
-| lib/main_development.dart | main_development.dart | 20 | 4 | 0  | offen |
-| lib/main_production.dart | main_production.dart | 2 | 1 | 0  | offen |
-| lib/main_smoke.dart | main_smoke.dart | 1 | 0 | 0  | offen |
-| lib/main_staging.dart | main_staging.dart | 2 | 1 | 0  | offen |
+| lib/main_development.dart | main_development.dart | 20 | 4 | 0  | verifiziert (B1 `d955d11`, Fehlertitel ARB; Boot-Status bewusst EN-technisch, Allowlist) |
+| lib/main_production.dart | main_production.dart | 2 | 1 | 0  | verifiziert (B1 `d955d11`, Startfehler DE/EN via Geraetesprache) |
+| lib/main_smoke.dart | main_smoke.dart | 1 | 0 | 0  | verifiziert (B1, technischer Smoke-Marker, Allowlist) |
+| lib/main_staging.dart | main_staging.dart | 2 | 1 | 0  | verifiziert (B1 `d955d11`, Startfehler DE/EN via Geraetesprache) |
 
 
 ## Arbeitslog
+
+- **2026-07-19, B1 — Start & Gerüst (`d955d11`):** 10 neue ARB-Keys (**763 DE = 763 EN**).
+  Bottom-Navigation nutzt bestehende Keys (`today`, `progressTitle`, `accompanimentTitle`,
+  `profile`) plus neu `tabTrainer`/`tabAdmin` (DE=EN, mit Einzelbegründung in der
+  Quality-Allowlist). Router-Fehlerseite (`routeNotFound`), Startfehler-Screens in
+  production/staging (`startupCouldNotStart` — über `lookupAppLocalizations` aus der
+  Gerätesprache aufgelöst, weil beim Bootstrap-Fehler kein lokalisierter Context
+  existiert; DE-Nutzer sahen hier bisher Englisch), Dev-Fehlertitel
+  (`startupBootstrapFailedTitle`), Kalender-Event-Copy für bestätigte Termine
+  (Titel/Fallbacks/Snackbars, aus der aktiven App-Sprache aufgelöst) sowie gemeinsamer
+  `clientFallbackName` (ersetzt hartes `'Trainee'` im Router und `'Klient'` in `app.dart`).
+  `ErrorRetryWidget`: deutscher Default-Parameter ist jetzt nullable und fällt zur Laufzeit
+  auf `errorLoadFailed` zurück. Bewusst EN-technisch per exakter Audit-Allowlist:
+  Dev-Boot-Status (5 Einträge) und Smoke-Marker — Abweichung von „alle sichtbaren Texte in
+  ARB“ ist dev-/smoke-flavor-only und im Prompt (B1) vorgesehen. `bootstrap.dart` und
+  `app_database.dart` brauchten keine Änderung (nur d-log, bereits EN). Belege: scoped
+  Audit 0 nicht-erlaubte a/b/c-Funde in allen 10 B1-Dateien, `make i18n-check` 763/763,
+  analyze 0 Fehler/0 Warnungen, **283/283 Tests grün** (Shell-Testharness bekam
+  l10n-Delegates).
 
 - **2026-07-19, W3 — Gates auf N Sprachen (`75efb1f`):** `scripts/i18n_check.py`
   entdeckt jetzt alle `lib/l10n/app_*.arb` neben dem DE-Template und führt sämtliche
