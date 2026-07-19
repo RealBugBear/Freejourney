@@ -7,7 +7,7 @@ ausführungsfertige Prompt für alle Restarbeiten (W0–W8); Sessions steigen do
 **Branch:** `i18n/english-localization` (abgezweigt von `main` @ `178d4bc`).
 **Diese Datei ist das Gedächtnis über Session-Grenzen hinweg** — nach jedem Arbeitsblock aktualisieren.
 
-**Nächster Block: W0** (In-flight-Batch verifizieren + landen, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
+**Nächster Block: W1** (Sprach-Registry `AppLanguages`, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
 
 ## Phasen-Checkliste
 
@@ -152,7 +152,7 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | assessment | features/assessment/domain/completion_questions.dart | 0 | 0 | 7 bilingual-ok | verifiziert (DE/EN-Feldpaare) |
 | assessment | features/assessment/domain/draft_persistence_service.dart | 0 | 2 | 0  | offen |
 | assessment | features/assessment/domain/reflex_questionnaire_definitions.dart | 134 | 0 | 0  | verifiziert (123 Fragen, 8 Module, 5 Hilfen, 5 Flags als DE/EN-Feldpaare; Audit 0 a/b/c) |
-| assessment | features/assessment/domain/services/reflex_profile_pdf_service.dart | 36 | 0 | 1  | offen |
+| assessment | features/assessment/domain/services/reflex_profile_pdf_service.dart | 36 | 0 | 1  | offen (B3; Entwurf liegt als `docs/i18n/wip/reflex_profile_pdf_localization.patch`) |
 | assessment | features/assessment/presentation/providers/reflex_profile_provider.dart | 3 | 6 | 0  | offen |
 | assessment | features/assessment/presentation/screens/analysis_placeholder_screen.dart | 16 | 0 | 0  | offen |
 | assessment | features/assessment/presentation/screens/duration_recommendation_screen.dart | 20 | 0 | 0  | offen |
@@ -245,6 +245,31 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 
 ## Arbeitslog
+
+- **2026-07-19, W0 — In-flight-Batch teilweise gelandet (`dca9563`, `f6b3250`):**
+  Der Tree entsprach exakt der erwarteten Dateiliste. Der Content-Teil (Übungs-Copy,
+  Reflexlabels, Fragebogen, Completion-Frage) ist verifiziert und committet: DE-Werte sind
+  byte-identisch geblieben, geändert wurden ausschließlich EN-Felder; die neue EN-Copy nennt
+  Abbruchkriterien explizit („stop the exercise“, „ask a qualified professional“) und
+  vermeidet Diagnose-Sprache („identified as being on the autism spectrum“ statt „diagnosed
+  with“). Zwei Tests in `reflex_questionnaire_localization_test.dart` pinnten den alten Wert
+  `'FPR'`; sie prüfen jetzt `contains('FPR')` plus zusätzlich, dass `shortLabel('en')` kompakt
+  `'FPR'` bleibt — relevant, weil `reflex_radar_chart.dart:172` `shortLabel` zeichnet und die
+  langen Labels sonst das Radar sprengen würden. Belege: analyze 0 Fehler/0 Warnungen
+  (97 bekannte Infos), `make i18n-check` 753/753 DE=EN, **272/272 Tests grün**.
+
+  **Abweichung — W0-Commit 2 (PDF) verworfen:** `reflex_profile_pdf_service.dart` enthielt
+  einen unvollständigen Refactor. `createSummaryPdf` bekam die Pflicht-Parameter `locale` und
+  `copy` (24-Feld-Struktur `ReflexProfilePdfCopy`), aber der einzige Aufrufer
+  `reflex_profile_result_screen.dart:223` wurde nie angepasst → 2 `missing_required_argument`
+  -Fehler, der Tree kompilierte nicht. Heilen hätte ~24 ARB-Key-Paare plus Aufrufer-Verdrahtung
+  gebraucht — das ist B3-Umfang, nicht „≤3 kleine Fixes“. Datei daher per `git restore`
+  zurückgesetzt. Der Entwurf ist **nicht verloren**: er liegt als
+  `docs/i18n/wip/reflex_profile_pdf_localization.patch` und ist in B3 mit
+  `git apply` wiederverwendbar — die Trennung von Copy-Struktur und Layout dort ist gut und
+  sollte übernommen werden. Achtung beim Wiederaufsetzen: der Patch enthält ein eigenes
+  `_supportedLanguageCode` mit `== 'de'`, das nach W2 durch `pickLocalized`/`AppLanguages`
+  ersetzt gehört.
 
 - **2026-07-19, Struktur-Prompt:** Vollständige Standortbestimmung (749 sichtbare Hardcodes
   offen, davon 479 deutsch, 11 Formatstellen; 36 `== 'de'`-Ternaries; W0-Batch uncommitted;
