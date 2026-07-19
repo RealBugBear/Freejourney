@@ -10,6 +10,8 @@ import 'app.dart';
 import 'bootstrap/bootstrap.dart';
 import 'bootstrap/providers.dart';
 import 'config/app_config.dart';
+import 'core/l10n/app_languages.dart';
+import 'l10n/app_localizations.dart';
 
 // Write to TMPDIR (sandbox temp dir) — readable via devicectl without path_provider
 File? _dbgFile;
@@ -130,6 +132,16 @@ class _DevelopmentBootstrapAppState extends State<_DevelopmentBootstrapApp> {
   Widget build(BuildContext context) {
     if (_app != null) return _app!;
 
+    // Boot-status copy stays deliberately English-technical (dev flavor);
+    // only the visible failure heading is localized, resolved from the
+    // device language because no localized context exists yet.
+    final l10n = lookupAppLocalizations(
+      Locale(
+        AppLanguages.resolveInitial(
+          WidgetsBinding.instance.platformDispatcher.locale.languageCode,
+        ),
+      ),
+    );
     return MaterialApp(
       home: Scaffold(
         backgroundColor: const Color(0xFF1565C0),
@@ -148,7 +160,7 @@ class _DevelopmentBootstrapAppState extends State<_DevelopmentBootstrapApp> {
                 Text(
                   _error == null
                       ? 'Reflex Journey DEV booting'
-                      : 'Bootstrap failed',
+                      : l10n.startupBootstrapFailedTitle,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

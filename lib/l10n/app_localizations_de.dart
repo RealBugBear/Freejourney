@@ -2668,4 +2668,43 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get profileContactNameHint => 'z. B. Maria oder Familie Müller';
+
+  @override
+  String get tabTrainer => 'Trainer';
+
+  @override
+  String get tabAdmin => 'Admin';
+
+  @override
+  String routeNotFound(String error) {
+    return 'Seite nicht gefunden: $error';
+  }
+
+  @override
+  String get startupCouldNotStart =>
+      'Reflex Journey konnte nicht gestartet werden. Bitte starte die App neu oder installiere sie neu.';
+
+  @override
+  String get startupBootstrapFailedTitle => 'Start fehlgeschlagen';
+
+  @override
+  String get clientFallbackName => 'Klient';
+
+  @override
+  String get appointmentCalendarFallbackTitle => 'Isometrische Partnerübung';
+
+  @override
+  String appointmentCalendarEventTitle(String title, String name) {
+    return '$title (mit $name)';
+  }
+
+  @override
+  String appointmentCalendarAdded(String name) {
+    return 'Termin mit $name wurde dem Kalender hinzugefügt.';
+  }
+
+  @override
+  String appointmentCalendarOpenFailed(String error) {
+    return 'Kalender konnte nicht geöffnet werden: $error';
+  }
 }

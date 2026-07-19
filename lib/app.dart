@@ -283,7 +283,7 @@ Future<void> _handleNotificationPayload(
   }
 
   if (type == 'appointment_confirmed') {
-    await _addConfirmedAppointmentToCalendar(payload);
+    await _addConfirmedAppointmentToCalendar(ref, payload);
     return;
   }
 
@@ -311,6 +311,7 @@ Future<void> _openCallFromPayload(
 }
 
 Future<void> _addConfirmedAppointmentToCalendar(
+  WidgetRef ref,
   Map<String, String> payload,
 ) async {
   final scheduledRaw = payload['scheduled_for'];
@@ -319,21 +320,26 @@ Future<void> _addConfirmedAppointmentToCalendar(
   final start = DateTime.tryParse(scheduledRaw)?.toLocal();
   if (start == null) return;
 
+  // Runs from a push payload without a localized BuildContext, so resolve
+  // the catalog for the active app language directly.
+  final l10n = lookupAppLocalizations(
+    Locale(ref.read(settingsProvider).languageCode),
+  );
   final durationMinutes =
       (int.tryParse(payload['duration_minutes'] ?? '') ?? 60).clamp(15, 240);
   final title = payload['title']?.isNotEmpty == true
       ? payload['title']!
-      : 'Isometrische Partnerübung';
+      : l10n.appointmentCalendarFallbackTitle;
   final traineeName = payload['trainee_name']?.isNotEmpty == true
       ? payload['trainee_name']!
-      : 'Klient';
+      : l10n.clientFallbackName;
   final messenger = rootNavigatorKey.currentContext != null
       ? ScaffoldMessenger.maybeOf(rootNavigatorKey.currentContext!)
       : null;
 
   try {
     await CalendarService.instance.createCalendarEvent(
-      title: '$title (mit $traineeName)',
+      title: l10n.appointmentCalendarEventTitle(title, traineeName),
       start: start,
       duration: Duration(minutes: durationMinutes),
       location:
@@ -342,14 +348,11 @@ Future<void> _addConfirmedAppointmentToCalendar(
           payload['notes']?.isNotEmpty == true ? payload['notes'] : null,
     );
     messenger?.showSnackBar(
-      SnackBar(
-        content:
-            Text('Termin mit $traineeName wurde dem Kalender hinzugefügt.'),
-      ),
+      SnackBar(content: Text(l10n.appointmentCalendarAdded(traineeName))),
     );
   } catch (e) {
     messenger?.showSnackBar(
-      SnackBar(content: Text('Kalender konnte nicht geöffnet werden: $e')),
+      SnackBar(content: Text(l10n.appointmentCalendarOpenFailed('$e'))),
     );
   }
 }

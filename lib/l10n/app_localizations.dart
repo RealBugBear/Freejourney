@@ -4616,6 +4616,66 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'z. B. Maria oder Familie Müller'**
   String get profileContactNameHint;
+
+  /// Bottom navigation tab label for the trainer area
+  ///
+  /// In de, this message translates to:
+  /// **'Trainer'**
+  String get tabTrainer;
+
+  /// Bottom navigation tab label for the admin panel
+  ///
+  /// In de, this message translates to:
+  /// **'Admin'**
+  String get tabAdmin;
+
+  /// Router error screen when no route matches
+  ///
+  /// In de, this message translates to:
+  /// **'Seite nicht gefunden: {error}'**
+  String routeNotFound(String error);
+
+  /// Full-screen message when app initialization fails at launch
+  ///
+  /// In de, this message translates to:
+  /// **'Reflex Journey konnte nicht gestartet werden. Bitte starte die App neu oder installiere sie neu.'**
+  String get startupCouldNotStart;
+
+  /// Heading on the development boot screen when initialization fails
+  ///
+  /// In de, this message translates to:
+  /// **'Start fehlgeschlagen'**
+  String get startupBootstrapFailedTitle;
+
+  /// Generic client display name when the real name is unavailable
+  ///
+  /// In de, this message translates to:
+  /// **'Klient'**
+  String get clientFallbackName;
+
+  /// Calendar event title when the appointment payload has none
+  ///
+  /// In de, this message translates to:
+  /// **'Isometrische Partnerübung'**
+  String get appointmentCalendarFallbackTitle;
+
+  /// Calendar event title combining appointment title and client name
+  ///
+  /// In de, this message translates to:
+  /// **'{title} (mit {name})'**
+  String appointmentCalendarEventTitle(String title, String name);
+
+  /// Snackbar after a confirmed appointment was written to the device calendar
+  ///
+  /// In de, this message translates to:
+  /// **'Termin mit {name} wurde dem Kalender hinzugefügt.'**
+  String appointmentCalendarAdded(String name);
+
+  /// Snackbar when writing a confirmed appointment to the device calendar fails
+  ///
+  /// In de, this message translates to:
+  /// **'Kalender konnte nicht geöffnet werden: {error}'**
+  String appointmentCalendarOpenFailed(String error);
 }
 
 class _AppLocalizationsDelegate

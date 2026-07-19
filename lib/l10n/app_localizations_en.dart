@@ -2649,4 +2649,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileContactNameHint => 'e.g., Maria or the Miller family';
+
+  @override
+  String get tabTrainer => 'Trainer';
+
+  @override
+  String get tabAdmin => 'Admin';
+
+  @override
+  String routeNotFound(String error) {
+    return 'Page not found: $error';
+  }
+
+  @override
+  String get startupCouldNotStart =>
+      'Reflex Journey could not start. Please restart the app or reinstall.';
+
+  @override
+  String get startupBootstrapFailedTitle => 'Bootstrap failed';
+
+  @override
+  String get clientFallbackName => 'Client';
+
+  @override
+  String get appointmentCalendarFallbackTitle => 'Isometric partner exercise';
+
+  @override
+  String appointmentCalendarEventTitle(String title, String name) {
+    return '$title (with $name)';
+  }
+
+  @override
+  String appointmentCalendarAdded(String name) {
+    return 'The appointment with $name was added to your calendar.';
+  }
+
+  @override
+  String appointmentCalendarOpenFailed(String error) {
+    return 'Could not open the calendar: $error';
+  }
 }

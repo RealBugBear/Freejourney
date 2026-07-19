@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/chat/presentation/providers/chat_providers.dart';
 import '../../features/trainer/presentation/providers/trainer_provider.dart';
+import '../../l10n/app_localizations.dart';
 import 'app_router.dart';
 
 class AppShell extends ConsumerWidget {
@@ -40,6 +41,7 @@ class AppShell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final role = ref.watch(userRoleProvider).valueOrNull ?? 'practitioner';
     final isAdmin = role == 'admin';
     final isTrainer = role == 'trainer' || isAdmin;
@@ -53,15 +55,15 @@ class AppShell extends ConsumerWidget {
         selectedIndex: currentIndex,
         onDestinationSelected: (index) => context.go(tabRoutes[index]),
         destinations: [
-          const NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Heute',
+          NavigationDestination(
+            icon: const Icon(Icons.home_outlined),
+            selectedIcon: const Icon(Icons.home),
+            label: l10n.today,
           ),
-          const NavigationDestination(
-            icon: Icon(Icons.insights_outlined),
-            selectedIcon: Icon(Icons.insights),
-            label: 'Verlauf',
+          NavigationDestination(
+            icon: const Icon(Icons.insights_outlined),
+            selectedIcon: const Icon(Icons.insights),
+            label: l10n.progressTitle,
           ),
           NavigationDestination(
             icon: Badge(
@@ -74,24 +76,24 @@ class AppShell extends ConsumerWidget {
               label: unreadDm > 99 ? const Text('99+') : Text('$unreadDm'),
               child: const Icon(Icons.handshake),
             ),
-            label: 'Begleitung',
+            label: l10n.accompanimentTitle,
           ),
           if (isTrainer)
-            const NavigationDestination(
-              icon: Icon(Icons.supervisor_account_outlined),
-              selectedIcon: Icon(Icons.supervisor_account),
-              label: 'Trainer',
+            NavigationDestination(
+              icon: const Icon(Icons.supervisor_account_outlined),
+              selectedIcon: const Icon(Icons.supervisor_account),
+              label: l10n.tabTrainer,
             ),
           if (isAdmin)
-            const NavigationDestination(
-              icon: Icon(Icons.admin_panel_settings_outlined),
-              selectedIcon: Icon(Icons.admin_panel_settings),
-              label: 'Admin',
+            NavigationDestination(
+              icon: const Icon(Icons.admin_panel_settings_outlined),
+              selectedIcon: const Icon(Icons.admin_panel_settings),
+              label: l10n.tabAdmin,
             ),
-          const NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profil',
+          NavigationDestination(
+            icon: const Icon(Icons.person_outline),
+            selectedIcon: const Icon(Icons.person),
+            label: l10n.profile,
           ),
         ],
       ),

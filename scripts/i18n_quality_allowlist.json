@@ -31,6 +31,8 @@
     "routineMode": "Routine is the established product-mode label in both locales.",
     "silentMode": "Silent is an intentionally shared product-mode name.",
     "stressLabel": "Stress is spelled identically and has the same meaning in both languages.",
+    "tabAdmin": "Admin is the identical technical role abbreviation in both languages.",
+    "tabTrainer": "Trainer is the established role name in German product copy and identical in English.",
     "themeSystem": "System is the conventional platform-theme label in both languages.",
     "trainerDiscoveryRadiusLabel": "The numeric radius and SI unit km are locale-independent.",
     "trainerSetupBioLabel": "Bio is the conventional short profile label in both languages.",

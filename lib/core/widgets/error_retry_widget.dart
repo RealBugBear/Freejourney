@@ -5,12 +5,13 @@ import '../../l10n/app_localizations.dart';
 
 /// Full-screen/list-body error with optional retry button.
 class ErrorRetryWidget extends StatelessWidget {
-  final String message;
+  /// Defaults to the localized generic load-failure copy when null.
+  final String? message;
   final VoidCallback? onRetry;
 
   const ErrorRetryWidget({
     super.key,
-    this.message = 'Daten konnten nicht geladen werden.',
+    this.message,
     this.onRetry,
   });
 
@@ -27,7 +28,7 @@ class ErrorRetryWidget extends StatelessWidget {
                 size: 48, color: AppColors.error.withValues(alpha: 0.7)),
             const SizedBox(height: 16),
             Text(
-              message,
+              message ?? AppLocalizations.of(context).errorLoadFailed,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium

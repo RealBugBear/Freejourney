@@ -4,3 +4,12 @@
 *	🇩🇪 Deutsch
 *	🇬🇧 English
 lib/features/mood/presentation/widgets/training_experience_sheet.dart	training
+# Development-flavor boot diagnostics: developer-facing, deliberately
+# English-technical (per I18N_STRUCTURE_PROMPT B1); never ships to users.
+lib/main_development.dart	Error: ⟦…⟧
+lib/main_development.dart	Starting DEV bootstrap...
+lib/main_development.dart	Loading .env.dev
+lib/main_development.dart	Starting sync service
+lib/main_development.dart	Reflex Journey DEV booting
+# Smoke-test flavor renders one technical marker string for CI/device checks.
+lib/main_smoke.dart	Reflex Journey smoke test

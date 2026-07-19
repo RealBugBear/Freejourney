@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../config/launch_flags.dart';
+import '../../l10n/app_localizations.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../settings/settings_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
@@ -346,7 +347,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 TrainerClient(
                   relationshipId: '',
                   clientId: clientId,
-                  displayName: 'Trainee',
+                  displayName: AppLocalizations.of(context).clientFallbackName,
                   currentDay: 1,
                   dailyStreak: 0,
                 ),
@@ -552,7 +553,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
-      body: Center(child: Text('Page not found: ${state.error}')),
+      body: Center(
+        child: Text(
+          AppLocalizations.of(context).routeNotFound('${state.error}'),
+        ),
+      ),
     ),
   );
 });

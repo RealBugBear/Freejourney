@@ -1295,5 +1295,37 @@
   "profileContactNameBodyWithCommunity": "Dein Kontaktname ist sichtbar für Trainer und im Kursbereich. Er kann sich von deinem Community-Namen unterscheiden.",
   "@profileContactNameBodyWithCommunity": {"description": "Initial contact name explanation with community features"},
   "profileContactNameHint": "z. B. Maria oder Familie Müller",
-  "@profileContactNameHint": {"description": "Example initial contact name"}
+  "@profileContactNameHint": {"description": "Example initial contact name"},
+  "tabTrainer": "Trainer",
+  "@tabTrainer": {"description": "Bottom navigation tab label for the trainer area"},
+  "tabAdmin": "Admin",
+  "@tabAdmin": {"description": "Bottom navigation tab label for the admin panel"},
+  "routeNotFound": "Seite nicht gefunden: {error}",
+  "@routeNotFound": {
+    "description": "Router error screen when no route matches",
+    "placeholders": {"error": {"type": "String"}}
+  },
+  "startupCouldNotStart": "Reflex Journey konnte nicht gestartet werden. Bitte starte die App neu oder installiere sie neu.",
+  "@startupCouldNotStart": {"description": "Full-screen message when app initialization fails at launch"},
+  "startupBootstrapFailedTitle": "Start fehlgeschlagen",
+  "@startupBootstrapFailedTitle": {"description": "Heading on the development boot screen when initialization fails"},
+  "clientFallbackName": "Klient",
+  "@clientFallbackName": {"description": "Generic client display name when the real name is unavailable"},
+  "appointmentCalendarFallbackTitle": "Isometrische Partnerübung",
+  "@appointmentCalendarFallbackTitle": {"description": "Calendar event title when the appointment payload has none"},
+  "appointmentCalendarEventTitle": "{title} (mit {name})",
+  "@appointmentCalendarEventTitle": {
+    "description": "Calendar event title combining appointment title and client name",
+    "placeholders": {"title": {"type": "String"}, "name": {"type": "String"}}
+  },
+  "appointmentCalendarAdded": "Termin mit {name} wurde dem Kalender hinzugefügt.",
+  "@appointmentCalendarAdded": {
+    "description": "Snackbar after a confirmed appointment was written to the device calendar",
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "appointmentCalendarOpenFailed": "Kalender konnte nicht geöffnet werden: {error}",
+  "@appointmentCalendarOpenFailed": {
+    "description": "Snackbar when writing a confirmed appointment to the device calendar fails",
+    "placeholders": {"error": {"type": "String"}}
+  }
 }

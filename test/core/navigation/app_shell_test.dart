@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:corejourney/core/navigation/app_shell.dart';
 import 'package:corejourney/features/trainer/presentation/providers/trainer_provider.dart';
 import 'package:corejourney/features/chat/presentation/providers/chat_providers.dart';
+import 'package:corejourney/l10n/app_localizations.dart';
 
 Widget _buildApp({
   bool trainerLinked = false,
@@ -56,7 +57,12 @@ Widget _buildApp({
       trainerLinkedProvider.overrideWithValue(trainerLinked),
       unreadDmCountProvider.overrideWithValue(unreadDm),
     ],
-    child: MaterialApp.router(routerConfig: router),
+    child: MaterialApp.router(
+      routerConfig: router,
+      locale: const Locale('de'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+    ),
   );
 }
 
