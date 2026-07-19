@@ -7,7 +7,7 @@ ausführungsfertige Prompt für alle Restarbeiten (W0–W8); Sessions steigen do
 **Branch:** `i18n/english-localization` (abgezweigt von `main` @ `178d4bc`).
 **Diese Datei ist das Gedächtnis über Session-Grenzen hinweg** — nach jedem Arbeitsblock aktualisieren.
 
-**Nächster Block: W3** (Gates auf N Sprachen verallgemeinern, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
+**Nächster Block: W4/B1** (Rest-Externalisierung in Batches, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
 
 ## Phasen-Checkliste
 
@@ -245,6 +245,22 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 
 ## Arbeitslog
+
+- **2026-07-19, W3 — Gates auf N Sprachen (`75efb1f`):** `scripts/i18n_check.py`
+  entdeckt jetzt alle `lib/l10n/app_*.arb` neben dem DE-Template und führt sämtliche
+  Prüfungen (Key-/Metadaten-Parität, Leerwerte, ICU-Platzhalter, Umlaut-Check nur für
+  Nicht-DE) pro Zielsprache in einer Schleife aus; Fehlermeldungen nennen die Datei,
+  jede scheiternde Sprache setzt Exit ≠ 0. Fixture-Tests belegen: ein unvollständiges
+  `app_fr.arb` lässt das Gate scheitern, ein vollständiges besteht.
+  `scripts/i18n_quality_check.py` deklariert `RULES_BY_LOCALE` (derzeit nur EN);
+  Kataloge ohne Regelwerk werden mit explizitem Hinweis übersprungen („app_fr.arb: no
+  quality rules defined yet — add them when the language ships“), EN-Verhalten
+  byte-identisch. **Umgebungs-Befund:** das System-`python3` ist 3.9 (das frühere 3.14
+  aus den `__pycache__`-Artefakten existiert nicht mehr); ein
+  `from __future__ import annotations` im Quality-Testmodul stellt die Lauffähigkeit
+  her, die Skripte selbst hatten den Import bereits. `make i18n-check` unverändert
+  (nur Kommentar). Belege: 27 Python-Tests grün, `make i18n-check` 753/753,
+  **283/283 Flutter-Tests grün**.
 
 - **2026-07-19, W2 — Content-Resolver `pickLocalized` (`af9360b`):** Neu
   `lib/core/l10n/localized_content.dart` — die eine Stelle, die die Content-Fallback-
