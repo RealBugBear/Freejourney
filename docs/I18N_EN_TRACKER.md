@@ -7,7 +7,7 @@ ausführungsfertige Prompt für alle Restarbeiten (W0–W8); Sessions steigen do
 **Branch:** `i18n/english-localization` (abgezweigt von `main` @ `178d4bc`).
 **Diese Datei ist das Gedächtnis über Session-Grenzen hinweg** — nach jedem Arbeitsblock aktualisieren.
 
-**Nächster Block: W1** (Sprach-Registry `AppLanguages`, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
+**Nächster Block: W2** (Content-Resolver `pickLocalized`, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
 
 ## Phasen-Checkliste
 
@@ -245,6 +245,22 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 
 ## Arbeitslog
+
+- **2026-07-19, W1 — Sprach-Registry `AppLanguages` (`f72cdc8`):** Neu
+  `lib/core/l10n/app_languages.dart` als einziges Verzeichnis der unterstützten Sprachen
+  (Code, Autonym, Flagge) plus `locales`, `isSupported`, `resolveInitial`, `normalize`,
+  `byCode`. Verdrahtet: `app.dart` (`supportedLocales`), `settings_provider.dart`
+  (Erstsprach-Erkennung + `assert` in `setLanguage`), `language_selection_screen.dart`
+  (Schleife statt zwei fester Buttons), `settings_screen.dart` (Optionsliste + Label über
+  `byCode`), `login_screen.dart` (Chips aus Registry), `profile_locale_sync_service.dart`
+  (`normalize` statt eigener de/en-Prüfung). **Sichtbare Copy unverändert:** die ARB-Werte
+  `languageGerman`/`languageEnglish` waren bereits exakt die Autonyme („Deutsch“/„English“,
+  in beiden Katalogen identisch) — die Allowlist-Einträge für die Login-Chips bleiben gültig.
+  Eine Verhaltensnuance bewusst erhalten: der Sync akzeptierte vorher via `startsWith('en')`
+  auch `en-US`; jetzt wird der Region-Subtag vor `normalize` abgeschnitten, damit `en-US`
+  nicht auf `de` zurückfällt. 6 Registry-Tests plus ein Sprachwahl-Widgettest, der über
+  `AppLanguages.all` iteriert statt hart 2 Buttons zu erwarten. Belege: analyze 0 Fehler/
+  0 Warnungen, `make i18n-check` 753/753, **279/279 Tests grün**.
 
 - **2026-07-19, W0 — In-flight-Batch teilweise gelandet (`dca9563`, `f6b3250`):**
   Der Tree entsprach exakt der erwarteten Dateiliste. Der Content-Teil (Übungs-Copy,
