@@ -1,10 +1,11 @@
 # Monetization + Trainer Studio — Master Execution Prompt
 
-**Stand:** 2026-07-10
+**Stand:** 2026-07-19
 **Zweck:** Ein Einstiegsprompt für den vollständigen Weg von Founder-
 Entscheidungen über Apple/Android-Payments bis Trainer-Studio-Pilot.
-**Modus heute:** Planung abgeschlossen; keine Implementierungsfreigabe allein
-durch die Existenz dieses Dokuments.
+**Modus heute:** T25.0 ist lokal abgeschlossen. T25.1 bleibt durch X3
+blockiert; der nächste ausführbare Punkt ist Studio-P0. Kein Live-/Portal-/
+Aktivierungs-Go allein durch die Existenz dieses Dokuments.
 
 ## 1. Source of Truth
 
@@ -50,8 +51,8 @@ Grund · ⏸ wartet auf Gate`.
 
 | ID | Status |
 |---|---|
-| PM-D1–PM-D12 Payments/Codes/Rollout-Regel | ☐ Founder-Entscheid offen |
-| TS-6–TS-11 Studio/Free MVP | ☐ Founder-Entscheid offen |
+| PM-D1–PM-D12 Payments/Codes/Rollout-Regel | ✅ 2026-07-19 — wie empfohlen freigegeben; Preise bleiben Hypothesen; Live-/Portal-/Aktivierungsgates separat |
+| TS-6–TS-11 Studio/Free MVP | ✅ 2026-07-19 — wie empfohlen freigegeben; TS-8 und finale Free-MVP-Daten bleiben bis Research/Pilotplanung Hypothesen |
 | R8 Bestandsschutz Nutzer | ☐ Founder-Freigabe offen |
 
 ### Externe Grundlagen
@@ -74,26 +75,26 @@ Grund · ⏸ wartet auf Gate`.
 | P2 Low-Fi-Konzepttest | ☐ offen |
 | P3A Daten-/Rechts-Entscheid | ☐ offen |
 | P3B Store-/Pricing-Entscheid | ⏸ parallel möglich; Pflicht vor P4B |
-| P4A Free-MVP-Build-Readiness | ⏸ wartet auf P0–P3A + T25.0 |
+| P4A Free-MVP-Build-Readiness | ⏸ wartet auf P0–P3A; T25.0 lokal erfüllt |
 | P4B Paid-Pilot-Readiness | ⏸ wartet auf Free-MVP-Auswertung + P3B + T25.5 |
 
 ### Payments
 
 | Task | Status |
 |---|---|
-| T25.0 Multi-Grant-/Benefit-Code-Fundament | ⏸ wartet auf PM-D1–D11-Go |
-| T25.1 RevenueCat Core + Test Store | ⏸ wartet auf T25.0 + X3 |
-| T25.2 Webhook + Reconciliation | ⏸ wartet auf T25.0/T25.1 + X3 |
+| T25.0 Multi-Grant-/Benefit-Code-Fundament | ✅ 2026-07-19 lokal implementiert/verifiziert — `docs/evidence/T25.0/README.md`; kein Live-Apply/Deploy |
+| T25.1 RevenueCat Core + Test Store | ⛔ blockiert: X3 RevenueCat-Projekt |
+| T25.2 Webhook + Reconciliation | ⏸ wartet auf T25.1 + X3 |
 | T25.3 Apple IAP | ⏸ wartet auf T25.1/T25.2 + X1 |
 | T25.4 Google Play Billing | ⏸ wartet auf T25.1/T25.2 + X4/X5 |
-| T25.5 Operations/Activation Readiness | ⏸ wartet auf T25.0–T25.4 |
+| T25.5 Operations/Activation Readiness | ⏸ wartet auf T25.1–T25.4 |
 | Nutzer-Paywall-Aktivierung | ⏸ wartet auf T25.5 + R8 + Legal + Founder-Go |
 
 ### Trainer Studio
 
 | Task | Status |
 |---|---|
-| T27.1 Studio-Entitlement/Rollout | ⏸ wartet auf P4A + T25.0 |
+| T27.1 Studio-Entitlement/Rollout | ⏸ wartet auf P4A; T25.0 lokal erfüllt |
 | T27.2 kostenlose Kohorten-UX | ⏸ wartet auf T27.1 + P2 |
 | T27.3 Klienten-Briefing | ⏸ wartet auf T27.1 + P3A-Matrix/Legal |
 | T27.4 Termin-Automation | ⏸ wartet auf T27.1 |
@@ -111,8 +112,8 @@ Die Session wählt genau einen Punkt:
 2. Ist eine notwendige Founder-Portalaktion der einzige Blocker des nächsten
    technischen Tasks? Erstelle/verwende die exakte gemeinsame Klickcheckliste;
    mutiere Portale nur interaktiv mit Founder-Go.
-3. Ist T25.0 freigegeben? Das Multi-Grant-/Benefit-Fundament hat Priorität vor
-   Store- oder Studio-Code.
+3. Ist T25.0 noch offen und freigegeben? Das Multi-Grant-/Benefit-Fundament hat
+   Priorität vor Store- oder Studio-Code.
 4. Während X1–X5 blockieren, arbeite den nächsten offenen P0–P3B-
    Discoverypunkt; Wartezeit wird so genutzt, Gate aber nicht gestrichen.
 5. Nach T25.0 und P0–P3A: P4A. Nur P4A-GO öffnet Free-MVP-Build/T27.6A.
@@ -168,8 +169,9 @@ Wenn die Empfehlungen passen, reicht:
 > dann bleiben Compile-Flags die einzige Gate-Mechanik und der Kill Switch
 > braucht ein Store-Update.
 
-Danach ist T25.0 der erste technische Task. Parallel kann P0/P1 vorbereitet
-werden, während externe Konten angelegt werden.
+Zum Zeitpunkt dieser Freigabe war T25.0 der erste technische Task; er ist
+inzwischen lokal abgeschlossen. Während X3 den nächsten Payment-Task blockiert,
+ist P0 der nächste ausführbare Discoverypunkt.
 
 ## 7. Session-Abschlussvertrag
 

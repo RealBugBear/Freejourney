@@ -1,6 +1,6 @@
 # Trainer Studio — ausführbare Build-Prompts T27.1–T27.6B
 
-**Stand:** 2026-07-10
+**Stand:** 2026-07-19
 **Status:** Prompts fertig; Ausführung wartet auf P4A-/P4B-Go und jeweilige Gates
 **Product Source of Truth:**
 `docs/superpowers/specs/2026-07-08-trainer-studio-design.md`
@@ -15,6 +15,11 @@ Konzepttest, Datenvertrag und Recht; P4B zusätzlich Store/Pricing.
 
 ## 1. Founder-Entscheidungspaket
 
+> **Founder-Entscheid 2026-07-19:** TS-6–TS-11 wie empfohlen freigegeben.
+> TS-8 und die finalen Free-MVP-Daten bleiben bis Research/Pilotplanung
+> Hypothesen. Live-/Portal-/Aktivierungsgates bleiben separat; insbesondere
+> ist dies kein P4A-/P4B-Go.
+
 ### TS-6 — Gründer-Vorteil
 
 **Empfehlung:** Startpreis-Grandfathering gemäß Payments Plan PM-D5. Copy nur:
@@ -26,11 +31,12 @@ Kein Prozent- oder Wiederanmeldeversprechen.
 
 ### TS-7 — Plattformen
 
-**Empfehlung:** Eine plattformneutrale Codebasis für iPhone, iPad, Android Phone
-und Tablet. Bezahlter Pilot startet iOS-first; Android folgt unmittelbar nach
-T25.4-E2E. GA erst, wenn beide Plattformen die jeweilige Store-Testmatrix
-erfüllen, sofern der Founder Android nicht ausdrücklich als Fast-Follow
-kommuniziert.
+**Freigegebene Auslegung:** Eine plattformneutrale Codebasis für iPhone, iPad,
+Android Phone und Tablet. Der kostenlose geschlossene MVP darf iOS-first
+starten; Android folgt, sobald der Build stabil verfügbar ist. Ein späterer
+bezahlter Pilot startet iOS-first; Android folgt unmittelbar nach T25.4-E2E.
+GA erst, wenn beide Plattformen die jeweilige Store-Testmatrix erfüllen,
+sofern der Founder Android nicht ausdrücklich als Fast-Follow kommuniziert.
 
 ### TS-8 — v1-Scope
 
@@ -288,9 +294,9 @@ Kein Versand, keine Aktivierung und kein GA ohne separates Founder-Go.
 ## 5. Reihenfolge
 
 ```text
-JETZT:       Founder-Entscheide PM-D1–D11 + TS-6–TS-11
-FOUNDATION:  T25.0 Multi-Grant + Benefit-Codes
-DISCOVERY:   P1 → P2 → P3A → P4A Free-MVP-GO
+ENTSCHEIDE:  ✅ PM-D1–PM-D12 + TS-6–TS-11 (Hypothesen bleiben markiert)
+FOUNDATION:  ✅ T25.0 lokal; Live-Apply/Deploy separat gegated
+DISCOVERY:   P0 → P1 → P2 → P3A → P4A Free-MVP-GO
 FREE MVP:    T27.1 → T27.2 + T27.3 + T27.4 → T27.6A → Auswertung
 PAYMENTS:    P3B + T25.1 → T25.2 → T25.3 + T25.4 → T25.5 (parallel)
 PAID PILOT:  P4B-GO → T27.6B → Auswertung → GA-Entscheid

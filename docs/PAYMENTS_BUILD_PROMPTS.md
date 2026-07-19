@@ -1,11 +1,14 @@
 # Payments — kopierfertige Build-Prompts T25.0–T25.5
 
-**Stand:** 2026-07-10
+**Stand:** 2026-07-19
 **Architektur:** `docs/PAYMENTS_MASTER_PLAN.md`
 **Orchestrator:** `docs/MONETIZATION_STUDIO_MASTER_PROMPT.md`
 
-Die Prompts sind vorbereitet, nicht freigegeben. Eine Session pro Task. Jede
-Live-/Storeaktion bleibt separat Founder-gated.
+PM-D1–PM-D12 wurden am 2026-07-19 wie empfohlen freigegeben. T25.0 ist lokal
+abgeschlossen (`docs/evidence/T25.0/README.md`); T25.1 ist der nächste Payment-
+Task, bleibt aber bis zum RevenueCat-Projekt X3 blockiert. T25.2–T25.5 warten
+weiter auf ihre jeweiligen Gates. Eine Session pro Task. Jede Live-/Storeaktion
+bleibt separat Founder-gated.
 
 ## T25.0 — Multi-Grant-Entitlement-Fundament
 

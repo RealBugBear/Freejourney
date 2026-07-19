@@ -1,7 +1,8 @@
 # Trainer Studio — Product-, UX- und Delivery-Spec (T27)
 
-**Stand:** 2026-07-10
-**Status:** Founder-Review ausstehend — Planung, kein Build-Auftrag
+**Stand:** 2026-07-19
+**Status:** TS-6–TS-11-Richtung vom Founder freigegeben; P0-Founder-Review der
+North Star/Zielgruppe und P1–P4A bleiben offen — Planung, kein Build-Auftrag
 **Owner:** Founder
 **Verwandt:** `docs/TRAINER_STUDIO_PROMPT.md` ·
 `docs/TRAINER_STUDIO_BUILD_PROMPTS.md` · `docs/PAYMENTS_MASTER_PLAN.md` ·
@@ -11,6 +12,13 @@
 > behält die gute Grundidee, macht aber Research, Produktentscheidung,
 > Rechtsprüfung und Build-Start zu getrennten Gates. Bis zum dokumentierten
 > Build-Go werden weder Produktivcode noch Store-Produkte angelegt.
+
+> **Datiertes Decision Record — 2026-07-19:** „GO PM-D1 bis PM-D12 und TS-6
+> bis TS-11 wie empfohlen. Preise, TS-8 und die finalen Free-MVP-Daten bleiben
+> bis Research/Pilotplanung Hypothesen. Live-/Portal-/Aktivierungsgates bleiben
+> separat.“ TS-7 bedeutet hier: plattformneutraler Build; kostenloser MVP
+> iOS-first zulässig mit Android nach stabiler Build-Verfügbarkeit; bezahlter
+> Pilot iOS-first mit Android nach T25.4-E2E.
 
 ## 0. Review-Ergebnis
 
@@ -509,16 +517,16 @@ Prozentuale Conversion-Ziele werden erst ab einer sinnvollen Stichprobe gesetzt.
 - Storepreis, Zeitraum, Verlängerung, Trial-Berechtigung, Restore und Kündigung
   sind vor Kauf klar.
 
-## 14. Offene Founder-Entscheidungen
+## 14. Founder-Entscheidungen
 
-| ID | Entscheidung | Fällig |
+| ID | Entscheidung | Status/Fälligkeit |
 |---|---|---|
-| TS-6 | Mechanik und Wortlaut des Gründer-Vorteils | vor externer Zusage |
-| TS-7 | iOS-first Free MVP, Android-Fast-Follow | vor Free-MVP-Build-Go |
-| TS-8 | finaler v1-Scope nach Research | nach Konzepttest |
-| TS-9 | Sitzungsprotokolle v1, später oder nie | nach Legal-/Security-Go |
-| TS-10 | Preis/Trial | nach Interviews + Store-Prüfung |
-| TS-11 | Dauer/Enddatum und Teilnehmer des kostenlosen MVP | vor Pilot-Stufe A |
+| TS-6 | Mechanik und Wortlaut des Gründer-Vorteils | ✅ 2026-07-19 Richtung freigegeben; keine Prozent-/Wiederanmeldegarantie |
+| TS-7 | plattformneutral; Free MVP iOS-first zulässig, Android nach stabilem Build | ✅ 2026-07-19; Paid-Android zusätzlich erst nach T25.4-E2E |
+| TS-8 | finaler v1-Scope nach Research | ✅ 2026-07-19 vorläufig Briefing + Termin-Automation; final nach Konzepttest |
+| TS-9 | Sitzungsprotokolle v1, später oder nie | ✅ 2026-07-19 separat gegated; Richtung erst nach Legal-/Security-Go |
+| TS-10 | Preis/Trial | ✅ 2026-07-19 nur als Hypothese; final nach Interviews + Store-Prüfung |
+| TS-11 | 3–5 Trainer, 6–8 Wochen, befristet/kostenlos/kein Auto-Abo | ✅ 2026-07-19 Rahmen; Enddatum/Teilnehmer final vor Pilot-Stufe A |
 
 ## 15. Aktuelle Primärquellen für den späteren Re-Check
 

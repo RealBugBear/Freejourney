@@ -1,6 +1,6 @@
 # Trainer Studio (T27) — Planning Master Prompt & Status
 
-**Stand:** 2026-07-10
+**Stand:** 2026-07-19
 **Modus:** Planung/Validierung. Kein Produktivcode, keine Migrationen, keine
 Store-/RevenueCat-Änderungen, bis Build-Readiness und Founder-Go dokumentiert
 sind.
@@ -13,6 +13,11 @@ Dieses Dokument steuert das Vorhaben phasenweise. Der frühere Entwurf sprang
 von einer groben Feature-Idee direkt in sechs Build-Sessions. Diese Fassung
 setzt Research, UX-Test, Recht/Daten und Store-Mechanik davor und konkretisiert
 Build-Tasks erst, wenn die offenen Entscheidungen gefallen sind.
+
+> **Founder-Entscheid 2026-07-19:** TS-6–TS-11 wurden wie empfohlen
+> freigegeben; TS-8 und die finalen Free-MVP-Daten bleiben bis
+> Research/Pilotplanung Hypothesen. P0–P3A und P4A bleiben offen — dieser
+> Entscheid ist ausdrücklich noch kein Studio-Build-Go.
 
 ## Harte Regeln
 
@@ -41,9 +46,9 @@ Build-Tasks erst, wenn die offenen Entscheidungen gefallen sind.
 | P2 — Low-Fi-Konzept + Usability-Test | ☐ offen |
 | P3A — Daten-/Rechts-Entscheid | ☐ offen |
 | P3B — Store-/Pricing-Entscheid | ⏸ darf parallel laufen; Pflicht vor P4B |
-| P4A — Free-MVP-Build-Readiness | ⏸ wartet auf P0–P3A + T25.0 |
+| P4A — Free-MVP-Build-Readiness | ⏸ wartet auf P0–P3A; T25.0 lokal erfüllt |
 | P4B — Paid-Pilot-Readiness | ⏸ wartet auf Free-MVP-Auswertung + P3B + T25.5 |
-| T27.1 — Entitlement + Rollout-Fundament | ⏸ wartet auf P4A + T25.0 |
+| T27.1 — Entitlement + Rollout-Fundament | ⏸ wartet auf P4A; T25.0 lokal erfüllt |
 | T27.2 — Studio-Einstieg + kostenlose Kohorten-UX | ⏸ wartet auf P4A + T27.1 |
 | T27.3 — Klienten-Briefing | ⏸ wartet auf P4A + T27.1 |
 | T27.4 — Termin-Automation | ⏸ wartet auf P4A + T27.1 |
@@ -70,8 +75,9 @@ P4A-/P4B-Go.
 
 ## P0 — Founder-Review
 
-**Ziel:** Die Produktausrichtung ist verstanden und die offenen
-Founder-Entscheidungen TS-6 bis TS-11 sind sichtbar, ohne sie vorwegzunehmen.
+**Ziel:** Die Produktausrichtung ist verstanden. Die freigegebene Richtung
+TS-6 bis TS-11 und die weiterhin hypothetischen Preis-/TS-8-/Pilotdetails sind
+sichtbar, ohne Research- oder P4A-Ergebnisse vorwegzunehmen.
 
 **Aufgabe:**
 

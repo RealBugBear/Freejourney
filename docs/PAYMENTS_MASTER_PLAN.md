@@ -1,8 +1,10 @@
 # Payments Master Plan — Premium + Codes + Trainer Studio, Apple + Android
 
-**Stand:** 2026-07-10
-**Status:** Founder-Review ausstehend — ausführungsreife Planung, kein aktueller
-Build-Auftrag
+**Stand:** 2026-07-19
+**Status:** PM-D1–PM-D12 vom Founder am 2026-07-19 wie empfohlen freigegeben;
+Preisangaben bleiben Hypothesen bis zu ihren Validierungsgates. T25.0 ist lokal
+implementiert und verifiziert; Live-DDL, Function-Deploy, Store-/Portal- und
+Aktivierungsschritte bleiben separat gegated.
 **Gilt für:** iPhone, iPad, Android-Smartphone und Android-Tablet
 **Nicht im Scope:** macOS, Windows, Web-Checkout und Trainer↔Klient-Zahlungen
 **Orchestrierung:** `docs/MONETIZATION_STUDIO_MASTER_PROMPT.md`
@@ -11,6 +13,11 @@ Dieser Plan ersetzt die erste Fassung vom 2026-07-10. Er bewahrt Claudes gute
 Grundentscheidung — RevenueCat als gemeinsame Store-Abstraktion — korrigiert
 aber das Entitlement-Modell, die RevenueCat-Identität, Google-Play-Produkte,
 Gebühren, Kill-Switch-Semantik und Lifecycle-Lücken.
+
+> **Founder-Entscheid 2026-07-19:** „GO PM-D1 bis PM-D12 und TS-6 bis TS-11
+> wie empfohlen. Preise, TS-8 und die finalen Free-MVP-Daten bleiben bis
+> Research/Pilotplanung Hypothesen. Live-/Portal-/Aktivierungsgates bleiben
+> separat.“
 
 ## 0. Review der ersten Fassung
 
@@ -529,6 +536,8 @@ schreiben.
 
 ### T25.0 — Multi-Grant- und Benefit-Code-Fundament
 
+**Status:** ✅ 2026-07-19 lokal implementiert und verifiziert; Evidenz unter
+`docs/evidence/T25.0/README.md`. Kein Live-Apply oder Deploy.
 **Gate:** Founder bestätigt PM-D1–D12.
 **Ergebnis:** `entitlement_grants`, Benefit-Kampagnen/-Codes/-Redemptions,
 effektive Statusfunktion, Legacy-Projektion, T24-Code-Backfill,
@@ -606,10 +615,10 @@ Funktionen ist das operativ unzureichend.
   jeweils sicheren Zustand (Verkauf aus, Feature-Zugang unverändert);
 - Compile-Flags bleiben für alles Übrige die einzige Gate-Mechanik.
 
-Bei GO werden CLAUDE.md §4 und der Doc-Kommentar in
-`lib/config/launch_flags.dart` in T25.0 entsprechend ergänzt, damit Regel
-und Realität nicht auseinanderlaufen. Bei NO-GO entfallen die Rollout-Tabellen
-und der Kill Switch bleibt Compile-Flag + Store-Update (bewusst langsamer).
+Der GO vom 2026-07-19 wurde in CLAUDE.md §4 und im Doc-Kommentar von
+`lib/config/launch_flags.dart` umgesetzt, damit Regel und Realität nicht
+auseinanderlaufen. Die Rollout-Tabellen sind lokal implementiert; ihr Live-
+Apply und jede Aktivierung bleiben eigene Gates.
 
 ## 13. Founder-Entscheidungspaket
 
