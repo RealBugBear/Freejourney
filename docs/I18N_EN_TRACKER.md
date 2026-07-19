@@ -7,7 +7,7 @@ ausführungsfertige Prompt für alle Restarbeiten (W0–W8); Sessions steigen do
 **Branch:** `i18n/english-localization` (abgezweigt von `main` @ `178d4bc`).
 **Diese Datei ist das Gedächtnis über Session-Grenzen hinweg** — nach jedem Arbeitsblock aktualisieren.
 
-**Nächster Block: W2** (Content-Resolver `pickLocalized`, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
+**Nächster Block: W3** (Gates auf N Sprachen verallgemeinern, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
 
 ## Phasen-Checkliste
 
@@ -245,6 +245,27 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 
 ## Arbeitslog
+
+- **2026-07-19, W2 — Content-Resolver `pickLocalized` (`af9360b`):** Neu
+  `lib/core/l10n/localized_content.dart` — die eine Stelle, die die Content-Fallback-
+  Policy kennt (DE wenn angefragt, sonst EN als internationaler Fallback). Alle
+  `*De`/`*En`-Accessor-Methoden (`exercise.dart`, `reflex_questionnaire.dart`,
+  `completion_questions.dart`) und direkten Feldzugriffe
+  (`immersive_exercise_screen.dart`, `exercise_movement_widget.dart`) laufen darüber.
+  Formatierungs-Weichen (Datum kompakt/`dd.MM.yyyy`, 24h-Uhr in Settings) behalten ihre
+  DE-Sonderformate, vergleichen aber gegen `AppLanguages.sourceCode` statt `'de'`-Literal
+  — ein drittes Locale erbt automatisch das EN-Format. `consent_screen.dart` und
+  `analysis_placeholder_screen.dart`: **nur die `isDE`-Bedingung** registry-getrieben,
+  die (anwaltsgebundene) Copy blieb byte-identisch. **Bug-Fix `app.dart:407`:** der
+  Inline-Reminder-Text („Zeit für deine Einheit" / „Time for your unit") lief am ARB
+  vorbei; jetzt `reminderSessionTitle`/`reminderSessionBody` via
+  `lookupAppLocalizations(Locale(next.languageCode))` — dieselben Keys wie im Dashboard.
+  Sichtbare Folge (beabsichtigt): der Reminder-Body lautet nun einheitlich „Nimm dir
+  Zeit für deine heutige Einheit." statt des alten Inline-Wortlauts mit
+  „Reflexintegrations-Einheit". Hartes Grep-Gate erfüllt: `== 'de'` außerhalb
+  `core/l10n/`/generierter Dateien → **0 Treffer**. Belege: analyze 0 Fehler/0 Warnungen
+  (96 bekannte Infos), `make i18n-check` 753/753, **283/283 Tests grün** (4 neue
+  Resolver-Tests).
 
 - **2026-07-19, W1 — Sprach-Registry `AppLanguages` (`f72cdc8`):** Neu
   `lib/core/l10n/app_languages.dart` als einziges Verzeichnis der unterstützten Sprachen
