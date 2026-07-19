@@ -404,12 +404,12 @@ Future<void> _syncReminderState(
     if (!granted) return;
   }
 
-  final isDE = next.languageCode == 'de';
+  // No BuildContext with the app locale is available here, so resolve the
+  // catalog for the active language directly.
+  final l10n = lookupAppLocalizations(Locale(next.languageCode));
   await ns.scheduleReminder(
     startMinutes: next.reminderStartMinutes,
-    titleDe: isDE ? 'Zeit für deine Einheit' : 'Time for your unit',
-    bodyDe: isDE
-        ? 'Nimm dir Zeit für deine heutige Reflexintegrations-Einheit.'
-        : "Take time for today's reflex integration unit.",
+    titleDe: l10n.reminderSessionTitle,
+    bodyDe: l10n.reminderSessionBody,
   );
 }

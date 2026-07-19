@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../providers/consent_provider.dart';
+import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -79,7 +80,10 @@ class _ConsentScreenState extends ConsumerState<ConsentScreen>
 
   @override
   Widget build(BuildContext context) {
-    final isDE = ref.watch(settingsProvider).languageCode == 'de';
+    // Lawyer-owned bilingual copy below stays untouched; only the language
+    // switch is registry-driven (unsupported locales read the EN version).
+    final isDE =
+        ref.watch(settingsProvider).languageCode == AppLanguages.sourceCode;
 
     return Scaffold(
       appBar: AppBar(

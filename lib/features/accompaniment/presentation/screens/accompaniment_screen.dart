@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../config/launch_flags.dart';
+import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/onboarding/onboarding_hint_gate.dart';
 import '../../../../core/onboarding/onboarding_hint_provider.dart';
@@ -1044,7 +1045,9 @@ String? _extractTrainerInviteCode(String input) {
 
 String formatAccompanimentAppointmentDate(DateTime value, Locale locale) {
   final localeName = locale.toLanguageTag();
-  if (locale.languageCode == 'de') {
+  // DE keeps its fixed 24h format; every other locale inherits the
+  // locale-aware default (en-US: "Wed, Jul 15 · 3:30 PM").
+  if (locale.languageCode == AppLanguages.sourceCode) {
     return DateFormat('EEE, d. MMM · HH:mm', localeName).format(value);
   }
   return '${DateFormat.MMMEd(localeName).format(value)} · '

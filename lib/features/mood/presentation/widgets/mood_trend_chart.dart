@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/database/app_database.dart';
+import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/mood_daily_aggregate.dart';
@@ -227,7 +228,8 @@ class MoodTrendChart extends StatelessWidget {
 
 String formatMoodChartDate(DateTime value, Locale locale) {
   final localeName = locale.toLanguageTag();
-  if (locale.languageCode == 'de') {
+  // DE keeps its fixed compact format (15.7); other locales inherit Md.
+  if (locale.languageCode == AppLanguages.sourceCode) {
     return DateFormat('d.M', localeName).format(value);
   }
   return DateFormat.Md(localeName).format(value);

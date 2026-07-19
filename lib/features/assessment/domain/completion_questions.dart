@@ -1,3 +1,5 @@
+import '../../../core/l10n/localized_content.dart';
+
 /// Per-package completion questionnaire questions.
 /// Fill in the 'de' and 'en' strings for each package as they become available.
 /// Any package with a null or missing entry falls back to the default question.
@@ -55,8 +57,9 @@ const Map<String, Map<String, String?>> _packageQuestions = {
 /// Returns the completion question for [packageId] in [languageCode].
 /// Falls back to the default Moro question if no specific question is defined.
 String completionQuestionFor(String packageId, String languageCode) {
-  final lang = languageCode == 'en' ? 'en' : 'de';
-  final specific = _packageQuestions[packageId]?[lang];
+  final questions = _packageQuestions[packageId];
+  final specific = pickLocalized(languageCode,
+      de: questions?['de'], en: questions?['en']);
   if (specific != null && specific.isNotEmpty) return specific;
-  return lang == 'en' ? _defaultEn : _defaultDe;
+  return pickLocalized(languageCode, de: _defaultDe, en: _defaultEn);
 }

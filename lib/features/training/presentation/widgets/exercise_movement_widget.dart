@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/l10n/localized_content.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -90,7 +91,7 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
       _phase = _TickPhase.holding;
       setState(() => _secondsLeft = ex.holdSeconds);
       _feedback.speak(
-        _feedback.locale == 'de' ? ex.holdCueDe : ex.holdCueEn,
+        pickLocalized(_feedback.locale, de: ex.holdCueDe, en: ex.holdCueEn),
       );
       _feedback.hapticLight();
       _startTick();
@@ -352,7 +353,8 @@ class _ExerciseMovementWidgetState extends ConsumerState<ExerciseMovementWidget>
     // holdRest
     if (_phase == _TickPhase.holding) {
       final progress = 1 - (_secondsLeft / ex.holdSeconds).clamp(0.0, 1.0);
-      final label = locale == 'de' ? ex.holdCueDe : ex.holdCueEn;
+      final label =
+          pickLocalized(locale, de: ex.holdCueDe, en: ex.holdCueEn);
       return (label, progress, AppColors.primary);
     } else {
       // resting

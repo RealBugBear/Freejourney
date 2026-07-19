@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/database/app_database.dart';
+import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/error_retry_widget.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -358,7 +359,8 @@ class _NotesList extends StatelessWidget {
 
 String formatMoodNoteDate(DateTime value, Locale locale) {
   final localeName = locale.toLanguageTag();
-  if (locale.languageCode == 'de') {
+  // DE keeps its fixed dd.MM.yyyy format; other locales inherit yMd.
+  if (locale.languageCode == AppLanguages.sourceCode) {
     return DateFormat('dd.MM.yyyy', localeName).format(value);
   }
   return DateFormat.yMd(localeName).format(value);

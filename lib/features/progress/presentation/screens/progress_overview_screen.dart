@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/database/app_database.dart';
+import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/onboarding/onboarding_hint_gate.dart';
 import '../../../../core/onboarding/onboarding_hint_provider.dart';
@@ -24,7 +25,9 @@ import '../providers/progress_provider.dart';
 @visibleForTesting
 String formatProgressChartDate(DateTime date, Locale locale) {
   final localeName = locale.toLanguageTag();
-  final format = locale.languageCode == 'de'
+  // DE keeps its fixed compact format (15.7); every other locale inherits
+  // the locale-aware default (7/15 for en-US).
+  final format = locale.languageCode == AppLanguages.sourceCode
       ? DateFormat('d.M', localeName)
       : DateFormat.Md(localeName);
   return format.format(date);

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../config/launch_flags.dart';
+import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/onboarding/onboarding_hint_gate.dart';
 import '../../../../core/onboarding/onboarding_hint_provider.dart';
@@ -709,7 +710,8 @@ class _UsernameSectionState extends ConsumerState<_UsernameSection> {
 
 String formatProfileBirthDate(DateTime value, Locale locale) {
   final localeName = locale.toLanguageTag();
-  if (locale.languageCode == 'de') {
+  // DE keeps its fixed dd.MM.yyyy format; other locales inherit yMd.
+  if (locale.languageCode == AppLanguages.sourceCode) {
     return DateFormat('dd.MM.yyyy', localeName).format(value);
   }
   return DateFormat.yMd(localeName).format(value);

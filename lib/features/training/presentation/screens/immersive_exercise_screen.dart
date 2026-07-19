@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/l10n/localized_content.dart';
 import '../../../../core/training/adaptive_tempo_settings.dart';
 import '../../../../core/training/in_app_music_settings.dart';
 import '../../../../core/training/training_feedback_settings.dart';
@@ -260,9 +261,9 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
         ? l10n.trainingSwitchCueUpper
         : _isResting
             ? l10n.trainingPauseCue
-            : ((locale == 'de' ? ex.holdCueDe : ex.holdCueEn).isNotEmpty
-                ? (locale == 'de' ? ex.holdCueDe : ex.holdCueEn).toUpperCase()
-                : l10n.trainingHoldCueUpper);
+            : _holdCue(locale, ex).isNotEmpty
+                ? _holdCue(locale, ex).toUpperCase()
+                : l10n.trainingHoldCueUpper;
     final beatInterval = Duration(milliseconds: (_tempoSeconds * 1000).round());
 
     return Scaffold(
@@ -570,3 +571,8 @@ class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
         TrainingFeedbackMode.silent => '🔇',
       };
 }
+
+/// The exercise's own hold cue in the active language (may be empty, in
+/// which case callers fall back to the generic localized cue).
+String _holdCue(String locale, Exercise ex) =>
+    pickLocalized(locale, de: ex.holdCueDe, en: ex.holdCueEn);

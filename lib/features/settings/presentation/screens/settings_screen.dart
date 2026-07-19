@@ -334,8 +334,10 @@ class _TimePickerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // DE conventionally uses the 24h clock; other locales inherit the
+    // 12h/AM-PM default until a language with its own convention ships.
     final use24HourFormat =
-        Localizations.localeOf(context).languageCode == 'de';
+        Localizations.localeOf(context).languageCode == AppLanguages.sourceCode;
     final formatted = MaterialLocalizations.of(context).formatTimeOfDay(
       time,
       alwaysUse24HourFormat: use24HourFormat,
@@ -351,7 +353,8 @@ class _TimePickerTile extends StatelessWidget {
             builder: (ctx, child) => MediaQuery(
               data: MediaQuery.of(ctx).copyWith(
                 alwaysUse24HourFormat:
-                    Localizations.localeOf(ctx).languageCode == 'de',
+                    Localizations.localeOf(ctx).languageCode ==
+                        AppLanguages.sourceCode,
               ),
               child: child!,
             ),

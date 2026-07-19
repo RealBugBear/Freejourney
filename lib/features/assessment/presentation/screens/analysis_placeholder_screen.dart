@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -30,7 +31,8 @@ class AnalysisPlaceholderScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDE = ref.watch(settingsProvider).languageCode == 'de';
+    final isDE =
+        ref.watch(settingsProvider).languageCode == AppLanguages.sourceCode;
 
     return Scaffold(
       appBar: AppBar(

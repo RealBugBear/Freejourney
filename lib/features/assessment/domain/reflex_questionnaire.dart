@@ -1,3 +1,5 @@
+import '../../../core/l10n/localized_content.dart';
+
 enum ReflexQuestionnaireType {
   childParentReport,
   adultSelfReport,
@@ -71,9 +73,10 @@ class PrimitiveReflexCopy {
   final String shortLabelDe;
   final String shortLabelEn;
 
-  String label(String locale) => locale == 'de' ? labelDe : labelEn;
+  String label(String locale) =>
+      pickLocalized(locale, de: labelDe, en: labelEn);
   String shortLabel(String locale) =>
-      locale == 'de' ? shortLabelDe : shortLabelEn;
+      pickLocalized(locale, de: shortLabelDe, en: shortLabelEn);
 }
 
 extension PrimitiveReflexLocalization on PrimitiveReflex {
@@ -191,9 +194,10 @@ class ReflexQuestionnaireDefinition {
   final List<ReflexQuestion> questions;
   final ReflexScoringDefinition scoring;
 
-  String title(String locale) => locale == 'de' ? titleDe : titleEn;
+  String title(String locale) =>
+      pickLocalized(locale, de: titleDe, en: titleEn);
   String screenTitle(String locale) =>
-      locale == 'de' ? screenTitleDe : screenTitleEn;
+      pickLocalized(locale, de: screenTitleDe, en: screenTitleEn);
 }
 
 class ReflexQuestion {
@@ -236,10 +240,12 @@ class ReflexQuestion {
   final String? trainerFlagLabelDe;
   final String? trainerFlagLabelEn;
 
-  String text(String locale) => locale == 'de' ? textDe : textEn;
-  String? helpText(String locale) => locale == 'de' ? helpTextDe : helpTextEn;
+  String text(String locale) =>
+      pickLocalized(locale, de: textDe, en: textEn);
+  String? helpText(String locale) =>
+      pickLocalized(locale, de: helpTextDe, en: helpTextEn);
   String? trainerFlagLabel(String locale) =>
-      locale == 'de' ? trainerFlagLabelDe : trainerFlagLabelEn;
+      pickLocalized(locale, de: trainerFlagLabelDe, en: trainerFlagLabelEn);
 
   bool get contributesToScore =>
       role == ReflexQuestionRole.score && reflexes.isNotEmpty;
@@ -258,9 +264,10 @@ class ReflexQuestionModuleCopy {
   final String resultLabelDe;
   final String resultLabelEn;
 
-  String title(String locale) => locale == 'de' ? titleDe : titleEn;
+  String title(String locale) =>
+      pickLocalized(locale, de: titleDe, en: titleEn);
   String resultLabel(String locale) =>
-      locale == 'de' ? resultLabelDe : resultLabelEn;
+      pickLocalized(locale, de: resultLabelDe, en: resultLabelEn);
 }
 
 extension ReflexQuestionModuleLocalization on ReflexQuestionModule {

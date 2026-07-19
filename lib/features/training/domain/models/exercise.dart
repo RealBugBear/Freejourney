@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../../../core/l10n/localized_content.dart';
+
 // ── Rhythm types ──────────────────────────────────────────────────────────────
 
 enum RhythmType {
@@ -23,7 +25,8 @@ class ExercisePhase {
     required this.durationSeconds,
   });
 
-  String label(String locale) => locale == 'de' ? labelDe : labelEn;
+  String label(String locale) =>
+      pickLocalized(locale, de: labelDe, en: labelEn);
 }
 
 // ── Exercise model ────────────────────────────────────────────────────────────
@@ -118,16 +121,16 @@ class Exercise {
 
   int get exerciseNumber => sequenceNumber;
 
-  String title(String locale) => locale == 'de' ? titleDe : titleEn;
-  List<String> positionInstructions(String locale) =>
-      locale == 'de' ? positionInstructionsDe : positionInstructionsEn;
-  List<String> movementInstructions(String locale) =>
-      locale == 'de' ? movementInstructionsDe : movementInstructionsEn;
+  String title(String locale) =>
+      pickLocalized(locale, de: titleDe, en: titleEn);
+  List<String> positionInstructions(String locale) => pickLocalized(locale,
+      de: positionInstructionsDe, en: positionInstructionsEn);
+  List<String> movementInstructions(String locale) => pickLocalized(locale,
+      de: movementInstructionsDe, en: movementInstructionsEn);
   List<String> positionInstructionsFor(String locale, {bool duo = false}) {
     if (duo) {
-      final instructions = locale == 'de'
-          ? positionInstructionsDuoDe
-          : positionInstructionsDuoEn;
+      final instructions = pickLocalized(locale,
+          de: positionInstructionsDuoDe, en: positionInstructionsDuoEn);
       if (instructions != null && instructions.isNotEmpty) return instructions;
     }
     return positionInstructions(locale);
@@ -135,9 +138,8 @@ class Exercise {
 
   List<String> movementInstructionsFor(String locale, {bool duo = false}) {
     if (duo) {
-      final instructions = locale == 'de'
-          ? movementInstructionsDuoDe
-          : movementInstructionsDuoEn;
+      final instructions = pickLocalized(locale,
+          de: movementInstructionsDuoDe, en: movementInstructionsDuoEn);
       if (instructions != null && instructions.isNotEmpty) return instructions;
     }
     return movementInstructions(locale);
@@ -160,9 +162,10 @@ class Exercise {
     return null;
   }
 
-  List<String>? hints(String locale) => locale == 'de' ? hintsDe : hintsEn;
-  String executionGuide(String locale) =>
-      locale == 'de' ? executionGuideDe : executionGuideEn;
+  List<String>? hints(String locale) =>
+      pickLocalized(locale, de: hintsDe, en: hintsEn);
+  String executionGuide(String locale) => pickLocalized(locale,
+      de: executionGuideDe, en: executionGuideEn);
 
   // ── Deserialisation from Supabase row ───────────────────────────────────────
 
