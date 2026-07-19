@@ -7,8 +7,7 @@ ausführungsfertige Prompt für alle Restarbeiten (W0–W8); Sessions steigen do
 **Branch:** `i18n/english-localization` (abgezweigt von `main` @ `178d4bc`).
 **Diese Datei ist das Gedächtnis über Session-Grenzen hinweg** — nach jedem Arbeitsblock aktualisieren.
 
-**Nächster Block: W4/B3** (Assessment-UI & PDF, siehe `docs/I18N_STRUCTURE_PROMPT.md`;
-PDF-Entwurf liegt als `docs/i18n/wip/reflex_profile_pdf_localization.patch`)
+**Nächster Block: W4/B4** (Trainer komplett, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
 
 ## Phasen-Checkliste
 
@@ -151,17 +150,17 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | progress | features/progress/presentation/screens/progress_overview_screen.dart | 0 | 0 | 0  | verifiziert (UI/ICU + DE `15.7`/EN `7/15`, Audit 0) |
 | golden_day | features/golden_day/presentation/screens/golden_day_screen.dart | 0 | 0 | 0  | verifiziert (DE/EN-Widgettest, Audit 0) |
 | assessment | features/assessment/domain/completion_questions.dart | 0 | 0 | 7 bilingual-ok | verifiziert (DE/EN-Feldpaare) |
-| assessment | features/assessment/domain/draft_persistence_service.dart | 0 | 2 | 0  | offen |
+| assessment | features/assessment/domain/draft_persistence_service.dart | 0 | 2 | 0  | verifiziert (B3; d-log bereits EN, keine UI) |
 | assessment | features/assessment/domain/reflex_questionnaire_definitions.dart | 134 | 0 | 0  | verifiziert (123 Fragen, 8 Module, 5 Hilfen, 5 Flags als DE/EN-Feldpaare; Audit 0 a/b/c) |
-| assessment | features/assessment/domain/services/reflex_profile_pdf_service.dart | 36 | 0 | 1  | offen (B3; Entwurf liegt als `docs/i18n/wip/reflex_profile_pdf_localization.patch`) |
-| assessment | features/assessment/presentation/providers/reflex_profile_provider.dart | 3 | 6 | 0  | offen |
-| assessment | features/assessment/presentation/screens/analysis_placeholder_screen.dart | 16 | 0 | 0  | offen |
-| assessment | features/assessment/presentation/screens/duration_recommendation_screen.dart | 20 | 0 | 0  | offen |
-| assessment | features/assessment/presentation/screens/reflex_profile_demo_screen.dart | 66 | 0 | 0  | externalisiert (Fragen/Reflexnamen DE/EN; allgemeine UI noch offen) |
-| assessment | features/assessment/presentation/screens/reflex_profile_result_helpers.dart | 8 | 0 | 0  | externalisiert (Modulnamen DE/EN; allgemeine UI noch offen) |
-| assessment | features/assessment/presentation/screens/reflex_profile_result_screen.dart | 40 | 0 | 0  | externalisiert (Fragen/Reflexnamen DE/EN; allgemeine UI noch offen) |
-| assessment | features/assessment/presentation/screens/reflex_profile_screen.dart | 77 | 0 | 0  | externalisiert (Fragen/Module DE/EN; Dialog-/Buttontexte noch offen) |
-| assessment | features/assessment/presentation/widgets/reflex_radar_chart.dart | 15 | 0 | 0  | externalisiert (Reflexlabels DE/EN; Leerzustand noch offen) |
+| assessment | features/assessment/domain/services/reflex_profile_pdf_service.dart | 0 | 0 | 0  | verifiziert (B3; `ReflexProfilePdfCopy` + locale-aware Content, Audit 0) |
+| assessment | features/assessment/presentation/providers/reflex_profile_provider.dart | 0 | 0 | 0  | verifiziert (B3; Fallbacks via ARB/`lookupActiveAppLocalizations`, Exceptions EN) |
+| assessment | features/assessment/presentation/screens/analysis_placeholder_screen.dart | 0 | 0 | 0  | verifiziert (B3, Audit 0) |
+| assessment | features/assessment/presentation/screens/duration_recommendation_screen.dart | 0 | 0 | 0  | verifiziert (B3; ICU-Bodies + `PrimitiveReflex.label`, Audit 0) |
+| assessment | features/assessment/presentation/screens/reflex_profile_demo_screen.dart | 0 | 0 | 0  | verifiziert (B3, Audit 0) |
+| assessment | features/assessment/presentation/screens/reflex_profile_result_helpers.dart | 0 | 0 | 0  | verifiziert (Modulnamen DE/EN; keine a/b/c-Hardcodes) |
+| assessment | features/assessment/presentation/screens/reflex_profile_result_screen.dart | 0 | 0 | 0  | verifiziert (B3; PDF-Aufrufer verdrahtet, Audit 0) |
+| assessment | features/assessment/presentation/screens/reflex_profile_screen.dart | 0 | 0 | 0  | verifiziert (B3, Audit 0) |
+| assessment | features/assessment/presentation/widgets/reflex_radar_chart.dart | 0 | 0 | 0  | verifiziert (B3; Leerzustand ARB, Audit 0) |
 | accompaniment | features/accompaniment/presentation/screens/accompaniment_screen.dart | 0 | 0 | 0  | verifiziert (UI/Fehler/Termine DE/EN, Audit 0) |
 | mood | features/mood/presentation/widgets/mood_chart_widget.dart | 0 | 0 | 0  | verifiziert (locale-aware DE `15.7`/EN `7/15`, Audit 0) |
 | mood | features/mood/presentation/widgets/mood_checkin_sheet.dart | 0 | 0 | 0  | verifiziert (DE/EN, Audit 0) |
@@ -246,6 +245,20 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 
 ## Arbeitslog
+
+- **2026-07-19, B3 — Assessment-UI & PDF (`cf5de93`):** 136 neue ARB-Keys (**934 DE = 934 EN**).
+  Analysis-Placeholder, Dauerempfehlung, Reflexprofil-Fragebogen/-Ergebnis/-Demo,
+  Radar-Leerzustand und PDF-Zusammenfassung vollständig über ARB. Gemeinsame
+  Score-Band-Labels (`scoreBand*`) und `answerUnknown`; Reflexnamen weiter über
+  `PrimitiveReflex.label`/`pickLocalized`. PDF: WIP-Patch
+  (`docs/i18n/wip/reflex_profile_pdf_localization.patch`) angewendet —
+  `ReflexProfilePdfCopy` + `buildSummaryContent`, Locale über
+  `AppLanguages.normalize` (kein `== 'de'`), Aufrufer in
+  `reflex_profile_result_screen` verdrahtet via `reflexProfilePdfCopyFromL10n`.
+  Provider: sichtbare Fallbacks lokalisiert, Auth-Exceptions auf Englisch.
+  EN-Disclaimer claim-safe umformuliert (Quality-Gate). Belege: scoped Audit 0
+  a/b/c in allen B3-Dateien, `make i18n-check` 934/934, analyze 0 Fehler/
+  0 Warnungen, **283/283 Tests grün**.
 
 - **2026-07-19, B2 — Hinweise & Client-Push (`f6e1012`):** 38 neue ARB-Keys
   (**798 DE = 798 EN**): 19 Onboarding-Hints (4 Sheets als Titel+Body, 12 Bullet-Items,

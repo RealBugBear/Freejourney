@@ -413,7 +413,7 @@ per `grep -rln "i18n_check" .` lokalisieren).
       `lib/core/reminders/*` (3 Dateien), `lib/core/settings/settings_provider.dart` (1),
       `lib/core/sync/sync_service.dart` (1 sichtbarer + Logs EN), `lib/core/logging/logger_service.dart`,
       `lib/core/monitoring/sentry_service.dart` (Logs EN).
-- [ ] **B3 — Assessment-UI komplett:** `duration_recommendation_screen.dart` (20),
+- [x] **B3 — Assessment-UI komplett:** `duration_recommendation_screen.dart` (20),
       `analysis_placeholder_screen.dart` (16), `reflex_profile_screen.dart` (Rest-UI),
       `reflex_profile_result_screen.dart` + `_helpers.dart`, `reflex_profile_demo_screen.dart`,
       `reflex_radar_chart.dart` (Leerzustand), `reflex_profile_provider.dart` (3 sichtbare),
