@@ -421,7 +421,8 @@ per `grep -rln "i18n_check" .` lokalisieren).
       `draft_persistence_service.dart` (Logs EN).
 - [x] **B4 — Trainer komplett (~240):** alle Tracker-Dateien unter `lib/features/trainer/`
       externalisiert; scoped Audit 0 a/b/c; Parity 1091/1091; 283/283 Tests.
-- [ ] **B5 — Chat komplett (~65):** alle Dateien unter `lib/features/chat/` gemäß Tabelle.
+- [x] **B5 — Chat komplett (~65):** alle Tracker-Dateien unter `lib/features/chat/`
+      externalisiert; scoped Audit 0 a/b/c; Parity 1128/1128; 283/283 Tests.
 - [ ] **B6 — Launch-versteckte Features:** `lib/features/experience/`,
       `lib/features/community/`, `lib/features/video/`, `lib/features/premium/data/premium_repository.dart`
       — gleiche Sorgfalt (Flags können wieder angehen), niedrigste Dringlichkeit.

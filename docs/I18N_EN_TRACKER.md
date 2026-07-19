@@ -7,7 +7,7 @@ ausführungsfertige Prompt für alle Restarbeiten (W0–W8); Sessions steigen do
 **Branch:** `i18n/english-localization` (abgezweigt von `main` @ `178d4bc`).
 **Diese Datei ist das Gedächtnis über Session-Grenzen hinweg** — nach jedem Arbeitsblock aktualisieren.
 
-**Nächster Block: W4/B5** (Chat komplett, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
+**Nächster Block: W4/B6** (Launch-versteckte Features, siehe `docs/I18N_STRUCTURE_PROMPT.md`)
 
 ## Phasen-Checkliste
 
@@ -193,16 +193,16 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 | trainer | features/trainer/presentation/screens/trainer_requests_screen.dart | 0 | 0 | 0  | verifiziert (B4, Audit 0) |
 | trainer | features/trainer/presentation/widgets/osm_attribution.dart | 0 | 0 | 0  | verifiziert (B4; Attribution ARB, Audit 0) |
 | trainer | features/trainer/presentation/widgets/trainer_location_picker_widget.dart | 0 | 0 | 0  | verifiziert (B4; Tip ARB, Audit 0) |
-| chat | features/chat/data/repositories/supabase_chat_repository.dart | 3 | 4 | 0  | offen |
-| chat | features/chat/domain/models/chat_channel.dart | 3 | 0 | 0  | offen |
-| chat | features/chat/presentation/navigation/chat_navigation.dart | 2 | 0 | 0  | offen |
-| chat | features/chat/presentation/screens/chat_channel_screen.dart | 25 | 13 | 0  | offen |
-| chat | features/chat/presentation/screens/chat_inbox_screen.dart | 8 | 0 | 0  | offen |
-| chat | features/chat/presentation/screens/dm_screen.dart | 8 | 0 | 0  | offen |
-| chat | features/chat/presentation/widgets/direct_messages_action.dart | 1 | 0 | 0  | offen |
-| chat | features/chat/presentation/widgets/message_bubble.dart | 11 | 0 | 0  | offen |
-| chat | features/chat/presentation/widgets/message_input_bar.dart | 2 | 0 | 0  | offen |
-| chat | features/chat/presentation/widgets/typing_indicator.dart | 2 | 0 | 0  | offen |
+| chat | features/chat/data/repositories/supabase_chat_repository.dart | 0 | 4 | 0  | verifiziert (B5; Call-Request-Content via ARB/`lookupActiveAppLocalizations`) |
+| chat | features/chat/domain/models/chat_channel.dart | 0 | 0 | 0  | verifiziert (B5; `channelDisplayName(l10n)`, Audit 0) |
+| chat | features/chat/presentation/navigation/chat_navigation.dart | 0 | 0 | 0  | verifiziert (B5, Audit 0) |
+| chat | features/chat/presentation/screens/chat_channel_screen.dart | 0 | 0 | 0  | verifiziert (B5; UI/Dialoge/Fehler ARB, Audit 0) |
+| chat | features/chat/presentation/screens/chat_inbox_screen.dart | 0 | 0 | 0  | verifiziert (B5; locale Dates, Audit 0) |
+| chat | features/chat/presentation/screens/dm_screen.dart | 0 | 0 | 0  | verifiziert (B5; locale Dates, Audit 0) |
+| chat | features/chat/presentation/widgets/direct_messages_action.dart | 0 | 0 | 0  | verifiziert (B5, Audit 0) |
+| chat | features/chat/presentation/widgets/message_bubble.dart | 0 | 0 | 0  | verifiziert (B5; Bubbles/Call-Request ARB, Audit 0) |
+| chat | features/chat/presentation/widgets/message_input_bar.dart | 0 | 0 | 0  | verifiziert (B5, Audit 0) |
+| chat | features/chat/presentation/widgets/typing_indicator.dart | 0 | 0 | 0  | verifiziert (B5; ICU `chatTyping`, Audit 0) |
 | experience | features/experience/data/repositories/experience_repository.dart | 0 | 7 | 0  | offen |
 | experience | features/experience/domain/models/experience_share.dart | 1 | 0 | 0  | offen |
 | experience | features/experience/presentation/screens/experience_feed_screen.dart | 12 | 0 | 0  | offen |
@@ -245,6 +245,17 @@ Status-Werte: `offen` → `externalisiert` → `übersetzt` → `verifiziert`
 
 
 ## Arbeitslog
+
+- **2026-07-19, B5 — Chat komplett ():** 37 neue ARB-Keys (**1128 DE = 1128 EN**).
+  Inbox, DM, Channel-Screen, Bubbles, Input-Bar, Typing-Indicator, Navigation und
+  Call-Request-Persistenz über ARB. `ChatChannel.channelDisplayName(l10n)`;
+  Community/Experience-Aufrufer mitgezogen (Compile). Reuse von
+  `cancel`/`retry`/`settings`/`errorLoadFailedInline`/`profileMessages`/
+  `trainerFallbackName`/`trainerProposeAppointment`/`trainerRequestAccept`/
+  `trainerAppointmentAction`/`trainerChatFallback`. StateError-Texte EN;
+  Snackbars immer über ARB. Belege: scoped Audit **0 a/b/c** unter
+  `lib/features/chat/`, `make i18n-check` 1128/1128, analyze 0 Fehler/
+  0 Warnungen, **283/283 Tests grün**.
 
 - **2026-07-19, B4 — Trainer komplett (`49c86be`):** ~157 neue ARB-Keys (**1091 DE = 1091 EN**).
   Application-Intro/-Status/-Form, Dashboard, Clients-Liste + Debug-Panel,
