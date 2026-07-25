@@ -29,7 +29,7 @@ Sources consolidated here:
 8. Content requests to Sina are in flight (founder, 2026-07-03): adult questionnaire + videos (P2.A/B) and the top-20–30 forum Q&As for the new FAQ area (P2.C). When any of it lands, P2 jumps the queue.
 9. **Arbeitssystem seit 2026-07-06:** Die Launch-Tasks T01–T22 werden in `docs/LAUNCH_TASK_PROMPTS.md` getrackt (Status-Tracker + fertige Session-Prompts mit Rollen). Jede Session: Tracker lesen → nächsten nicht-blockierten Task per Prompt ausführen → Tracker UND Backlog fortschreiben. Der Backlog bleibt Single Source of Truth für WAS offen ist; der Tracker führt Ausführungsstatus + Arbeitsanweisungen.
 10. **🔶 Founder-Review-Vorlagen R1–R12 (angelegt 2026-07-06):** Zu jedem offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Block an der jeweiligen Stelle in diesem Backlog bzw. im Store-Draft/Tracker. Index mit Status + Vorlege-Regel: `docs/LAUNCH_TASK_PROMPTS.md` (Abschnitt „Founder-Review-Vorlagen“). Sessions legen fällige Blöcke dem Founder wörtlich zur Entscheidung vor, **bevor** der jeweilige Punkt umgesetzt wird.
-
+11. **Website-Warteliste (2026-07-25):** Formspree Free ist Zwischenlösung. **Vor Launch eigene Lösung bauen** (Supabase + Resend + DOI) — siehe P3.W Checkbox.
 *(2026-07-04: on-device QA on the fresh release dev build. Fixed two launch blockers found live: a fresh-install startup crash from a router redirect loop (`66958f0`) and a signup "something went wrong" error that appeared once email confirmation was enabled (`264e2f0`). Auth-config PATCH from the prior session corroborated in the field (emails link to reflexjourney.app, no dead corejourney.care page). Password reset — in-app and browser — both verified working on device.)*
 
 ---
@@ -203,7 +203,7 @@ Quellen/Begründung: `docs/APPSTORE_LAUNCH_ROADMAP.md` §6. Support- und Datensc
 - [ ] Website: `/datenschutz` mit Anwalts-Text (ASC-Pflichtfeld Datenschutz-URL) — Launch-Blocker, hängt an P0.6.
 - [ ] Website: `/trainer` + Bewerbungsformular (Marketing-Spec Teil C; einfaches Formular, kein Datei-Upload; Sichtprüfungs-Ablauf siehe Roadmap §7) — kein Launch-Blocker; Blocker für den Akquise-Piloten. Founder 2026-07-05: Angebot freigegeben, einfaches Formular + Einzelprüfung mit Führungszeugnis.
   > 🔶 **R11 — Empfehlung zur Entscheidung (vorlegen, bevor W5 gebaut wird):** Formular-Technik: **kleine Vercel-Serverless-Function**, die die Bewerbung per **Resend** an die Support-Adresse (R5) mailt. Warum: kein neuer Dienstleister und kein neuer AVV — Vercel und Resend stehen ohnehin im Anwaltsauftrag; kein Datei-Upload (Führungszeugnis wird nur im Sichttermin gezeigt, nie hochgeladen); für ~20 Pilot-Bewerbungen genau richtig dimensioniert. Alternative `mailto:`-Link wäre noch simpler, bricht aber auf Desktops ohne eingerichtetes Mail-Programm. **Zu entscheiden (dann):** Variante (Serverless + Resend empfohlen).
-
+- [ ] **Website-Warteliste: eigene Lösung vor Launch** (Founder 2026-07-25). Zwischenstand: Formspree Free (`https://formspree.io/f/xykrberv`) ohne Double-Opt-in / ohne Pro. **Vor dem eigentlichen Launch** Formspree ablösen durch eigene Infrastruktur (Empfehlung: Supabase-Tabelle + Edge Function + Resend-Mail mit echtem Double-Opt-in, EU). Dann `WAITLIST_ENDPOINT` in `reflexjourney-app-site/src/config.ts` umstellen, Datenschutz/Kanzlei aktualisieren, Test-Anmeldung. Kein Formspree-Pro kaufen.
 ---
 
 ## P4 — Maintainability & handoff (the actual long-term goal)
