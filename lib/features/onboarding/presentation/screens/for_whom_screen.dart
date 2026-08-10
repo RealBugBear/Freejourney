@@ -7,6 +7,7 @@ import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
+import '../widgets/pre_payoff_step_dots.dart';
 
 class ForWhomScreen extends ConsumerStatefulWidget {
   const ForWhomScreen({super.key});
@@ -27,67 +28,26 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
     super.dispose();
   }
 
-  Future<void> _onProfileCreated(String profileName) async {
+  void _onProfileCreated(ReflexSubjectProfile profile) {
     if (!mounted) return;
-    final goToReflex = await showModalBottomSheet<bool>(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) => Padding(
-        padding: const EdgeInsets.fromLTRB(28, 24, 28, 36),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              AppLocalizations.of(ctx)
-                  .forWhomReflexProfileSheetTitle(profileName),
-              style: Theme.of(ctx).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              AppLocalizations.of(ctx).forWhomReflexProfileSheetBody,
-              style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(ctx).colorScheme.onSurfaceVariant,
-                    height: 1.45,
-                  ),
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () => Navigator.pop(ctx, true),
-                child: Text(AppLocalizations.of(ctx).forWhomStartReflexProfile),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () => Navigator.pop(ctx, false),
-                child: Text(AppLocalizations.of(ctx).forWhomLaterToTraining),
-              ),
-            ),
-          ],
-        ),
-      ),
+    // Direct to Reflex Profile payoff — skip the in-profile "for whom" gate.
+    context.go(
+      Routes.reflexProfile,
+      extra: <String, dynamic>{
+        'packageId': 'moro',
+        'subjectProfileId': profile.id,
+        'questionnaireFor':
+            profile.profileType == 'adult_self' ? 'adult' : 'child',
+        'fromOnboarding': true,
+      },
     );
-    if (!mounted) return;
-    if (goToReflex == true) {
-      context.go(Routes.reflexProfile, extra: 'moro');
-    } else {
-      context.go(Routes.dashboard);
-    }
   }
 
   Future<void> _createSelfProfile() async {
     setState(() => _saving = true);
     try {
       final profile = await createAdultSelfProfile(ref);
-      await _onProfileCreated(profile.displayName);
+      _onProfileCreated(profile);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -113,12 +73,12 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
     }
     setState(() => _saving = true);
     try {
-      await createChildReflexSubjectProfile(
+      final profile = await createChildReflexSubjectProfile(
         ref,
         displayName: name,
         birthDate: birthDate,
       );
-      await _onProfileCreated(name);
+      _onProfileCreated(profile);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -141,16 +101,24 @@ class _ForWhomScreenState extends ConsumerState<ForWhomScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go(Routes.dashboard),
+          onPressed: () {
+            if (_showChildForm) {
+              setState(() => _showChildForm = false);
+              return;
+            }
+            // Stay in the pre-payoff chain (Kontaktname), not a soft abandon.
+            context.go(Routes.usernameSetup);
+          },
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
+              const PrePayoffStepDots(currentStep: 4),
+              const SizedBox(height: 28),
               Text(
                 l10n.forWhomTitle,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(

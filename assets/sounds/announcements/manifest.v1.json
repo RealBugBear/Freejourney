@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "moro-2026.07.23-v1",
+  "defaultLocale": "de",
+  "locales": {
+    "de": {
+      "entries": {
+        "session.pause": {"spokenText": "Pause.", "assetKey": null},
+        "session.resume": {"spokenText": "Weiter.", "assetKey": null},
+        "session.complete": {"spokenText": "Einheit abgeschlossen.", "assetKey": null},
+        "session.safety": {"spokenText": "Stoppe bei Schmerzen, Schwindel, Übelkeit oder deutlichem Unwohlsein. Lass anhaltende Beschwerden fachlich abklären.", "assetKey": null},
+        "session.countdown.3": {"spokenText": "Drei.", "assetKey": null},
+        "session.countdown.2": {"spokenText": "Zwei.", "assetKey": null},
+        "session.countdown.1": {"spokenText": "Eins.", "assetKey": null},
+        "exercise.repetition.complete": {"spokenText": "Wiederholung abgeschlossen.", "assetKey": null},
+        "exercise.switch_side": {"spokenText": "Wechsel.", "assetKey": null},
+        "exercise.rest": {"spokenText": "Pause.", "assetKey": null},
+
+        "exercise.moro_ex1.name": {"spokenText": "Moro fünf.", "assetKey": null},
+        "exercise.moro_ex1.position.solo": {"spokenText": "Lege dich auf den Rücken und strecke beide Beine aus. Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden. Du hebst abwechselnd ein Bein an. Bein hoch, halten, zurück, Seite wechseln.", "assetKey": null},
+        "exercise.moro_ex1.position.duo": {"spokenText": "Lege dich auf den Rücken und strecke beide Beine aus. Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden. Du hebst abwechselnd ein Bein an. Bein hoch, halten, zurück, Seite wechseln.", "assetKey": null},
+        "exercise.moro_ex1.phase.1": {"spokenText": "Hoch.", "assetKey": null},
+        "exercise.moro_ex1.phase.2": {"spokenText": "Halten.", "assetKey": null},
+        "exercise.moro_ex1.phase.3": {"spokenText": "Runter.", "assetKey": null},
+
+        "exercise.moro_ex2.name": {"spokenText": "Moro drei. Halber Frosch.", "assetKey": null},
+        "exercise.moro_ex2.position.solo": {"spokenText": "Lege dich auf den Rücken und strecke beide Beine aus. Lass beide Beine gerade und entspannt nebeneinander liegen. Du lässt abwechselnd einen Fuß am anderen Bein entlanggleiten. Fuß hochgleiten, zurück, Seite wechseln.", "assetKey": null},
+        "exercise.moro_ex2.position.duo": {"spokenText": "Lege dich auf den Rücken und strecke beide Beine aus. Lass beide Beine gerade und entspannt nebeneinander liegen. Du lässt abwechselnd einen Fuß am anderen Bein entlanggleiten. Fuß hochgleiten, zurück, Seite wechseln.", "assetKey": null},
+        "exercise.moro_ex2.phase.1": {"spokenText": "Hoch.", "assetKey": null},
+        "exercise.moro_ex2.phase.2": {"spokenText": "Runter.", "assetKey": null},
+
+        "exercise.moro_ex3.name": {"spokenText": "Moro vier. Frosch.", "assetKey": null},
+        "exercise.moro_ex3.position.solo": {"spokenText": "Lege dich auf den Rücken und strecke beide Beine aus. Führe die Fußsohlen zusammen. Du bewegst beide Füße gemeinsam. Füße heran, Knie öffnen, Füße zurück.", "assetKey": null},
+        "exercise.moro_ex3.position.duo": {"spokenText": "Lege dich auf den Rücken und strecke beide Beine aus. Führe die Fußsohlen zusammen. Du bewegst beide Füße gemeinsam. Füße heran, Knie öffnen, Füße zurück.", "assetKey": null},
+        "exercise.moro_ex3.phase.1": {"spokenText": "Ran.", "assetKey": null},
+        "exercise.moro_ex3.phase.2": {"spokenText": "Zurück.", "assetKey": null},
+
+        "exercise.moro_ex4.name": {"spokenText": "Moro eins.", "assetKey": null},
+        "exercise.moro_ex4.position.solo": {"spokenText": "Lege dich auf den Rücken. Stelle die Füße auf und halte die Knie zusammen. Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden. Du bewegst beide Knie zu jeder Seite. Rechts, Mitte, links, Mitte.", "assetKey": null},
+        "exercise.moro_ex4.position.duo": {"spokenText": "Lege dich auf den Rücken. Stelle die Füße auf und halte die Knie zusammen. Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden. Du bewegst beide Knie zu jeder Seite. Rechts, Mitte, links, Mitte.", "assetKey": null},
+        "exercise.moro_ex4.phase.1": {"spokenText": "Rechts.", "assetKey": null},
+        "exercise.moro_ex4.phase.2": {"spokenText": "Mitte.", "assetKey": null},
+        "exercise.moro_ex4.phase.3": {"spokenText": "Links.", "assetKey": null},
+        "exercise.moro_ex4.phase.4": {"spokenText": "Mitte.", "assetKey": null},
+
+        "exercise.moro_ex5.name": {"spokenText": "Moro zwei.", "assetKey": null},
+        "exercise.moro_ex5.position.solo": {"spokenText": "Lege dich auf den Rücken. Stelle die Füße auf und halte die Knie zusammen. Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden. Du rollst Kopf und Oberkörper mit der Ausatmung an. Ausatmen, hochrollen, halten, ablegen.", "assetKey": null},
+        "exercise.moro_ex5.position.duo": {"spokenText": "Lege dich auf den Rücken. Stelle die Füße auf und halte die Knie zusammen. Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden. Du rollst Kopf und Oberkörper mit der Ausatmung an. Ausatmen, hochrollen, halten, ablegen.", "assetKey": null},
+        "exercise.moro_ex5.phase.1": {"spokenText": "Ausatmen.", "assetKey": null},
+        "exercise.moro_ex5.phase.2": {"spokenText": "Hochrollen.", "assetKey": null},
+        "exercise.moro_ex5.phase.3": {"spokenText": "Halten.", "assetKey": null},
+        "exercise.moro_ex5.phase.4": {"spokenText": "Ablegen.", "assetKey": null},
+
+        "exercise.moro_ex6.name": {"spokenText": "Moro sechs. Isometrischer Gegendruck.", "assetKey": null},
+        "exercise.moro_ex6.position.solo": {"spokenText": "Lege dich auf den Rücken und winkle beide Beine an. Lege die überkreuzten Hände auf Knie oder Schienbeine. Baue leichten Gegendruck auf. Halte sieben Sekunden. Löse drei Sekunden. Wechsle nach drei Wiederholungen das Armkreuz.", "assetKey": null},
+        "exercise.moro_ex6.position.duo": {"spokenText": "Lege dich auf den Rücken und winkle beide Beine an. Lege die überkreuzten Hände auf Knie oder Schienbeine. Baue leichten Gegendruck auf. Halte sieben Sekunden. Löse drei Sekunden. Wechsle nach drei Wiederholungen das Armkreuz.", "assetKey": null},
+        "exercise.moro_ex6.phase.1": {"spokenText": "Spannung.", "assetKey": null},
+
+        "exercise.moro_ex7.name": {"spokenText": "Moro sieben. Überkreuzter Gegendruck.", "assetKey": null},
+        "exercise.moro_ex7.position.solo": {"spokenText": "Lege dich auf den Rücken und winkle beide Beine an. Lege die überkreuzten Hände auf Oberschenkel oder Knie. Lass Beine und Hände kontrolliert gegeneinander arbeiten. Halte sieben Sekunden. Löse drei Sekunden. Wechsle nach drei Wiederholungen das Armkreuz.", "assetKey": null},
+        "exercise.moro_ex7.position.duo": {"spokenText": "Lege dich auf den Rücken und winkle beide Beine an. Lege die überkreuzten Hände auf Oberschenkel oder Knie. Lass Beine und Hände kontrolliert gegeneinander arbeiten. Halte sieben Sekunden. Löse drei Sekunden. Wechsle nach drei Wiederholungen das Armkreuz.", "assetKey": null},
+        "exercise.moro_ex7.phase.1": {"spokenText": "Spannung.", "assetKey": null}
+      }
+    },
+    "en": {
+      "entries": {
+        "session.pause": {"spokenText": "Pause.", "assetKey": null},
+        "session.resume": {"spokenText": "Continue.", "assetKey": null},
+        "session.complete": {"spokenText": "Session complete.", "assetKey": null},
+        "session.safety": {"spokenText": "Stop if you feel pain, dizziness, nausea, or significant discomfort. Seek professional advice if symptoms persist.", "assetKey": null},
+        "session.countdown.3": {"spokenText": "Three.", "assetKey": null},
+        "session.countdown.2": {"spokenText": "Two.", "assetKey": null},
+        "session.countdown.1": {"spokenText": "One.", "assetKey": null},
+        "exercise.repetition.complete": {"spokenText": "Repetition complete.", "assetKey": null},
+        "exercise.switch_side": {"spokenText": "Switch sides.", "assetKey": null},
+        "exercise.rest": {"spokenText": "Rest.", "assetKey": null},
+
+        "exercise.moro_ex1.name": {"spokenText": "Moro five.", "assetKey": null},
+        "exercise.moro_ex1.position.solo": {"spokenText": "Lie on your back with both legs extended. Rest your arms alongside your body with your palms facing down. You alternately raise one leg. Leg up, hold, return, switch sides.", "assetKey": null},
+        "exercise.moro_ex1.position.duo": {"spokenText": "Lie on your back with both legs extended. Rest your arms alongside your body with your palms facing down. You alternately raise one leg. Leg up, hold, return, switch sides.", "assetKey": null},
+        "exercise.moro_ex1.phase.1": {"spokenText": "Up.", "assetKey": null},
+        "exercise.moro_ex1.phase.2": {"spokenText": "Hold.", "assetKey": null},
+        "exercise.moro_ex1.phase.3": {"spokenText": "Down.", "assetKey": null},
+
+        "exercise.moro_ex2.name": {"spokenText": "Moro three. Half frog.", "assetKey": null},
+        "exercise.moro_ex2.position.solo": {"spokenText": "Lie on your back with both legs extended. Let both legs rest straight and relaxed beside each other. You alternately slide one foot along the opposite leg. Slide foot up, return, switch sides.", "assetKey": null},
+        "exercise.moro_ex2.position.duo": {"spokenText": "Lie on your back with both legs extended. Let both legs rest straight and relaxed beside each other. You alternately slide one foot along the opposite leg. Slide foot up, return, switch sides.", "assetKey": null},
+        "exercise.moro_ex2.phase.1": {"spokenText": "Up.", "assetKey": null},
+        "exercise.moro_ex2.phase.2": {"spokenText": "Down.", "assetKey": null},
+
+        "exercise.moro_ex3.name": {"spokenText": "Moro four. Frog.", "assetKey": null},
+        "exercise.moro_ex3.position.solo": {"spokenText": "Lie on your back with both legs extended. Bring the soles of your feet together. You move both feet together. Feet in, knees open, feet back.", "assetKey": null},
+        "exercise.moro_ex3.position.duo": {"spokenText": "Lie on your back with both legs extended. Bring the soles of your feet together. You move both feet together. Feet in, knees open, feet back.", "assetKey": null},
+        "exercise.moro_ex3.phase.1": {"spokenText": "In.", "assetKey": null},
+        "exercise.moro_ex3.phase.2": {"spokenText": "Back.", "assetKey": null},
+
+        "exercise.moro_ex4.name": {"spokenText": "Moro one.", "assetKey": null},
+        "exercise.moro_ex4.position.solo": {"spokenText": "Lie on your back. Place your feet on the floor and keep your knees together. Rest your arms alongside your body with your palms facing down. You move both knees to each side. Right, centre, left, centre.", "assetKey": null},
+        "exercise.moro_ex4.position.duo": {"spokenText": "Lie on your back. Place your feet on the floor and keep your knees together. Rest your arms alongside your body with your palms facing down. You move both knees to each side. Right, centre, left, centre.", "assetKey": null},
+        "exercise.moro_ex4.phase.1": {"spokenText": "Right.", "assetKey": null},
+        "exercise.moro_ex4.phase.2": {"spokenText": "Centre.", "assetKey": null},
+        "exercise.moro_ex4.phase.3": {"spokenText": "Left.", "assetKey": null},
+        "exercise.moro_ex4.phase.4": {"spokenText": "Centre.", "assetKey": null},
+
+        "exercise.moro_ex5.name": {"spokenText": "Moro two.", "assetKey": null},
+        "exercise.moro_ex5.position.solo": {"spokenText": "Lie on your back. Place your feet on the floor and keep your knees together. Rest your arms alongside your body with your palms facing down. You curl your head and upper body as you exhale. Exhale, roll up, hold, lower.", "assetKey": null},
+        "exercise.moro_ex5.position.duo": {"spokenText": "Lie on your back. Place your feet on the floor and keep your knees together. Rest your arms alongside your body with your palms facing down. You curl your head and upper body as you exhale. Exhale, roll up, hold, lower.", "assetKey": null},
+        "exercise.moro_ex5.phase.1": {"spokenText": "Exhale.", "assetKey": null},
+        "exercise.moro_ex5.phase.2": {"spokenText": "Roll up.", "assetKey": null},
+        "exercise.moro_ex5.phase.3": {"spokenText": "Hold.", "assetKey": null},
+        "exercise.moro_ex5.phase.4": {"spokenText": "Lower.", "assetKey": null},
+
+        "exercise.moro_ex6.name": {"spokenText": "Moro six. Isometric counterpressure.", "assetKey": null},
+        "exercise.moro_ex6.position.solo": {"spokenText": "Lie on your back with both legs bent. Place your crossed hands on your knees or shins. Build gentle counterpressure. Hold for seven seconds. Release for three seconds. Switch the arm cross after three repetitions.", "assetKey": null},
+        "exercise.moro_ex6.position.duo": {"spokenText": "Lie on your back with both legs bent. Place your crossed hands on your knees or shins. Build gentle counterpressure. Hold for seven seconds. Release for three seconds. Switch the arm cross after three repetitions.", "assetKey": null},
+        "exercise.moro_ex6.phase.1": {"spokenText": "Tension.", "assetKey": null},
+
+        "exercise.moro_ex7.name": {"spokenText": "Moro seven. Crossed counterpressure.", "assetKey": null},
+        "exercise.moro_ex7.position.solo": {"spokenText": "Lie on your back with both legs bent. Place your crossed hands on your thighs or knees. Let your legs and hands work against each other with control. Hold for seven seconds. Release for three seconds. Switch the arm cross after three repetitions.", "assetKey": null},
+        "exercise.moro_ex7.position.duo": {"spokenText": "Lie on your back with both legs bent. Place your crossed hands on your thighs or knees. Let your legs and hands work against each other with control. Hold for seven seconds. Release for three seconds. Switch the arm cross after three repetitions.", "assetKey": null},
+        "exercise.moro_ex7.phase.1": {"spokenText": "Tension.", "assetKey": null}
+      }
+    }
+  }
+}

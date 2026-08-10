@@ -8,6 +8,7 @@ import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../onboarding/presentation/widgets/pre_payoff_step_dots.dart';
 
 // ── Screen ────────────────────────────────────────────────────────────────────
 
@@ -18,22 +19,22 @@ class ConsentScreen extends ConsumerStatefulWidget {
   ConsumerState<ConsentScreen> createState() => _ConsentScreenState();
 }
 
-class _ConsentScreenState extends ConsumerState<ConsentScreen>
-    with SingleTickerProviderStateMixin {
-  late final TabController _tabController;
+class _ConsentScreenState extends ConsumerState<ConsentScreen> {
   bool _agreed = false;
   bool _saving = false;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    // Remote consent may exist without a local prefs flag (other device).
+    // Skip the form if the async check says already done — no Dashboard hop.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _skipIfAlreadyConsented());
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  Future<void> _skipIfAlreadyConsented() async {
+    final consented = await ref.read(hasConsentedProvider.future);
+    if (!mounted || consented != true) return;
+    context.go('/dashboard');
   }
 
   Future<void> _confirm() async {
@@ -78,41 +79,136 @@ class _ConsentScreenState extends ConsumerState<ConsentScreen>
     }
   }
 
+  Future<void> _openDocumentSheet({
+    required String title,
+    required Widget body,
+  }) {
+    return showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        final height = MediaQuery.sizeOf(ctx).height * 0.88;
+        return SizedBox(
+          height: height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 10),
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Theme.of(ctx).colorScheme.outlineVariant,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Text(
+                          title,
+                          style:
+                              Theme.of(ctx).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      icon: const Icon(Icons.close),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+              Expanded(child: body),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Lawyer-owned bilingual copy below stays untouched; only the language
     // switch is registry-driven (unsupported locales read the EN version).
     final isDE =
         ref.watch(settingsProvider).languageCode == AppLanguages.sourceCode;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(isDE ? 'Zustimmung erforderlich' : 'Consent Required'),
-        automaticallyImplyLeading: false, // must agree to proceed
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(text: isDE ? 'Hinweise' : 'Safety'),
-            Tab(text: isDE ? 'Nutzungsbedingungen' : 'Terms'),
-            Tab(text: isDE ? 'Datenschutz' : 'Privacy'),
-          ],
-        ),
-      ),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _SafetyTab(isDE: isDE),
-                  _TermsTab(isDE: isDE),
-                  _PrivacyTab(isDE: isDE),
-                ],
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(28, 28, 28, 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const PrePayoffStepDots(currentStep: 2),
+                    const SizedBox(height: 28),
+                    Text(
+                      l10n.consentShortTitle,
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      l10n.consentDiscoverLead,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            height: 1.45,
+                          ),
+                    ),
+                    const SizedBox(height: 28),
+                    _ConsentDocRow(
+                      title: l10n.consentRowSafety,
+                      hint: l10n.consentReadLinkHint,
+                      onTap: () => _openDocumentSheet(
+                        title: l10n.consentRowSafety,
+                        body: _SafetyTab(isDE: isDE),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _ConsentDocRow(
+                      title: l10n.consentRowTerms,
+                      hint: l10n.consentReadLinkHint,
+                      onTap: () => _openDocumentSheet(
+                        title: l10n.consentRowTerms,
+                        body: _TermsTab(isDE: isDE),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _ConsentDocRow(
+                      title: l10n.consentRowPrivacy,
+                      hint: l10n.consentReadLinkHint,
+                      onTap: () => _openDocumentSheet(
+                        title: l10n.consentRowPrivacy,
+                        body: _PrivacyTab(isDE: isDE),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
 
-            // ── Agreement checkbox + confirm button ────────────────────────
+            // ── Agreement checkbox + discover CTA ──────────────────────────
             Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
@@ -129,14 +225,13 @@ class _ConsentScreenState extends ConsumerState<ConsentScreen>
                     contentPadding: EdgeInsets.zero,
                     controlAffinity: ListTileControlAffinity.leading,
                     title: Text(
-                      isDE
-                          ? 'Ich habe alle drei Abschnitte gelesen und stimme den Nutzungsbedingungen sowie der Datenschutzerklärung zu.'
-                          : 'I have read all three sections and agree to the Terms of Use and Privacy Policy.',
+                      l10n.consentCheckboxLabel,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton(
+                    key: const Key('consent_discover_cta'),
                     onPressed: (_agreed && !_saving) ? _confirm : null,
                     child: _saving
                         ? const SizedBox(
@@ -148,9 +243,7 @@ class _ConsentScreenState extends ConsumerState<ConsentScreen>
                             ),
                           )
                         : Text(
-                            isDE
-                                ? 'Ich stimme zu und möchte fortfahren'
-                                : 'I agree and want to continue',
+                            l10n.consentDiscoverCta,
                             textAlign: TextAlign.center,
                           ),
                   ),
@@ -158,6 +251,61 @@ class _ConsentScreenState extends ConsumerState<ConsentScreen>
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ConsentDocRow extends StatelessWidget {
+  const _ConsentDocRow({
+    required this.title,
+    required this.hint,
+    required this.onTap,
+  });
+
+  final String title;
+  final String hint;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final outline = Theme.of(context).colorScheme.outlineVariant;
+    return Material(
+      color: Theme.of(context).colorScheme.surfaceContainerLow,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: outline),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+              ),
+              Text(
+                hint,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              const SizedBox(width: 4),
+              Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ],
+          ),
         ),
       ),
     );

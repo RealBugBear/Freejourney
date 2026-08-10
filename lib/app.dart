@@ -8,6 +8,7 @@ import 'package:app_links/app_links.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'bootstrap/bootstrap.dart';
 import 'bootstrap/providers.dart';
 import 'config/launch_flags.dart';
 import 'core/l10n/app_languages.dart';
@@ -74,8 +75,11 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
   Future<void> _initDeepLinks() async {
     final appLinks = AppLinks();
 
-    // Cold start: App war geschlossen, Link öffnet sie neu
-    final initialUri = await appLinks.getInitialLink();
+    // Prefer the link captured right after Supabase init (bootstrap). Fall back
+    // to getInitialLink for hosts that still have it available.
+    final initialUri =
+        Bootstrap.pendingInitialDeepLink ?? await appLinks.getInitialLink();
+    Bootstrap.pendingInitialDeepLink = null;
     if (initialUri != null) {
       await _handleDeepLink(initialUri);
     }
@@ -89,6 +93,7 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
     // Email links carry a token_hash (the same link the web fallback pages on
     // reflexjourney.app use); getSessionFromUrl cannot process those.
     final tokenHash = uri.queryParameters['token_hash'];
+    final otpTypeRaw = uri.queryParameters['type'];
 
     switch (classifyAuthDeepLink(uri)) {
       case AuthDeepLink.resetPassword:
@@ -104,23 +109,46 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
           ref.read(passwordRecoveryActiveProvider.notifier).state = false;
         }
       case AuthDeepLink.confirmSignup:
-        // Confirmation link tapped on the device that has the app installed:
-        // verify here and the user ends up signed in. If a session already
-        // exists the account is in use — leave it alone; expired/invalid
-        // links leave the user on the login screen to request a new one.
-        if (tokenHash == null || auth.currentSession != null) return;
+        // Prefer the web /auth/confirm page (Safari). If a Universal Link still
+        // opens the app (AASA cache / custom scheme), verify here so the
+        // account is activated — then land on Consent, never Dashboard first.
+        if (auth.currentSession != null) {
+          _goPostConfirmLanding();
+          return;
+        }
         try {
-          await auth.verifyOTP(type: OtpType.signup, tokenHash: tokenHash);
-        } on AuthException {
-          // Some confirmations verify only under the generic "email" type —
-          // same fallback the /auth/confirm web page uses.
-          try {
-            await auth.verifyOTP(type: OtpType.email, tokenHash: tokenHash);
-          } catch (_) {}
-        } catch (_) {}
+          if (tokenHash != null) {
+            final preferred = switch (otpTypeRaw) {
+              'email' => OtpType.email,
+              'signup' || null || '' => OtpType.signup,
+              _ => OtpType.signup,
+            };
+            try {
+              await auth.verifyOTP(type: preferred, tokenHash: tokenHash);
+            } on AuthException {
+              if (preferred != OtpType.email) {
+                await auth.verifyOTP(type: OtpType.email, tokenHash: tokenHash);
+              } else {
+                await auth.verifyOTP(type: OtpType.signup, tokenHash: tokenHash);
+              }
+            }
+          } else {
+            // Legacy hash-fragment redirects (#access_token=…).
+            await auth.getSessionFromUrl(uri);
+          }
+          _goPostConfirmLanding();
+        } catch (e, st) {
+          appLogger.w('Signup confirm deep link failed: $e\n$st');
+        }
       case AuthDeepLink.none:
         break;
     }
+  }
+
+  void _goPostConfirmLanding() {
+    final ctx = rootNavigatorKey.currentContext;
+    if (ctx == null || !ctx.mounted) return;
+    ctx.go(Routes.consent);
   }
 
   /// Flush the sync queue whenever the app moves to background or is suspended.

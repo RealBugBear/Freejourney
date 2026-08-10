@@ -147,14 +147,17 @@ Befund: `public/privacy.html` (Kontakt = private Gmail-Adresse, Stand Dez 2024, 
 
 ---
 
-## P2 — Content integration ⛔ blocked: Sina delivery
+## P2 — Content integration ⛔ blocked: Sina delivery (B, C) · A delivered 2026-08-01, decision pending
 
 Expected deliverables (per CONTENT-STATUS and 2026-06-24 session):
-**A) Adult questionnaire** — revised `erw` questions + question→reflex mapping (mapping currently missing entirely).
+**A) Adult questionnaire** — revised questions + question→reflex mapping. **Delivered twice, independently (both 2026-08-01) — a decision is now pending, not content:**
+  - `FRI_Fragen_Erwachsene_v1.xlsx` (`adult_v1`) — built in a prompt session, 127 items in 11 modules, 14 reflexes, with evidence levels and stable IDs.
+  - `FRI_Fragen_Sina_2026-08-01.xlsx` sheets `Tabelle3`/`Tabelle4` — Sina's own version, 110 questions in 7 modules, **15** reflexes (adds an "Amphibienreflex" the app does not know).
 **B) Final training videos** — selected/cut from the filmed footage, plus final exercise pictures.
 **C) FAQ/orientation content** (added 2026-07-03, founder decision) — the 20–30 most common questions + answers from Sina's forum, as the content base for an in-app help area.
 
-- [ ] A: Validate content (scoring rules per `specs/reflexprofil_planung.md`), seed into the questionnaire system following the child-questionnaire pattern (`reflex_profile_questionnaire_v1` migration as reference).
+- [ ] A **(step 1, do this first)**: Compare the two adult versions and produce a decision paper — run `/Users/alexandermessinger/dev/ReflexJourney/docs/ADULT_QUESTIONNAIRE_COMPARISON_PROMPT.md` in a session opened in the `ReflexJourney` repo. It merges nothing and decides nothing; it delivers `erwachsenenbogen-vergleich.xlsx` + `erwachsenenbogen-vergleich-befund.md` for founder/Sina sign-off. Seven defects are already verified and written into the prompt, incl. inverted-polarity questions that would score backwards and safety questions (pregnancy, psychiatric treatment) carrying reflex crosses.
+- [ ] A **(step 2, blocked by step 1)**: Validate content (scoring rules per `specs/reflexprofil_planung.md`), seed into the questionnaire system following the child-questionnaire pattern (`reflex_profile_questionnaire_v1` migration as reference). Adding a 15th reflex would additionally require enum, migration, i18n and result-UI changes — founder decision, see step 1.
 - [ ] B: Upload media to Supabase Storage, populate the remote media URL columns (pipeline built 2026-05-30: `ExerciseImageWidget`/`ExerciseVideoWidget` URL-or-asset resolution, Drift cache sync).
 - [ ] Verify on-device: media loads remotely, falls back to assets offline.
 - [ ] C (Stufe 1): Build a curated, searchable FAQ/orientation section in the app from Sina's reviewed forum Q&As. **Not launch-blocking** — ships with or shortly after launch once content arrives. Every answer gets a copy review for therapy/medical-claim language before seeding. No bot, no free-text generation — static reviewed content only. ⛔ blocked: content (founder requested forum access / top-20–30 Q&As from Sina, 2026-07-03).

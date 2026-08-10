@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../config/launch_flags.dart';
 import '../../l10n/app_localizations.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
+import '../../features/consent/presentation/providers/consent_provider.dart';
 import '../settings/settings_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/reset_password_screen.dart';
@@ -157,6 +158,26 @@ class _CombinedListenable extends ChangeNotifier {
 
 final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
+/// Sync local-prefs consent check for GoRouter (avoids painting Dashboard
+/// before the async consent gate can redirect).
+bool _hasLocalConsent(Ref ref, String userId) {
+  return ref.read(sharedPreferencesProvider).getBool(consentPrefKey(userId)) ==
+      true;
+}
+
+bool _isConsentExemptRoute(String loc) {
+  return loc == Routes.consent ||
+      loc == Routes.login ||
+      loc == Routes.resetPassword ||
+      loc == Routes.changePassword ||
+      loc == Routes.languageSelection ||
+      loc == Routes.reflexProfileDemo;
+}
+
+String _postAuthHome(Ref ref, String userId) {
+  return _hasLocalConsent(ref, userId) ? Routes.dashboard : Routes.consent;
+}
+
 final routerProvider = Provider<GoRouter>((ref) {
   final authRefresh = _StreamRefreshListenable(
     Supabase.instance.client.auth.onAuthStateChange,
@@ -202,15 +223,22 @@ final routerProvider = Provider<GoRouter>((ref) {
         return Routes.languageSelection;
       }
       if (hasSelectedLanguage && loc == Routes.languageSelection) {
-        return user == null ? Routes.login : Routes.dashboard;
+        if (user == null) return Routes.login;
+        return _postAuthHome(ref, user.id);
       }
       // Nicht eingeloggt → Login (außer während Recovery)
       if (user == null && !isPublicRoute) {
         return Routes.login;
       }
-      // Eingeloggt und auf Login → Dashboard
-      if (user != null && !isPasswordRecovery && loc == Routes.login) {
-        return Routes.dashboard;
+      // Eingeloggt: never paint Dashboard (or other app chrome) before Consent.
+      if (user != null && !isPasswordRecovery) {
+        final consented = _hasLocalConsent(ref, user.id);
+        if (!consented && !_isConsentExemptRoute(loc)) {
+          return Routes.consent;
+        }
+        if (loc == Routes.login) {
+          return _postAuthHome(ref, user.id);
+        }
       }
       return null;
     },

@@ -41,7 +41,7 @@ Build-Tasks erst, wenn die offenen Entscheidungen gefallen sind.
 
 | Abschnitt | Status |
 |---|---|
-| P0 — Founder-Review dieser Spec | ☐ offen |
+| P0 — Founder-Review dieser Spec | ✅ 2026-07-23 — bestätigt; Evidenz `docs/evidence/T27/planning/founder_review.md` |
 | P1 — Problem-Interviews | ☐ offen |
 | P2 — Low-Fi-Konzept + Usability-Test | ☐ offen |
 | P3A — Daten-/Rechts-Entscheid | ☐ offen |

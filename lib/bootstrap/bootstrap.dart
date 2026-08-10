@@ -1,6 +1,7 @@
 import 'dart:developer' as dev;
 import 'dart:io';
 
+import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -22,6 +23,10 @@ class Bootstrap {
   final AppDatabase database;
   final SyncService syncService;
   final SharedPreferences prefs;
+
+  /// Cold-start Universal/App Link captured after Supabase is ready.
+  /// Consumed once by [CoreJourneyApp] so bootstrap latency cannot drop it.
+  static Uri? pendingInitialDeepLink;
 
   Bootstrap._({
     required this.config,
@@ -101,6 +106,18 @@ class Bootstrap {
       ),
     );
     _dbg('Supabase initialization completed');
+
+    // Capture the cold-start link now that auth is ready. Waiting until
+    // CoreJourneyApp mounts (after sync/prefs) can miss signup-confirm links
+    // opened from Mail via Universal Links.
+    try {
+      pendingInitialDeepLink = await AppLinks().getInitialLink();
+      if (pendingInitialDeepLink != null) {
+        _dbg('Captured initial deep link: $pendingInitialDeepLink');
+      }
+    } catch (e) {
+      _dbg('Initial deep link capture failed: $e');
+    }
 
     // Initialize local database.
     //

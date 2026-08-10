@@ -4,12 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/training/in_app_music_settings.dart';
 
-/// Stable asset keys for the music picker. Display names live in the ARBs.
-const List<String> kInAppTracks = [
-  'sounds/music/ambient_flow.mp3',
-  'sounds/music/stille_natur.mp3',
-  'sounds/music/tiefe_toene.mp3',
-];
+/// Only verified, bundled production tracks may appear here.
+///
+/// The current release contains no music assets, so the picker must not
+/// advertise or persist fictional choices.
+const List<String> kInAppTracks = [];
 
 class InAppMusicService {
   InAppMusicService._();
@@ -43,7 +42,10 @@ class InAppMusicService {
     final prefs = await SharedPreferences.getInstance();
     final track = InAppMusicSettings.selectedTrack(prefs);
     final volume = InAppMusicSettings.volume(prefs);
-    if (track == null) {
+    if (track == null || !kInAppTracks.contains(track)) {
+      if (track != null) {
+        await InAppMusicSettings.setSelectedTrack(prefs, null);
+      }
       await stop();
       return;
     }
@@ -51,6 +53,10 @@ class InAppMusicService {
   }
 
   Future<void> play(String assetKey, {double volume = 0.7}) async {
+    if (!kInAppTracks.contains(assetKey)) {
+      await stop();
+      return;
+    }
     try {
       await init();
       _currentTrack = assetKey;

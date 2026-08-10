@@ -122,14 +122,14 @@ class SettingsScreen extends ConsumerWidget {
             child: _SegmentedRow<TrainingFeedbackMode>(
               options: const [
                 TrainingFeedbackMode.silent,
-                TrainingFeedbackMode.haptic,
-                TrainingFeedbackMode.voiceCues,
+                TrainingFeedbackMode.hapticOnly,
+                TrainingFeedbackMode.voiceAndCues,
               ],
               selected: settings.feedbackMode,
               label: (mode) => switch (mode) {
                 TrainingFeedbackMode.silent => l10n.silentMode,
-                TrainingFeedbackMode.haptic => l10n.hapticMode,
-                TrainingFeedbackMode.voiceCues => l10n.voiceCuesMode,
+                TrainingFeedbackMode.hapticOnly => l10n.hapticMode,
+                TrainingFeedbackMode.voiceAndCues => l10n.voiceCuesMode,
               },
               onChanged: notifier.setFeedbackMode,
             ),

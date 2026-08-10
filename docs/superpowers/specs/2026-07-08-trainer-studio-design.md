@@ -1,8 +1,8 @@
 # Trainer Studio — Product-, UX- und Delivery-Spec (T27)
 
-**Stand:** 2026-07-19
-**Status:** TS-6–TS-11-Richtung vom Founder freigegeben; P0-Founder-Review der
-North Star/Zielgruppe und P1–P4A bleiben offen — Planung, kein Build-Auftrag
+**Stand:** 2026-07-23
+**Status:** TS-6–TS-11-Richtung und P0-Founder-Review vom Founder freigegeben;
+P1–P4A bleiben offen — Planung, kein Build-Auftrag
 **Owner:** Founder
 **Verwandt:** `docs/TRAINER_STUDIO_PROMPT.md` ·
 `docs/TRAINER_STUDIO_BUILD_PROMPTS.md` · `docs/PAYMENTS_MASTER_PLAN.md` ·
@@ -19,6 +19,15 @@ North Star/Zielgruppe und P1–P4A bleiben offen — Planung, kein Build-Auftrag
 > separat.“ TS-7 bedeutet hier: plattformneutraler Build; kostenloser MVP
 > iOS-first zulässig mit Android nach stabiler Build-Verfügbarkeit; bezahlter
 > Pilot iOS-first mit Android nach T25.4-E2E.
+
+> **Datiertes P0 Decision Record — 2026-07-23:** Founder bestätigt North Star,
+> primäre Zielgruppe und Scope-Regel „Briefing + Termin-Automation; Notizen
+> separat“. Extern zugesagt wurde nach aktueller Bestandsaufnahme nur
+> „Eintrag/Sichtbarkeit dauerhaft kostenlos“; keine Studio-Preis-, Prozent-
+> oder Wiederanmeldezusage. Preis, finaler TS-8-Scope und Pilotdetails bleiben
+> Hypothesen bis P1/P2/P3B/P4A/P4B. Der Wunsch nach einem späteren
+> Trainer-Tester-Account und anschließender Installation auf dem Founder-Gerät
+> ist Testwunsch, kein Build-, Store- oder Deploy-Go.
 
 ## 0. Review-Ergebnis
 
@@ -527,6 +536,7 @@ Prozentuale Conversion-Ziele werden erst ab einer sinnvollen Stichprobe gesetzt.
 | TS-9 | Sitzungsprotokolle v1, später oder nie | ✅ 2026-07-19 separat gegated; Richtung erst nach Legal-/Security-Go |
 | TS-10 | Preis/Trial | ✅ 2026-07-19 nur als Hypothese; final nach Interviews + Store-Prüfung |
 | TS-11 | 3–5 Trainer, 6–8 Wochen, befristet/kostenlos/kein Auto-Abo | ✅ 2026-07-19 Rahmen; Enddatum/Teilnehmer final vor Pilot-Stufe A |
+| P0 | Founder-Review der Spec: North Star, Zielgruppe, Scope-Regel und Altversprechen | ✅ 2026-07-23 bestätigt; Evidenz `docs/evidence/T27/planning/founder_review.md` |
 
 ## 15. Aktuelle Primärquellen für den späteren Re-Check
 

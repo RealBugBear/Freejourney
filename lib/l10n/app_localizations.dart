@@ -224,6 +224,72 @@ abstract class AppLocalizations {
   /// **'Fast geschafft! Wir haben dir eine E-Mail zur Bestätigung deines Kontos gesendet. Bitte tippe auf den Link darin, dann kannst du dich anmelden.'**
   String get signUpConfirmEmailSent;
 
+  /// B1 framing under login brand toward discovering the Reflex Profile
+  ///
+  /// In de, this message translates to:
+  /// **'Gleich entdeckst du dein persönliches Reflex-Profil — in deinem Tempo.'**
+  String get loginDiscoverLead;
+
+  /// Layout B consent screen short title
+  ///
+  /// In de, this message translates to:
+  /// **'Kurz zustimmen'**
+  String get consentShortTitle;
+
+  /// B1 emotional lead on consent before the three document links
+  ///
+  /// In de, this message translates to:
+  /// **'Dann entdeckst du dein persönliches Reflex-Profil — in deinem Tempo.'**
+  String get consentDiscoverLead;
+
+  /// Consent Layout B row that opens the safety/medical sheet
+  ///
+  /// In de, this message translates to:
+  /// **'Sicherheit'**
+  String get consentRowSafety;
+
+  /// Consent Layout B row that opens the terms of use sheet
+  ///
+  /// In de, this message translates to:
+  /// **'Nutzung'**
+  String get consentRowTerms;
+
+  /// Consent Layout B row that opens the privacy policy sheet
+  ///
+  /// In de, this message translates to:
+  /// **'Datenschutz'**
+  String get consentRowPrivacy;
+
+  /// Trailing hint on consent document rows
+  ///
+  /// In de, this message translates to:
+  /// **'Lesen'**
+  String get consentReadLinkHint;
+
+  /// Single consent checkbox label (Layout B)
+  ///
+  /// In de, this message translates to:
+  /// **'Ich habe die Hinweise gelesen und stimme den Nutzungsbedingungen sowie der Datenschutzerklärung zu.'**
+  String get consentCheckboxLabel;
+
+  /// Primary consent CTA — B1 discover tone
+  ///
+  /// In de, this message translates to:
+  /// **'Reflex-Profil entdecken'**
+  String get consentDiscoverCta;
+
+  /// Shorter B1 Kontaktname benefit line without community
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Kontaktname ist für Trainer sichtbar — danach entdeckst du dein Reflex-Profil.'**
+  String get profileContactNameDiscoverBody;
+
+  /// Shorter B1 Kontaktname benefit line with community
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Kontaktname ist für Trainer sichtbar und kann sich von deinem Community-Namen unterscheiden — danach entdeckst du dein Reflex-Profil.'**
+  String get profileContactNameDiscoverBodyWithCommunity;
+
   /// No description provided for @authErrorInvalidCredentials.
   ///
   /// In de, this message translates to:
@@ -293,13 +359,13 @@ abstract class AppLocalizations {
   /// No description provided for @tutorialMode.
   ///
   /// In de, this message translates to:
-  /// **'Tutorial'**
+  /// **'Lernmodus'**
   String get tutorialMode;
 
   /// No description provided for @routineMode.
   ///
   /// In de, this message translates to:
-  /// **'Routine'**
+  /// **'Routinemodus'**
   String get routineMode;
 
   /// No description provided for @silentMode.
@@ -3065,7 +3131,7 @@ abstract class AppLocalizations {
   /// Confirmation text when leaving an unsaved training session
   ///
   /// In de, this message translates to:
-  /// **'Deine Einheit wird nicht gespeichert. Wirklich abbrechen?'**
+  /// **'Deine aktuelle Stelle wird auf diesem Gerät gesichert. Möchtest du die Einheit verlassen?'**
   String get trainingSessionExitUnsaved;
 
   /// Daily reminder body rescheduled after completing a training session
@@ -3416,10 +3482,10 @@ abstract class AppLocalizations {
   /// **'Tiefe Töne'**
   String get trainingMusicDeepTones;
 
-  /// Note explaining how in-app sounds mix with the user's own music
+  /// Honest note that external music control and ducking are not released
   ///
   /// In de, this message translates to:
-  /// **'Eigene Musik (Spotify etc.) läuft weiter - Töne mischen sich darunter.'**
+  /// **'Eigene Musik wird in dieser Version nicht von der App gesteuert oder abgesenkt.'**
   String get trainingOwnMusicMixNote;
 
   /// Heading during the short break between exercises
@@ -3443,7 +3509,7 @@ abstract class AppLocalizations {
   /// Subtitle describing routine training mode
   ///
   /// In de, this message translates to:
-  /// **'Hands-free'**
+  /// **'Automatischer Ablauf'**
   String get trainingRoutineSubtitle;
 
   /// Compact exercise duration and repetition summary
@@ -6946,6 +7012,240 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'📹 Video-Call angefragt'**
   String get chatCallRequestMessageContent;
+
+  /// Learning-mode confirmation heading before an exercise
+  ///
+  /// In de, this message translates to:
+  /// **'Bereit für die Bewegung?'**
+  String get trainingReadyForMovement;
+
+  /// Learning-mode confirmation guidance
+  ///
+  /// In de, this message translates to:
+  /// **'Prüfe deine Position. Starte erst, wenn du dich sicher und stabil fühlst.'**
+  String get trainingReadyBody;
+
+  /// Button to replay or revisit the current instruction
+  ///
+  /// In de, this message translates to:
+  /// **'Anleitung wiederholen'**
+  String get trainingRepeatInstruction;
+
+  /// Preparation countdown
+  ///
+  /// In de, this message translates to:
+  /// **'Start in {seconds} Sekunden'**
+  String trainingPreparationCountdown(int seconds);
+
+  /// Current repetition counter
+  ///
+  /// In de, this message translates to:
+  /// **'Wiederholung {current} von {total}'**
+  String trainingRepetitionOf(int current, int total);
+
+  /// Current phase counter
+  ///
+  /// In de, this message translates to:
+  /// **'Phase {current} von {total}'**
+  String trainingPhaseOf(int current, int total);
+
+  /// Remaining time in the current training step
+  ///
+  /// In de, this message translates to:
+  /// **'Noch {seconds} Sekunden'**
+  String trainingTimeRemaining(int seconds);
+
+  /// Voice asset content gate title
+  ///
+  /// In de, this message translates to:
+  /// **'Sprachbegleitung noch nicht verfügbar'**
+  String get trainingAudioContentUnavailableTitle;
+
+  /// Transparent explanation when production voice assets are missing
+  ///
+  /// In de, this message translates to:
+  /// **'Die geprüften Aufnahmen fehlen noch. Der Ablauf funktioniert visuell und haptisch; er ist derzeit nicht vollständig sprachgeführt.'**
+  String get trainingAudioContentUnavailableBody;
+
+  /// Universal professional exercise safety guidance
+  ///
+  /// In de, this message translates to:
+  /// **'Stoppe bei Schmerzen, Schwindel, Übelkeit oder starkem Unwohlsein. Hole vor dem Fortsetzen fachlichen Rat ein.'**
+  String get trainingSafetyStop;
+
+  /// Lifecycle or audio interruption heading
+  ///
+  /// In de, this message translates to:
+  /// **'Training pausiert'**
+  String get trainingInterruptedTitle;
+
+  /// Interruption recovery guidance
+  ///
+  /// In de, this message translates to:
+  /// **'Die Zeit wurde angehalten. Prüfe deine Position und setze bewusst fort.'**
+  String get trainingInterruptedBody;
+
+  /// Atomic completion persistence in progress
+  ///
+  /// In de, this message translates to:
+  /// **'Abschluss wird sicher gespeichert …'**
+  String get trainingCompletionSaving;
+
+  /// Recoverable completion persistence failure
+  ///
+  /// In de, this message translates to:
+  /// **'Der Abschluss konnte noch nicht gespeichert werden. Deine Einheit bleibt lokal erhalten.'**
+  String get trainingCompletionSaveFailed;
+
+  /// Invalid or missing training content title
+  ///
+  /// In de, this message translates to:
+  /// **'Training nicht verfügbar'**
+  String get trainingContentUnavailableTitle;
+
+  /// Safe empty-package explanation
+  ///
+  /// In de, this message translates to:
+  /// **'Für dieses Paket liegt kein geprüfter Trainingsinhalt vor. Es wurde kein anderes Paket als Ersatz gestartet.'**
+  String get trainingContentUnavailableBody;
+
+  /// Checkpoint resume dialog title
+  ///
+  /// In de, this message translates to:
+  /// **'Einheit fortsetzen?'**
+  String get trainingResumeSessionTitle;
+
+  /// Checkpoint resume dialog body
+  ///
+  /// In de, this message translates to:
+  /// **'Eine unterbrochene Einheit wurde gefunden. Du kannst an derselben Stelle fortfahren oder neu beginnen.'**
+  String get trainingResumeSessionBody;
+
+  /// Resume checkpoint action
+  ///
+  /// In de, this message translates to:
+  /// **'Fortsetzen'**
+  String get trainingResumeSession;
+
+  /// Discard checkpoint and start over
+  ///
+  /// In de, this message translates to:
+  /// **'Neu beginnen'**
+  String get trainingStartOver;
+
+  /// Training preflight authentication error
+  ///
+  /// In de, this message translates to:
+  /// **'Melde dich an, bevor du eine Einheit startest.'**
+  String get trainingSignInRequired;
+
+  /// Training preflight enrollment error
+  ///
+  /// In de, this message translates to:
+  /// **'Für dieses Paket wurde keine aktive Teilnahme gefunden. Starte oder aktiviere das Paket zuerst.'**
+  String get trainingEnrollmentMissing;
+
+  /// Training preflight progress error
+  ///
+  /// In de, this message translates to:
+  /// **'Der Trainingsfortschritt ist noch nicht eingerichtet. Bitte synchronisiere erneut oder wende dich an den Support.'**
+  String get trainingProgressMissing;
+
+  /// Neutral side indicator
+  ///
+  /// In de, this message translates to:
+  /// **'Seite {number}'**
+  String trainingSideNumber(int number);
+
+  /// Arm-cross indicator
+  ///
+  /// In de, this message translates to:
+  /// **'Armkreuz {number}'**
+  String trainingArmCrossNumber(int number);
+
+  /// Honest empty state when no bundled music tracks exist
+  ///
+  /// In de, this message translates to:
+  /// **'Für diese Version sind noch keine geprüften internen Musiktitel verfügbar.'**
+  String get trainingMusicUnavailable;
+
+  /// Exercise orientation heading
+  ///
+  /// In de, this message translates to:
+  /// **'Orientierung'**
+  String get trainingOrientationLabel;
+
+  /// Exercise breathing heading
+  ///
+  /// In de, this message translates to:
+  /// **'Atmung'**
+  String get trainingBreathingLabel;
+
+  /// Concise routine-mode instruction heading
+  ///
+  /// In de, this message translates to:
+  /// **'Kurzhinweis'**
+  String get trainingRoutineCueLabel;
+
+  /// Exercise safety heading
+  ///
+  /// In de, this message translates to:
+  /// **'Sicherheit'**
+  String get trainingSafetyLabel;
+
+  /// Reason routine mode is still locked
+  ///
+  /// In de, this message translates to:
+  /// **'Nach zwei begleiteten Einheiten'**
+  String get trainingRoutineLocked;
+
+  /// First-session familiarity guidance title
+  ///
+  /// In de, this message translates to:
+  /// **'Erster Durchlauf: in Ruhe kennenlernen'**
+  String get trainingLearningFirstTitle;
+
+  /// First-session familiarity guidance body
+  ///
+  /// In de, this message translates to:
+  /// **'Der Lernmodus zeigt dir Position, Bewegung, Atmung und Sicherheit vollständig.'**
+  String get trainingLearningFirstBody;
+
+  /// Second-session familiarity guidance title
+  ///
+  /// In de, this message translates to:
+  /// **'Zweiter Durchlauf: sicher festigen'**
+  String get trainingLearningSecondTitle;
+
+  /// Second-session familiarity guidance body
+  ///
+  /// In de, this message translates to:
+  /// **'Du erhältst eine kompaktere Anleitung. Danach steht dir der Routinemodus zur Verfügung.'**
+  String get trainingLearningSecondBody;
+
+  /// Routine-mode recommendation title
+  ///
+  /// In de, this message translates to:
+  /// **'Routinemodus ist verfügbar'**
+  String get trainingRoutineReadyTitle;
+
+  /// Routine-mode recommendation body
+  ///
+  /// In de, this message translates to:
+  /// **'Du kennst den Ablauf. Nutze die automatische Führung oder bleibe bei der ausführlichen Anleitung.'**
+  String get trainingRoutineReadyBody;
+
+  /// Safe bundled snapshot while cache validation is pending
+  ///
+  /// In de, this message translates to:
+  /// **'Der geprüfte Offline-Inhalt ist bereit. Aktualisierungen werden im Hintergrund geprüft.'**
+  String get trainingContentChecking;
+
+  /// Visible fallback notice for invalid, empty, or failed cache
+  ///
+  /// In de, this message translates to:
+  /// **'Der lokale oder entfernte Cache war nicht verwendbar. Du trainierst mit dem geprüften Offline-Inhalt dieser Version.'**
+  String get trainingOfflineSnapshotNotice;
 }
 
 class _AppLocalizationsDelegate

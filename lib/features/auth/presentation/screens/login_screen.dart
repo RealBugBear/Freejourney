@@ -188,7 +188,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 12),
+                Text(
+                  l10n.loginDiscoverLead,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        height: 1.4,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 36),
 
                 // Email field
                 TextFormField(

@@ -75,6 +75,7 @@ class _StubAuthRepository implements AuthRepository {
   Future<bool> signUpWithEmail({
     required String email,
     required String password,
+    String? emailRedirectTo,
   }) async {
     return false;
   }

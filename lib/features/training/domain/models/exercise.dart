@@ -1,6 +1,27 @@
 import 'dart:convert';
 
 import '../../../../core/l10n/localized_content.dart';
+import '../content/moro_media_manifest.dart';
+
+const defaultExerciseSafetyNoteDe =
+    'Stoppe bei Schmerzen, Schwindel, Übelkeit oder deutlichem Unwohlsein. '
+    'Lass anhaltende Beschwerden fachlich abklären.';
+const defaultExerciseSafetyNoteEn =
+    'Stop if you feel pain, dizziness, nausea, or significant discomfort. '
+    'Seek professional advice if symptoms persist.';
+
+/// Accepts only secure, absolute remote media URLs.
+///
+/// Remote media is an optional overlay. Invalid values resolve to null so the
+/// bundled content remains the dependable offline source.
+String? validatedRemoteMediaUrl(Object? value) {
+  if (value is! String) return null;
+  final normalized = value.trim();
+  if (normalized.isEmpty) return null;
+  final uri = Uri.tryParse(normalized);
+  if (uri == null || uri.scheme != 'https' || uri.host.isEmpty) return null;
+  return normalized;
+}
 
 // ── Rhythm types ──────────────────────────────────────────────────────────────
 
@@ -49,6 +70,14 @@ class Exercise {
   final List<String>? movementInstructionsDuoEn;
   final String executionGuideDe;
   final String executionGuideEn;
+  final String orientationDe;
+  final String orientationEn;
+  final String? breathingDe;
+  final String? breathingEn;
+  final String routineCueDe;
+  final String routineCueEn;
+  final String safetyNoteDe;
+  final String safetyNoteEn;
   final int durationSeconds;
   final int repetitions;
   final String imagePath;
@@ -99,6 +128,14 @@ class Exercise {
     this.movementInstructionsDuoEn,
     required this.executionGuideDe,
     required this.executionGuideEn,
+    this.orientationDe = '',
+    this.orientationEn = '',
+    this.breathingDe,
+    this.breathingEn,
+    this.routineCueDe = '',
+    this.routineCueEn = '',
+    this.safetyNoteDe = defaultExerciseSafetyNoteDe,
+    this.safetyNoteEn = defaultExerciseSafetyNoteEn,
     required this.durationSeconds,
     required this.repetitions,
     required this.imagePath,
@@ -152,6 +189,8 @@ class Exercise {
     return imagePath;
   }
 
+  bool get hasBundledImage => imagePath.trim().isNotEmpty;
+
   /// Returns the remote Supabase Storage URL for this exercise's image.
   /// Prefers duo URL when [duo] is true and one is available.
   String? imageUrlFor({bool duo = false}) {
@@ -164,8 +203,79 @@ class Exercise {
 
   List<String>? hints(String locale) =>
       pickLocalized(locale, de: hintsDe, en: hintsEn);
-  String executionGuide(String locale) => pickLocalized(locale,
-      de: executionGuideDe, en: executionGuideEn);
+  String executionGuide(String locale) =>
+      pickLocalized(locale, de: executionGuideDe, en: executionGuideEn);
+  String orientation(String locale) {
+    final value =
+        pickLocalized(locale, de: orientationDe, en: orientationEn).trim();
+    return value.isEmpty ? executionGuide(locale) : value;
+  }
+
+  String? breathing(String locale) {
+    final value = pickLocalized(locale, de: breathingDe, en: breathingEn);
+    if (value == null || value.trim().isEmpty) return null;
+    return value;
+  }
+
+  String routineCue(String locale) {
+    final value =
+        pickLocalized(locale, de: routineCueDe, en: routineCueEn).trim();
+    return value.isEmpty ? executionGuide(locale) : value;
+  }
+
+  String safetyNote(String locale) =>
+      pickLocalized(locale, de: safetyNoteDe, en: safetyNoteEn);
+
+  Exercise withRemoteMedia({
+    String? imageUrl,
+    String? duoImageUrl,
+    String? videoUrl,
+  }) {
+    return Exercise(
+      id: id,
+      packageId: packageId,
+      sequenceNumber: sequenceNumber,
+      titleDe: titleDe,
+      titleEn: titleEn,
+      positionInstructionsDe: positionInstructionsDe,
+      positionInstructionsEn: positionInstructionsEn,
+      movementInstructionsDe: movementInstructionsDe,
+      movementInstructionsEn: movementInstructionsEn,
+      hintsDe: hintsDe,
+      hintsEn: hintsEn,
+      positionInstructionsDuoDe: positionInstructionsDuoDe,
+      positionInstructionsDuoEn: positionInstructionsDuoEn,
+      movementInstructionsDuoDe: movementInstructionsDuoDe,
+      movementInstructionsDuoEn: movementInstructionsDuoEn,
+      executionGuideDe: executionGuideDe,
+      executionGuideEn: executionGuideEn,
+      orientationDe: orientationDe,
+      orientationEn: orientationEn,
+      breathingDe: breathingDe,
+      breathingEn: breathingEn,
+      routineCueDe: routineCueDe,
+      routineCueEn: routineCueEn,
+      safetyNoteDe: safetyNoteDe,
+      safetyNoteEn: safetyNoteEn,
+      durationSeconds: durationSeconds,
+      repetitions: repetitions,
+      imagePath: imagePath,
+      duoImagePath: duoImagePath,
+      videoPath: videoPath,
+      audioCuePath: audioCuePath,
+      imageUrl: validatedRemoteMediaUrl(imageUrl),
+      duoImageUrl: validatedRemoteMediaUrl(duoImageUrl),
+      videoUrl: validatedRemoteMediaUrl(videoUrl),
+      rhythmType: rhythmType,
+      phases: phases,
+      hasRepSwitch: hasRepSwitch,
+      holdCueDe: holdCueDe,
+      holdCueEn: holdCueEn,
+      holdSeconds: holdSeconds,
+      restSeconds: restSeconds,
+      halfwaySwitch: halfwaySwitch,
+    );
+  }
 
   // ── Deserialisation from Supabase row ───────────────────────────────────────
 
@@ -186,12 +296,6 @@ class Exercise {
     final decoded = jsonDecode(value as String);
     final list = (decoded as List).cast<String>();
     return list.isEmpty ? null : list;
-  }
-
-  static String? _normalizeUrl(dynamic v) {
-    if (v == null) return null;
-    final s = (v as String).trim();
-    return s.isEmpty ? null : s;
   }
 
   static List<ExercisePhase> _decodePhases(dynamic value) {
@@ -236,15 +340,25 @@ class Exercise {
       hintsEn: _decodeNullableStringList(row['hints_en']),
       executionGuideDe: row['execution_guide_de'] as String,
       executionGuideEn: row['execution_guide_en'] as String,
+      orientationDe: row['orientation_de'] as String? ?? '',
+      orientationEn: row['orientation_en'] as String? ?? '',
+      breathingDe: row['breathing_de'] as String?,
+      breathingEn: row['breathing_en'] as String?,
+      routineCueDe: row['routine_cue_de'] as String? ?? '',
+      routineCueEn: row['routine_cue_en'] as String? ?? '',
+      safetyNoteDe:
+          row['safety_note_de'] as String? ?? defaultExerciseSafetyNoteDe,
+      safetyNoteEn:
+          row['safety_note_en'] as String? ?? defaultExerciseSafetyNoteEn,
       durationSeconds: row['duration_seconds'] as int,
       repetitions: row['repetitions'] as int,
-      imagePath: _preferredBundledImagePath(id, rawImagePath),
+      imagePath: rawImagePath,
       duoImagePath: row['duo_image_path'] as String?,
       videoPath: row['video_path'] as String?,
       audioCuePath: row['audio_cue_path'] as String?,
-      imageUrl: _normalizeUrl(row['image_url']),
-      duoImageUrl: _normalizeUrl(row['duo_image_url']),
-      videoUrl: _normalizeUrl(row['video_url']),
+      imageUrl: validatedRemoteMediaUrl(row['image_url']),
+      duoImageUrl: validatedRemoteMediaUrl(row['duo_image_url']),
+      videoUrl: validatedRemoteMediaUrl(row['video_url']),
       rhythmType: rhythm,
       phases: _decodePhases(row['phases_json']),
       hasRepSwitch: row['has_rep_switch'] as bool? ?? false,
@@ -254,19 +368,6 @@ class Exercise {
       restSeconds: row['rest_seconds'] as int? ?? 3,
       halfwaySwitch: row['halfway_switch'] as bool? ?? false,
     );
-  }
-}
-
-String _preferredBundledImagePath(String exerciseId, String backendImagePath) {
-  switch (exerciseId) {
-    case 'moro_ex2':
-      return 'assets/images/trainings/moro/moro1.3.jpeg';
-    case 'moro_ex4':
-      return 'assets/images/trainings/moro/moro1.1.jpeg';
-    case 'moro_ex5':
-      return 'assets/images/trainings/moro/moro1.2.jpeg';
-    default:
-      return backendImagePath;
   }
 }
 
@@ -326,40 +427,46 @@ const List<Exercise> moroExercises = [
     titleDe: 'Moro 5',
     titleEn: 'Moro 5',
     positionInstructionsDe: [
-      'Rückenlage',
-      'Beide Beine ausgestreckt',
-      'Arme ausgestreckt neben dem Körper, Handflächen am Boden',
+      'Lege dich auf den Rücken und strecke beide Beine aus.',
+      'Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden.',
     ],
     positionInstructionsEn: [
-      'Lie on your back',
-      'Both legs extended',
-      'Arms extended alongside the body, palms on the floor',
+      'Lie on your back with both legs extended.',
+      'Rest your arms alongside your body with your palms facing down.',
     ],
     movementInstructionsDe: [
-      'Nur ein Bein bewegt sich',
-      'Dieses Bein langsam in ca. drei Sekunden anheben und auf dem Schienbein des anderen Beins ablegen',
-      'Kurz halten',
-      'In drei Sekunden wieder zurück',
-      'Seitenwechsel',
+      'Hebe ein Bein in 3 Sekunden an. Lege es auf dem Schienbein des ruhenden Beins ab.',
+      'Halte 1 Sekunde.',
+      'Führe das Bein in 3 Sekunden zurück.',
+      'Wechsle für die nächste Wiederholung die Seite.',
     ],
     movementInstructionsEn: [
-      'Only one leg moves',
-      'Slowly raise this leg over about three seconds and rest it on the shin of the other leg',
-      'Hold briefly',
-      'Return in three seconds',
-      'Switch sides',
+      'Raise one leg for 3 seconds. Rest it on the shin of the still leg.',
+      'Hold for 1 second.',
+      'Return the leg for 3 seconds.',
+      'Switch sides before the next repetition.',
     ],
     hintsDe: [
-      'Das nicht bewegte Bein bleibt komplett ruhig und unverändert liegen'
+      'Halte das ruhende Bein und dein Becken stabil am Boden.',
     ],
-    hintsEn: ['The non-moving leg remains completely still'],
+    hintsEn: [
+      'Keep the resting leg and your pelvis steady on the floor.',
+    ],
     executionGuideDe:
-        'Bein anheben und auf dem Schienbein des anderen Beins ablegen.',
-    executionGuideEn: 'Raise leg and rest it on the shin of the other leg.',
+        'Hebe ein Bein an, halte kurz und führe es kontrolliert zurück.',
+    executionGuideEn:
+        'Raise one leg, hold briefly, and return it with control.',
+    orientationDe:
+        'Du hebst abwechselnd ein Bein an und legst es auf dem anderen Schienbein ab.',
+    orientationEn:
+        'You alternately raise one leg and rest it on the opposite shin.',
+    breathingDe: 'Atme ruhig und gleichmäßig weiter.',
+    breathingEn: 'Keep breathing calmly and evenly.',
+    routineCueDe: 'Bein hoch – halten – zurück – Seite wechseln.',
+    routineCueEn: 'Leg up – hold – return – switch sides.',
     durationSeconds: 40,
     repetitions: 3,
-    imagePath: 'assets/images/trainings/moro/moro5.png',
-    videoPath: 'assets/videos/moro/moro_5.mov',
+    imagePath: moroExercise1ImagePath,
     rhythmType: RhythmType.phased,
     phases: _phasesUpHoldDown,
     hasRepSwitch: true,
@@ -373,41 +480,44 @@ const List<Exercise> moroExercises = [
     titleDe: 'Moro 3 – Halber Frosch',
     titleEn: 'Moro 3 – Half Frog',
     positionInstructionsDe: [
-      'Rückenlage',
-      'Beide Beine ausgestreckt',
-      'Neutrale Ausgangsposition',
+      'Lege dich auf den Rücken und strecke beide Beine aus.',
+      'Lass beide Beine gerade und entspannt nebeneinander liegen.',
     ],
     positionInstructionsEn: [
-      'Lie on your back',
-      'Both legs extended',
-      'Neutral starting position',
+      'Lie on your back with both legs extended.',
+      'Let both legs rest straight and relaxed beside each other.',
     ],
     movementInstructionsDe: [
-      'Ein Bein bewegt sich:',
-      'Fußsohle gleitet an der Innenseite des anderen Beins nach oben zum Körper, ca. drei Sekunden',
-      'Dann in drei Sekunden wieder vollständig zurück in die neutrale Position',
-      'Danach Seitenwechsel',
+      'Lass eine Fußsohle in 3 Sekunden an der Innenseite des anderen Beins zum Körper gleiten.',
+      'Führe den Fuß in 3 Sekunden zurück, bis das Bein wieder gestreckt ist.',
+      'Wechsle für die nächste Wiederholung die Seite.',
     ],
     movementInstructionsEn: [
-      'One leg moves:',
-      'The sole of the foot slides along the inside of the other leg upward toward the body, about three seconds',
-      'Then slide back down to neutral over three seconds',
-      'Switch sides',
+      'Slide one sole along the inside of the other leg toward your body for 3 seconds.',
+      'Slide the foot back for 3 seconds until the leg is straight again.',
+      'Switch sides before the next repetition.',
     ],
     hintsDe: [
-      'Fußsohle bleibt während der gesamten Bewegung am anderen Bein anliegend',
-      'Bewegungsweite richtet sich nach diesem Kontakt',
+      'Halte die Fußsohle während der gesamten Bewegung am anderen Bein.',
+      'Beende den Bewegungsumfang, bevor der Kontakt verloren geht.',
     ],
     hintsEn: [
-      'The sole of the foot remains in contact with the other leg throughout',
-      'Range of motion is guided by this contact',
+      'Keep the sole in contact with the other leg throughout the movement.',
+      'End the movement before you lose that contact.',
     ],
-    executionGuideDe: 'Fußsohle gleitet am anderen Bein entlang nach oben.',
-    executionGuideEn: 'Sole of foot slides up along the other leg.',
+    executionGuideDe:
+        'Lass eine Fußsohle am anderen Bein hoch- und zurückgleiten.',
+    executionGuideEn: 'Slide one sole up and back along the other leg.',
+    orientationDe:
+        'Du lässt abwechselnd einen Fuß am anderen Bein entlanggleiten.',
+    orientationEn: 'You alternately slide one foot along the opposite leg.',
+    breathingDe: 'Atme ruhig und gleichmäßig weiter.',
+    breathingEn: 'Keep breathing calmly and evenly.',
+    routineCueDe: 'Fuß hochgleiten – zurück – Seite wechseln.',
+    routineCueEn: 'Slide foot up – return – switch sides.',
     durationSeconds: 40,
     repetitions: 3,
-    imagePath: 'assets/images/trainings/moro/moro1.3.jpeg',
-    videoPath: 'assets/videos/moro/moro_3.mov',
+    imagePath: moroExercise2ImagePath,
     rhythmType: RhythmType.phased,
     phases: _phasesUpDown,
     hasRepSwitch: true,
@@ -421,36 +531,42 @@ const List<Exercise> moroExercises = [
     titleDe: 'Moro 4 – Frosch',
     titleEn: 'Moro 4 – Frog',
     positionInstructionsDe: [
-      'Rückenlage',
-      'Beide Beine ausgestreckt',
-      'Fußsohlen zusammenführen',
+      'Lege dich auf den Rücken und strecke beide Beine aus.',
+      'Führe die Fußsohlen zusammen.',
     ],
     positionInstructionsEn: [
-      'Lie on your back',
-      'Both legs extended',
-      'Bring the soles of the feet together',
+      'Lie on your back with both legs extended.',
+      'Bring the soles of your feet together.',
     ],
     movementInstructionsDe: [
-      'Füße langsam drei Sekunden Richtung Körper führen',
-      'Knie gehen dabei nach außen',
-      'Füße anschließend drei Sekunden zurückführen',
+      'Führe beide Füße in 3 Sekunden zum Körper. Lass die Knie nach außen sinken.',
+      'Führe die Füße in 3 Sekunden zurück.',
     ],
     movementInstructionsEn: [
-      'Slowly bring feet toward the body over three seconds',
-      'Knees open outward',
-      'Return feet over three seconds',
+      'Bring both feet toward your body for 3 seconds. Let your knees open outward.',
+      'Return your feet for 3 seconds.',
     ],
     hintsDe: [
-      'Range of Motion nur so weit, wie die Fußsohlen während der gesamten Bewegung eng aneinander bleiben'
+      'Halte die Fußsohlen während der gesamten Bewegung aneinander.',
+      'Wähle nur einen Bewegungsumfang, bei dem der Kontakt bestehen bleibt.',
     ],
     hintsEn: [
-      'Only move as far as the soles of the feet can remain together throughout'
+      'Keep the soles together throughout the movement.',
+      'Move only as far as you can maintain that contact.',
     ],
-    executionGuideDe: 'Füße zum Körper führen, Knie gehen nach außen.',
-    executionGuideEn: 'Bring feet toward the body, knees open outward.',
+    executionGuideDe:
+        'Führe die Füße zum Körper und kontrolliert wieder zurück.',
+    executionGuideEn:
+        'Bring your feet toward your body and return with control.',
+    orientationDe: 'Du führst beide Füße gemeinsam in einer Froschbewegung.',
+    orientationEn: 'You move both feet together in a frog movement.',
+    breathingDe: 'Atme ruhig und gleichmäßig weiter.',
+    breathingEn: 'Keep breathing calmly and evenly.',
+    routineCueDe: 'Füße heran – Knie öffnen – Füße zurück.',
+    routineCueEn: 'Feet in – knees open – feet back.',
     durationSeconds: 35,
     repetitions: 3,
-    imagePath: 'assets/images/trainings/moro/moro4.png',
+    imagePath: moroExercise3ImagePath,
     rhythmType: RhythmType.phased,
     phases: _phasesInOut,
     hasRepSwitch: false,
@@ -464,45 +580,48 @@ const List<Exercise> moroExercises = [
     titleDe: 'Moro 1',
     titleEn: 'Moro 1',
     positionInstructionsDe: [
-      'Rückenlage',
-      'Beine zusammen und angewinkelt, Füße am Boden',
-      'Arme ausgestreckt neben dem Körper, Handflächen am Boden',
+      'Lege dich auf den Rücken. Stelle die Füße auf und halte die Knie zusammen.',
+      'Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden.',
     ],
     positionInstructionsEn: [
-      'Lie on your back',
-      'Legs together and bent, feet on the floor',
-      'Arms extended alongside the body, palms on the floor',
+      'Lie on your back. Place your feet on the floor and keep your knees together.',
+      'Rest your arms alongside your body with your palms facing down.',
     ],
     movementInstructionsDe: [
-      'Knie langsam drei Sekunden nach rechts führen',
-      'Drei Sekunden zurück zur Mitte',
-      'Knie drei Sekunden nach links führen',
-      'Zurück zur Mitte',
-      'Drei Durchgänge',
+      'Führe beide Knie in 3 Sekunden nach rechts.',
+      'Führe sie in 3 Sekunden zur Mitte zurück.',
+      'Führe beide Knie in 3 Sekunden nach links.',
+      'Führe sie in 3 Sekunden zur Mitte zurück.',
     ],
     movementInstructionsEn: [
-      'Slowly lower knees to the right over three seconds',
-      'Return to center over three seconds',
-      'Lower knees to the left over three seconds',
-      'Return to center',
-      'Three rounds',
+      'Lower both knees to the right for 3 seconds.',
+      'Return them to the centre for 3 seconds.',
+      'Lower both knees to the left for 3 seconds.',
+      'Return them to the centre for 3 seconds.',
     ],
     hintsDe: [
-      'Hüfte bleibt stabil am Boden, ohne sich abzuheben oder mitzudrehen',
-      'Bewegung nur so weit, wie die Hüfte neutral bleibt',
+      'Halte dein Becken stabil am Boden.',
+      'Bewege die Knie nur so weit, wie das Becken ruhig bleibt.',
     ],
     hintsEn: [
-      'Hips remain stable on the floor, not lifting or rotating',
-      'Only move as far as the hips stay neutral',
+      'Keep your pelvis steady on the floor.',
+      'Move your knees only as far as your pelvis stays still.',
     ],
     executionGuideDe:
-        'Knie langsam zur Seite führen. Hüfte bleibt stabil am Boden.',
+        'Führe beide Knie kontrolliert nach rechts, zur Mitte, nach links und zurück.',
     executionGuideEn:
-        'Slowly lower knees to the side. Hips stay stable on the floor.',
+        'Move both knees with control to the right, centre, left, and back.',
+    orientationDe:
+        'Du bewegst beide Knie kontrolliert von der Mitte zu jeder Seite.',
+    orientationEn:
+        'You move both knees with control from the centre to each side.',
+    breathingDe: 'Atme ruhig weiter und halte die Luft nicht an.',
+    breathingEn: 'Keep breathing calmly without holding your breath.',
+    routineCueDe: 'Rechts – Mitte – links – Mitte.',
+    routineCueEn: 'Right – centre – left – centre.',
     durationSeconds: 45,
     repetitions: 3,
-    imagePath: 'assets/images/trainings/moro/moro1.1.jpeg',
-    videoPath: 'assets/videos/moro/moro_1.mov',
+    imagePath: moroExercise4ImagePath,
     rhythmType: RhythmType.phased,
     phases: _phasesKnees,
     hasRepSwitch: false,
@@ -516,43 +635,46 @@ const List<Exercise> moroExercises = [
     titleDe: 'Moro 2',
     titleEn: 'Moro 2',
     positionInstructionsDe: [
-      'Rückenlage',
-      'Beine zusammen und angewinkelt, Füße am Boden',
-      'Arme ausgestreckt neben dem Körper, Handflächen am Boden',
+      'Lege dich auf den Rücken. Stelle die Füße auf und halte die Knie zusammen.',
+      'Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden.',
     ],
     positionInstructionsEn: [
-      'Lie on your back',
-      'Legs together and bent, feet on the floor',
-      'Arms extended alongside the body, palms on the floor',
+      'Lie on your back. Place your feet on the floor and keep your knees together.',
+      'Rest your arms alongside your body with your palms facing down.',
     ],
     movementInstructionsDe: [
-      'Mit dem Ausatmen Kopf und Oberkörper langsam in ca. drei Sekunden anheben',
-      'Stirn bewegt sich Richtung Knie',
-      'Kurz halten',
-      'Langsam wieder ablegen',
+      'Beginne auszuatmen.',
+      'Rolle Kopf und Oberkörper in 3 Sekunden an. Bewege die Stirn Richtung Knie.',
+      'Halte 1 Sekunde.',
+      'Lege Kopf und Oberkörper in 2 Sekunden ab.',
     ],
     movementInstructionsEn: [
-      'While exhaling, slowly raise the head and upper body over about three seconds',
-      'Forehead moves toward the knees',
-      'Hold briefly',
-      'Slowly lower back down',
+      'Begin to exhale.',
+      'Curl your head and upper body up for 3 seconds. Move your forehead toward your knees.',
+      'Hold for 1 second.',
+      'Lower your head and upper body for 2 seconds.',
     ],
     hintsDe: [
-      'Wenn die Rumpfkraft nicht ausreicht: Hände an die Schienbeine legen, Handflächen offen lassen',
-      'Arme unterstützen nur leicht, nicht ziehen',
+      'Lege bei Bedarf die offenen Hände an die Schienbeine.',
+      'Unterstütze dich nur leicht. Ziehe nicht mit den Armen.',
     ],
     hintsEn: [
-      'If core strength is insufficient: place hands on the shins, palms open',
-      'Arms only support lightly, do not pull',
+      'If needed, place your open hands on your shins.',
+      'Use only light support. Do not pull with your arms.',
     ],
     executionGuideDe:
-        'Kopf und Oberkörper langsam anheben, Stirn Richtung Knie.',
+        'Atme aus, rolle den Oberkörper an und lege ihn kontrolliert ab.',
     executionGuideEn:
-        'Slowly raise head and upper body, forehead toward knees.',
+        'Exhale, curl your upper body up, and lower with control.',
+    orientationDe: 'Du rollst Kopf und Oberkörper mit der Ausatmung an.',
+    orientationEn: 'You curl your head and upper body up as you exhale.',
+    breathingDe: 'Atme beim Anrollen aus. Atme danach ruhig weiter.',
+    breathingEn: 'Exhale as you curl up. Then continue breathing calmly.',
+    routineCueDe: 'Ausatmen – hochrollen – halten – ablegen.',
+    routineCueEn: 'Exhale – curl up – hold – lower.',
     durationSeconds: 30,
     repetitions: 3,
-    imagePath: 'assets/images/trainings/moro/moro1.2.jpeg',
-    videoPath: 'assets/videos/moro/moro_2.mov',
+    imagePath: moroExercise5ImagePath,
     rhythmType: RhythmType.phased,
     phases: _phasesRollUp,
     hasRepSwitch: false,
@@ -566,41 +688,46 @@ const List<Exercise> moroExercises = [
     titleDe: 'Moro 6 – Isometrischer Gegendruck',
     titleEn: 'Moro 6 – Isometric Counterpressure',
     positionInstructionsDe: [
-      'Rückenlage',
-      'Beine angewinkelt',
-      'Hände überkreuz auf den Knien oder Schienbeinen',
+      'Lege dich auf den Rücken und winkle beide Beine an.',
+      'Lege die überkreuzten Hände auf Knie oder Schienbeine.',
     ],
     positionInstructionsEn: [
-      'Lie on your back',
-      'Legs bent',
-      'Hands crossed on the knees or shins',
+      'Lie on your back with both legs bent.',
+      'Place your crossed hands on your knees or shins.',
     ],
     movementInstructionsDe: [
-      'Leichter Gegendruck: Beine ziehen Richtung Körper, Hände halten dagegen',
-      'Kopf leicht anheben',
-      'Sieben Sekunden durch den Mund ausatmen',
-      'Drei Sekunden Pause',
-      'Drei Wiederholungen',
-      'Armkreuz wechseln',
-      'Drei weitere Wiederholungen',
+      'Ziehe die Beine leicht zum Körper. Halte mit den Händen kontrolliert dagegen und hebe den Kopf etwas an.',
+      'Halte den Gegendruck 7 Sekunden.',
+      'Löse die Spannung für 3 Sekunden.',
+      'Wechsle nach 3 Wiederholungen das Armkreuz. Führe 3 weitere Wiederholungen aus.',
     ],
     movementInstructionsEn: [
-      'Light counterpressure: legs pull toward body, hands push against',
-      'Slightly lift the head',
-      'Exhale through the mouth for seven seconds',
-      'Three seconds rest',
-      'Three repetitions',
-      'Switch arm cross',
-      'Three more repetitions',
+      'Draw your legs gently toward your body. Resist with your hands and lift your head slightly.',
+      'Hold the counterpressure for 7 seconds.',
+      'Release the tension for 3 seconds.',
+      'Switch the arm cross after 3 repetitions. Complete 3 more repetitions.',
     ],
-    hintsDe: ['Spannung gleichmäßig halten, nicht ruckartig'],
-    hintsEn: ['Maintain even tension, no jerking'],
-    executionGuideDe: 'Gegendruck aufbauen. Sieben Sekunden ausatmen.',
-    executionGuideEn: 'Build counterpressure. Exhale for seven seconds.',
+    hintsDe: [
+      'Baue die Spannung gleichmäßig auf. Vermeide ruckartige Bewegungen.',
+    ],
+    hintsEn: [
+      'Build the tension evenly. Avoid sudden or jerky movement.',
+    ],
+    executionGuideDe:
+        'Baue leichten Gegendruck auf, halte und löse kontrolliert.',
+    executionGuideEn:
+        'Build gentle counterpressure, hold, and release with control.',
+    orientationDe:
+        'Du hältst einen gleichmäßigen Gegendruck zwischen Beinen und gekreuzten Händen.',
+    orientationEn:
+        'You maintain even counterpressure between your legs and crossed hands.',
+    breathingDe: 'Atme während der 7 Sekunden durch den Mund aus.',
+    breathingEn: 'Exhale through your mouth during the 7-second hold.',
+    routineCueDe: 'Spannung und ausatmen – lösen – Armkreuz wechseln.',
+    routineCueEn: 'Tension and exhale – release – switch arm cross.',
     durationSeconds: 90,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/moro/moro6.png',
-    videoPath: 'assets/videos/moro/moro_6.mov',
+    imagePath: moroExercise6ImagePath,
     rhythmType: RhythmType.holdRest,
     holdCueDe: 'Spannung',
     holdCueEn: 'Tension',
@@ -617,43 +744,45 @@ const List<Exercise> moroExercises = [
     titleDe: 'Moro 7 – Überkreuzter Gegendruck',
     titleEn: 'Moro 7 – Crossed Counterpressure',
     positionInstructionsDe: [
-      'Rückenlage',
-      'Beine angewinkelt',
-      'Hände überkreuz auf Oberschenkeln oder Knien',
+      'Lege dich auf den Rücken und winkle beide Beine an.',
+      'Lege die überkreuzten Hände auf Oberschenkel oder Knie.',
     ],
     positionInstructionsEn: [
-      'Lie on your back',
-      'Legs bent',
-      'Hands crossed on the thighs or knees',
+      'Lie on your back with both legs bent.',
+      'Place your crossed hands on your thighs or knees.',
     ],
     movementInstructionsDe: [
-      'Beine Richtung Körper ziehen',
-      'Hände arbeiten dagegen',
-      'Kopf leicht zur Brust anheben',
-      'Sieben Sekunden ausatmen',
-      'Drei Sekunden Pause',
-      'Sechs Wiederholungen',
-      'Nach drei Wiederholungen Armkreuz wechseln',
+      'Ziehe beide Beine zum Körper. Drücke mit den Händen kontrolliert dagegen und hebe den Kopf leicht Richtung Brust.',
+      'Halte den Gegendruck 7 Sekunden.',
+      'Löse die Spannung für 3 Sekunden.',
+      'Wechsle nach 3 Wiederholungen das Armkreuz. Führe 3 weitere Wiederholungen aus.',
     ],
     movementInstructionsEn: [
-      'Pull legs toward the body',
-      'Hands work against it',
-      'Slightly raise head toward chest',
-      'Exhale for seven seconds',
-      'Three seconds rest',
-      'Six repetitions',
-      'Switch arm cross after three repetitions',
+      'Draw both legs toward your body. Resist with your hands and lift your head slightly toward your chest.',
+      'Hold the counterpressure for 7 seconds.',
+      'Release the tension for 3 seconds.',
+      'Switch the arm cross after 3 repetitions. Complete 3 more repetitions.',
     ],
-    hintsDe: ['Bewegung bleibt klein; Fokus auf kontrollierter Spannung'],
-    hintsEn: ['Movement stays small; focus on controlled tension'],
+    hintsDe: [
+      'Halte die Bewegung klein und die Spannung gleichmäßig.',
+    ],
+    hintsEn: [
+      'Keep the movement small and the tension even.',
+    ],
     executionGuideDe:
-        'Beine und Hände arbeiten gegeneinander. Sieben Sekunden ausatmen.',
+        'Lass Beine und Hände kontrolliert gegeneinander arbeiten.',
     executionGuideEn:
-        'Legs and hands work against each other. Exhale for seven seconds.',
+        'Let your legs and hands work against each other with control.',
+    orientationDe:
+        'Du arbeitest mit überkreuzten Händen gegen den Zug beider Beine.',
+    orientationEn: 'You use crossed hands to resist the pull of both legs.',
+    breathingDe: 'Atme während der 7 Sekunden aus.',
+    breathingEn: 'Exhale during the 7-second hold.',
+    routineCueDe: 'Ziehen und ausatmen – lösen – Armkreuz wechseln.',
+    routineCueEn: 'Pull and exhale – release – switch arm cross.',
     durationSeconds: 90,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/moro/moro7.png',
-    videoPath: 'assets/videos/moro/moro_7.mov',
+    imagePath: moroExercise7ImagePath,
     rhythmType: RhythmType.holdRest,
     holdCueDe: 'Spannung',
     holdCueEn: 'Tension',
@@ -700,7 +829,8 @@ const List<Exercise> spinalGalantExercises = [
     executionGuideEn: 'Rock body gently, head rolls along.',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/spinal_galant/1spin.jpeg',
+    imagePath:
+        'assets/images/Bilder/02_Spinaler Galant-Reflex/FRI_App_02_Spinaler Galant-Reflex_01.png',
     holdCueDe: 'Schaukeln',
     holdCueEn: 'Rock',
   ),
@@ -734,7 +864,8 @@ const List<Exercise> spinalGalantExercises = [
     executionGuideEn: 'Gently rock hips side to side.',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/spinal_galant/2spin.jpeg',
+    imagePath:
+        'assets/images/Bilder/02_Spinaler Galant-Reflex/FRI_App_02_Spinaler Galant-Reflex_02.png',
     holdCueDe: 'Schaukeln',
     holdCueEn: 'Rock',
   ),
@@ -770,7 +901,8 @@ const List<Exercise> spinalGalantExercises = [
     executionGuideEn: 'Hold position. Do not interlace fingers.',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/spinal_galant/3spin.jpeg',
+    imagePath:
+        'assets/images/Bilder/02_Spinaler Galant-Reflex/FRI_App_02_Spinaler Galant-Reflex_03.png',
     holdCueDe: 'Halten',
     holdCueEn: 'Hold',
   ),
@@ -814,7 +946,8 @@ const List<Exercise> spinalGalantExercises = [
     executionGuideEn: 'Rotate hips. Arms at right angles.',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/spinal_galant/4spin.jpeg',
+    imagePath:
+        'assets/images/Bilder/02_Spinaler Galant-Reflex/FRI_App_02_Spinaler Galant-Reflex_04.png',
     holdCueDe: 'Drehen',
     holdCueEn: 'Rotate',
   ),
@@ -857,7 +990,7 @@ const List<Exercise> tlrExercises = [
     executionGuideEn: 'Rock body, head rolls along relaxed.',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/tlr/tlr1.jpeg',
+    imagePath: 'assets/images/Bilder/03_TLR-Reflex/FRI_App_03_TLR-Refle_01.png',
     holdCueDe: 'Schaukeln',
     holdCueEn: 'Rock',
   ),
@@ -904,7 +1037,7 @@ const List<Exercise> tlrExercises = [
     executionGuideEn: 'Nose leads. Slowly roll over the head.',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/tlr/tlr2.jpeg',
+    imagePath: 'assets/images/Bilder/03_TLR-Reflex/FRI_App_03_TLR-Refle_02.png',
     holdCueDe: 'Rollen',
     holdCueEn: 'Roll',
   ),
@@ -943,7 +1076,7 @@ const List<Exercise> tlrExercises = [
     executionGuideEn: 'Roll up and hold position. Core active.',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/tlr/tlr3.jpeg',
+    imagePath: 'assets/images/Bilder/03_TLR-Reflex/FRI_App_03_TLR-Refle_03.png',
     holdCueDe: 'Halten',
     holdCueEn: 'Hold',
   ),
@@ -988,11 +1121,11 @@ const List<Exercise> tlrExercises = [
       'Stop if you feel pain or discomfort in your neck.',
     ],
     executionGuideDe: 'Einatmen: Kopf heben. Ausatmen: fallen lassen.',
-    executionGuideEn:
-        'Inhale: gently lift your head. Exhale: gently lower it.',
+    executionGuideEn: 'Inhale: gently lift your head. Exhale: gently lower it.',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/tlr/tlr4.jpeg',
+    imagePath:
+        'assets/images/Bilder/03_TLR-Reflex/FRI_App_03_TLR-Refle1_04.png',
     rhythmType: RhythmType.phased,
     phases: _phasesBreathing,
     hasRepSwitch: false,
@@ -1032,7 +1165,7 @@ const List<Exercise> tlrExercises = [
     executionGuideEn: 'Slowly cycle in the air. Large movements.',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/tlr/tlr5.jpeg',
+    imagePath: 'assets/images/Bilder/03_TLR-Reflex/FRI_App_03_TLR-Refle_05.png',
     holdCueDe: 'Fahren',
     holdCueEn: 'Cycle',
   ),
@@ -1062,8 +1195,10 @@ const List<Exercise> vorrundeExercises = [
     executionGuideEn: 'TBD',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/vorrunde/Vorbereitung_solo_01.png',
-    duoImagePath: 'assets/images/trainings/vorrunde/Vorbereitung_duo_01.png',
+    imagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_01.png',
+    duoImagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_01.png',
     rhythmType: RhythmType.holdRest,
     holdSeconds: 7,
     restSeconds: 3,
@@ -1088,8 +1223,10 @@ const List<Exercise> vorrundeExercises = [
     executionGuideEn: 'TBD',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/vorrunde/Vorbereitung_solo_02.png',
-    duoImagePath: 'assets/images/trainings/vorrunde/Vorbereitung_duo_02.png',
+    imagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_02.png',
+    duoImagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_02.png',
     rhythmType: RhythmType.holdRest,
     holdSeconds: 7,
     restSeconds: 3,
@@ -1114,8 +1251,10 @@ const List<Exercise> vorrundeExercises = [
     executionGuideEn: 'TBD',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/vorrunde/Vorbereitung_solo_03.png',
-    duoImagePath: 'assets/images/trainings/vorrunde/Vorbereitung_duo_03.png',
+    imagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_03.png',
+    duoImagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_03.png',
     rhythmType: RhythmType.holdRest,
     holdSeconds: 7,
     restSeconds: 3,
@@ -1140,8 +1279,10 @@ const List<Exercise> vorrundeExercises = [
     executionGuideEn: 'TBD',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/vorrunde/Vorbereitung_solo_04.png',
-    duoImagePath: 'assets/images/trainings/vorrunde/Vorbereitung_duo_04.png',
+    imagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_04.png',
+    duoImagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_04.png',
     rhythmType: RhythmType.holdRest,
     holdSeconds: 7,
     restSeconds: 3,
@@ -1166,8 +1307,10 @@ const List<Exercise> vorrundeExercises = [
     executionGuideEn: 'TBD',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/vorrunde/Vorbereitung_solo_05.png',
-    duoImagePath: 'assets/images/trainings/vorrunde/Vorbereitung_duo_05.png',
+    imagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_05.png',
+    duoImagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_05.png',
     rhythmType: RhythmType.holdRest,
     holdSeconds: 7,
     restSeconds: 3,
@@ -1192,8 +1335,10 @@ const List<Exercise> vorrundeExercises = [
     executionGuideEn: 'TBD',
     durationSeconds: 7,
     repetitions: 6,
-    imagePath: 'assets/images/trainings/vorrunde/Vorbereitung_solo_06.png',
-    duoImagePath: 'assets/images/trainings/vorrunde/Vorbereitung_duo_06.png',
+    imagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_06.png',
+    duoImagePath:
+        'assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_06.png',
     rhythmType: RhythmType.holdRest,
     holdSeconds: 7,
     restSeconds: 3,

@@ -1,578 +1,621 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../core/l10n/localized_content.dart';
-import '../../../../core/training/adaptive_tempo_settings.dart';
-import '../../../../core/training/in_app_music_settings.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/training/training_feedback_settings.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/exercise.dart';
-import '../../domain/services/audio_announcement_service.dart';
-import '../../domain/services/metronome_service.dart';
-import '../services/in_app_music_service.dart';
-import '../widgets/music_picker_sheet.dart';
-import '../widgets/pendulum_animation_widget.dart';
+import '../../domain/session/session_orchestrator.dart';
+import '../widgets/exercise_motion_visualizer.dart';
 import '../widgets/rep_segments_widget.dart';
 
-class ImmersiveExerciseScreen extends StatefulWidget {
-  final Exercise exercise;
-  final int exerciseIndex; // 0-based
-  final int totalExercises;
-  final bool isRoutineMode;
-  final VoidCallback onComplete;
-
+/// State-driven active movement UI.
+///
+/// The widget deliberately owns no clock, animation controller or completion
+/// logic. Every value is a projection of [TrainingSessionState].
+class ImmersiveExerciseScreen extends StatelessWidget {
   const ImmersiveExerciseScreen({
     super.key,
     required this.exercise,
     required this.exerciseIndex,
     required this.totalExercises,
     required this.isRoutineMode,
-    required this.onComplete,
+    required this.state,
+    required this.sessionProgress,
+    required this.currentBeat,
+    required this.beatsInCurrentStep,
+    required this.tempoSeconds,
+    required this.feedbackMode,
+    required this.reducedMotion,
+    required this.onPause,
+    required this.onResume,
+    required this.onSlower,
+    required this.onFaster,
+    required this.onCycleFeedback,
+    required this.onRepeatInstruction,
+    required this.onEndSession,
   });
 
-  @override
-  State<ImmersiveExerciseScreen> createState() =>
-      _ImmersiveExerciseScreenState();
-}
-
-class _ImmersiveExerciseScreenState extends State<ImmersiveExerciseScreen> {
-  MetronomeService? _metronome;
-  final _subs = <StreamSubscription>[];
-
-  int _currentBeat = 0;
-  int _currentRepIndex = 0;
-  int _phaseCueIndex = 0;
-  bool _isResting = false;
-  bool _halfwayAnnounce = false;
-  bool _isPaused = false;
-  bool _musicActive = false;
-
-  double _tempoSeconds = 1.0;
-  int _holdSecondsOverride = 7;
-  TrainingFeedbackMode _feedbackMode = TrainingFeedbackMode.voiceAndCues;
-  static const double _stepSize = 0.5;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSettingsAndStart();
-  }
-
-  Future<void> _loadSettingsAndStart() async {
-    final prefs = await SharedPreferences.getInstance();
-    final feedback = TrainingFeedbackSettings.feedbackMode(prefs);
-    final persistedTempo = AdaptiveTempoSettings.tempoForExerciseOrNull(
-        prefs, widget.exercise.sequenceNumber);
-    final musicTrack = InAppMusicSettings.selectedTrack(prefs);
-
-    if (!mounted) return;
-    setState(() {
-      _feedbackMode = feedback;
-      _tempoSeconds = persistedTempo ?? 1.0;
-      _musicActive = musicTrack != null;
-      _holdSecondsOverride = widget.exercise.holdSeconds;
-    });
-    if (musicTrack != null) {
-      unawaited(InAppMusicService.instance.loadFromPrefs());
-    }
-    _startMetronome();
-  }
-
-  void _startMetronome() {
-    // hapticOnly = haptic per beat, no beat audio, structural tones off
-    // silent    = no haptic, no beat audio, but structural tones (start/end) on
-    // voiceAndCues = full audio
-    final enableAudio = _feedbackMode != TrainingFeedbackMode.hapticOnly;
-    final enableBeatAudio = _feedbackMode == TrainingFeedbackMode.voiceAndCues;
-    final svc = MetronomeService(
-      tempoSeconds: _tempoSeconds,
-      restDuration: const Duration(seconds: 3),
-      enableAudio: enableAudio,
-      enableBeatAudio: enableBeatAudio,
-    );
-    _metronome = svc;
-    svc.playStartTone(); // start marker for silent/minimal mode
-
-    _subs.add(svc.beatStream.listen((beat) {
-      if (mounted) {
-        setState(() {
-          _currentBeat = beat;
-          _isResting = false;
-          _halfwayAnnounce = false;
-        });
-      }
-      if (_feedbackMode == TrainingFeedbackMode.hapticOnly) {
-        HapticFeedback.lightImpact();
-      }
-    }));
-
-    _subs.add(svc.repIndexStream.listen((idx) {
-      if (mounted) {
-        setState(() {
-          _currentRepIndex = idx;
-          _phaseCueIndex = 0;
-        });
-      }
-    }));
-
-    _subs.add(svc.repComplete.listen((_) {
-      if (!mounted) return;
-      final justCompletedRep =
-          _currentRepIndex; // 0-based rep that just finished
-      final isHalfway = widget.exercise.halfwaySwitch &&
-          widget.exercise.repetitions == 6 &&
-          justCompletedRep == 2; // rep 3 (0-based index 2)
-      setState(() {
-        _isResting = true;
-        _halfwayAnnounce = isHalfway;
-      });
-      if (_feedbackMode != TrainingFeedbackMode.silent) {
-        HapticFeedback.mediumImpact();
-      }
-      if (widget.isRoutineMode &&
-          _feedbackMode == TrainingFeedbackMode.voiceAndCues &&
-          (widget.exercise.hasRepSwitch || isHalfway)) {
-        unawaited(AudioAnnouncementService.instance
-            .play('sounds/announcements/de/wechsel.mp3'));
-      }
-    }));
-
-    _subs.add(svc.phaseTransition.listen((_) {
-      if (!mounted ||
-          !widget.isRoutineMode ||
-          _feedbackMode != TrainingFeedbackMode.voiceAndCues ||
-          widget.exercise.phases.isEmpty) {
-        return;
-      }
-      final nextPhaseCueIndex = _phaseCueIndex + 1;
-      _phaseCueIndex = nextPhaseCueIndex >= widget.exercise.phases.length
-          ? widget.exercise.phases.length - 1
-          : nextPhaseCueIndex;
-      unawaited(AudioAnnouncementService.instance.play(
-        'sounds/announcements/de/exercises/${widget.exercise.id}_phase_${_phaseCueIndex + 1}.mp3',
-      ));
-    }));
-
-    _subs.add(svc.allRepsComplete.listen((_) async {
-      if (!mounted) return;
-      if (_feedbackMode != TrainingFeedbackMode.silent) {
-        HapticFeedback.heavyImpact();
-      }
-      final prefs = await SharedPreferences.getInstance();
-      await AdaptiveTempoSettings.saveTempoForExercise(
-        prefs,
-        exerciseNumber: widget.exercise.sequenceNumber,
-        tempoSeconds: _tempoSeconds,
-      );
-      if (mounted) widget.onComplete();
-    }));
-
-    unawaited(svc.startExercise(widget.exercise));
-  }
-
-  @override
-  void dispose() {
-    for (final s in _subs) {
-      s.cancel();
-    }
-    _metronome?.dispose();
-    super.dispose();
-  }
-
-  Future<void> _togglePause() async {
-    if (_isPaused) {
-      if (widget.isRoutineMode &&
-          _feedbackMode == TrainingFeedbackMode.voiceAndCues) {
-        await AudioAnnouncementService.instance
-            .play('sounds/announcements/de/weiter.mp3');
-      }
-      await _metronome?.resume();
-    } else {
-      await _metronome?.pause();
-      if (widget.isRoutineMode &&
-          _feedbackMode == TrainingFeedbackMode.voiceAndCues) {
-        await AudioAnnouncementService.instance
-            .play('sounds/announcements/de/pause.mp3');
-      }
-    }
-    if (mounted) setState(() => _isPaused = !_isPaused);
-    HapticFeedback.selectionClick();
-  }
-
-  void _changeTempo(double delta) {
-    final newTempo = (_tempoSeconds + delta).clamp(0.5, 3.0);
-    final snapped = (newTempo / _stepSize).round() * _stepSize;
-    if (mounted) setState(() => _tempoSeconds = snapped);
-    _metronome?.tempoSeconds = snapped;
-    HapticFeedback.selectionClick();
-  }
-
-  void _changeHoldSeconds(int delta) {
-    final min = widget.exercise.holdSeconds;
-    final newVal = (_holdSecondsOverride + delta).clamp(min, 60);
-    if (newVal == _holdSecondsOverride) return;
-    if (mounted) setState(() => _holdSecondsOverride = newVal);
-    _metronome?.holdSecondsOverride = newVal;
-    HapticFeedback.selectionClick();
-  }
-
-  Future<void> _cycleFeedbackMode() async {
-    final next = switch (_feedbackMode) {
-      TrainingFeedbackMode.voiceAndCues => TrainingFeedbackMode.hapticOnly,
-      TrainingFeedbackMode.hapticOnly => TrainingFeedbackMode.silent,
-      TrainingFeedbackMode.silent => TrainingFeedbackMode.voiceAndCues,
-    };
-    final prefs = await SharedPreferences.getInstance();
-    await TrainingFeedbackSettings.setFeedbackMode(prefs, next);
-    if (mounted) setState(() => _feedbackMode = next);
-    HapticFeedback.selectionClick();
-  }
-
-  void _openMusicPicker() {
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: const Color(0xFF12121e),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (_) => MusicPickerSheet(
-        onMusicActiveChanged: (active) {
-          if (mounted) setState(() => _musicActive = active);
-        },
-      ),
-    );
-  }
+  final Exercise exercise;
+  final int exerciseIndex;
+  final int totalExercises;
+  final bool isRoutineMode;
+  final TrainingSessionState state;
+  final double sessionProgress;
+  final int currentBeat;
+  final int beatsInCurrentStep;
+  final double tempoSeconds;
+  final TrainingFeedbackMode feedbackMode;
+  final bool reducedMotion;
+  final VoidCallback onPause;
+  final VoidCallback onResume;
+  final VoidCallback onSlower;
+  final VoidCallback onFaster;
+  final VoidCallback onCycleFeedback;
+  final VoidCallback onRepeatInstruction;
+  final VoidCallback onEndSession;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final ex = widget.exercise;
-    final isHoldRest = ex.rhythmType == RhythmType.holdRest;
-    final beatsPerRep = isHoldRest ? _holdSecondsOverride : ex.holdSeconds;
-    final beatProgress =
-        beatsPerRep > 0 ? (_currentBeat / beatsPerRep).clamp(0.0, 1.0) : 0.0;
-    final sessionProgress =
-        widget.exerciseIndex / widget.totalExercises.toDouble();
     final locale = Localizations.localeOf(context).languageCode;
-    final cueWord = _halfwayAnnounce
-        ? l10n.trainingSwitchCueUpper
-        : _isResting
-            ? l10n.trainingPauseCue
-            : _holdCue(locale, ex).isNotEmpty
-                ? _holdCue(locale, ex).toUpperCase()
-                : l10n.trainingHoldCueUpper;
-    final beatInterval = Duration(milliseconds: (_tempoSeconds * 1000).round());
+    final l10n = AppLocalizations.of(context);
+    final remainingSeconds =
+        (state.remaining.inMilliseconds / 1000).ceil().clamp(0, 999);
+    final action = _currentAction(context, locale);
+    final side = _sideLabel(context);
+    final isRecovery = _effectiveStage == TrainingSessionStage.recovery;
+    final completedReps =
+        isRecovery ? state.repetitionIndex + 1 : state.repetitionIndex;
+    final movementProgress =
+        isRecovery ? 1.0 : state.stepProgress.clamp(0.0, 1.0);
 
-    return Scaffold(
-      backgroundColor: const Color(0xFF080810),
-      body: SafeArea(
-        child: Column(
+    return ColoredBox(
+      color: AppColors.backgroundDark,
+      child: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final largeText = MediaQuery.textScalerOf(context).scale(14) >= 21;
+            final landscape = constraints.maxWidth >= 720 &&
+                constraints.maxWidth > constraints.maxHeight &&
+                !largeText;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight - 40,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _header(context),
+                    const SizedBox(height: 12),
+                    Semantics(
+                      label: l10n.trainingProgressSemantics(
+                        exerciseIndex + 1,
+                        totalExercises,
+                      ),
+                      value:
+                          '${(sessionProgress * 100).round().clamp(0, 100)}%',
+                      child: LinearProgressIndicator(
+                        value: sessionProgress.clamp(0.0, 1.0),
+                        minHeight: 8,
+                        borderRadius: BorderRadius.circular(999),
+                        backgroundColor: Colors.white12,
+                        color: AppColors.primaryLight,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    if (landscape)
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: _visual(
+                              context,
+                              movementProgress: movementProgress,
+                              isRecovery: isRecovery,
+                            ),
+                          ),
+                          const SizedBox(width: 32),
+                          Expanded(
+                            child: _status(
+                              context,
+                              action: action,
+                              side: side,
+                              remainingSeconds: remainingSeconds,
+                              completedReps: completedReps,
+                              movementProgress: movementProgress,
+                            ),
+                          ),
+                        ],
+                      )
+                    else ...[
+                      _visual(
+                        context,
+                        movementProgress: movementProgress,
+                        isRecovery: isRecovery,
+                      ),
+                      const SizedBox(height: 18),
+                      _status(
+                        context,
+                        action: action,
+                        side: side,
+                        remainingSeconds: remainingSeconds,
+                        completedReps: completedReps,
+                        movementProgress: movementProgress,
+                      ),
+                    ],
+                    const SizedBox(height: 24),
+                    _controls(context),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _header(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final title = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.trainingExerciseOfTotal(
+            exerciseIndex + 1,
+            totalExercises,
+          ),
+          style: const TextStyle(
+            color: AppColors.primaryLight,
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 3),
+        Text(
+          exercise.title(Localizations.localeOf(context).languageCode),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            height: 1.15,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ],
+    );
+    final modePill = DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.primary.withValues(alpha: 0.16),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: AppColors.primaryLight.withValues(alpha: 0.35),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        child: Text(
+          isRoutineMode ? l10n.routineMode : l10n.tutorialMode,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final largeText = MediaQuery.textScalerOf(context).scale(14) >= 21;
+        if (largeText || constraints.maxWidth < 360) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              title,
+              const SizedBox(height: 10),
+              modePill,
+            ],
+          );
+        }
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Header ──────────────────────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    l10n.trainingExerciseOfTotalCompact(
-                      widget.exerciseIndex + 1,
-                      widget.totalExercises,
+            Expanded(child: title),
+            const SizedBox(width: 12),
+            modePill,
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _visual(
+    BuildContext context, {
+    required double movementProgress,
+    required bool isRecovery,
+  }) {
+    return Center(
+      child: SizedBox.square(
+        dimension: 236,
+        child: _supportsMoroVisualizer
+            ? ExerciseMotionVisualizer(
+                exerciseId: exercise.id,
+                phaseIndex:
+                    isRecovery && exercise.rhythmType == RhythmType.holdRest
+                        ? 1
+                        : state.phaseIndex,
+                repetitionIndex: state.repetitionIndex,
+                phaseProgress: movementProgress,
+                reducedMotion: reducedMotion,
+              )
+            : Semantics(
+                label: exercise.title(
+                  Localizations.localeOf(context).languageCode,
+                ),
+                image: true,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.primaryLight.withValues(alpha: 0.4),
                     ),
-                    style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.3),
-                        fontSize: 10,
-                        letterSpacing: 0.12),
                   ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF6366f1).withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(
-                          color:
-                              const Color(0xFF6366f1).withValues(alpha: 0.3)),
-                    ),
-                    child: Text(
-                      widget.isRoutineMode
-                          ? l10n.routineMode
-                          : l10n.tutorialMode,
-                      style: const TextStyle(
-                          color: Color(0xFFa5b4fc),
-                          fontSize: 9,
-                          fontWeight: FontWeight.w700),
-                    ),
+                  child: const Icon(
+                    Icons.accessibility_new_rounded,
+                    size: 96,
+                    color: AppColors.primaryLight,
                   ),
-                ],
+                ),
+              ),
+      ),
+    );
+  }
+
+  Widget _status(
+    BuildContext context, {
+    required String action,
+    required String side,
+    required int remainingSeconds,
+    required int completedReps,
+    required double movementProgress,
+  }) {
+    final l10n = AppLocalizations.of(context);
+    final phaseCount = exercise.phases.isEmpty ? 1 : exercise.phases.length;
+
+    return Semantics(
+      liveRegion: true,
+      container: true,
+      label: [
+        action,
+        l10n.trainingRepetitionOf(
+          (state.repetitionIndex + 1).clamp(1, exercise.repetitions),
+          exercise.repetitions,
+        ),
+        l10n.trainingTimeRemaining(remainingSeconds),
+        if (side.isNotEmpty) side,
+      ].join('. '),
+      child: Column(
+        children: [
+          if (side.isNotEmpty)
+            Text(
+              side,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: AppColors.primaryLight,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
               ),
             ),
+          Text(
+            action.toUpperCase(),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 30,
+              height: 1.1,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.8,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '$remainingSeconds',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: AppColors.primaryLight,
+              fontSize: 64,
+              height: 1,
+              fontFeatures: [FontFeature.tabularFigures()],
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            l10n.trainingTimeRemaining(remainingSeconds),
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white70, fontSize: 16),
+          ),
+          const SizedBox(height: 18),
+          if (exercise.phases.isNotEmpty)
+            Text(
+              l10n.trainingPhaseOf(state.phaseIndex + 1, phaseCount),
+              style: const TextStyle(color: Colors.white70, fontSize: 15),
+            ),
+          const SizedBox(height: 8),
+          RepSegmentsWidget(
+            totalReps: exercise.repetitions,
+            completedReps: completedReps.clamp(0, exercise.repetitions),
+            beatProgress: movementProgress,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            l10n.trainingRepetitionOf(
+              (state.repetitionIndex + 1).clamp(1, exercise.repetitions),
+              exercise.repetitions,
+            ),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          if (_effectiveStage == TrainingSessionStage.activeMovement &&
+              beatsInCurrentStep > 0) ...[
+            const SizedBox(height: 6),
+            Text(
+              exercise.rhythmType == RhythmType.holdRest
+                  ? l10n.trainingSecondsOf(beatsInCurrentStep)
+                  : l10n.trainingBeatsOf(beatsInCurrentStep),
+              style: const TextStyle(color: Colors.white60, fontSize: 14),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 
-            // ── Session progress bar ─────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(1),
-                child: LinearProgressIndicator(
-                  value: sessionProgress,
-                  minHeight: 2,
-                  backgroundColor: Colors.white.withValues(alpha: 0.08),
-                  valueColor: const AlwaysStoppedAnimation(Color(0xFF6366f1)),
+  Widget _controls(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final paused = state.isPaused;
+    final largeText = MediaQuery.textScalerOf(context).scale(14) >= 21;
+    final slowerButton = OutlinedButton(
+      onPressed: onSlower,
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size.fromHeight(52),
+      ),
+      child: Text(
+        l10n.trainingSlower,
+        textAlign: TextAlign.center,
+      ),
+    );
+    final tempoIndicator = Semantics(
+      label: l10n.trainingTempoAnnouncement(
+        tempoSeconds.toStringAsFixed(1),
+      ),
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 52),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white24),
+        ),
+        child: Text(
+          l10n.trainingSecondsPerBeat(
+            tempoSeconds.toStringAsFixed(1),
+          ),
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+    final fasterButton = OutlinedButton(
+      onPressed: onFaster,
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size.fromHeight(52),
+      ),
+      child: Text(
+        l10n.trainingFaster,
+        textAlign: TextAlign.center,
+      ),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (largeText) ...[
+          tempoIndicator,
+          const SizedBox(height: 10),
+          slowerButton,
+          const SizedBox(height: 10),
+          fasterButton,
+        ] else
+          Row(
+            children: [
+              Expanded(child: slowerButton),
+              const SizedBox(width: 10),
+              Expanded(child: tempoIndicator),
+              const SizedBox(width: 10),
+              Expanded(child: fasterButton),
+            ],
+          ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: onCycleFeedback,
+                icon: Icon(_feedbackIcon),
+                label: Text(_feedbackLabel(context)),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(56),
                 ),
               ),
             ),
-
-            // ── Center content ───────────────────────────────────────────
+            const SizedBox(width: 10),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  PendulumAnimationWidget(
-                    beatInterval: beatInterval,
-                    beat: _currentBeat,
-                    isActive: !_isResting && !_isPaused,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Big beat number
-                  Text(
-                    '$_currentBeat',
-                    style: TextStyle(
-                      color: _isResting
-                          ? const Color(0xFFa5b4fc).withValues(alpha: 0.4)
-                          : const Color(0xFFa5b4fc),
-                      fontSize: 64,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -2,
-                      shadows: _isResting
-                          ? []
-                          : const [
-                              Shadow(
-                                color: Color(0x66a5b4fc),
-                                blurRadius: 30,
-                              ),
-                            ],
-                    ),
-                  ),
-                  Text(
-                    _isResting
-                        ? l10n.trainingRest
-                        : isHoldRest
-                            ? l10n.trainingSecondsOf(_holdSecondsOverride)
-                            : l10n.trainingBeatsOf(ex.holdSeconds),
-                    style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.25),
-                        fontSize: 11),
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Cue word
-                  Text(
-                    cueWord,
-                    style: TextStyle(
-                      color: (_isResting || _halfwayAnnounce)
-                          ? Colors.white.withValues(alpha: 0.55)
-                          : Colors.white.withValues(alpha: 0.85),
-                      fontSize: _isResting ? 14 : 18,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.08,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Rep segments
-                  RepSegmentsWidget(
-                    totalReps: ex.repetitions,
-                    completedReps: _currentRepIndex,
-                    beatProgress: beatProgress,
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Exercise title
-                  Text(
-                    ex.title(locale),
-                    style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.3),
-                        fontSize: 11),
-                  ),
-                ],
-              ),
-            ),
-
-            // ── Bottom controls ──────────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-              child: Column(
-                children: [
-                  // Duration / tempo row
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _tempoBtn(
-                          '−',
-                          isHoldRest
-                              ? (_holdSecondsOverride > ex.holdSeconds
-                                  ? () => _changeHoldSeconds(-1)
-                                  : null)
-                              : () => _changeTempo(-_stepSize),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color:
-                                const Color(0xFF6366f1).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: const Color(0xFF6366f1)
-                                    .withValues(alpha: 0.2)),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            isHoldRest
-                                ? l10n.trainingHoldTime(_holdSecondsOverride)
-                                : l10n.trainingSecondsPerBeat(
-                                    _tempoSeconds.toStringAsFixed(
-                                      _tempoSeconds.truncateToDouble() ==
-                                              _tempoSeconds
-                                          ? 0
-                                          : 1,
-                                    ),
-                                  ),
-                            style: const TextStyle(
-                                color: Color(0xFFa5b4fc),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: _tempoBtn(
-                          '+',
-                          isHoldRest
-                              ? () => _changeHoldSeconds(1)
-                              : () => _changeTempo(_stepSize),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Icon controls row
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _iconBtn(
-                          _musicActive ? '♫' : '♪',
-                          _musicActive
-                              ? l10n.trainingMusicOn
-                              : l10n.trainingMusic,
-                          _openMusicPicker,
-                          active: _musicActive,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: _iconBtn(
-                          _feedbackIcon(_feedbackMode),
-                          _feedbackLabel(_feedbackMode),
-                          _cycleFeedbackMode,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: _iconBtn(
-                          _isPaused ? '▶' : '⏸',
-                          _isPaused ? l10n.trainingResume : l10n.trainingPause,
-                          _togglePause,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              child: FilledButton.icon(
+                onPressed: paused ? onResume : onPause,
+                icon: Icon(
+                  paused ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                ),
+                label: Text(paused ? l10n.trainingResume : l10n.trainingPause),
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size.fromHeight(56),
+                ),
               ),
             ),
           ],
         ),
-      ),
+        const SizedBox(height: 10),
+        if (largeText) ...[
+          OutlinedButton.icon(
+            onPressed: onRepeatInstruction,
+            icon: const Icon(Icons.replay_rounded),
+            label: Text(l10n.trainingRepeatInstruction),
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size.fromHeight(52),
+            ),
+          ),
+          const SizedBox(height: 10),
+          TextButton.icon(
+            onPressed: onEndSession,
+            icon: const Icon(Icons.close_rounded),
+            label: Text(l10n.trainingExitTooltip),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.error,
+              minimumSize: const Size.fromHeight(52),
+            ),
+          ),
+        ] else
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: onRepeatInstruction,
+                  icon: const Icon(Icons.replay_rounded),
+                  label: Text(l10n.trainingRepeatInstruction),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(52),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: onEndSession,
+                  icon: const Icon(Icons.close_rounded),
+                  label: Text(l10n.trainingExitTooltip),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.error,
+                    minimumSize: const Size.fromHeight(52),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        if (paused) ...[
+          const SizedBox(height: 14),
+          Semantics(
+            liveRegion: true,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.warning.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: AppColors.warning.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    l10n.trainingInterruptedTitle,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.trainingInterruptedBody,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 15,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 
-  Widget _tempoBtn(String label, VoidCallback? onTap) {
-    final enabled = onTap != null;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 36,
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: enabled ? 0.06 : 0.02),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-              color: Colors.white.withValues(alpha: enabled ? 0.1 : 0.04)),
-        ),
-        alignment: Alignment.center,
-        child: Text(label,
-            style: TextStyle(
-                color: Colors.white.withValues(alpha: enabled ? 0.6 : 0.2),
-                fontSize: 18,
-                fontWeight: FontWeight.w700)),
-      ),
-    );
-  }
+  TrainingSessionStage? get _effectiveStage =>
+      state.isPaused ? state.resumeStage : state.stage;
 
-  Widget _iconBtn(String icon, String label, VoidCallback onTap,
-          {bool active = false}) =>
-      GestureDetector(
-        onTap: onTap,
-        child: Container(
-          height: 32,
-          decoration: BoxDecoration(
-            color: active
-                ? const Color(0xFF22c55e).withValues(alpha: 0.1)
-                : Colors.white.withValues(alpha: 0.04),
-            borderRadius: BorderRadius.circular(9),
-            border: Border.all(
-                color: active
-                    ? const Color(0xFF22c55e).withValues(alpha: 0.3)
-                    : Colors.white.withValues(alpha: 0.08)),
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            '$icon $label',
-            style: TextStyle(
-                color: active
-                    ? const Color(0xFF86efac)
-                    : Colors.white.withValues(alpha: 0.4),
-                fontSize: 9,
-                fontWeight: FontWeight.w600),
-          ),
-        ),
-      );
-
-  String _feedbackLabel(TrainingFeedbackMode mode) {
+  String _currentAction(BuildContext context, String locale) {
     final l10n = AppLocalizations.of(context);
-    return switch (mode) {
+    if (state.isPaused) return l10n.trainingInterruptedTitle;
+    if (_effectiveStage == TrainingSessionStage.recovery) {
+      return state.requiresSideSwitch
+          ? (exercise.halfwaySwitch
+              ? l10n.trainingSwitchArmCross
+              : l10n.trainingSwitchCue)
+          : l10n.trainingRest;
+    }
+    if (exercise.rhythmType == RhythmType.phased &&
+        exercise.phases.isNotEmpty) {
+      return exercise.phases[state.phaseIndex].label(locale);
+    }
+    final cue = locale == 'en' ? exercise.holdCueEn : exercise.holdCueDe;
+    return cue.isEmpty ? l10n.trainingHoldCueUpper : cue;
+  }
+
+  String _sideLabel(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    if (exercise.halfwaySwitch) {
+      final number = state.repetitionIndex < exercise.repetitions ~/ 2 ? 1 : 2;
+      return l10n.trainingArmCrossNumber(number);
+    }
+    if (exercise.hasRepSwitch) {
+      return l10n.trainingSideNumber((state.repetitionIndex % 2) + 1);
+    }
+    return '';
+  }
+
+  String _feedbackLabel(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return switch (feedbackMode) {
       TrainingFeedbackMode.voiceAndCues => l10n.trainingFeedbackSounds,
       TrainingFeedbackMode.hapticOnly => l10n.trainingFeedbackHaptics,
       TrainingFeedbackMode.silent => l10n.trainingFeedbackSilent,
     };
   }
 
-  String _feedbackIcon(TrainingFeedbackMode mode) => switch (mode) {
-        TrainingFeedbackMode.voiceAndCues => '🔊',
-        TrainingFeedbackMode.hapticOnly => '📳',
-        TrainingFeedbackMode.silent => '🔇',
+  IconData get _feedbackIcon => switch (feedbackMode) {
+        TrainingFeedbackMode.voiceAndCues => Icons.volume_up_outlined,
+        TrainingFeedbackMode.hapticOnly => Icons.vibration_rounded,
+        TrainingFeedbackMode.silent => Icons.volume_off_outlined,
       };
-}
 
-/// The exercise's own hold cue in the active language (may be empty, in
-/// which case callers fall back to the generic localized cue).
-String _holdCue(String locale, Exercise ex) =>
-    pickLocalized(locale, de: ex.holdCueDe, en: ex.holdCueEn);
+  bool get _supportsMoroVisualizer => const {
+        'moro_ex1',
+        'moro_ex2',
+        'moro_ex3',
+        'moro_ex4',
+        'moro_ex5',
+        'moro_ex6',
+        'moro_ex7',
+      }.contains(exercise.id);
+}

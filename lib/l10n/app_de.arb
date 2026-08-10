@@ -24,6 +24,50 @@
   "resetPassword": "Passwort zurücksetzen",
   "passwordResetSent": "Wir haben dir eine E-Mail zum Zurücksetzen des Passworts gesendet.",
   "signUpConfirmEmailSent": "Fast geschafft! Wir haben dir eine E-Mail zur Bestätigung deines Kontos gesendet. Bitte tippe auf den Link darin, dann kannst du dich anmelden.",
+  "loginDiscoverLead": "Gleich entdeckst du dein persönliches Reflex-Profil — in deinem Tempo.",
+  "@loginDiscoverLead": {
+    "description": "B1 framing under login brand toward discovering the Reflex Profile"
+  },
+  "consentShortTitle": "Kurz zustimmen",
+  "@consentShortTitle": {
+    "description": "Layout B consent screen short title"
+  },
+  "consentDiscoverLead": "Dann entdeckst du dein persönliches Reflex-Profil — in deinem Tempo.",
+  "@consentDiscoverLead": {
+    "description": "B1 emotional lead on consent before the three document links"
+  },
+  "consentRowSafety": "Sicherheit",
+  "@consentRowSafety": {
+    "description": "Consent Layout B row that opens the safety/medical sheet"
+  },
+  "consentRowTerms": "Nutzung",
+  "@consentRowTerms": {
+    "description": "Consent Layout B row that opens the terms of use sheet"
+  },
+  "consentRowPrivacy": "Datenschutz",
+  "@consentRowPrivacy": {
+    "description": "Consent Layout B row that opens the privacy policy sheet"
+  },
+  "consentReadLinkHint": "Lesen",
+  "@consentReadLinkHint": {
+    "description": "Trailing hint on consent document rows"
+  },
+  "consentCheckboxLabel": "Ich habe die Hinweise gelesen und stimme den Nutzungsbedingungen sowie der Datenschutzerklärung zu.",
+  "@consentCheckboxLabel": {
+    "description": "Single consent checkbox label (Layout B)"
+  },
+  "consentDiscoverCta": "Reflex-Profil entdecken",
+  "@consentDiscoverCta": {
+    "description": "Primary consent CTA — B1 discover tone"
+  },
+  "profileContactNameDiscoverBody": "Dein Kontaktname ist für Trainer sichtbar — danach entdeckst du dein Reflex-Profil.",
+  "@profileContactNameDiscoverBody": {
+    "description": "Shorter B1 Kontaktname benefit line without community"
+  },
+  "profileContactNameDiscoverBodyWithCommunity": "Dein Kontaktname ist für Trainer sichtbar und kann sich von deinem Community-Namen unterscheiden — danach entdeckst du dein Reflex-Profil.",
+  "@profileContactNameDiscoverBodyWithCommunity": {
+    "description": "Shorter B1 Kontaktname benefit line with community"
+  },
   "authErrorInvalidCredentials": "E-Mail oder Passwort ist falsch.",
   "authErrorEmailInUse": "Diese E-Mail-Adresse ist bereits registriert.",
   "authErrorWeakPassword": "Das Passwort muss mindestens 8 Zeichen lang sein.",
@@ -62,8 +106,8 @@
     }
   },
   "trainingMode": "Einheitsmodus",
-  "tutorialMode": "Tutorial",
-  "routineMode": "Routine",
+  "tutorialMode": "Lernmodus",
+  "routineMode": "Routinemodus",
   "silentMode": "Silent",
   "hapticMode": "Haptisch",
   "voiceCuesMode": "Stimme & Cues",
@@ -1267,7 +1311,7 @@
   "@trainingMusicOn": {
     "description": "Active music control label"
   },
-  "trainingSessionExitUnsaved": "Deine Einheit wird nicht gespeichert. Wirklich abbrechen?",
+  "trainingSessionExitUnsaved": "Deine aktuelle Stelle wird auf diesem Gerät gesichert. Möchtest du die Einheit verlassen?",
   "@trainingSessionExitUnsaved": {
     "description": "Confirmation text when leaving an unsaved training session"
   },
@@ -1564,9 +1608,9 @@
   "@trainingMusicDeepTones": {
     "description": "Display name of the Deep Tones music track"
   },
-  "trainingOwnMusicMixNote": "Eigene Musik (Spotify etc.) läuft weiter - Töne mischen sich darunter.",
+  "trainingOwnMusicMixNote": "Eigene Musik wird in dieser Version nicht von der App gesteuert oder abgesenkt.",
   "@trainingOwnMusicMixNote": {
-    "description": "Note explaining how in-app sounds mix with the user's own music"
+    "description": "Honest note that external music control and ducking are not released"
   },
   "trainingShortBreak": "Kurze Pause",
   "@trainingShortBreak": {
@@ -1580,7 +1624,7 @@
   "@trainingTutorialSubtitle": {
     "description": "Subtitle describing tutorial training mode"
   },
-  "trainingRoutineSubtitle": "Hands-free",
+  "trainingRoutineSubtitle": "Automatischer Ablauf",
   "@trainingRoutineSubtitle": {
     "description": "Subtitle describing routine training mode"
   },
@@ -4418,5 +4462,197 @@
   "chatCallRequestMessageContent": "📹 Video-Call angefragt",
   "@chatCallRequestMessageContent": {
     "description": "Persisted chat message content for a video call request"
+  },
+  "trainingReadyForMovement": "Bereit für die Bewegung?",
+  "@trainingReadyForMovement": {
+    "description": "Learning-mode confirmation heading before an exercise"
+  },
+  "trainingReadyBody": "Prüfe deine Position. Starte erst, wenn du dich sicher und stabil fühlst.",
+  "@trainingReadyBody": {
+    "description": "Learning-mode confirmation guidance"
+  },
+  "trainingRepeatInstruction": "Anleitung wiederholen",
+  "@trainingRepeatInstruction": {
+    "description": "Button to replay or revisit the current instruction"
+  },
+  "trainingPreparationCountdown": "Start in {seconds} Sekunden",
+  "@trainingPreparationCountdown": {
+    "description": "Preparation countdown",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "trainingRepetitionOf": "Wiederholung {current} von {total}",
+  "@trainingRepetitionOf": {
+    "description": "Current repetition counter",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "trainingPhaseOf": "Phase {current} von {total}",
+  "@trainingPhaseOf": {
+    "description": "Current phase counter",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "trainingTimeRemaining": "Noch {seconds} Sekunden",
+  "@trainingTimeRemaining": {
+    "description": "Remaining time in the current training step",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "trainingAudioContentUnavailableTitle": "Sprachbegleitung noch nicht verfügbar",
+  "@trainingAudioContentUnavailableTitle": {
+    "description": "Voice asset content gate title"
+  },
+  "trainingAudioContentUnavailableBody": "Die geprüften Aufnahmen fehlen noch. Der Ablauf funktioniert visuell und haptisch; er ist derzeit nicht vollständig sprachgeführt.",
+  "@trainingAudioContentUnavailableBody": {
+    "description": "Transparent explanation when production voice assets are missing"
+  },
+  "trainingSafetyStop": "Stoppe bei Schmerzen, Schwindel, Übelkeit oder starkem Unwohlsein. Hole vor dem Fortsetzen fachlichen Rat ein.",
+  "@trainingSafetyStop": {
+    "description": "Universal professional exercise safety guidance"
+  },
+  "trainingInterruptedTitle": "Training pausiert",
+  "@trainingInterruptedTitle": {
+    "description": "Lifecycle or audio interruption heading"
+  },
+  "trainingInterruptedBody": "Die Zeit wurde angehalten. Prüfe deine Position und setze bewusst fort.",
+  "@trainingInterruptedBody": {
+    "description": "Interruption recovery guidance"
+  },
+  "trainingCompletionSaving": "Abschluss wird sicher gespeichert …",
+  "@trainingCompletionSaving": {
+    "description": "Atomic completion persistence in progress"
+  },
+  "trainingCompletionSaveFailed": "Der Abschluss konnte noch nicht gespeichert werden. Deine Einheit bleibt lokal erhalten.",
+  "@trainingCompletionSaveFailed": {
+    "description": "Recoverable completion persistence failure"
+  },
+  "trainingContentUnavailableTitle": "Training nicht verfügbar",
+  "@trainingContentUnavailableTitle": {
+    "description": "Invalid or missing training content title"
+  },
+  "trainingContentUnavailableBody": "Für dieses Paket liegt kein geprüfter Trainingsinhalt vor. Es wurde kein anderes Paket als Ersatz gestartet.",
+  "@trainingContentUnavailableBody": {
+    "description": "Safe empty-package explanation"
+  },
+  "trainingResumeSessionTitle": "Einheit fortsetzen?",
+  "@trainingResumeSessionTitle": {
+    "description": "Checkpoint resume dialog title"
+  },
+  "trainingResumeSessionBody": "Eine unterbrochene Einheit wurde gefunden. Du kannst an derselben Stelle fortfahren oder neu beginnen.",
+  "@trainingResumeSessionBody": {
+    "description": "Checkpoint resume dialog body"
+  },
+  "trainingResumeSession": "Fortsetzen",
+  "@trainingResumeSession": {
+    "description": "Resume checkpoint action"
+  },
+  "trainingStartOver": "Neu beginnen",
+  "@trainingStartOver": {
+    "description": "Discard checkpoint and start over"
+  },
+  "trainingSignInRequired": "Melde dich an, bevor du eine Einheit startest.",
+  "@trainingSignInRequired": {
+    "description": "Training preflight authentication error"
+  },
+  "trainingEnrollmentMissing": "Für dieses Paket wurde keine aktive Teilnahme gefunden. Starte oder aktiviere das Paket zuerst.",
+  "@trainingEnrollmentMissing": {
+    "description": "Training preflight enrollment error"
+  },
+  "trainingProgressMissing": "Der Trainingsfortschritt ist noch nicht eingerichtet. Bitte synchronisiere erneut oder wende dich an den Support.",
+  "@trainingProgressMissing": {
+    "description": "Training preflight progress error"
+  },
+  "trainingSideNumber": "Seite {number}",
+  "@trainingSideNumber": {
+    "description": "Neutral side indicator",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "trainingArmCrossNumber": "Armkreuz {number}",
+  "@trainingArmCrossNumber": {
+    "description": "Arm-cross indicator",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "trainingMusicUnavailable": "Für diese Version sind noch keine geprüften internen Musiktitel verfügbar.",
+  "@trainingMusicUnavailable": {
+    "description": "Honest empty state when no bundled music tracks exist"
+  },
+  "trainingOrientationLabel": "Orientierung",
+  "@trainingOrientationLabel": {
+    "description": "Exercise orientation heading"
+  },
+  "trainingBreathingLabel": "Atmung",
+  "@trainingBreathingLabel": {
+    "description": "Exercise breathing heading"
+  },
+  "trainingRoutineCueLabel": "Kurzhinweis",
+  "@trainingRoutineCueLabel": {
+    "description": "Concise routine-mode instruction heading"
+  },
+  "trainingSafetyLabel": "Sicherheit",
+  "@trainingSafetyLabel": {
+    "description": "Exercise safety heading"
+  },
+  "trainingRoutineLocked": "Nach zwei begleiteten Einheiten",
+  "@trainingRoutineLocked": {
+    "description": "Reason routine mode is still locked"
+  },
+  "trainingLearningFirstTitle": "Erster Durchlauf: in Ruhe kennenlernen",
+  "@trainingLearningFirstTitle": {
+    "description": "First-session familiarity guidance title"
+  },
+  "trainingLearningFirstBody": "Der Lernmodus zeigt dir Position, Bewegung, Atmung und Sicherheit vollständig.",
+  "@trainingLearningFirstBody": {
+    "description": "First-session familiarity guidance body"
+  },
+  "trainingLearningSecondTitle": "Zweiter Durchlauf: sicher festigen",
+  "@trainingLearningSecondTitle": {
+    "description": "Second-session familiarity guidance title"
+  },
+  "trainingLearningSecondBody": "Du erhältst eine kompaktere Anleitung. Danach steht dir der Routinemodus zur Verfügung.",
+  "@trainingLearningSecondBody": {
+    "description": "Second-session familiarity guidance body"
+  },
+  "trainingRoutineReadyTitle": "Routinemodus ist verfügbar",
+  "@trainingRoutineReadyTitle": {
+    "description": "Routine-mode recommendation title"
+  },
+  "trainingRoutineReadyBody": "Du kennst den Ablauf. Nutze die automatische Führung oder bleibe bei der ausführlichen Anleitung.",
+  "@trainingRoutineReadyBody": {
+    "description": "Routine-mode recommendation body"
+  },
+  "trainingContentChecking": "Der geprüfte Offline-Inhalt ist bereit. Aktualisierungen werden im Hintergrund geprüft.",
+  "@trainingContentChecking": {
+    "description": "Safe bundled snapshot while cache validation is pending"
+  },
+  "trainingOfflineSnapshotNotice": "Der lokale oder entfernte Cache war nicht verwendbar. Du trainierst mit dem geprüften Offline-Inhalt dieser Version.",
+  "@trainingOfflineSnapshotNotice": {
+    "description": "Visible fallback notice for invalid, empty, or failed cache"
   }
 }

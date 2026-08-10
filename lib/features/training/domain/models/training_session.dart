@@ -1,5 +1,3 @@
-enum TrainingFeedbackMode { silent, haptic, voiceAndCues }
-
 enum TrainingSessionMode { tutorial, routine }
 
 class TrainingSessionResult {

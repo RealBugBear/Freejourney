@@ -6,6 +6,54 @@ enum TrainingFeedbackMode {
   voiceAndCues,
 }
 
+/// The production contract for every feedback channel used during training.
+///
+/// Consumers must ask this policy instead of deriving behaviour from enum
+/// comparisons. In particular, [TrainingFeedbackMode.silent] is a true
+/// all-channel mute and [TrainingFeedbackMode.hapticOnly] never permits audio.
+class TrainingFeedbackPolicy {
+  final bool allowsVoice;
+  final bool allowsTones;
+  final bool allowsMusic;
+  final bool allowsHaptics;
+
+  const TrainingFeedbackPolicy({
+    required this.allowsVoice,
+    required this.allowsTones,
+    required this.allowsMusic,
+    required this.allowsHaptics,
+  });
+
+  static const Map<TrainingFeedbackMode, TrainingFeedbackPolicy> matrix = {
+    TrainingFeedbackMode.silent: TrainingFeedbackPolicy(
+      allowsVoice: false,
+      allowsTones: false,
+      allowsMusic: false,
+      allowsHaptics: false,
+    ),
+    TrainingFeedbackMode.hapticOnly: TrainingFeedbackPolicy(
+      allowsVoice: false,
+      allowsTones: false,
+      allowsMusic: false,
+      allowsHaptics: true,
+    ),
+    TrainingFeedbackMode.voiceAndCues: TrainingFeedbackPolicy(
+      allowsVoice: true,
+      allowsTones: true,
+      allowsMusic: true,
+      allowsHaptics: true,
+    ),
+  };
+
+  static TrainingFeedbackPolicy forMode(TrainingFeedbackMode mode) {
+    return matrix[mode]!;
+  }
+}
+
+extension TrainingFeedbackModePolicy on TrainingFeedbackMode {
+  TrainingFeedbackPolicy get policy => TrainingFeedbackPolicy.forMode(this);
+}
+
 enum TrainingVoicePreset {
   calm,
   neutral,
@@ -13,26 +61,72 @@ enum TrainingVoicePreset {
 }
 
 class TrainingFeedbackSettings {
+  /// The only supported persistence key and format for the feedback mode.
+  ///
+  /// Values are the canonical [TrainingFeedbackMode.name] strings.
   static const String trainingFeedbackModeKey = 'training_feedback_mode';
+  static const String _legacyFeedbackModeKey = 'settings.feedbackMode';
+
   static const String trainingVoicePresetKey = 'training_voice_preset';
   static const String trainingVoiceNameKey = 'training_voice_name';
   static const String trainingVoiceLocaleKey = 'training_voice_locale';
 
+  /// Reads the canonical value and the legacy integer value conservatively.
+  ///
+  /// If both keys exist, the quieter valid mode wins. This makes a partially
+  /// completed migration fail closed instead of unexpectedly enabling audio.
   static TrainingFeedbackMode feedbackMode(SharedPreferences prefs) {
-    final raw = prefs.getString(trainingFeedbackModeKey);
-    return switch (raw) {
-      'silent' => TrainingFeedbackMode.silent,
-      'hapticOnly' => TrainingFeedbackMode.hapticOnly,
-      'voiceAndCues' => TrainingFeedbackMode.voiceAndCues,
-      _ => TrainingFeedbackMode.voiceAndCues,
-    };
+    final candidates = <TrainingFeedbackMode>[
+      if (_parseStoredMode(prefs.get(trainingFeedbackModeKey)) case final mode?)
+        mode,
+      if (_parseStoredMode(prefs.get(_legacyFeedbackModeKey)) case final mode?)
+        mode,
+    ];
+
+    if (candidates.isEmpty) return TrainingFeedbackMode.voiceAndCues;
+    return candidates.reduce(_quieterMode);
+  }
+
+  /// Rewrites either historical representation to the single string contract.
+  static Future<TrainingFeedbackMode> migrateFeedbackMode(
+    SharedPreferences prefs,
+  ) async {
+    final mode = feedbackMode(prefs);
+    await prefs.setString(trainingFeedbackModeKey, mode.name);
+    await prefs.remove(_legacyFeedbackModeKey);
+    return mode;
   }
 
   static Future<void> setFeedbackMode(
     SharedPreferences prefs,
     TrainingFeedbackMode mode,
+  ) async {
+    await prefs.setString(trainingFeedbackModeKey, mode.name);
+    await prefs.remove(_legacyFeedbackModeKey);
+  }
+
+  static TrainingFeedbackMode? _parseStoredMode(Object? raw) {
+    return switch (raw) {
+      'silent' || 0 => TrainingFeedbackMode.silent,
+      'hapticOnly' || 'haptic' || 1 => TrainingFeedbackMode.hapticOnly,
+      'voiceAndCues' || 'voiceCues' || 2 => TrainingFeedbackMode.voiceAndCues,
+      _ => null,
+    };
+  }
+
+  static TrainingFeedbackMode _quieterMode(
+    TrainingFeedbackMode first,
+    TrainingFeedbackMode second,
   ) {
-    return prefs.setString(trainingFeedbackModeKey, mode.name);
+    return _quietnessRank(first) <= _quietnessRank(second) ? first : second;
+  }
+
+  static int _quietnessRank(TrainingFeedbackMode mode) {
+    return switch (mode) {
+      TrainingFeedbackMode.silent => 0,
+      TrainingFeedbackMode.hapticOnly => 1,
+      TrainingFeedbackMode.voiceAndCues => 2,
+    };
   }
 
   static TrainingVoicePreset voicePreset(SharedPreferences prefs) {

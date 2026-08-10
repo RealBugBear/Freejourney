@@ -76,6 +76,44 @@ class AppLocalizationsEn extends AppLocalizations {
       'Almost there! We\'ve sent you an email to confirm your account. Please tap the link inside, then you can sign in.';
 
   @override
+  String get loginDiscoverLead =>
+      'Next, you\'ll discover your personal Reflex Profile — at your own pace.';
+
+  @override
+  String get consentShortTitle => 'A quick agreement';
+
+  @override
+  String get consentDiscoverLead =>
+      'Then you\'ll discover your personal Reflex Profile — at your own pace.';
+
+  @override
+  String get consentRowSafety => 'Safety';
+
+  @override
+  String get consentRowTerms => 'Terms';
+
+  @override
+  String get consentRowPrivacy => 'Privacy';
+
+  @override
+  String get consentReadLinkHint => 'Read';
+
+  @override
+  String get consentCheckboxLabel =>
+      'I have read the notices and agree to the Terms of Use and Privacy Policy.';
+
+  @override
+  String get consentDiscoverCta => 'Discover Reflex Profile';
+
+  @override
+  String get profileContactNameDiscoverBody =>
+      'Your contact name is visible to trainers — then you\'ll discover your Reflex Profile.';
+
+  @override
+  String get profileContactNameDiscoverBodyWithCommunity =>
+      'Your contact name is visible to trainers and can differ from your community name — then you\'ll discover your Reflex Profile.';
+
+  @override
   String get authErrorInvalidCredentials => 'Email or password is incorrect.';
 
   @override
@@ -115,10 +153,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trainingMode => 'Session Mode';
 
   @override
-  String get tutorialMode => 'Tutorial';
+  String get tutorialMode => 'Learning Mode';
 
   @override
-  String get routineMode => 'Routine';
+  String get routineMode => 'Routine Mode';
 
   @override
   String get silentMode => 'Silent';
@@ -1715,7 +1753,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trainingSessionExitUnsaved =>
-      'This session won\'t be saved. Are you sure you want to exit?';
+      'Your current position is saved on this device. Do you want to leave the session?';
 
   @override
   String get trainingReminderSessionBody =>
@@ -1927,7 +1965,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trainingOwnMusicMixNote =>
-      'Your own music (Spotify, etc.) will keep playing—the session sounds mix in underneath.';
+      'External music is not controlled or ducked by the app in this release.';
 
   @override
   String get trainingShortBreak => 'Short Break';
@@ -1939,7 +1977,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trainingTutorialSubtitle => 'Guided';
 
   @override
-  String get trainingRoutineSubtitle => 'Hands-free';
+  String get trainingRoutineSubtitle => 'Automatic flow';
 
   @override
   String trainingDurationAndRepetitions(int seconds, int repetitions) {
@@ -4095,4 +4133,149 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatCallRequestMessageContent => '📹 Video call requested';
+
+  @override
+  String get trainingReadyForMovement => 'Ready for the movement?';
+
+  @override
+  String get trainingReadyBody =>
+      'Check your position. Start only when you feel safe and stable.';
+
+  @override
+  String get trainingRepeatInstruction => 'Repeat instructions';
+
+  @override
+  String trainingPreparationCountdown(int seconds) {
+    return 'Starting in $seconds seconds';
+  }
+
+  @override
+  String trainingRepetitionOf(int current, int total) {
+    return 'Repetition $current of $total';
+  }
+
+  @override
+  String trainingPhaseOf(int current, int total) {
+    return 'Phase $current of $total';
+  }
+
+  @override
+  String trainingTimeRemaining(int seconds) {
+    return '$seconds seconds remaining';
+  }
+
+  @override
+  String get trainingAudioContentUnavailableTitle =>
+      'Voice guidance is not available yet';
+
+  @override
+  String get trainingAudioContentUnavailableBody =>
+      'The approved recordings are still missing. The visual and haptic flow works, but the session is not yet fully voice-guided.';
+
+  @override
+  String get trainingSafetyStop =>
+      'Stop if you feel pain, dizziness, nausea, or marked discomfort. Seek professional guidance before continuing.';
+
+  @override
+  String get trainingInterruptedTitle => 'Training paused';
+
+  @override
+  String get trainingInterruptedBody =>
+      'The timer is stopped. Check your position and resume deliberately.';
+
+  @override
+  String get trainingCompletionSaving => 'Saving your completion securely…';
+
+  @override
+  String get trainingCompletionSaveFailed =>
+      'Your completion could not be saved yet. The session remains stored on this device.';
+
+  @override
+  String get trainingContentUnavailableTitle => 'Training unavailable';
+
+  @override
+  String get trainingContentUnavailableBody =>
+      'No verified training content is available for this package. A different package was not started as a substitute.';
+
+  @override
+  String get trainingResumeSessionTitle => 'Resume your session?';
+
+  @override
+  String get trainingResumeSessionBody =>
+      'An interrupted session was found. Continue from the same point or start again.';
+
+  @override
+  String get trainingResumeSession => 'Resume';
+
+  @override
+  String get trainingStartOver => 'Start again';
+
+  @override
+  String get trainingSignInRequired => 'Sign in before starting a session.';
+
+  @override
+  String get trainingEnrollmentMissing =>
+      'No active enrollment was found for this package. Start or reactivate the package first.';
+
+  @override
+  String get trainingProgressMissing =>
+      'Training progress has not been set up yet. Sync again or contact support.';
+
+  @override
+  String trainingSideNumber(int number) {
+    return 'Side $number';
+  }
+
+  @override
+  String trainingArmCrossNumber(int number) {
+    return 'Arm cross $number';
+  }
+
+  @override
+  String get trainingMusicUnavailable =>
+      'No verified in-app music tracks are available in this release yet.';
+
+  @override
+  String get trainingOrientationLabel => 'Orientation';
+
+  @override
+  String get trainingBreathingLabel => 'Breathing';
+
+  @override
+  String get trainingRoutineCueLabel => 'Short cue';
+
+  @override
+  String get trainingSafetyLabel => 'Safety';
+
+  @override
+  String get trainingRoutineLocked => 'After two guided sessions';
+
+  @override
+  String get trainingLearningFirstTitle => 'First pass: learn at your own pace';
+
+  @override
+  String get trainingLearningFirstBody =>
+      'Learning Mode shows the full position, movement, breathing, and safety guidance.';
+
+  @override
+  String get trainingLearningSecondTitle => 'Second pass: build confidence';
+
+  @override
+  String get trainingLearningSecondBody =>
+      'You will see a more compact guide. Routine Mode becomes available afterward.';
+
+  @override
+  String get trainingRoutineReadyTitle => 'Routine Mode is available';
+
+  @override
+  String get trainingRoutineReadyBody =>
+      'You know the flow. Use automatic guidance or stay with the detailed instructions.';
+
+  @override
+  String get trainingContentChecking =>
+      'Verified offline content is ready while updates are checked in the background.';
+
+  @override
+  String get trainingOfflineSnapshotNotice =>
+      'The local or remote cache could not be used. This session uses the verified offline content for this version.';
 }

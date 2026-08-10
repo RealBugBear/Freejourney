@@ -360,9 +360,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     _maybeRedirectOnboarding();
 
     // Case 2: providers resolve after first build
-    ref.listen<AsyncValue<bool>>(hasSeenAnalysisPlaceholderProvider, (_, next) {
-      if (!next.isLoading) _maybeRedirectOnboarding();
-    });
     ref.listen<AsyncValue<bool>>(hasConsentedProvider, (_, next) {
       if (!next.isLoading) _maybeRedirectOnboarding();
     });

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
+
 class RepSegmentsWidget extends StatelessWidget {
   final int totalReps;
   final int completedReps; // fully done reps
@@ -26,8 +28,8 @@ class RepSegmentsWidget extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2),
             color: isDone
-                ? const Color(0xFF6366f1)
-                : Colors.white.withOpacity(0.1),
+                ? AppColors.primaryLight
+                : Colors.white.withValues(alpha: 0.1),
           ),
           child: isActive
               ? FractionallySizedBox(
@@ -36,10 +38,10 @@ class RepSegmentsWidget extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(2),
-                      color: const Color(0xFF6366f1),
-                      boxShadow: const [
+                      color: AppColors.primaryLight,
+                      boxShadow: [
                         BoxShadow(
-                          color: Color(0x996366f1),
+                          color: AppColors.primaryLight.withValues(alpha: 0.6),
                           blurRadius: 6,
                           spreadRadius: 1,
                         ),

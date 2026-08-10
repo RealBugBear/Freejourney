@@ -41,22 +41,41 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   bool _questionnaireStarted = false;
   String? _questionnaireFor; // 'child' or 'adult'
   int _currentModuleIndex = 0;
+  bool _didReadRouteExtras = false;
+  bool _fromOnboarding = false;
+  String? _pendingSubjectProfileId;
 
   ReflexQuestionnaireDefinition get _definition => childParentQuestionnaireV1;
+
+  Map<String, dynamic>? get _routeExtraMap {
+    final extra = GoRouterState.of(context).extra;
+    if (extra is Map<String, dynamic>) return extra;
+    if (extra is Map) return Map<String, dynamic>.from(extra);
+    return null;
+  }
 
   String get _packageId {
     final extra = GoRouterState.of(context).extra;
     if (extra is String) return extra;
-    if (extra is Map<String, dynamic>) {
-      return extra['packageId'] as String? ?? 'moro';
-    }
-    return 'moro';
+    return _routeExtraMap?['packageId'] as String? ?? 'moro';
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didReadRouteExtras) return;
+    _didReadRouteExtras = true;
+    final map = _routeExtraMap;
+    if (map == null || map['fromOnboarding'] != true) return;
+    _fromOnboarding = true;
+    _questionnaireFor = map['questionnaireFor'] as String?;
+    _pendingSubjectProfileId = map['subjectProfileId'] as String?;
   }
 
   @override
@@ -495,29 +514,76 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
     );
   }
 
+  void _resolvePendingSubjectProfile(List<ReflexSubjectProfile> profiles) {
+    final pendingId = _pendingSubjectProfileId;
+    if (pendingId == null || _selectedProfile != null) return;
+    for (final profile in profiles) {
+      if (profile.id == pendingId) {
+        _selectedProfile = profile;
+        _pendingSubjectProfileId = null;
+        return;
+      }
+    }
+  }
+
+  void _handleAppBarBack() {
+    if (_questionnaireStarted) {
+      _showExitConfirmation();
+      return;
+    }
+    if (_questionnaireFor != null) {
+      if (_fromOnboarding) {
+        context.go(Routes.onboardingForWhom);
+        return;
+      }
+      setState(() {
+        _questionnaireFor = null;
+        _selectedProfile = null;
+      });
+      return;
+    }
+    if (_fromOnboarding) {
+      context.go(Routes.onboardingForWhom);
+      return;
+    }
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go(Routes.dashboard);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final profilesAsync = ref.watch(reflexSubjectProfilesProvider);
     final locale = Localizations.localeOf(context).languageCode;
 
     return PopScope(
-      canPop: !_questionnaireStarted,
+      canPop: false,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) return;
-        _showExitConfirmation();
+        _handleAppBarBack();
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(_definition.screenTitle(locale))),
+        appBar: AppBar(
+          title: Text(_definition.screenTitle(locale)),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: _handleAppBarBack,
+          ),
+        ),
         body: SafeArea(
           child: profilesAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (error, _) => Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text(AppLocalizations.of(context).reflexProfileLoadProfilesFailed('$error')),
+                child: Text(AppLocalizations.of(context)
+                    .reflexProfileLoadProfilesFailed('$error')),
               ),
             ),
             data: (profiles) {
+              _resolvePendingSubjectProfile(profiles);
               if (_questionnaireFor == null) {
                 return _buildForWhom();
               }
@@ -625,7 +691,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
             ),
             const SizedBox(height: 24),
             OutlinedButton.icon(
-              onPressed: () => setState(() => _questionnaireFor = null),
+              onPressed: _handleAppBarBack,
               icon: const Icon(Icons.arrow_back),
               label: Text(l10n.back),
             ),
@@ -637,6 +703,9 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
 
   Widget _buildStart(List<ReflexSubjectProfile> profiles) {
     final l10n = AppLocalizations.of(context);
+    final seededProfile =
+        _fromOnboarding ? _selectedProfile : null;
+
     return ListView(
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
       children: [
@@ -661,112 +730,129 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
               ),
         ),
         const SizedBox(height: 20),
-        if (profiles.isNotEmpty) ...[
+        if (seededProfile != null) ...[
           Text(
-            l10n.reflexProfileSelectChild,
+            seededProfile.displayName.isEmpty
+                ? l10n.profile
+                : seededProfile.displayName,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
           ),
           const SizedBox(height: 8),
-          for (final profile in profiles)
-            Card(
-              child: ListTile(
-                leading: Icon(
-                  _selectedProfile?.id == profile.id
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked,
-                  color: _selectedProfile?.id == profile.id
-                      ? AppColors.primary
-                      : Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-                title: Text(
-                  profile.displayName.isEmpty
-                      ? l10n.profile
-                      : profile.displayName,
-                ),
-                subtitle: Text(
-                  [
-                    if (profile.ageYears != null)
-                      l10n.yearsCount(profile.ageYears!),
-                    if (profile.ageGroup != null) profile.ageGroup!,
-                  ].join(' · '),
-                ),
-                onTap: () => setState(() => _selectedProfile = profile),
-              ),
-            ),
-          const SizedBox(height: 8),
           FilledButton.icon(
-            onPressed: _selectedProfile == null
-                ? null
-                : () => _checkForDraft(_selectedProfile!.id),
+            onPressed: () => _checkForDraft(seededProfile.id),
             icon: const Icon(Icons.assignment_outlined),
             label: Text(l10n.reflexProfileStartQuestionnaire),
           ),
-          const SizedBox(height: 24),
-        ],
-        Text(
-          l10n.reflexProfileNewChild,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w800,
+        ] else ...[
+          if (profiles.isNotEmpty) ...[
+            Text(
+              l10n.reflexProfileSelectChild,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+            ),
+            const SizedBox(height: 8),
+            for (final profile in profiles)
+              Card(
+                child: ListTile(
+                  leading: Icon(
+                    _selectedProfile?.id == profile.id
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                    color: _selectedProfile?.id == profile.id
+                        ? AppColors.primary
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  title: Text(
+                    profile.displayName.isEmpty
+                        ? l10n.profile
+                        : profile.displayName,
+                  ),
+                  subtitle: Text(
+                    [
+                      if (profile.ageYears != null)
+                        l10n.yearsCount(profile.ageYears!),
+                      if (profile.ageGroup != null) profile.ageGroup!,
+                    ].join(' · '),
+                  ),
+                  onTap: () => setState(() => _selectedProfile = profile),
+                ),
               ),
-        ),
-        const SizedBox(height: 10),
-        TextField(
-          controller: _nameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: InputDecoration(
-            labelText: l10n.reflexProfileNameOrNickname,
-            border: const OutlineInputBorder(),
+            const SizedBox(height: 8),
+            FilledButton.icon(
+              onPressed: _selectedProfile == null
+                  ? null
+                  : () => _checkForDraft(_selectedProfile!.id),
+              icon: const Icon(Icons.assignment_outlined),
+              label: Text(l10n.reflexProfileStartQuestionnaire),
+            ),
+            const SizedBox(height: 24),
+          ],
+          Text(
+            l10n.reflexProfileNewChild,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
           ),
-        ),
-        const SizedBox(height: 12),
-        InkWell(
-          onTap: () async {
-            final now = DateTime.now();
-            final picked = await showDatePicker(
-              context: context,
-              initialDate: _selectedBirthDate ??
-                  DateTime(now.year - 6, now.month, now.day),
-              firstDate: DateTime(now.year - 100),
-              lastDate: now,
-              helpText: l10n.reflexProfilePickBirthDate,
-            );
-            if (picked != null) {
-              setState(() => _selectedBirthDate = picked);
-            }
-          },
-          borderRadius: BorderRadius.circular(4),
-          child: InputDecorator(
+          const SizedBox(height: 10),
+          TextField(
+            controller: _nameController,
+            textCapitalization: TextCapitalization.words,
             decoration: InputDecoration(
-              labelText: l10n.reflexProfileBirthDateRequired,
+              labelText: l10n.reflexProfileNameOrNickname,
               border: const OutlineInputBorder(),
-              suffixIcon: const Icon(Icons.calendar_month_outlined),
-              helperText: _selectedBirthDate == null
-                  ? l10n.reflexProfileBirthDateHelper
-                  : null,
-            ),
-            child: Text(
-              _selectedBirthDate == null
-                  ? l10n.reflexProfileSelectDate
-                  : '${_selectedBirthDate!.day.toString().padLeft(2, '0')}.'
-                      '${_selectedBirthDate!.month.toString().padLeft(2, '0')}.'
-                      '${_selectedBirthDate!.year}',
-              style: _selectedBirthDate == null
-                  ? TextStyle(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant)
-                  : null,
             ),
           ),
-        ),
-        const SizedBox(height: 14),
-        FilledButton.icon(
-          onPressed: _saving ? null : _createProfile,
-          icon: const Icon(Icons.person_add_alt_1_outlined),
-          label: Text(
-            _saving ? l10n.saving : l10n.reflexProfileCreateAndStart,
+          const SizedBox(height: 12),
+          InkWell(
+            onTap: () async {
+              final now = DateTime.now();
+              final picked = await showDatePicker(
+                context: context,
+                initialDate: _selectedBirthDate ??
+                    DateTime(now.year - 6, now.month, now.day),
+                firstDate: DateTime(now.year - 100),
+                lastDate: now,
+                helpText: l10n.reflexProfilePickBirthDate,
+              );
+              if (picked != null) {
+                setState(() => _selectedBirthDate = picked);
+              }
+            },
+            borderRadius: BorderRadius.circular(4),
+            child: InputDecorator(
+              decoration: InputDecoration(
+                labelText: l10n.reflexProfileBirthDateRequired,
+                border: const OutlineInputBorder(),
+                suffixIcon: const Icon(Icons.calendar_month_outlined),
+                helperText: _selectedBirthDate == null
+                    ? l10n.reflexProfileBirthDateHelper
+                    : null,
+              ),
+              child: Text(
+                _selectedBirthDate == null
+                    ? l10n.reflexProfileSelectDate
+                    : '${_selectedBirthDate!.day.toString().padLeft(2, '0')}.'
+                        '${_selectedBirthDate!.month.toString().padLeft(2, '0')}.'
+                        '${_selectedBirthDate!.year}',
+                style: _selectedBirthDate == null
+                    ? TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant)
+                    : null,
+              ),
+            ),
           ),
-        ),
+          const SizedBox(height: 14),
+          FilledButton.icon(
+            onPressed: _saving ? null : _createProfile,
+            icon: const Icon(Icons.person_add_alt_1_outlined),
+            label: Text(
+              _saving ? l10n.saving : l10n.reflexProfileCreateAndStart,
+            ),
+          ),
+        ],
       ],
     );
   }

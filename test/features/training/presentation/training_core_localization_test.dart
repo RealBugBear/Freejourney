@@ -1,4 +1,5 @@
 import 'package:corejourney/features/training/domain/models/exercise.dart';
+import 'package:corejourney/features/training/domain/session/session_orchestrator.dart';
 import 'package:corejourney/features/training/presentation/screens/training_outro_screen.dart';
 import 'package:corejourney/features/training/presentation/screens/vorrunde_interstitial_screen.dart';
 import 'package:corejourney/features/training/presentation/widgets/exercise_transition_widget.dart';
@@ -125,11 +126,14 @@ void main() {
           exerciseIndex: 0,
           totalExercises: 7,
           isRoutineMode: false,
-          transitionDurationSeconds: 10,
-          packageId: 'moro',
-          isFirstRun: false,
           locale: 'en',
-          onStart: () {},
+          isDuo: false,
+          stage: TrainingSessionStage.exerciseAnnouncement,
+          remainingSeconds: 0,
+          voiceGuidanceAvailable: false,
+          onConfirmReady: () {},
+          onStartNow: () {},
+          onRepeatInstruction: () {},
         ),
       ),
     );
@@ -152,9 +156,13 @@ void main() {
 
     expect(find.text('Music'), findsOneWidget);
     expect(find.text('Off'), findsOneWidget);
-    expect(find.text('Ambient Flow'), findsOneWidget);
-    expect(find.text('Quiet Nature'), findsOneWidget);
-    expect(find.text('Deep Tones'), findsOneWidget);
+    expect(find.text('Ambient Flow'), findsNothing);
+    expect(
+      find.text(
+        'No verified in-app music tracks are available in this release yet.',
+      ),
+      findsOneWidget,
+    );
     expect(find.text('Stille Natur'), findsNothing);
 
     await tester.pumpWidget(
@@ -167,7 +175,13 @@ void main() {
 
     expect(find.text('Musik'), findsOneWidget);
     expect(find.text('Aus'), findsOneWidget);
-    expect(find.text('Stille Natur'), findsOneWidget);
-    expect(find.text('Tiefe Töne'), findsOneWidget);
+    expect(find.text('Stille Natur'), findsNothing);
+    expect(
+      find.text(
+        'Für diese Version sind noch keine geprüften internen Musiktitel '
+        'verfügbar.',
+      ),
+      findsOneWidget,
+    );
   });
 }

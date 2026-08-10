@@ -80,6 +80,17 @@ class _MusicPickerSheetState extends State<MusicPickerSheet> {
           ...kInAppTracks.map(
             (track) => _trackTile(track, _trackLabel(l10n, track)),
           ),
+          if (kInAppTracks.isEmpty) ...[
+            const SizedBox(height: 12),
+            Text(
+              l10n.trainingMusicUnavailable,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+                height: 1.4,
+              ),
+            ),
+          ],
           const SizedBox(height: 12),
           if (_selected != null) ...[
             Text(

@@ -43,6 +43,7 @@ class _StubAuthRepository implements AuthRepository {
   Future<bool> signUpWithEmail({
     required String email,
     required String password,
+    String? emailRedirectTo,
   }) async {
     return false;
   }
@@ -90,7 +91,9 @@ void main() {
     await tester.pumpWidget(_buildApp());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Sign Up'));
+    final signUp = find.text('Sign Up');
+    await tester.ensureVisible(signUp);
+    await tester.tap(signUp);
     await tester.pumpAndSettle();
 
     expect(find.byType(SignInWithAppleButton), findsNothing);

@@ -5,14 +5,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+export '../training/training_feedback_settings.dart' show TrainingFeedbackMode;
+
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/training/domain/models/training_session.dart';
 import '../l10n/app_languages.dart';
+import '../training/training_feedback_settings.dart';
 import 'profile_locale_sync_service.dart';
 
 // ── Keys ─────────────────────────────────────────────────────────────────────
 
-const _kFeedbackMode = 'settings.feedbackMode';
 const _kWeeklyGoal = 'settings.weeklyGoal';
 const languagePreferenceKey = 'settings.languageCode';
 // Theme is user-scoped: 'settings.themeMode_<userId>' so each account
@@ -30,8 +32,6 @@ String _themeModeKey(String? userId) =>
 
 // ── Model ─────────────────────────────────────────────────────────────────────
 
-enum TrainingFeedbackMode { silent, haptic, voiceCues }
-
 class AppSettings {
   final TrainingFeedbackMode feedbackMode;
   final int weeklyGoal;
@@ -45,7 +45,7 @@ class AppSettings {
   final TrainingSessionMode trainingMode;
 
   const AppSettings({
-    this.feedbackMode = TrainingFeedbackMode.haptic,
+    this.feedbackMode = TrainingFeedbackMode.voiceAndCues,
     this.weeklyGoal = 5,
     this.languageCode = 'de',
     this.hasSelectedLanguage = false,
@@ -100,16 +100,21 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
   final SharedPreferences _prefs;
   final String? _userId;
   final ProfileLocaleSyncService? _profileLocaleSyncService;
+  Future<void> _feedbackPersistence = Future.value();
 
   SettingsNotifier(
     this._prefs,
     this._userId, {
     ProfileLocaleSyncService? profileLocaleSyncService,
   })  : _profileLocaleSyncService = profileLocaleSyncService,
-        super(_load(_prefs, _userId));
+        super(_load(_prefs, _userId)) {
+    // SharedPreferences writes are local and best-effort. Reads remain
+    // conservative until this migration completes, even if the app is killed.
+    _feedbackPersistence = _migrateFeedbackMode();
+    unawaited(_feedbackPersistence);
+  }
 
   static AppSettings _load(SharedPreferences prefs, String? userId) {
-    final modeIndex = prefs.getInt(_kFeedbackMode) ?? 1;
     // Read theme from user-scoped key; fall back to global key for migration
     // (users who saved a theme before this change still get their preference).
     final themeModeIndex = prefs.getInt(_themeModeKey(userId)) ??
@@ -127,8 +132,7 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
         );
 
     return AppSettings(
-      feedbackMode: TrainingFeedbackMode
-          .values[modeIndex.clamp(0, TrainingFeedbackMode.values.length - 1)],
+      feedbackMode: TrainingFeedbackSettings.feedbackMode(prefs),
       weeklyGoal: prefs.getInt(_kWeeklyGoal) ?? 5,
       languageCode: languageCode,
       hasSelectedLanguage: hasSelectedLanguage,
@@ -144,7 +148,26 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
 
   void setFeedbackMode(TrainingFeedbackMode mode) {
     state = state.copyWith(feedbackMode: mode);
-    _prefs.setInt(_kFeedbackMode, mode.index);
+    _feedbackPersistence = _feedbackPersistence.then(
+      (_) => _persistFeedbackMode(mode),
+    );
+    unawaited(_feedbackPersistence);
+  }
+
+  Future<void> _migrateFeedbackMode() async {
+    try {
+      await TrainingFeedbackSettings.migrateFeedbackMode(_prefs);
+    } catch (error) {
+      debugPrint('[SettingsNotifier] feedback migration failed: $error');
+    }
+  }
+
+  Future<void> _persistFeedbackMode(TrainingFeedbackMode mode) async {
+    try {
+      await TrainingFeedbackSettings.setFeedbackMode(_prefs, mode);
+    } catch (error) {
+      debugPrint('[SettingsNotifier] feedback persistence failed: $error');
+    }
   }
 
   void setWeeklyGoal(int goal) {

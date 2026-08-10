@@ -42,9 +42,14 @@ class SupabaseAuthRepository implements AuthRepository {
   Future<bool> signUpWithEmail({
     required String email,
     required String password,
+    String? emailRedirectTo,
   }) async {
-    final response =
-        await _client.auth.signUp(email: email, password: password);
+    final response = await _client.auth.signUp(
+      email: email,
+      password: password,
+      emailRedirectTo:
+          emailRedirectTo ?? 'https://reflexjourney.app/auth/confirm',
+    );
     // With email confirmation enabled, sign-up returns no session until the
     // user clicks the confirmation link. A null session means "confirm pending".
     return response.session == null;

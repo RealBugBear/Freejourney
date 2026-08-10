@@ -1,28 +1,33 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:drift/drift.dart' as drift;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-
-import '../../../../core/navigation/app_router.dart';
-import '../../../../core/training/routine_tip_settings.dart';
 
 import '../../../../bootstrap/providers.dart';
 import '../../../../core/database/app_database.dart';
+import '../../../../core/navigation/app_router.dart';
 import '../../../../core/notifications/notification_service.dart';
-import '../../../../core/sync/sync_service.dart';
-import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/training/routine_tip_settings.dart';
+import '../../../../core/training/training_familiarity_settings.dart';
+import '../../../../core/training/training_session_checkpoint_store.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../mood/presentation/widgets/training_experience_sheet.dart';
+import '../../../progress/presentation/providers/progress_provider.dart';
+import '../../data/repositories/training_completion_repository.dart';
+import '../../domain/models/exercise.dart';
+import '../../domain/models/training_session.dart';
 import '../../domain/services/experience_prompt_service.dart';
 import '../../domain/services/vorrunde_phase_service.dart';
-import '../../domain/models/training_session.dart';
-import '../../../progress/presentation/providers/progress_provider.dart';
-import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
+import '../../domain/session/session_orchestrator.dart';
 import '../providers/training_flow_provider.dart';
 import '../widgets/disclaimer_dialog.dart';
 import '../widgets/training_intro_widget.dart';
@@ -57,8 +62,23 @@ class TrainingSessionScreen extends ConsumerStatefulWidget {
 }
 
 class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
+  static const _uuid = Uuid();
+
   _TrainingPhase _phase = _TrainingPhase.intro;
   List<String> _completedExerciseIds = [];
+  List<Exercise> _sessionExercises = const [];
+  TrainingSessionState? _restoredState;
+  TrainingSessionMode? _sessionMode;
+  EnrollmentsTableData? _sessionEnrollment;
+  String? _sessionId;
+  String? _sessionUserId;
+  String? _sessionProfileId;
+  String? _sessionContentVersion;
+  int? _familiarityCount;
+  int _sessionFamiliarityCount = 0;
+  String? _familiarityLoadVersion;
+  bool _isStarting = false;
+  bool _reachedPackageEnd = false;
 
   @override
   void initState() {
@@ -72,92 +92,369 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
     super.dispose();
   }
 
-  Future<void> _handleOutroContinue(TrainingFlowState state) async {
+  Future<void> _startSession(TrainingFlowState state) async {
+    if (_isStarting) return;
     final l10n = AppLocalizations.of(context);
-    if (widget.packageId == 'vorrunde') {
-      await _handleVorrundeOutroContinue(state);
+    if (!state.hasContent || state.contentVersion == null) {
+      await _showPreflightError(
+        l10n.trainingContentUnavailableTitle,
+        l10n.trainingContentUnavailableBody,
+      );
       return;
     }
 
-    // Save session + update progress in background.
-    //
-    // IMPORTANT: Do NOT use activeEnrollmentProvider here — it is keyed to
-    // selectedPackageIdProvider, which may differ from widget.packageId if the
-    // user has multiple packages. Query the DB directly for this package.
-    final db = ref.read(databaseProvider);
-    final syncService = ref.read(syncServiceProvider);
+    setState(() => _isStarting = true);
+    try {
+      final userId =
+          ref.read(authStateProvider).valueOrNull?.session?.user.id ??
+              Supabase.instance.client.auth.currentUser?.id;
+      if (userId == null) {
+        await _showPreflightError(
+          l10n.trainingContentUnavailableTitle,
+          l10n.trainingSignInRequired,
+        );
+        return;
+      }
+
+      final db = ref.read(databaseProvider);
+      final requestedProfileId = ref.read(selectedSubjectProfileProvider)?.id;
+      final enrollment = await _findActiveEnrollment(
+        db: db,
+        userId: userId,
+        subjectProfileId: requestedProfileId,
+      );
+      if (enrollment == null) {
+        await _showPreflightError(
+          l10n.trainingContentUnavailableTitle,
+          l10n.trainingEnrollmentMissing,
+        );
+        return;
+      }
+
+      final progressRows = await (db.select(db.progressEntriesTable)
+            ..where((table) => table.enrollmentId.equals(enrollment.id)))
+          .get();
+      if (progressRows.length != 1) {
+        await _showPreflightError(
+          l10n.trainingContentUnavailableTitle,
+          l10n.trainingProgressMissing,
+        );
+        return;
+      }
+      final progress = progressRows.single;
+      if (progress.lastDisclaimerAcceptedAt == null) {
+        final accepted = await _askToAcceptDisclaimer();
+        if (!mounted || !accepted) return;
+        await TrainingCompletionRepository(db).acceptDisclaimer(
+          progressId: progress.id,
+          userId: userId,
+          acceptedAt: DateTime.now(),
+        );
+        unawaited(ref.read(syncServiceProvider).drain());
+      }
+
+      final profileId = enrollment.subjectProfileId ?? 'self:$userId';
+      final contentVersion = state.contentVersion!;
+      final prefs = await SharedPreferences.getInstance();
+      final checkpointStore = TrainingSessionCheckpointStore(prefs);
+      final familiarityCount = TrainingFamiliaritySettings.completedSessions(
+        prefs,
+        profileId: profileId,
+        packageId: widget.packageId,
+        contentVersion: contentVersion,
+      );
+      var restored = checkpointStore.load(
+        profileId: profileId,
+        packageId: widget.packageId,
+        contentVersion: contentVersion,
+      );
+
+      if (restored != null) {
+        final resume = await _askToResumeSession();
+        if (!mounted) return;
+        if (!resume) {
+          await checkpointStore.clear(
+            profileId: profileId,
+            packageId: widget.packageId,
+            contentVersion: contentVersion,
+          );
+          restored = null;
+        }
+      }
+
+      final exercises = List<Exercise>.unmodifiable(state.exercises);
+      final mode = restored?.mode ??
+          (familiarityCount < 2 ? TrainingSessionMode.tutorial : state.mode);
+      setState(() {
+        _sessionExercises = exercises;
+        _sessionMode = mode;
+        _sessionEnrollment = enrollment;
+        _sessionUserId = userId;
+        _sessionProfileId = profileId;
+        _sessionContentVersion = contentVersion;
+        _sessionId = restored?.sessionId ?? _uuid.v4();
+        _restoredState = restored;
+        _familiarityCount = familiarityCount;
+        _sessionFamiliarityCount = familiarityCount;
+        _phase = _TrainingPhase.session;
+      });
+    } finally {
+      if (mounted) setState(() => _isStarting = false);
+    }
+  }
+
+  Future<EnrollmentsTableData?> _findActiveEnrollment({
+    required AppDatabase db,
+    required String userId,
+    required String? subjectProfileId,
+  }) async {
+    final rows = await (db.select(db.enrollmentsTable)
+          ..where((table) => table.userId.equals(userId))
+          ..where((table) => table.packageId.equals(widget.packageId))
+          ..where((table) => subjectProfileId == null
+              ? table.subjectProfileId.isNull()
+              : table.subjectProfileId.equals(subjectProfileId))
+          ..where((table) => table.status.equals('active'))
+          ..limit(1))
+        .get();
+    return rows.firstOrNull;
+  }
+
+  void _ensureFamiliarityLoaded(TrainingFlowState state) {
+    final version = state.contentVersion;
+    if (!state.hasContent ||
+        version == null ||
+        _familiarityLoadVersion == version) {
+      return;
+    }
+    _familiarityLoadVersion = version;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(_loadFamiliarity(version));
+    });
+  }
+
+  Future<void> _loadFamiliarity(String contentVersion) async {
     final userId = ref.read(authStateProvider).valueOrNull?.session?.user.id ??
         Supabase.instance.client.auth.currentUser?.id;
-    final subjectProfileId = ref.read(selectedSubjectProfileProvider)?.id;
+    if (userId == null) return;
+    final enrollment = await _findActiveEnrollment(
+      db: ref.read(databaseProvider),
+      userId: userId,
+      subjectProfileId: ref.read(selectedSubjectProfileProvider)?.id,
+    );
+    if (enrollment == null) return;
+    final profileId = enrollment.subjectProfileId ?? 'self:$userId';
+    final prefs = await SharedPreferences.getInstance();
+    final count = TrainingFamiliaritySettings.completedSessions(
+      prefs,
+      profileId: profileId,
+      packageId: widget.packageId,
+      contentVersion: contentVersion,
+    );
+    if (!mounted || _familiarityLoadVersion != contentVersion) return;
+    setState(() => _familiarityCount = count);
+    if (count < 2) {
+      ref
+          .read(trainingFlowProvider(widget.packageId).notifier)
+          .setMode(TrainingSessionMode.tutorial);
+    }
+  }
 
-    EnrollmentsTableData? enrollment;
-    ProgressEntriesTableData? progress;
+  Future<bool> _askToResumeSession() async {
+    final l10n = AppLocalizations.of(context);
+    return await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (dialogContext) => AlertDialog(
+            title: Text(l10n.trainingResumeSessionTitle),
+            content: Text(l10n.trainingResumeSessionBody),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext, false),
+                child: Text(l10n.trainingStartOver),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(dialogContext, true),
+                child: Text(l10n.trainingResumeSession),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
 
-    if (userId != null) {
-      final rows = await (db.select(db.enrollmentsTable)
-            ..where((t) => t.userId.equals(userId))
-            ..where((t) => t.packageId.equals(widget.packageId))
-            ..where((t) => subjectProfileId == null
-                ? t.subjectProfileId.isNull()
-                : (t.subjectProfileId.equals(subjectProfileId) |
-                    t.subjectProfileId.isNull()))
-            ..where((t) => t.status.equals('active'))
-            ..orderBy([
-              (t) => drift.OrderingTerm(
-                    expression:
-                        t.subjectProfileId.equals(subjectProfileId ?? ''),
-                    mode: drift.OrderingMode.desc,
-                  ),
-            ])
-            ..limit(1))
-          .get();
-      enrollment = rows.firstOrNull;
-      if (enrollment != null) {
-        progress = await (db.select(db.progressEntriesTable)
-              ..where((t) => t.enrollmentId.equals(enrollment!.id))
-              ..limit(1))
-            .getSingleOrNull();
-      }
+  Future<bool> _askToAcceptDisclaimer() async {
+    return await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (dialogContext) => DisclaimerDialog(
+            onAccept: () => Navigator.pop(dialogContext, true),
+          ),
+        ) ??
+        false;
+  }
+
+  Future<void> _showPreflightError(String title, String body) {
+    return showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        icon: const Icon(Icons.error_outline, color: AppColors.error),
+        title: Text(title),
+        content: Text(body),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(AppLocalizations.of(context).back),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _persistCompletion(TrainingSessionState state) async {
+    final l10n = AppLocalizations.of(context);
+    final db = ref.read(databaseProvider);
+    final enrollment = _sessionEnrollment;
+    final userId = _sessionUserId;
+    final sessionId = _sessionId;
+    final profileId = _sessionProfileId;
+    final contentVersion = _sessionContentVersion;
+    if (enrollment == null ||
+        userId == null ||
+        sessionId == null ||
+        profileId == null ||
+        contentVersion == null ||
+        state.sessionId != sessionId) {
+      throw const TrainingCompletionException(
+        TrainingCompletionErrorCode.invalidArgument,
+        'The active training preflight is incomplete.',
+      );
     }
 
-    var reachedPackageEnd = false;
-    if (enrollment != null && progress != null) {
-      final totalDays = (enrollment.assignedDurationWeeks * 7).clamp(1, 3650);
-      reachedPackageEnd = progress.currentDay >= totalDays;
-      await saveCompletedSession(
+    if (widget.packageId == 'vorrunde') {
+      final progress = await (db.select(db.progressEntriesTable)
+            ..where((table) => table.enrollmentId.equals(enrollment.id)))
+          .getSingleOrNull();
+      if (progress == null) {
+        throw const TrainingCompletionException(
+          TrainingCompletionErrorCode.missingProgress,
+          'The warm-up enrollment has no progress entry.',
+        );
+      }
+      await saveVorrundeRegulationSession(
         db: db,
-        syncService: syncService,
+        syncService: ref.read(syncServiceProvider),
         enrollment: enrollment,
         progress: progress,
         completedExerciseIds: state.completedExerciseIds,
       );
-      await _saveCompanionSessions(
+    } else {
+      final repository = TrainingCompletionRepository(db);
+      final completedAt = DateTime.now();
+      final companionRequests = await _buildCompanionCompletionRequests(
         db: db,
-        syncService: syncService,
         userId: userId,
+        parentSessionId: sessionId,
         completedExerciseIds: state.completedExerciseIds,
+        completedAt: completedAt,
       );
+      await repository.completeSessionsAtomically(
+        requests: [
+          TrainingCompletionRequest(
+            sessionId: sessionId,
+            userId: userId,
+            enrollmentId: enrollment.id,
+            completedExerciseIds: state.completedExerciseIds,
+            completedAt: completedAt,
+          ),
+          ...companionRequests,
+        ],
+      );
+
+      final updatedProgress = await (db.select(db.progressEntriesTable)
+            ..where((table) => table.enrollmentId.equals(enrollment.id)))
+          .getSingle();
+      final totalDays = (enrollment.assignedDurationWeeks * 7).clamp(1, 3650);
+      _reachedPackageEnd = updatedProgress.currentDay >= totalDays;
     }
 
-    // Suppress today's training reminder since the session is done.
+    final prefs = await SharedPreferences.getInstance();
+    await TrainingFamiliaritySettings.recordCompletion(
+      prefs,
+      profileId: profileId,
+      packageId: widget.packageId,
+      contentVersion: contentVersion,
+      sessionId: sessionId,
+    );
+
     final settings = ref.read(settingsProvider);
     if (settings.remindersEnabled) {
-      await NotificationService.instance.suppressTodayAndReschedule(
-        startMinutes: settings.reminderStartMinutes,
-        title: l10n.reminderSessionTitle,
-        body: l10n.trainingReminderSessionBody,
+      try {
+        await NotificationService.instance.suppressTodayAndReschedule(
+          startMinutes: settings.reminderStartMinutes,
+          title: l10n.reminderSessionTitle,
+          body: l10n.trainingReminderSessionBody,
+        );
+      } on Object catch (error) {
+        debugPrint('Training reminder reschedule failed: $error');
+      }
+    }
+    unawaited(ref.read(syncServiceProvider).drain());
+  }
+
+  Future<List<TrainingCompletionRequest>> _buildCompanionCompletionRequests({
+    required AppDatabase db,
+    required String userId,
+    required String parentSessionId,
+    required List<String> completedExerciseIds,
+    required DateTime completedAt,
+  }) async {
+    final requests = <TrainingCompletionRequest>[];
+    for (final subjectProfileId in widget.companionSubjectProfileIds.toSet()) {
+      final enrollment = await (db.select(db.enrollmentsTable)
+            ..where((table) => table.userId.equals(userId))
+            ..where(
+              (table) => table.subjectProfileId.equals(subjectProfileId),
+            )
+            ..where((table) => table.packageId.equals(widget.packageId))
+            ..where((table) => table.status.equals('active'))
+            ..limit(1))
+          .getSingleOrNull();
+      if (enrollment == null) {
+        throw TrainingCompletionException(
+          TrainingCompletionErrorCode.missingEnrollment,
+          'No active enrollment exists for companion "$subjectProfileId".',
+        );
+      }
+
+      requests.add(
+        TrainingCompletionRequest(
+          sessionId: _uuid.v5(
+            Namespace.url.value,
+            '$parentSessionId:$subjectProfileId',
+          ),
+          userId: userId,
+          enrollmentId: enrollment.id,
+          completedExerciseIds: completedExerciseIds,
+          completedAt: completedAt,
+        ),
       );
     }
+    return List.unmodifiable(requests);
+  }
 
-    if (!mounted) return;
-
-    if (reachedPackageEnd) {
-      await _showPackageCompletionReachedDialog();
+  Future<void> _handleOutroContinue() async {
+    if (widget.packageId == 'vorrunde') {
+      await _handleVorrundeOutroContinue();
+      return;
     }
 
+    if (_reachedPackageEnd && mounted) {
+      await _showPackageCompletionReachedDialog();
+    }
     if (!mounted) return;
 
-    // One combined experience prompt per day (mood + text + optional share).
+    final enrollment = _sessionEnrollment;
     if (enrollment != null) {
       final shouldShow = await ExperiencePromptService.shouldShow();
       if (shouldShow && mounted) {
@@ -168,17 +465,14 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
         );
       }
     }
-
     if (!mounted) return;
 
     final prefs = await SharedPreferences.getInstance();
     await RoutineTipSettings.incrementSessionCount(prefs);
-
-    if (!mounted) return;
-    context.pop();
+    if (mounted) context.pop();
   }
 
-  Future<void> _handleVorrundeOutroContinue(TrainingFlowState state) async {
+  Future<void> _handleVorrundeOutroContinue() async {
     final userId = ref.read(authStateProvider).valueOrNull?.session?.user.id ??
         Supabase.instance.client.auth.currentUser?.id;
     final subjectProfileId = ref.read(selectedSubjectProfileProvider)?.id;
@@ -197,16 +491,8 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
       ref.invalidate(vorrundePhaseProvider(subjectProfileId));
     }
 
-    final enrollment = ref.read(activeEnrollmentProvider).valueOrNull;
-    final progress = ref.read(activeProgressProvider).valueOrNull;
-    if (enrollment != null && progress != null) {
-      await saveVorrundeRegulationSession(
-        db: ref.read(databaseProvider),
-        syncService: ref.read(syncServiceProvider),
-        enrollment: enrollment,
-        progress: progress,
-        completedExerciseIds: state.completedExerciseIds,
-      );
+    final enrollment = _sessionEnrollment;
+    if (enrollment != null) {
       final shouldShow = await ExperiencePromptService.shouldShow();
       if (shouldShow && mounted) {
         await showTrainingExperienceSheet(
@@ -219,50 +505,6 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
 
     if (!mounted) return;
     context.go(Routes.trainingStart, extra: 'moro');
-  }
-
-  Future<void> _saveCompanionSessions({
-    required AppDatabase db,
-    required SyncService syncService,
-    required String? userId,
-    required List<String> completedExerciseIds,
-  }) async {
-    if (userId == null || widget.companionSubjectProfileIds.isEmpty) return;
-
-    final today = DateTime.now();
-    final todayDate = DateTime(today.year, today.month, today.day);
-
-    for (final subjectProfileId in widget.companionSubjectProfileIds) {
-      final enrollment = await (db.select(db.enrollmentsTable)
-            ..where((t) => t.userId.equals(userId))
-            ..where((t) => t.subjectProfileId.equals(subjectProfileId))
-            ..where((t) => t.packageId.equals(widget.packageId))
-            ..where((t) => t.status.equals('active'))
-            ..limit(1))
-          .getSingleOrNull();
-      if (enrollment == null) continue;
-
-      final progress = await (db.select(db.progressEntriesTable)
-            ..where((t) => t.enrollmentId.equals(enrollment.id))
-            ..limit(1))
-          .getSingleOrNull();
-      if (progress == null) continue;
-
-      final lastActivity = progress.lastActivityDate;
-      final completedToday = lastActivity != null &&
-          lastActivity.year == todayDate.year &&
-          lastActivity.month == todayDate.month &&
-          lastActivity.day == todayDate.day;
-      if (completedToday) continue;
-
-      await saveCompletedSession(
-        db: db,
-        syncService: syncService,
-        enrollment: enrollment,
-        progress: progress,
-        completedExerciseIds: completedExerciseIds,
-      );
-    }
   }
 
   Future<void> _showPackageCompletionReachedDialog() async {
@@ -316,50 +558,47 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
     final pkg = widget.packageId;
     final flowState = ref.watch(trainingFlowProvider(pkg));
 
-    // Show disclaimer as dialog overlay
-    if (flowState.showDisclaimer) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => DisclaimerDialog(
-            onAccept: () {
-              Navigator.of(context).pop();
-              ref.read(trainingFlowProvider(pkg).notifier).acceptDisclaimer();
-            },
-          ),
-        );
-      });
-    }
-
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
         if (didPop) return;
+        if (_phase == _TrainingPhase.session) return;
         final shouldPop = await _onWillPop();
         if (shouldPop && context.mounted) context.go(Routes.dashboard);
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.backgroundDark,
         body: SafeArea(
           child: Stack(
             children: [
               _buildCurrentStep(flowState),
-              // Close button — always visible top-right
-              Positioned(
-                top: 8,
-                right: 8,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white60),
-                  onPressed: () async {
-                    final router = GoRouter.of(context);
-                    final shouldLeave = await _onWillPop();
-                    if (shouldLeave && mounted) {
-                      router.go(Routes.dashboard);
-                    }
-                  },
+              if (_isStarting)
+                const Positioned.fill(
+                  child: ColoredBox(
+                    color: Color(0x99000000),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
                 ),
-              ),
+              if (_phase != _TrainingPhase.session)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Semantics(
+                    button: true,
+                    label: AppLocalizations.of(context).trainingExitTooltip,
+                    child: IconButton(
+                      tooltip: AppLocalizations.of(context).trainingExitTooltip,
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () async {
+                        final router = GoRouter.of(context);
+                        final shouldLeave = await _onWillPop();
+                        if (shouldLeave && mounted) {
+                          router.go(Routes.dashboard);
+                        }
+                      },
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
@@ -368,6 +607,51 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
   }
 
   Widget _buildCurrentStep(TrainingFlowState state) {
+    if (_phase == _TrainingPhase.intro) {
+      _ensureFamiliarityLoaded(state);
+    }
+    if (_phase == _TrainingPhase.intro && !state.hasContent) {
+      final l10n = AppLocalizations.of(context);
+      return Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 480),
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.inventory_2_outlined,
+                  color: AppColors.warning,
+                  size: 64,
+                ),
+                const SizedBox(height: 18),
+                Text(
+                  l10n.trainingContentUnavailableTitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  l10n.trainingContentUnavailableBody,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                    height: 1.45,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     switch (_phase) {
       case _TrainingPhase.intro:
         return TrainingIntroWidget(
@@ -376,7 +660,14 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
           totalExercises: state.totalExercises,
           mode: state.mode,
           isDuo: widget.companionSubjectProfileIds.isNotEmpty,
-          onStart: () => setState(() => _phase = _TrainingPhase.session),
+          completedSessions: _familiarityCount,
+          contentNotice: state.isCachePending
+              ? AppLocalizations.of(context).trainingContentChecking
+              : state.contentIssue == null
+                  ? null
+                  : AppLocalizations.of(context).trainingOfflineSnapshotNotice,
+          routineEnabled: (_familiarityCount ?? 0) >= 2,
+          onStart: () => unawaited(_startSession(state)),
           onModeChanged: (newMode) {
             // Update the flow state so the toggle visually switches immediately.
             ref
@@ -389,27 +680,34 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
 
       case _TrainingPhase.session:
         return ImmersiveSessionScreen(
-          exercises: state.exercises,
-          isRoutineMode: state.mode == TrainingSessionMode.routine,
+          exercises: _sessionExercises,
+          mode: _sessionMode!,
           packageId: widget.packageId,
+          contentVersion: _sessionContentVersion!,
+          sessionId: _sessionId!,
+          profileId: _sessionProfileId!,
+          restoredState: _restoredState,
+          completedSessions: _sessionFamiliarityCount,
           companionSubjectProfileIds: widget.companionSubjectProfileIds,
-          onComplete: (ids) {
+          persistCompletion: _persistCompletion,
+          onCompleted: (completedState) {
             setState(() {
-              _completedExerciseIds = ids;
+              _completedExerciseIds = completedState.completedExerciseIds;
               _phase = _TrainingPhase.outro;
+            });
+          },
+          onCancelled: () {
+            setState(() {
+              _restoredState = null;
+              _phase = _TrainingPhase.intro;
             });
           },
         );
 
       case _TrainingPhase.outro:
-        final completedState = state.copyWith(
-          completedExerciseIds: _completedExerciseIds,
-          isComplete: true,
-          step: TrainingFlowStep.outro,
-        );
         return TrainingOutroWidget(
           completedCount: _completedExerciseIds.length,
-          onContinue: () => _handleOutroContinue(completedState),
+          onContinue: () => unawaited(_handleOutroContinue()),
         );
     }
   }

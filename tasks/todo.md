@@ -1,21 +1,49 @@
-# T25.0 — Multi-Grant-/Benefit-Code-Fundament (2026-07-19)
+# Pre-Payoff Onboarding Feel — Implement (2026-07-25)
 
-## Plan
+**Branch:** `i18n/english-localization` (dirty with unrelated training/i18n work — do not sweep into this change set)
+**Spec:** `docs/superpowers/specs/2026-07-25-pre-payoff-onboarding-feel-design.md`
 
-- [x] 1. Founder-Go PM-D1–PM-D12 + TS-6–TS-11 datiert in den kanonischen Trackern dokumentieren; T25.0 auf 🔄 setzen und PM-D12-Regelausnahme in `CLAUDE.md`/`launch_flags.dart` präzisieren.
-- [x] 2. Additive, idempotente Migration für Grant-Ledger, Benefit-Kampagnen/-Codes/-Einlösungen, getrennte Rollouts, effektiven Status und transaktionale Legacy-Projektion erstellen.
-- [x] 3. T24-Bestand sicher backfillen und den Legacy-RPC kompatibel auf HMAC-Benefit-Codes erweitern; mehrere Grants, Limits, Rollen, Laufzeiten und Campaign-Stopp korrekt behandeln.
-- [x] 4. `redeem-access-code` ohne Deploy auf Legacy+HMAC-Pfade weiterentwickeln; keine Codes/PII loggen und neutrale Grant-/Offer-Antworten liefern.
-- [x] 5. Premium-Domain/Repository auf effektive Premium- und Studio-Entitlements, Grant-Ursprung und bounded Offline-Cache erweitern; bestehender T23-Paketfluss bleibt kompatibel.
-- [x] 6. Pflichtmatrix lokal testen: Grant-Kombinationen, Ablauf/Refund, Premium+Studio, Backfill zweimal, Campaignlimits/Rollen, Rollouts und negative Client-Schreibversuche.
-- [x] 7. `supabase db reset --local`, SQL/RLS-Tests, Deno-Checks/-Tests, Flutter-Tests/Analyze und `make release-readiness-mobile` ausführen; Ergebnisse erst danach als Evidenz eintragen.
-- [x] 8. `docs/evidence/T25.0/`, Masterstatus, Launch-Tracker/Backlog und Rollback-/Live-Apply-Plan aktualisieren; bewusste Dateiliste lokal committen, kein Push/Deploy/Live-DDL.
+## Redirect map (Phase 0 evidence)
+
+- Dashboard `_maybeRedirectOnboarding`: Consent → Kontaktname only. Analysis placeholder was **not** forced in gate body; dead listener removed.
+- Username (no subject profiles) now → Für-wen (was entry-points).
+- Für-wen → Reflex Profile direct (now/later sheet removed).
+- Analysis route `/onboarding/analysis` kept for deep links; not gated.
+
+## Phases
+
+- [x] 1. Shared 4 thin step-dot widget (`currentStep` 1-based: Account→Consent→Kontaktname→Für-wen)
+- [x] 2. Consent Layout B (dots, short title, B1 lead, 3 sheet rows, checkbox, CTA „Reflex-Profil entdecken“); legal bodies untouched
+- [x] 3. Analysis placeholder off required path (drop dead listener; keep route cheaply)
+- [x] 4. Kontaktname: dots + shorter B1 body; username → Für-wen; Für-wen → Reflex Profile direct (no sheet)
+- [x] 5. Account: single B1 framing line if natural slot
+- [x] 6. Verify: analyze, tests, gen-l10n + i18n-check, acceptance table
 
 ## Review
 
-✅ 2026-07-19 lokal abgeschlossen. Migration, Edge Function und Flutter-
-Integration sind implementiert und mit Full Replay, 95 pgTAP-Tests, einem
-echten Zwei-Konten-Concurrency-Test, 12 Edge-Function-Tests, 43 fokussierten
-Flutter-Tests sowie der vollständigen 310-Test-Release-Suite belegt. Keine Live-DDL,
-kein Deploy, keine Portaländerung, keine Kampagnen-/Sales-Aktivierung und kein
-Push. Evidenz und Rollback: `docs/evidence/T25.0/README.md`.
+### Verification evidence
+
+- `dart analyze` on touched screens/widgets: **No issues found**
+- `flutter test` consent Layout B + step dots: **All tests passed! (3)**
+- `python3 scripts/i18n_check.py`: **parity passed** (1191 keys)
+- `make i18n-check` overall: quality check failed on **pre-existing** allowlist keys (`routineMode`, `trainingRoutineSubtitle`, `tutorialMode`) already dirty on this branch — not introduced by this work
+- Manual path: reasoned walkthrough (no simulator run this session)
+
+### Acceptance
+
+| # | Result | Evidence |
+|---|---|---|
+| A1 | ✅ | Consent Layout B + `consent_screen_layout_b_test.dart` |
+| A2 | ✅ | Lawyer bodies retained in `_SafetyTab`/`_TermsTab`/`_PrivacyTab`; chrome-only rewrite |
+| A3 | ✅ | No analysis redirect in `_maybeRedirectOnboarding`; listener removed |
+| A4 | ✅ | `for_whom_screen.dart` → `context.go(Routes.reflexProfile)` direct |
+| A5 | ✅ | New keys DE+EN; `i18n_check.py` parity passed |
+| A6 | ✅ | Gate still Consent then Kontaktname before payoff |
+| A7 | ✅ | Touched onboarding/consent/username/login/dashboard + ARB/tests only |
+
+### Residual / follow-ups
+
+- Entry-points screen remains reachable by route but is no longer on the required Kontaktname path (post-payoff / non-blocking per spec).
+- Analysis placeholder route kept for deep links; provider/pref helpers left for that screen.
+- Branch already dirty with training/i18n work — commit only the onboarding-feel files when Founder asks.
+- No device/simulator smoke this session.

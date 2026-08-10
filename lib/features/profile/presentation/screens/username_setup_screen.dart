@@ -7,6 +7,7 @@ import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
+import '../../../onboarding/presentation/widgets/pre_payoff_step_dots.dart';
 import '../providers/profile_provider.dart';
 
 class UsernameSetupScreen extends ConsumerStatefulWidget {
@@ -53,13 +54,12 @@ class _UsernameSetupScreenState extends ConsumerState<UsernameSetupScreen> {
       await ref.read(profileProvider.notifier).save(displayName: trimmed);
       if (!mounted) return;
 
-      // Check if subject profiles already exist (e.g. existing user).
-      // If none → show entry points screen before intake assessment.
-      // If some → go straight to the dashboard.
+      // No subject profiles yet → Für-wen, then Reflex Profile (payoff).
+      // Entry-points stay optional / post-payoff (non-blocking).
       final profiles = await ref.read(allReflexSubjectProfilesProvider.future);
       if (!mounted) return;
       if (profiles.isEmpty) {
-        context.go(Routes.onboardingEntryPoints);
+        context.go(Routes.onboardingForWhom);
       } else {
         context.go(Routes.dashboard);
       }
@@ -81,7 +81,7 @@ class _UsernameSetupScreenState extends ConsumerState<UsernameSetupScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go(Routes.dashboard),
+          onPressed: () => context.go(Routes.consent),
         ),
       ),
       body: SafeArea(
@@ -90,6 +90,8 @@ class _UsernameSetupScreenState extends ConsumerState<UsernameSetupScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const PrePayoffStepDots(currentStep: 3),
+              const SizedBox(height: 28),
               const Spacer(),
               Text(
                 l10n.profileContactNameQuestion,
@@ -100,8 +102,8 @@ class _UsernameSetupScreenState extends ConsumerState<UsernameSetupScreen> {
               const SizedBox(height: 10),
               Text(
                 kCommunityEnabled
-                    ? l10n.profileContactNameBodyWithCommunity
-                    : l10n.profileContactNameBody,
+                    ? l10n.profileContactNameDiscoverBodyWithCommunity
+                    : l10n.profileContactNameDiscoverBody,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),

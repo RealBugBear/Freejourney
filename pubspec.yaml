@@ -1,7 +1,7 @@
 name: corejourney
 description: Reflex Journey — Nervous System Training
 publish_to: none
-version: 1.0.5+2026071601
+version: 1.0.5+2026072501
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -118,6 +118,17 @@ flutter:
     - assets/images/trainings/babinski/
     - assets/images/trainings/landau/
     - assets/images/trainings/vorrunde/
+    # Finalized exercise artwork (source-organized by reflex package)
+    - assets/images/Bilder/00_Vorbereitung/
+    - assets/images/Bilder/01_FLR und Moro-Reflex/
+    - assets/images/Bilder/02_Spinaler Galant-Reflex/
+    - assets/images/Bilder/03_TLR-Reflex/
+    - assets/images/Bilder/04_ATNR-Reflex/
+    - assets/images/Bilder/05_STNR-Reflex/
+    - assets/images/Bilder/06_Babinski-Reflex/
+    - assets/images/Bilder/07_Landau-Reflex/
+    - assets/images/Bilder/08_Babkin-Plantar-Palmar-Aufricht-Reflex/
+    - assets/images/Bilder/09_Such-Saug-Reflex/
     # Videos are streamed from Supabase Storage — NOT bundled
     # Sounds — shared + per package
     - assets/sounds/
@@ -131,8 +142,9 @@ flutter:
     - assets/sounds/babinski/
     - assets/sounds/landau/
     - assets/sounds/music/
+    - assets/sounds/announcements/manifest.v1.json
     - assets/sounds/announcements/de/
-    - assets/sounds/announcements/de/exercises/
+    - assets/sounds/announcements/en/
 
 flutter_launcher_icons:
   android: true

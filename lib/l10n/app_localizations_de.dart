@@ -76,6 +76,44 @@ class AppLocalizationsDe extends AppLocalizations {
       'Fast geschafft! Wir haben dir eine E-Mail zur Bestätigung deines Kontos gesendet. Bitte tippe auf den Link darin, dann kannst du dich anmelden.';
 
   @override
+  String get loginDiscoverLead =>
+      'Gleich entdeckst du dein persönliches Reflex-Profil — in deinem Tempo.';
+
+  @override
+  String get consentShortTitle => 'Kurz zustimmen';
+
+  @override
+  String get consentDiscoverLead =>
+      'Dann entdeckst du dein persönliches Reflex-Profil — in deinem Tempo.';
+
+  @override
+  String get consentRowSafety => 'Sicherheit';
+
+  @override
+  String get consentRowTerms => 'Nutzung';
+
+  @override
+  String get consentRowPrivacy => 'Datenschutz';
+
+  @override
+  String get consentReadLinkHint => 'Lesen';
+
+  @override
+  String get consentCheckboxLabel =>
+      'Ich habe die Hinweise gelesen und stimme den Nutzungsbedingungen sowie der Datenschutzerklärung zu.';
+
+  @override
+  String get consentDiscoverCta => 'Reflex-Profil entdecken';
+
+  @override
+  String get profileContactNameDiscoverBody =>
+      'Dein Kontaktname ist für Trainer sichtbar — danach entdeckst du dein Reflex-Profil.';
+
+  @override
+  String get profileContactNameDiscoverBodyWithCommunity =>
+      'Dein Kontaktname ist für Trainer sichtbar und kann sich von deinem Community-Namen unterscheiden — danach entdeckst du dein Reflex-Profil.';
+
+  @override
   String get authErrorInvalidCredentials => 'E-Mail oder Passwort ist falsch.';
 
   @override
@@ -117,10 +155,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get trainingMode => 'Einheitsmodus';
 
   @override
-  String get tutorialMode => 'Tutorial';
+  String get tutorialMode => 'Lernmodus';
 
   @override
-  String get routineMode => 'Routine';
+  String get routineMode => 'Routinemodus';
 
   @override
   String get silentMode => 'Silent';
@@ -1734,7 +1772,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get trainingSessionExitUnsaved =>
-      'Deine Einheit wird nicht gespeichert. Wirklich abbrechen?';
+      'Deine aktuelle Stelle wird auf diesem Gerät gesichert. Möchtest du die Einheit verlassen?';
 
   @override
   String get trainingReminderSessionBody =>
@@ -1946,7 +1984,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get trainingOwnMusicMixNote =>
-      'Eigene Musik (Spotify etc.) läuft weiter - Töne mischen sich darunter.';
+      'Eigene Musik wird in dieser Version nicht von der App gesteuert oder abgesenkt.';
 
   @override
   String get trainingShortBreak => 'Kurze Pause';
@@ -1958,7 +1996,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get trainingTutorialSubtitle => 'Mit Anleitung';
 
   @override
-  String get trainingRoutineSubtitle => 'Hands-free';
+  String get trainingRoutineSubtitle => 'Automatischer Ablauf';
 
   @override
   String trainingDurationAndRepetitions(int seconds, int repetitions) {
@@ -4099,4 +4137,152 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get chatCallRequestMessageContent => '📹 Video-Call angefragt';
+
+  @override
+  String get trainingReadyForMovement => 'Bereit für die Bewegung?';
+
+  @override
+  String get trainingReadyBody =>
+      'Prüfe deine Position. Starte erst, wenn du dich sicher und stabil fühlst.';
+
+  @override
+  String get trainingRepeatInstruction => 'Anleitung wiederholen';
+
+  @override
+  String trainingPreparationCountdown(int seconds) {
+    return 'Start in $seconds Sekunden';
+  }
+
+  @override
+  String trainingRepetitionOf(int current, int total) {
+    return 'Wiederholung $current von $total';
+  }
+
+  @override
+  String trainingPhaseOf(int current, int total) {
+    return 'Phase $current von $total';
+  }
+
+  @override
+  String trainingTimeRemaining(int seconds) {
+    return 'Noch $seconds Sekunden';
+  }
+
+  @override
+  String get trainingAudioContentUnavailableTitle =>
+      'Sprachbegleitung noch nicht verfügbar';
+
+  @override
+  String get trainingAudioContentUnavailableBody =>
+      'Die geprüften Aufnahmen fehlen noch. Der Ablauf funktioniert visuell und haptisch; er ist derzeit nicht vollständig sprachgeführt.';
+
+  @override
+  String get trainingSafetyStop =>
+      'Stoppe bei Schmerzen, Schwindel, Übelkeit oder starkem Unwohlsein. Hole vor dem Fortsetzen fachlichen Rat ein.';
+
+  @override
+  String get trainingInterruptedTitle => 'Training pausiert';
+
+  @override
+  String get trainingInterruptedBody =>
+      'Die Zeit wurde angehalten. Prüfe deine Position und setze bewusst fort.';
+
+  @override
+  String get trainingCompletionSaving => 'Abschluss wird sicher gespeichert …';
+
+  @override
+  String get trainingCompletionSaveFailed =>
+      'Der Abschluss konnte noch nicht gespeichert werden. Deine Einheit bleibt lokal erhalten.';
+
+  @override
+  String get trainingContentUnavailableTitle => 'Training nicht verfügbar';
+
+  @override
+  String get trainingContentUnavailableBody =>
+      'Für dieses Paket liegt kein geprüfter Trainingsinhalt vor. Es wurde kein anderes Paket als Ersatz gestartet.';
+
+  @override
+  String get trainingResumeSessionTitle => 'Einheit fortsetzen?';
+
+  @override
+  String get trainingResumeSessionBody =>
+      'Eine unterbrochene Einheit wurde gefunden. Du kannst an derselben Stelle fortfahren oder neu beginnen.';
+
+  @override
+  String get trainingResumeSession => 'Fortsetzen';
+
+  @override
+  String get trainingStartOver => 'Neu beginnen';
+
+  @override
+  String get trainingSignInRequired =>
+      'Melde dich an, bevor du eine Einheit startest.';
+
+  @override
+  String get trainingEnrollmentMissing =>
+      'Für dieses Paket wurde keine aktive Teilnahme gefunden. Starte oder aktiviere das Paket zuerst.';
+
+  @override
+  String get trainingProgressMissing =>
+      'Der Trainingsfortschritt ist noch nicht eingerichtet. Bitte synchronisiere erneut oder wende dich an den Support.';
+
+  @override
+  String trainingSideNumber(int number) {
+    return 'Seite $number';
+  }
+
+  @override
+  String trainingArmCrossNumber(int number) {
+    return 'Armkreuz $number';
+  }
+
+  @override
+  String get trainingMusicUnavailable =>
+      'Für diese Version sind noch keine geprüften internen Musiktitel verfügbar.';
+
+  @override
+  String get trainingOrientationLabel => 'Orientierung';
+
+  @override
+  String get trainingBreathingLabel => 'Atmung';
+
+  @override
+  String get trainingRoutineCueLabel => 'Kurzhinweis';
+
+  @override
+  String get trainingSafetyLabel => 'Sicherheit';
+
+  @override
+  String get trainingRoutineLocked => 'Nach zwei begleiteten Einheiten';
+
+  @override
+  String get trainingLearningFirstTitle =>
+      'Erster Durchlauf: in Ruhe kennenlernen';
+
+  @override
+  String get trainingLearningFirstBody =>
+      'Der Lernmodus zeigt dir Position, Bewegung, Atmung und Sicherheit vollständig.';
+
+  @override
+  String get trainingLearningSecondTitle =>
+      'Zweiter Durchlauf: sicher festigen';
+
+  @override
+  String get trainingLearningSecondBody =>
+      'Du erhältst eine kompaktere Anleitung. Danach steht dir der Routinemodus zur Verfügung.';
+
+  @override
+  String get trainingRoutineReadyTitle => 'Routinemodus ist verfügbar';
+
+  @override
+  String get trainingRoutineReadyBody =>
+      'Du kennst den Ablauf. Nutze die automatische Führung oder bleibe bei der ausführlichen Anleitung.';
+
+  @override
+  String get trainingContentChecking =>
+      'Der geprüfte Offline-Inhalt ist bereit. Aktualisierungen werden im Hintergrund geprüft.';
+
+  @override
+  String get trainingOfflineSnapshotNotice =>
+      'Der lokale oder entfernte Cache war nicht verwendbar. Du trainierst mit dem geprüften Offline-Inhalt dieser Version.';
 }
