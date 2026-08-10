@@ -106,11 +106,11 @@ Exercise(
 - [ ] **Step 3: Create placeholder image directory**
 
 ```bash
-mkdir -p /Users/alexandermessinger/dev/claudvibes/corejourney/app/assets/images/trainings/vorrunde
-touch /Users/alexandermessinger/dev/claudvibes/corejourney/app/assets/images/trainings/vorrunde/.gitkeep
-mkdir -p /Users/alexandermessinger/dev/claudvibes/corejourney/app/assets/sounds/announcements/de/exercises
-touch /Users/alexandermessinger/dev/claudvibes/corejourney/app/assets/sounds/announcements/de/.gitkeep
-touch /Users/alexandermessinger/dev/claudvibes/corejourney/app/assets/sounds/announcements/de/exercises/.gitkeep
+mkdir -p /Users/alexandermessinger/dev/claudvibes/reflexjourney/assets/images/trainings/vorrunde
+touch /Users/alexandermessinger/dev/claudvibes/reflexjourney/assets/images/trainings/vorrunde/.gitkeep
+mkdir -p /Users/alexandermessinger/dev/claudvibes/reflexjourney/assets/sounds/announcements/de/exercises
+touch /Users/alexandermessinger/dev/claudvibes/reflexjourney/assets/sounds/announcements/de/.gitkeep
+touch /Users/alexandermessinger/dev/claudvibes/reflexjourney/assets/sounds/announcements/de/exercises/.gitkeep
 ```
 
 - [ ] **Step 4: Register asset paths in pubspec.yaml**
@@ -126,7 +126,7 @@ In `pubspec.yaml`, under `flutter: assets:`, add:
 - [ ] **Step 5: Verify app compiles**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter analyze --no-fatal-infos 2>&1 | tail -5
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter analyze --no-fatal-infos 2>&1 | tail -5
 ```
 
 Expected: no new errors related to `Exercise`.
@@ -173,7 +173,7 @@ void main() {
 - [ ] **Step 2: Run test to confirm it fails**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter test test/features/training/audio_announcement_service_test.dart 2>&1 | tail -10
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter test test/features/training/audio_announcement_service_test.dart 2>&1 | tail -10
 ```
 
 Expected: compilation error (class doesn't exist yet).
@@ -249,7 +249,7 @@ class AudioAnnouncementService {
 - [ ] **Step 4: Run test to confirm it passes**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter test test/features/training/audio_announcement_service_test.dart 2>&1 | tail -10
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter test test/features/training/audio_announcement_service_test.dart 2>&1 | tail -10
 ```
 
 Expected: PASS (2 tests).
@@ -322,7 +322,7 @@ Future<void> setVolume(double volume) async {
 - [ ] **Step 2: Verify compile**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter analyze lib/features/training/presentation/services/in_app_music_service.dart 2>&1 | tail -5
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter analyze lib/features/training/presentation/services/in_app_music_service.dart 2>&1 | tail -5
 ```
 
 Expected: no errors.
@@ -468,7 +468,7 @@ Row(
 - [ ] **Step 3: Check that `settingsProvider.notifier` has `setTrainingMode`**
 
 ```bash
-grep -n "setTrainingMode\|trainingMode" /Users/alexandermessinger/dev/claudvibes/corejourney/app/lib/core/settings/settings_provider.dart | head -10
+grep -n "setTrainingMode\|trainingMode" /Users/alexandermessinger/dev/claudvibes/reflexjourney/lib/core/settings/settings_provider.dart | head -10
 ```
 
 Expected: `setTrainingMode` method exists. If not, add it (copy pattern from any other setter in that file).
@@ -476,7 +476,7 @@ Expected: `setTrainingMode` method exists. If not, add it (copy pattern from any
 - [ ] **Step 4: Verify compile**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter analyze lib/features/training/presentation/widgets/training_intro_widget.dart 2>&1 | tail -5
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter analyze lib/features/training/presentation/widgets/training_intro_widget.dart 2>&1 | tail -5
 ```
 
 - [ ] **Step 5: Commit**
@@ -583,7 +583,7 @@ void dispose() {
 - [ ] **Step 5: Verify compile**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter analyze lib/features/training/presentation/screens/immersive_session_screen.dart 2>&1 | tail -5
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter analyze lib/features/training/presentation/screens/immersive_session_screen.dart 2>&1 | tail -5
 ```
 
 - [ ] **Step 6: Commit**
@@ -796,7 +796,7 @@ if (widget.isFirstRun && ex.videoPath != null && !widget.isRoutineMode) ...[
 - [ ] **Step 7: Verify compile**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter analyze lib/features/training/ lib/core/training/first_run_settings.dart 2>&1 | tail -10
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter analyze lib/features/training/ lib/core/training/first_run_settings.dart 2>&1 | tail -10
 ```
 
 - [ ] **Step 8: Commit**
@@ -854,7 +854,7 @@ void main() {
 - [ ] **Step 2: Run test to confirm it fails**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter test test/features/training/vorrunde_status_settings_test.dart 2>&1 | tail -5
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter test test/features/training/vorrunde_status_settings_test.dart 2>&1 | tail -5
 ```
 
 Expected: compilation error.
@@ -885,7 +885,7 @@ class VorrundeStatusSettings {
 - [ ] **Step 4: Run test to confirm it passes**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter test test/features/training/vorrunde_status_settings_test.dart 2>&1 | tail -5
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter test test/features/training/vorrunde_status_settings_test.dart 2>&1 | tail -5
 ```
 
 Expected: PASS (3 tests).
@@ -1153,7 +1153,7 @@ if (_showInterstitial) {
 - [ ] **Step 3: Verify compile**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter analyze lib/features/packages/ 2>&1 | tail -10
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter analyze lib/features/packages/ 2>&1 | tail -10
 ```
 
 - [ ] **Step 4: Commit**
@@ -1221,7 +1221,7 @@ import '../../../../core/training/routine_tip_settings.dart';
 Find the dashboard screen file:
 
 ```bash
-grep -rl "dashboard\|Dashboard" /Users/alexandermessinger/dev/claudvibes/corejourney/app/lib/features/home --include="*.dart" | head -3
+grep -rl "dashboard\|Dashboard" /Users/alexandermessinger/dev/claudvibes/reflexjourney/lib/features/home --include="*.dart" | head -3
 ```
 
 In the dashboard `StatefulWidget`'s `initState`, add a one-shot check after first frame:
@@ -1300,7 +1300,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 - [ ] **Step 4: Verify compile**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter analyze 2>&1 | grep -E "error|warning" | grep -v "info" | head -20
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter analyze 2>&1 | grep -E "error|warning" | grep -v "info" | head -20
 ```
 
 Expected: no new errors.
@@ -1320,7 +1320,7 @@ git commit -m "feat: show Routine-mode tip after 2nd completed session"
 - [ ] **Step 1: Run full test suite**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter test 2>&1 | tail -20
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter test 2>&1 | tail -20
 ```
 
 Expected: all tests pass.
@@ -1328,7 +1328,7 @@ Expected: all tests pass.
 - [ ] **Step 2: Full flutter analyze**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter analyze --no-fatal-infos 2>&1 | tail -10
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter analyze --no-fatal-infos 2>&1 | tail -10
 ```
 
 Expected: "No issues found!" or only pre-existing warnings.

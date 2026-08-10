@@ -69,7 +69,7 @@ void main() {
 - [ ] **Step 2: Test ausführen — sicherstellen dass er fehlschlägt**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/features/trainer/trainer_provider_test.dart -v
 ```
 
@@ -456,7 +456,7 @@ Erwartet: FAIL (Datei existiert nicht)
 - [ ] **Step 3: Verzeichnis und Screen anlegen**
 
 ```bash
-mkdir -p /Users/alexandermessinger/dev/claudvibes/corejourney/app/lib/features/community/presentation/screens
+mkdir -p /Users/alexandermessinger/dev/claudvibes/reflexjourney/lib/features/community/presentation/screens
 ```
 
 `lib/features/community/presentation/screens/community_screen.dart`:
@@ -979,7 +979,7 @@ Falls `chatInbox` oder `chatChannel` noch anderswo referenziert werden:
 
 ```bash
 grep -r "chatInbox\|chatChannel\|Routes.chat" \
-  /Users/alexandermessinger/dev/claudvibes/corejourney/app/lib --include="*.dart"
+  /Users/alexandermessinger/dev/claudvibes/reflexjourney/lib --include="*.dart"
 ```
 
 Alle gefundenen Stellen auf `/dm` bzw. `/dm/:channelId` oder `/community/:channelId` aktualisieren.

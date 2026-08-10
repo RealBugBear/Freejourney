@@ -107,7 +107,7 @@ Voraussetzung für T27.6B, den bezahlten Founding-Pilot.
 ### T27.1 — Studio-Entitlement und Rollout
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T27.1 — Studio-Entitlement und Rollout. Lies zuerst CLAUDE.md,
 docs/LAUNCH_MASTER_PROMPT.md, docs/TRAINER_STUDIO_BUILD_PROMPTS.md §2–§4,
@@ -133,7 +133,7 @@ separatem Founder-Go. Keine UI, keine Storeprodukte.
 ### T27.2 — Studio-Einstieg und kostenlose Kohorten-UX
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T27.2 — Studio-Einstieg und kostenlose Kohorten-UX. Lies zuerst
 CLAUDE.md, docs/LAUNCH_MASTER_PROMPT.md, die Spec §3–§6 und §13, P2-
@@ -157,7 +157,7 @@ Keine Paywall/Storepreise, Briefing-Daten oder Termin-Automation bauen.
 ### T27.3 — Klienten-Briefing
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T27.3 — Klienten-Briefing. Lies zuerst CLAUDE.md,
 docs/LAUNCH_MASTER_PROMPT.md, Spec §5.2/§7/§13, die in P3A freigegebene
@@ -186,7 +186,7 @@ KI oder neue Datenkategorie außerhalb der Matrix.
 ### T27.4 — Termin-Automation
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T27.4 — Termin-Automation. Lies zuerst CLAUDE.md,
 docs/LAUNCH_MASTER_PROMPT.md, Spec §5.3/§7/§13, T27.1, appointment-Migrationen,
@@ -236,7 +236,7 @@ Schutzkonzept.
 ### T27.6A — Kostenlosen MVP-Pilot vorbereiten/aktivieren
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T27.6A — kostenloser Studio-MVP-Pilot. Lies CLAUDE.md,
 docs/LAUNCH_MASTER_PROMPT.md, Spec §11–§12, Payments Plan PM-D11 und Evidenz
@@ -261,7 +261,7 @@ separat Founder-gated.
 ### T27.6B — Store-Paywall, E2E und bezahlter Founding-Pilot
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T27.6B — Storekatalog, Paywall, E2E und bezahlter Founding-Pilot. Lies zuerst CLAUDE.md,
 docs/LAUNCH_MASTER_PROMPT.md, Payments Plan §7–§10/§12, Spec §8/§12,

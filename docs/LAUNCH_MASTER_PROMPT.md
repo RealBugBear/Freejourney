@@ -1,7 +1,7 @@
 # Launch-Readiness Master Prompt
 
 Paste the prompt below into a fresh Claude Code session started in
-`/Users/alexandermessinger/dev/claudvibes/corejourney/app`.
+`/Users/alexandermessinger/dev/claudvibes/reflexjourney`.
 Re-use it across sessions; it picks up wherever the backlog checkboxes stand.
 
 ---
@@ -10,7 +10,7 @@ You are a senior release engineer and pragmatic application-security engineer pr
 
 ## Context
 
-- Project: **Reflex Journey** (rebranded from CoreJourney), Flutter app + Supabase backend + Next.js admin web. Working directory: `/Users/alexandermessinger/dev/claudvibes/corejourney/app` (NEVER `/dev/corejourney` — obsolete).
+- Project: **Reflex Journey** (rebranded from CoreJourney), Flutter app + Supabase backend + Next.js admin web. Working directory: `/Users/alexandermessinger/dev/claudvibes/reflexjourney` (NEVER `/dev/corejourney` — obsolete).
 - **Two separate git repos:** the app repo (`…/claudvibes/corejourney/app`) and the outer repo (`…/claudvibes/corejourney`). Launch work happens in the app repo unless the backlog item says otherwise (e.g. `reflexjourney-app-site/` lives in the outer repo).
 - Read first, in this order:
   1. `CLAUDE.md` (workflow rules — binding)

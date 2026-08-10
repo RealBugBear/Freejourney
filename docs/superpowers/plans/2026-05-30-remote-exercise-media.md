@@ -125,7 +125,7 @@ In `lib/core/database/app_database.dart`, change `schemaVersion` from `7` to `8`
 - [ ] **Step 3: Rebuild Drift generated code**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 dart run build_runner build --delete-conflicting-outputs
 ```
 
@@ -194,7 +194,7 @@ After `duoImagePath: row['duo_image_path'] as String?,` in `fromRow`, add:
 - [ ] **Step 5: Verify the app compiles**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/features/training/domain/models/exercise.dart
 ```
 
@@ -228,7 +228,7 @@ In `_fetchAndCache()`, after `videoPath: Value(row['video_path'] as String?),`, 
 - [ ] **Step 2: Verify compile**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/core/sync/exercises_sync_service.dart
 ```
 
@@ -260,7 +260,7 @@ In `pubspec.yaml`, under the `video_player` line, add:
 Then run:
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter pub get
 ```
 
@@ -321,7 +321,7 @@ class ExerciseImageWidget extends StatelessWidget {
 - [ ] **Step 3: Verify compile**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/features/training/presentation/widgets/exercise_image_widget.dart
 ```
 
@@ -495,7 +495,7 @@ class _FallbackImage extends StatelessWidget {
 - [ ] **Step 5: Verify compile**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/features/training/presentation/widgets/exercise_video_widget.dart
 ```
 
@@ -691,7 +691,7 @@ ExerciseImageWidget(exercise: exercise, fit: BoxFit.cover)
 - [ ] **Step 7: Verify all 6 files compile**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze \
   lib/features/training/presentation/widgets/exercise_position_widget.dart \
   lib/features/training/presentation/widgets/training_intro_widget.dart \
@@ -706,7 +706,7 @@ Expected: no errors.
 - [ ] **Step 8: Full analyze pass**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/
 ```
 

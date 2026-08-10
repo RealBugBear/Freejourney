@@ -19,7 +19,7 @@ This file is binding. When it conflicts with your instincts, this file wins.
 | Auth pages / Universal Links site | `../reflexjourney-app-site/` | **outer** repo |
 | Product specs, outer planning docs | `../specs/`, `../docs/` | **outer** repo |
 
-- Correct app path: `/Users/alexandermessinger/dev/claudvibes/corejourney/app`.
+- Correct app path: `/Users/alexandermessinger/dev/claudvibes/reflexjourney`.
   `/Users/alexandermessinger/dev/corejourney` is an **obsolete clone — never touch it**.
 - The outer folder `corejourney` and Dart package `corejourney` keep the old name;
   everything user-facing is Reflex Journey / `de.reflexjourney.app` / `reflexjourney.app`.

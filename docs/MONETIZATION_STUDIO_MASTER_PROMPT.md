@@ -130,7 +130,7 @@ Free-MVP-Aktivierung → Paid-Readiness.
 ## 5. Startanweisung — diesen Block in eine frische Session einfügen
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Arbeite als Orchestrator für Monetization + Trainer Studio. Lies vollständig:
 CLAUDE.md, docs/LAUNCH_MASTER_PROMPT.md,

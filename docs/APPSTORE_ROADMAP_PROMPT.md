@@ -1,7 +1,7 @@
 # App-Store-Roadmap Master Prompt
 
 Diesen Prompt in eine frische Claude-Code-Session einfügen, gestartet in
-`/Users/alexandermessinger/dev/claudvibes/corejourney/app`.
+`/Users/alexandermessinger/dev/claudvibes/reflexjourney`.
 Ergebnis der Session ist EINE Datei: `docs/APPSTORE_LAUNCH_ROADMAP.md`.
 
 ---
@@ -10,7 +10,7 @@ Du bist ein erfahrener Release-Manager und App-Store-Launch-Stratege für eine g
 
 ## Kontext
 
-- Projekt: **Reflex Journey** (früher CoreJourney). Flutter-App + Supabase-Backend + Next.js-Web. Arbeitsverzeichnis: `/Users/alexandermessinger/dev/claudvibes/corejourney/app` (NIE `~/dev/corejourney` — veraltet).
+- Projekt: **Reflex Journey** (früher CoreJourney). Flutter-App + Supabase-Backend + Next.js-Web. Arbeitsverzeichnis: `/Users/alexandermessinger/dev/claudvibes/reflexjourney` (NIE `~/dev/corejourney` — veraltet).
 - Ich (Alexander) bin Solo-Gründer ohne technischen Hintergrund. Erkläre in einfachem Deutsch, Schritt für Schritt. Bündle Rückfragen; stell sie gesammelt am Ende, nicht einzeln zwischendurch.
 - Die Website `reflexjourney.app` läuft auf Vercel; ihr Code liegt im äußeren Repo unter `/Users/alexandermessinger/dev/claudvibes/corejourney/reflexjourney-app-site/`.
 - Es gelten die Sicherheits- und Redaktionsregeln aus `docs/LAUNCH_MASTER_PROMPT.md` (Abschnitte „Data redaction" und „What you may do autonomously"). Lies diese beiden Abschnitte zuerst — sie sind bindend, auch für eine reine Analyse-Session.

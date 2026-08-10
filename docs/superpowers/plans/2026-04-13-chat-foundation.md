@@ -298,7 +298,7 @@ select * from bot_faqs;
 - [ ] **Step 1.5 — Commit migration file**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 git add supabase/migrations/20260413_chat_foundation.sql
 git commit -m "feat(chat): add SQL migration — chat tables, RLS, bot seed"
 ```
@@ -727,7 +727,7 @@ void main() {
 - [ ] **Step 4.2 — Run test to verify it compiles and passes**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/features/chat/data/supabase_chat_repository_test.dart -v
 ```
 
@@ -2536,7 +2536,7 @@ git commit -m "feat(chat): ChatChannelScreen — realtime messages, pagination, 
 - [ ] **Step 11.1 — Create functions directory and write Edge Function**
 
 ```bash
-mkdir -p /Users/alexandermessinger/dev/claudvibes/corejourney/app/supabase/functions/chat-triage-bot
+mkdir -p /Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/functions/chat-triage-bot
 ```
 
 ```typescript

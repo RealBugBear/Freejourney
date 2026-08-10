@@ -1,7 +1,7 @@
 # Prompt: Sprach-Infrastruktur fertigstellen (I18N-Endspurt + Mehrsprachen-Fundament)
 
 > **Anleitung für Alexander:** Diesen Prompt in einer **frischen Claude-Code-Session** im
-> App-Repo (`~/dev/claudvibes/corejourney/app`) ausführen. **Opus 4.8 reicht** — alle
+> App-Repo (`~/dev/claudvibes/reflexjourney`) ausführen. **Opus 4.8 reicht** — alle
 > Architektur-Entscheidungen sind hier bereits getroffen und als exakter Code vorgegeben;
 > die Session muss nur präzise ausführen. Der Prompt ist **wiederanlauffähig**: Wenn eine
 > Session endet, startest du einfach eine neue mit demselben Prompt — sie liest den Tracker

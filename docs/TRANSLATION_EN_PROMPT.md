@@ -1,7 +1,7 @@
 # Prompt: Vollständige englische Lokalisierung der App (EN-i18n)
 
 > **Anleitung für Alexander:** Diesen Prompt in einer frischen Claude-Code-Session im App-Repo
-> (`~/dev/claudvibes/corejourney/app`) ausführen. Einstieg wie immer: Die Session liest zuerst
+> (`~/dev/claudvibes/reflexjourney`) ausführen. Einstieg wie immer: Die Session liest zuerst
 > `docs/LAUNCH_MASTER_PROMPT.md` und die Regeln in `docs/LAUNCH_TASK_PROMPTS.md`, dann diesen
 > Prompt wörtlich abarbeiten. Der Task ist groß — er ist in Phasen mit Zwischen-Checkpoints
 > geschnitten und kann über mehrere Sessions laufen (Fortschritt wird in einem Tracker-Dokument

@@ -87,7 +87,7 @@ Für jeden offenen Founder-Punkt liegt eine vorbereitete Empfehlung als 🔶-Blo
 
 ## Die Prompts
 
-Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeinsamer Kopf für alle (steht der Kürze halber nur hier): *Arbeitsverzeichnis `/Users/alexandermessinger/dev/claudvibes/corejourney/app`. Lies zuerst `CLAUDE.md`, `docs/LAUNCH_MASTER_PROMPT.md` (Regeln binden: Datenredaktion, gated actions, Evidenzpflicht) und den Status-Tracker in `docs/LAUNCH_TASK_PROMPTS.md`. Setze deinen Task im Tracker auf 🔄, arbeite ihn ab, und schließe mit Tracker-/Backlog-Update + Ausgabe des nächsten Task-Prompts.*
+Jeder Prompt ist einzeln in eine frische Claude-Code-Session einfügbar. Gemeinsamer Kopf für alle (steht der Kürze halber nur hier): *Arbeitsverzeichnis `/Users/alexandermessinger/dev/claudvibes/reflexjourney`. Lies zuerst `CLAUDE.md`, `docs/LAUNCH_MASTER_PROMPT.md` (Regeln binden: Datenredaktion, gated actions, Evidenzpflicht) und den Status-Tracker in `docs/LAUNCH_TASK_PROMPTS.md`. Setze deinen Task im Tracker auf 🔄, arbeite ihn ab, und schließe mit Tracker-/Backlog-Update + Ausgabe des nächsten Task-Prompts.*
 
 ---
 

@@ -121,7 +121,7 @@ Future<void> _sendPasswordReset() async {
 - [ ] **Step 5: Commit**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 git add lib/features/auth/presentation/screens/login_screen.dart
 git commit -m "fix: autocorrect off + trim in password confirm, add redirectTo to password reset"
 ```
@@ -163,7 +163,7 @@ Die neuen Screens brauchen folgende Strings. Alle bestehenden Strings bleiben un
 - [ ] **Step 3: l10n generieren**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter gen-l10n
 ```
 
@@ -221,7 +221,7 @@ Future<void> updatePassword({required String newPassword}) async {
 - [ ] **Step 3: Kompilierung prüfen**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/features/auth/
 ```
 
@@ -283,7 +283,7 @@ Future<void> updatePassword({required String newPassword}) async {
 - [ ] **Step 4: Kompilierung prüfen**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/features/auth/
 ```
 
@@ -306,7 +306,7 @@ git commit -m "feat: add updatePassword to AuthNotifier and passwordRecoveryActi
 - [ ] **Step 1: Package hinzufügen**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter pub add app_links
 ```
 
@@ -412,7 +412,7 @@ GoRoute(
 - [ ] **Step 4: Kompilierung prüfen**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/core/navigation/
 ```
 
@@ -496,7 +496,7 @@ void dispose() {
 - [ ] **Step 4: Kompilierung prüfen**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/app.dart
 ```
 
@@ -711,7 +711,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
 - [ ] **Step 2: Kompilierung prüfen**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/features/auth/presentation/screens/reset_password_screen.dart
 ```
 
@@ -981,7 +981,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
 - [ ] **Step 2: Kompilierung prüfen**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/features/auth/presentation/screens/change_password_screen.dart
 ```
 
@@ -1042,7 +1042,7 @@ Future<void> _sendPasswordReset(
 - [ ] **Step 4: Kompilierung + App starten**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/features/profile/
 ```
 
@@ -1126,7 +1126,7 @@ Im `<activity android:name=".MainActivity">`-Block, direkt nach dem bestehenden 
 - [ ] **Step 2: Kompilierung prüfen**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze
 ```
 

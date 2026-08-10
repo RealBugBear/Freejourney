@@ -8,7 +8,7 @@
 
 **Tech Stack:** Flutter 3.x, Riverpod, go_router, Supabase (PostgreSQL triggers + RLS + Edge Functions Deno), Agora (video, testing mode)
 
-**Working directory:** `/Users/alexandermessinger/dev/claudvibes/corejourney/app`  
+**Working directory:** `/Users/alexandermessinger/dev/claudvibes/reflexjourney`  
 **Supabase project:** `sxvpiggednbftfqeokyd`  
 **Run app:** `make run` (DEV device) · `make run-sim` (simulator)  
 **Analyze:** `flutter analyze lib/ 2>&1 | grep "error •"`
@@ -122,7 +122,7 @@ Expected: column `subscription_tier` present, all rows show `free`.
 - [ ] **Step 4: Commit the migration file**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 git add supabase/migrations/20260415_subscription_tier.sql
 git commit -m "feat(db): add subscription_tier to profiles with trigger protection"
 ```

@@ -136,7 +136,7 @@ The CI workflows call `flutter build apk --flavor staging` and `--flavor product
 
 - [ ] **Step 4: Verify the debug build works for staging flavor**
 
-  Run from the project root (`claudvibes/corejourney/app/`):
+  Run from the project root (`claudvibes/reflexjourney/`):
   ```bash
   flutter build apk --flavor staging -t lib/main_staging.dart --debug
   ```

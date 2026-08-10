@@ -13,7 +13,7 @@ bleibt separat Founder-gated.
 ## T25.0 — Multi-Grant-Entitlement-Fundament
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T25.0 — Multi-Grant-Entitlement-Fundament. Lies CLAUDE.md,
 docs/LAUNCH_MASTER_PROMPT.md, docs/PAYMENTS_MASTER_PLAN.md §0–§6/§10–§12,
@@ -59,7 +59,7 @@ UI, kein Live-Apply ohne separates Founder-Go. Evidenz T25.0.
 ## T25.1 — RevenueCat Core + Test Store
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T25.1 — RevenueCat Core + Test Store. Lies CLAUDE.md,
 docs/LAUNCH_MASTER_PROMPT.md, Payments Master Plan §5/§7/§10–§11,
@@ -90,7 +90,7 @@ Keine echten Store-/Webhook-Schritte. Evidenz T25.1.
 ## T25.2 — Webhook, HMAC und Reconciliation
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T25.2 — RevenueCat Webhook + Reconciliation. Lies CLAUDE.md,
 docs/LAUNCH_MASTER_PROMPT.md, Payments Master Plan §3–§6/§10,
@@ -122,7 +122,7 @@ Founder-Go; danach unauth/wrong-HMAC Smoke + redigierte Evidenz T25.2.
 ## T25.3 — Apple IAP, iPhone + iPad
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T25.3 — Apple IAP Production Wiring. Lies CLAUDE.md,
 docs/LAUNCH_MASTER_PROMPT.md, Payments Master Plan §2/§7–§10,
@@ -153,7 +153,7 @@ Keine Paywall-Aktivierung. Suite, Prod-Build, redigierte Evidenz T25.3.
 ## T25.4 — Google Play Billing, Phone + Tablet
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T25.4 — Google Play Billing Production Wiring. Lies CLAUDE.md,
 docs/LAUNCH_MASTER_PROMPT.md, Payments Master Plan §2/§7–§10,
@@ -185,7 +185,7 @@ Keine Paywall-Aktivierung. Suite/APK-AAB-Prod-Build, redigierte Evidenz T25.4.
 ## T25.5 — Operations und Aktivierungs-Readiness
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 
 Task: T25.5 — Payment Operations + Activation Readiness. Lies CLAUDE.md,
 docs/LAUNCH_MASTER_PROMPT.md, Payments Master Plan vollständig und Evidenz

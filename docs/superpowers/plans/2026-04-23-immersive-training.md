@@ -176,7 +176,7 @@ void main() {
 - [ ] **Step 1.2: Run — confirm FAIL**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/features/training/metronome_service_test.dart
 ```
 Expected: error — `MetronomeService` not found.
@@ -1773,9 +1773,9 @@ Open `pubspec.yaml`. Under `flutter: assets:`, add:
 ```
 Then create the directory (it needs at least one file to be valid):
 ```bash
-mkdir -p /Users/alexandermessinger/dev/claudvibes/corejourney/app/assets/sounds/music
+mkdir -p /Users/alexandermessinger/dev/claudvibes/reflexjourney/assets/sounds/music
 # Add a placeholder file so the directory exists in git
-touch /Users/alexandermessinger/dev/claudvibes/corejourney/app/assets/sounds/music/.gitkeep
+touch /Users/alexandermessinger/dev/claudvibes/reflexjourney/assets/sounds/music/.gitkeep
 ```
 
 - [ ] **Step 6.4: Smoke test**

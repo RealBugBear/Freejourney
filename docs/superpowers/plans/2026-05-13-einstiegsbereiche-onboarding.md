@@ -80,7 +80,7 @@ void main() {
 - [ ] **Step 1.2: Test ausführen — muss fehlschlagen**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/features/onboarding/presentation/providers/entry_points_provider_test.dart
 ```
 

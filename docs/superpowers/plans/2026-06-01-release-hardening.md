@@ -49,7 +49,7 @@
 - [ ] **Step 1: Confirm the compile errors exist**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/core/services/notification_service.dart lib/core/reminders/reminder_settings.dart 2>&1 | grep -E "error|warning" | head -10
 ```
 
@@ -110,7 +110,7 @@ class UserPreferences {
 - [ ] **Step 3: Verify the compile errors are gone**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/core/services/notification_service.dart lib/core/reminders/reminder_settings.dart 2>&1 | grep -E "error" | head -10
 ```
 
@@ -119,7 +119,7 @@ Expected: no errors for these two files.
 - [ ] **Step 4: Commit**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 git add lib/features/progress/domain/models/user_preferences.dart
 git commit -m "fix: restore user_preferences.dart (HabitWindow, QuietHours, UserPreferences)"
 ```
@@ -142,7 +142,7 @@ The test uses `AppConfig.development` and `AppConfig.production` static factorie
 - [ ] **Step 1: Confirm the logger itself fails to analyze**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/core/logging/logger_service.dart 2>&1 | grep error | head -10
 ```
 
@@ -392,7 +392,7 @@ void main() {
 - [ ] **Step 4: Run the logger test**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/core/logging/logger_service_test.dart -v
 ```
 
@@ -401,7 +401,7 @@ Expected: all tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 git add lib/core/logging/logger_service.dart test/core/logging/logger_service_test.dart
 git commit -m "fix: update LoggerService to use AppConfig.isDevelopment/isProduction; fix test constructors"
 ```
@@ -423,7 +423,7 @@ The sync, feature-flag, and old progress tests reference modules that were refac
 - [ ] **Step 1: Confirm stale tests still fail to compile**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/core/sync/sync_service_test.dart --reporter=compact 2>&1 | tail -3
 flutter test test/core/feature_flags/feature_flag_service_test.dart --reporter=compact 2>&1 | tail -3
 flutter test test/features/progress/streak_logic_test.dart --reporter=compact 2>&1 | tail -3
@@ -434,7 +434,7 @@ Expected: each prints a compilation error referencing a missing import.
 - [ ] **Step 2: Delete the 3 stale files**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 rm test/core/sync/sync_service_test.dart
 rm test/core/feature_flags/feature_flag_service_test.dart
 rm test/features/progress/streak_logic_test.dart
@@ -559,7 +559,7 @@ void main() {
 - [ ] **Step 4: Run the ported training-flow test**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/features/training/training_flow_provider_test.dart -v
 ```
 
@@ -568,7 +568,7 @@ Expected: all tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 git add \
   test/core/sync/sync_service_test.dart \
   test/core/feature_flags/feature_flag_service_test.dart \
@@ -590,7 +590,7 @@ Two problems: (1) expects `find.text('Community')` but AppBar title is now `'Erf
 - [ ] **Step 1: Run the failing test to confirm the errors**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/features/community/community_screen_test.dart -v 2>&1 | grep -E "Expected|Actual|Failed|Error" | head -10
 ```
 
@@ -630,7 +630,7 @@ void main() {
 - [ ] **Step 3: Run the test**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/features/community/community_screen_test.dart -v
 ```
 
@@ -639,7 +639,7 @@ Expected: 1 test passes.
 - [ ] **Step 4: Commit**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 git add test/features/community/community_screen_test.dart
 git commit -m "fix: update community_screen_test — Erfahrungen title, chatChannelsProvider override"
 ```
@@ -651,7 +651,7 @@ git commit -m "fix: update community_screen_test — Erfahrungen title, chatChan
 - [ ] **Step 1: Run full test suite**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test --reporter=compact 2>&1 | tail -10
 ```
 
@@ -668,7 +668,7 @@ If any tests still fail, diagnose and fix before continuing to Task 6.
 **Migration tracking note:** Pasting into the Supabase SQL Editor bypasses the Supabase CLI migration history (`supabase_migrations.schema_migrations`). This means `supabase db push` may try to re-apply this migration in the future. Prefer CLI repair if the project is linked:
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 supabase migration repair --status applied 20260522
 ```
 
@@ -767,7 +767,7 @@ Expected: 1 row for `20260522` / `create_vorrunde_phases`.
 - [ ] **Step 1: Launch app on simulator**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 make run-sim
 ```
 

@@ -75,7 +75,7 @@ void main() {
 - [ ] **Step 2: Run the test to confirm it fails**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/core/theme/app_colors_test.dart
 ```
 
@@ -151,7 +151,7 @@ Expected: All 8 tests PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 git add lib/core/theme/app_colors.dart test/core/theme/app_colors_test.dart
 git commit -m "feat: replace violet palette with Free Place green (#009E6B)"
 ```
@@ -396,7 +396,7 @@ git commit -m "feat: swap Inter for Poppins, update button radius to 14px"
 - [ ] **Step 1: Run the app on a simulator**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 make run-sim
 ```
 

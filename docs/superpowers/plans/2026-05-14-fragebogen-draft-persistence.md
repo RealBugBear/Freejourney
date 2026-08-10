@@ -121,7 +121,7 @@ void main() {
 - [ ] **Schritt 2: Tests fehlschlagen lassen**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/features/assessment/domain/draft_persistence_service_test.dart
 ```
 
@@ -352,7 +352,7 @@ In `_buildMonths` (Zeile 1017–1028), beide setState-Blöcke im onTap:
 - [ ] **Schritt 9: App kompiliert fehlerfrei**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/features/assessment/presentation/screens/reflex_profile_screen.dart
 ```
 

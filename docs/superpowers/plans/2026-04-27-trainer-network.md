@@ -88,7 +88,7 @@ In `android/app/src/main/AndroidManifest.xml`, add before the `<application` tag
 - [ ] **Step 1.4: Run flutter pub get and verify no errors**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter pub get
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter pub get
 ```
 
 Expected: no dependency conflicts, flutter_map + geolocator + latlong2 in `.dart_tool/package_config.json`.
@@ -627,7 +627,7 @@ GRANT EXECUTE ON FUNCTION get_own_trainer_profile()                             
 - [ ] **Step 2.2: Apply migration to local Supabase**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 supabase db reset
 # or apply incrementally:
 supabase db push
@@ -818,7 +818,7 @@ Append inside the `AppLocalizationsEn` class:
 - [ ] **Step 3.4: Run flutter analyze to verify no missing overrides**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter analyze lib/l10n/
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter analyze lib/l10n/
 ```
 
 Expected: no errors about unimplemented abstract members.
@@ -943,7 +943,7 @@ void main() {
 - [ ] **Step 4.2: Run test to verify it fails**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter test test/features/trainer/domain/models/trainer_profile_test.dart
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter test test/features/trainer/domain/models/trainer_profile_test.dart
 ```
 
 Expected: FAIL — `trainer_profile.dart` does not exist.
@@ -1276,7 +1276,7 @@ class SupabaseTrainerProfileRepository implements TrainerProfileRepository {
 - [ ] **Step 5.3: Run flutter analyze**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter analyze lib/features/trainer/
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter analyze lib/features/trainer/
 ```
 
 Expected: no errors.
@@ -2767,7 +2767,7 @@ Expected: no errors.
 - [ ] **Step 13.7: Run full flutter analyze**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app && flutter analyze
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney && flutter analyze
 ```
 
 Expected: zero errors, zero warnings.

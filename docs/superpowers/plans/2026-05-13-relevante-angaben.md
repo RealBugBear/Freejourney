@@ -177,7 +177,7 @@ void main() {
 - [ ] **Step 2: Run tests — confirm they fail**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/features/assessment/presentation/screens/reflex_profile_result_helpers_test.dart
 ```
 
@@ -292,7 +292,7 @@ Expected: all tests pass.
 - [ ] **Step 6: Commit**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 git add lib/features/assessment/presentation/screens/reflex_profile_result_helpers.dart \
         test/features/assessment/presentation/screens/reflex_profile_result_helpers_test.dart
 git commit -m "feat: add buildRelevanteAngaben helper with unit tests"
@@ -572,7 +572,7 @@ String _formatAnswer(dynamic value) {
 - [ ] **Step 5: Run `flutter analyze` — confirm no errors**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter analyze lib/features/assessment/presentation/screens/reflex_profile_result_screen.dart
 ```
 
@@ -591,7 +591,7 @@ Expected: all tests pass.
 - [ ] **Step 7: Commit**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 git add lib/features/assessment/presentation/screens/reflex_profile_result_screen.dart
 git commit -m "feat: replace Antwortübersicht with filtered Relevante Angaben section"
 ```

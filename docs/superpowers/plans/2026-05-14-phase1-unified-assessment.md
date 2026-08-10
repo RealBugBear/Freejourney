@@ -108,7 +108,7 @@ test('items within a module group are sorted by question number', () {
 - [ ] **Step 2: Run tests to confirm they fail**
 
 ```bash
-cd /Users/alexandermessinger/dev/claudvibes/corejourney/app
+cd /Users/alexandermessinger/dev/claudvibes/reflexjourney
 flutter test test/features/assessment/presentation/screens/reflex_profile_result_helpers_test.dart --reporter=compact
 ```
 

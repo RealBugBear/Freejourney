@@ -63,7 +63,7 @@ Statuswerte: `☐ offen · 🔄 in Arbeit · ✅ erledigt (+ Evidenz) · ⛔ blo
 ## Startanweisung für eine frische Session
 
 ```text
-Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/corejourney/app
+Arbeitsverzeichnis: /Users/alexandermessinger/dev/claudvibes/reflexjourney
 Lies CLAUDE.md, docs/LAUNCH_MASTER_PROMPT.md,
 docs/TRAINER_STUDIO_PROMPT.md und
 docs/superpowers/specs/2026-07-08-trainer-studio-design.md vollständig.

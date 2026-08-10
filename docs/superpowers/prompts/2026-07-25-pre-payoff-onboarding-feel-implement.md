@@ -26,7 +26,7 @@ so that after Account + Consent + Kontaktname + Für-wen, the user lands in the 
 
 | Item | Value |
 |---|---|
-| Work directory | `/Users/alexandermessinger/dev/claudvibes/corejourney/app` |
+| Work directory | `/Users/alexandermessinger/dev/claudvibes/reflexjourney` |
 | Git repo for commits | Nested `app/` repo (`git rev-parse --show-toplevel` must end in `/app`) |
 | Product name | Reflex Journey / `reflexjourney` |
 | Obsolete path | Never `/Users/alexandermessinger/dev/corejourney` |
