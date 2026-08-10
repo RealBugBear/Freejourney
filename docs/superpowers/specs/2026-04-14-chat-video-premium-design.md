@@ -1,7 +1,7 @@
 # Chat, Video & Premium — Design Spec
 **Date:** 2026-04-14  
 **Status:** Approved  
-**Working directory:** `/Users/alexandermessinger/dev/claudvibes/reflexjourney`  
+**Working directory:** `/Users/alexandermessinger/dev/claudvibes/reflexjourney`
 **Supabase project:** `sxvpiggednbftfqeokyd`
 
 ---
