@@ -1087,6 +1087,11 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
               const SizedBox(height: 12),
               switch (question.answerType) {
                 ReflexAnswerType.yesNoUnknown => _buildYesNoUnknown(question),
+                // Adult four-way answers land in Phase 5. Until then, keep the
+                // existing three-button control so the enum addition compiles
+                // without unlocking the adult questionnaire UI.
+                ReflexAnswerType.yesNoUnknownNotApplicable =>
+                  _buildYesNoUnknown(question),
                 ReflexAnswerType.monthsNumber => _buildMonths(question),
                 ReflexAnswerType.freeText => _buildFreeText(question),
                 ReflexAnswerType.multiSelectWithText =>
