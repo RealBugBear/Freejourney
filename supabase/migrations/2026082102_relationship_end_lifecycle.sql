@@ -140,3 +140,74 @@ REVOKE ALL ON FUNCTION public.ensure_trainer_client_relationship(uuid)
   FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.ensure_trainer_client_relationship(uuid)
   TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.accept_invite(p_code text)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $function$
+DECLARE
+  _invite public.trainer_client_relationships%rowtype;
+  _client uuid := auth.uid();
+  _exist  uuid;
+BEGIN
+  IF _client IS NULL THEN
+    RAISE EXCEPTION 'Nicht eingeloggt';
+  END IF;
+
+  SELECT * INTO _invite
+    FROM public.trainer_client_relationships
+   WHERE invite_code = upper(trim(p_code))
+     AND status      = 'pending'
+     AND client_id IS NULL;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Invalid or already used invite code';
+  END IF;
+
+  -- Displacing a trainer is as deliberate an act as ending one, so it marks.
+  -- Also fires the reflex-share revoke trigger for each displaced pair.
+  UPDATE public.trainer_client_relationships
+     SET status             = 'disconnected',
+         ended_by_client_at = COALESCE(ended_by_client_at, now())
+   WHERE client_id = _client
+     AND status    = 'active';
+
+  -- Clear markers PAIR-WIDE for the incoming trainer. Clearing only the row
+  -- selected below would leave a second marked row behind, and the pair-wide
+  -- guard in ensure_trainer_client_relationship() would then wedge the pair
+  -- out of reconciliation permanently.
+  UPDATE public.trainer_client_relationships
+     SET ended_by_client_at       = NULL,
+         end_notification_sent_at = NULL
+   WHERE trainer_id = _invite.trainer_id
+     AND client_id  = _client;
+
+  -- Canonical row selection. Ordering must match ensure_trainer_client_relationship.
+  SELECT id INTO _exist
+    FROM public.trainer_client_relationships
+   WHERE trainer_id = _invite.trainer_id
+     AND client_id  = _client
+     AND status     = 'disconnected'
+   ORDER BY linked_at DESC NULLS LAST, created_at DESC, id DESC
+   LIMIT 1;
+
+  IF _exist IS NOT NULL THEN
+    UPDATE public.trainer_client_relationships
+       SET status = 'active', linked_at = now()
+     WHERE id = _exist;
+
+    DELETE FROM public.trainer_client_relationships WHERE id = _invite.id;
+  ELSE
+    UPDATE public.trainer_client_relationships
+       SET client_id = _client,
+           status    = 'active',
+           linked_at = now()
+     WHERE id = _invite.id;
+  END IF;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.accept_invite(text) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.accept_invite(text) TO authenticated;

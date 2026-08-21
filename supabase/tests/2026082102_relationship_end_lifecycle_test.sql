@@ -223,5 +223,111 @@ DELETE FROM public.trainer_client_relationships
  WHERE id IN ('2b300000-0000-4000-8000-000000000009',
               '2b300000-0000-4000-8000-000000000010');
 
+-- ── Switching marks the displaced trainer, and re-linking clears markers ────
+
+INSERT INTO public.trainer_client_relationships
+  (id, trainer_id, client_id, status, linked_at)
+VALUES ('2b300000-0000-4000-8000-000000000020',
+        '2b100000-0000-4000-8000-000000000001',
+        '2b100000-0000-4000-8000-000000000004', 'active', now());
+
+INSERT INTO public.trainer_client_relationships
+  (id, trainer_id, client_id, status, invite_code)
+VALUES ('2b300000-0000-4000-8000-000000000021',
+        '2b100000-0000-4000-8000-000000000002', NULL, 'pending', 'BBCODE01');
+
+SELECT set_config('request.jwt.claims',
+  '{"sub":"2b100000-0000-4000-8000-000000000004","role":"authenticated"}', true);
+SELECT set_config('request.jwt.claim.role','authenticated', true);
+SET LOCAL ROLE authenticated;
+
+SELECT lives_ok(
+  $$ SELECT public.accept_invite('BBCODE01') $$,
+  'client switches to a new trainer'
+);
+
+RESET ROLE;
+SELECT set_config('request.jwt.claim.role','service_role', true);
+SELECT set_config('request.jwt.claims','{"role":"service_role"}', true);
+
+SELECT isnt(
+  (SELECT ended_by_client_at FROM public.trainer_client_relationships
+    WHERE id='2b300000-0000-4000-8000-000000000020'),
+  NULL,
+  'switching marks the displaced relationship as client-ended'
+);
+
+SELECT set_config('request.jwt.claims',
+  '{"sub":"2b100000-0000-4000-8000-000000000001","role":"authenticated"}', true);
+SELECT set_config('request.jwt.claim.role','authenticated', true);
+SET LOCAL ROLE authenticated;
+
+SELECT is(
+  public.ensure_trainer_client_relationship('2b100000-0000-4000-8000-000000000004'),
+  NULL,
+  'the displaced trainer cannot reconcile the client back'
+);
+
+RESET ROLE;
+SELECT set_config('request.jwt.claim.role','service_role', true);
+SELECT set_config('request.jwt.claims','{"role":"service_role"}', true);
+
+-- Duplicates: two disconnected rows for the same pair, one marked.
+-- Re-linking must clear the marker on BOTH, or the pair wedges forever.
+INSERT INTO public.trainer_client_relationships
+  (id, trainer_id, client_id, status, linked_at, created_at, ended_by_client_at,
+   end_notification_sent_at)
+VALUES
+  ('2b300000-0000-4000-8000-000000000030','2b100000-0000-4000-8000-000000000001',
+   '2b100000-0000-4000-8000-000000000003','disconnected',
+   now() - interval '5 days', now() - interval '5 days', now(), now()),
+  ('2b300000-0000-4000-8000-000000000031','2b100000-0000-4000-8000-000000000001',
+   '2b100000-0000-4000-8000-000000000003','disconnected',
+   now() - interval '5 days', now() - interval '5 days', now(), NULL);
+
+INSERT INTO public.trainer_client_relationships
+  (id, trainer_id, client_id, status, invite_code)
+VALUES ('2b300000-0000-4000-8000-000000000032',
+        '2b100000-0000-4000-8000-000000000001', NULL, 'pending', 'BBCODE02');
+
+SELECT set_config('request.jwt.claims',
+  '{"sub":"2b100000-0000-4000-8000-000000000003","role":"authenticated"}', true);
+SELECT set_config('request.jwt.claim.role','authenticated', true);
+SET LOCAL ROLE authenticated;
+
+SELECT lives_ok(
+  $$ SELECT public.accept_invite('BBCODE02') $$,
+  'client re-links to a former trainer despite duplicate rows'
+);
+
+RESET ROLE;
+SELECT set_config('request.jwt.claim.role','service_role', true);
+SELECT set_config('request.jwt.claims','{"role":"service_role"}', true);
+
+SELECT is(
+  (SELECT count(*)::integer FROM public.trainer_client_relationships
+    WHERE trainer_id='2b100000-0000-4000-8000-000000000001'
+      AND client_id ='2b100000-0000-4000-8000-000000000003'
+      AND ended_by_client_at IS NOT NULL),
+  0,
+  'no row of the pair keeps a client-end marker after re-linking'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM public.trainer_client_relationships
+    WHERE trainer_id='2b100000-0000-4000-8000-000000000001'
+      AND client_id ='2b100000-0000-4000-8000-000000000003'
+      AND end_notification_sent_at IS NOT NULL),
+  0,
+  'the notification claim is cleared too, so a later end can notify again'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM public.trainer_client_relationships
+    WHERE trainer_id='2b100000-0000-4000-8000-000000000001'
+      AND client_id ='2b100000-0000-4000-8000-000000000003'
+      AND status='active'),
+  1,
+  'exactly one active relationship exists after re-linking'
+);
+
 SELECT * FROM finish();
 ROLLBACK;
