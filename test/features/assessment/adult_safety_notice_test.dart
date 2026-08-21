@@ -5,6 +5,8 @@ import 'package:corejourney/features/assessment/domain/adult_questionnaire_visib
 import 'package:corejourney/features/assessment/domain/adult_reflex_questionnaire_definitions.dart';
 import 'package:corejourney/features/assessment/domain/adult_safety_notice.dart';
 import 'package:corejourney/features/assessment/domain/reflex_questionnaire.dart';
+import 'package:corejourney/l10n/app_localizations_de.dart';
+import 'package:corejourney/l10n/app_localizations_en.dart';
 
 void main() {
   group('Phase 6 default flags', () {
@@ -18,39 +20,50 @@ void main() {
     });
   });
 
-  group('AdultSafetyNotice', () {
+  group('AdultSafetyNotice metadata', () {
     test('message_version is expert draft v0', () {
       expect(AdultSafetyNotice.messageVersion, 'adult_safety_expertdraft_v0');
       expect(AdultSafetyNotice.contentApprovalStatus, 'expertPending');
     });
+  });
 
-    test('DE body matches expert draft and omits movement appendix by default',
-        () {
-      final body = AdultSafetyNotice.body(
-        languageCode: 'de',
-        movementChecksEnabled: false,
-      );
+  group('adult safety notice ARB copy (single source)', () {
+    final de = AppLocalizationsDe();
+    final en = AppLocalizationsEn();
+
+    test('DE body matches expert draft §6 without movement appendix', () {
       expect(
-        body,
+        de.reflexProfileAdultSafetyNoticeBody,
         'Deine Angabe kann bedeuten, dass einzelne Bewegungen oder '
         'Trainingsübungen angepasst oder vorher fachlich besprochen werden '
         'sollten. Dieses Ergebnis bewertet deine Diagnose nicht.',
       );
-      expect(body.contains('gekennzeichneten Übungen'), isFalse);
-    });
-
-    test('movement appendix is appended only when movement flag is on', () {
-      final body = AdultSafetyNotice.body(
-        languageCode: 'de',
-        movementChecksEnabled: true,
+      expect(
+        de.reflexProfileAdultSafetyNoticeBody
+            .contains('gekennzeichneten Übungen'),
+        isFalse,
       );
       expect(
-        body.endsWith(
-          'Führe die gekennzeichneten Übungen nicht ohne die hier empfohlene '
-          'Rücksprache durch.',
-        ),
-        isTrue,
+        de.reflexProfileAdultSafetyNoticeMovementAppendix,
+        'Führe die gekennzeichneten Übungen nicht ohne die hier empfohlene '
+        'Rücksprache durch.',
       );
+      expect(de.reflexProfileAdultSafetyNoticeConfirm, 'Hinweis gelesen.');
+    });
+
+    test('EN body is the faithful translation without movement appendix', () {
+      expect(
+        en.reflexProfileAdultSafetyNoticeBody,
+        'Your answer may mean that individual movements or training exercises '
+        'should be adapted or discussed with a professional first. This result '
+        'does not evaluate your diagnosis.',
+      );
+      expect(
+        en.reflexProfileAdultSafetyNoticeMovementAppendix,
+        'Do not perform the marked exercises without the consultation '
+        'recommended here.',
+      );
+      expect(en.reflexProfileAdultSafetyNoticeConfirm, 'Notice read.');
     });
   });
 
