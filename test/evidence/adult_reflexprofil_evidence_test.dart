@@ -3,9 +3,11 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:corejourney/core/theme/app_colors.dart';
 import 'package:corejourney/features/assessment/domain/adult_reflex_profile_scoring.dart';
 import 'package:corejourney/features/assessment/domain/models/reflex_profile_assessment.dart';
 import 'package:corejourney/features/assessment/domain/reflex_questionnaire.dart';
@@ -86,24 +88,75 @@ ReflexProfileAssessment _assessment({
   );
 }
 
+ThemeData _evidenceTheme({required Brightness brightness}) {
+  final base = ThemeData(
+    useMaterial3: true,
+    brightness: brightness,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColors.primary,
+      brightness: brightness,
+    ),
+  );
+  return base.copyWith(
+    scaffoldBackgroundColor: brightness == Brightness.light
+        ? AppColors.backgroundLight
+        : null,
+    textTheme: base.textTheme.apply(fontFamily: 'Poppins'),
+  );
+}
+
 Widget _frame({
   required GlobalKey key,
   required Widget child,
-  required ThemeData theme,
+  required Brightness brightness,
   Locale locale = const Locale('de'),
 }) {
   return RepaintBoundary(
     key: key,
-    child: ProviderScope(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: theme,
-        locale: locale,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Scaffold(body: child),
+    child: ColoredBox(
+      color: brightness == Brightness.light
+          ? AppColors.backgroundLight
+          : const Color(0xFF121212),
+      child: ProviderScope(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: _evidenceTheme(brightness: brightness),
+          locale: locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: child),
+        ),
       ),
     ),
+  );
+}
+
+void _replaceTestFontFallbacks() {
+  for (final element in find.byType(RichText, skipOffstage: false).evaluate()) {
+    final renderObject = element.renderObject;
+    if (renderObject is! RenderParagraph) continue;
+    final text = renderObject.text;
+    if (text is TextSpan) {
+      renderObject.text = _withEvidenceFont(text);
+    }
+  }
+}
+
+InlineSpan _withEvidenceFont(InlineSpan span) {
+  if (span is! TextSpan) return span;
+  final style = span.style ?? const TextStyle();
+  return TextSpan(
+    text: span.text,
+    children: span.children?.map(_withEvidenceFont).toList(),
+    style: style.copyWith(fontFamily: style.fontFamily ?? 'Poppins'),
+    recognizer: span.recognizer,
+    mouseCursor: span.mouseCursor,
+    onEnter: span.onEnter,
+    onExit: span.onExit,
+    semanticsLabel: span.semanticsLabel,
+    semanticsIdentifier: span.semanticsIdentifier,
+    locale: span.locale,
+    spellOut: span.spellOut,
   );
 }
 
@@ -112,6 +165,8 @@ Future<void> _capture(
   GlobalKey key,
   String filename,
 ) async {
+  await tester.pump();
+  _replaceTestFontFallbacks();
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 100));
   final boundary =
@@ -125,20 +180,59 @@ Future<void> _capture(
     image.dispose();
   });
   expect(file.existsSync(), isTrue, reason: filename);
-  expect(file.lengthSync(), greaterThan(5000), reason: filename);
+  expect(file.lengthSync(), greaterThan(8000), reason: filename);
+}
+
+Future<void> _loadEvidenceFonts() async {
+  final flutterRoot = await _findFlutterRoot();
+  final materialFonts = Directory(
+    '${flutterRoot.path}/bin/cache/artifacts/material_fonts',
+  );
+  final roboto = File('${materialFonts.path}/Roboto-Regular.ttf');
+  for (final family in const ['Poppins', 'Roboto', '.SF Pro Text']) {
+    await _loadFont(family: family, file: roboto);
+  }
+  await _loadFont(
+    family: 'MaterialIcons',
+    file: File('${materialFonts.path}/MaterialIcons-Regular.otf'),
+  );
+}
+
+Future<Directory> _findFlutterRoot() async {
+  final configuredRoot = Platform.environment['FLUTTER_ROOT'];
+  if (configuredRoot != null && configuredRoot.isNotEmpty) {
+    return Directory(configuredRoot);
+  }
+  final which = await Process.run('which', ['flutter']);
+  if (which.exitCode != 0) {
+    throw StateError('Flutter SDK not found; set FLUTTER_ROOT.');
+  }
+  final flutterBin = File((which.stdout as String).trim());
+  return flutterBin.parent.parent;
+}
+
+Future<void> _loadFont({required String family, required File file}) async {
+  final bytes = await file.readAsBytes();
+  final loader = FontLoader(family)..addFont(Future.value(ByteData.sublistView(bytes)));
+  await loader.load();
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() async {
+    await _loadEvidenceFonts();
+  });
+
   testWidgets('capture adult reflexprofil evidence screenshots', (tester) async {
     await tester.binding.setSurfaceSize(_phone);
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    // 1) Adult result — light
     final lightKey = GlobalKey();
     await tester.pumpWidget(
       _frame(
         key: lightKey,
-        theme: ThemeData.light(useMaterial3: true),
+        brightness: Brightness.light,
         child: AdultReflexProfileResultView(
           assessment: _assessment(scores: _sampleScores()),
           packageId: 'moro',
@@ -149,12 +243,11 @@ void main() {
     expect(find.text('Dein Reflexprofil'), findsOneWidget);
     await _capture(tester, lightKey, '01_adult_result_light.png');
 
-    // 2) Adult result — dark
     final darkKey = GlobalKey();
     await tester.pumpWidget(
       _frame(
         key: darkKey,
-        theme: ThemeData.dark(useMaterial3: true),
+        brightness: Brightness.dark,
         child: AdultReflexProfileResultView(
           assessment: _assessment(scores: _sampleScores()),
           packageId: 'moro',
@@ -164,12 +257,11 @@ void main() {
     );
     await _capture(tester, darkKey, '02_adult_result_dark.png');
 
-    // 3) Legacy notice
     final legacyKey = GlobalKey();
     await tester.pumpWidget(
       _frame(
         key: legacyKey,
-        theme: ThemeData.light(useMaterial3: true),
+        brightness: Brightness.light,
         child: AdultReflexProfileLegacyNotice(
           assessment: _assessment(
             scores: const {'legacy': true},
@@ -181,12 +273,11 @@ void main() {
     expect(find.text('Erstellt mit älterer Methode'), findsOneWidget);
     await _capture(tester, legacyKey, '03_adult_result_legacy.png');
 
-    // 4) 2×2 answer grid (questionnaire answer surfaces)
     final gridKey = GlobalKey();
     await tester.pumpWidget(
       _frame(
         key: gridKey,
-        theme: ThemeData.light(useMaterial3: true),
+        brightness: Brightness.light,
         child: const Padding(
           padding: EdgeInsets.all(20),
           child: Column(
@@ -194,7 +285,11 @@ void main() {
             children: [
               Text(
                 'Beispielangabe',
-                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w800,
+                  fontSize: 18,
+                ),
               ),
               SizedBox(height: 16),
               AdultAnswerChoiceGrid(
@@ -214,12 +309,11 @@ void main() {
     expect(find.text('Trifft nicht zu'), findsOneWidget);
     await _capture(tester, gridKey, '04_adult_answer_grid_2x2.png');
 
-    // Real invite placement (same light result; invite slot below actions)
     final inviteKey = GlobalKey();
     await tester.pumpWidget(
       _frame(
         key: inviteKey,
-        theme: ThemeData.light(useMaterial3: true),
+        brightness: Brightness.light,
         child: AdultReflexProfileResultView(
           assessment: _assessment(scores: _sampleScores()),
           packageId: 'moro',
