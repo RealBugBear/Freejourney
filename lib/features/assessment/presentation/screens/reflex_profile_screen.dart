@@ -8,6 +8,8 @@ import '../../../../core/navigation/app_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/draft_persistence_service.dart';
+import '../../domain/reflex_answer_json.dart';
+import '../../domain/reflex_draft_meta.dart';
 import '../../domain/reflex_profile_scoring.dart';
 import '../../domain/reflex_questionnaire.dart';
 import '../../domain/reflex_questionnaire_definitions.dart';
@@ -44,6 +46,8 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   bool _didReadRouteExtras = false;
   bool _fromOnboarding = false;
   String? _pendingSubjectProfileId;
+  DateTime? _startedAt;
+  final Map<String, dynamic> _moduleTimings = {};
 
   ReflexQuestionnaireDefinition get _definition => childParentQuestionnaireV1;
 
@@ -272,40 +276,36 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
     }
   }
 
-  Map<String, dynamic> _answerToJson(ReflexAnswerValue answer) {
-    return {
-      if (answer.yesNoUnknown != null)
-        'answer': answer.yesNoUnknown! ? 'yes' : 'no',
-      if (answer.isUnknown) 'answer': 'unknown',
-      if (answer.selectedOptionIds.isNotEmpty)
-        'selected_options': answer.selectedOptionIds,
-      if (answer.text != null && answer.text!.trim().isNotEmpty)
-        'text': answer.text!.trim(),
-      if (answer.months != null) 'months': answer.months,
-    };
-  }
+  Map<String, dynamic> _answerToJson(ReflexAnswerValue answer) =>
+      reflexAnswerToJson(answer);
 
-  ReflexAnswerValue _answerFromJson(Map<String, dynamic> raw) {
-    final answer = raw['answer'] as String?;
-    return ReflexAnswerValue(
-      yesNoUnknown: answer == 'yes'
-          ? true
-          : answer == 'no'
-              ? false
-              : null,
-      isUnknown: answer == 'unknown',
-      selectedOptionIds: (raw['selected_options'] as List?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
-      text: raw['text'] as String?,
-      months: (raw['months'] as num?)?.toInt(),
+  ReflexAnswerValue _answerFromJson(Map<String, dynamic> raw) =>
+      reflexAnswerFromJson(raw);
+
+  ReflexDraftMeta _buildDraftMeta() {
+    return ReflexDraftMeta(
+      moduleIndex: _currentModuleIndex,
+      questionnaireFor: _questionnaireFor ?? 'child',
+      questionnaireVersion: _definition.version,
+      filterAnswers: {
+        for (final entry in _answers.entries)
+          if (entry.key.startsWith('f_') && entry.value.choice != null)
+            entry.key: switch (entry.value.choice!) {
+              ReflexAnswerChoice.yes => 'yes',
+              ReflexAnswerChoice.no => 'no',
+              ReflexAnswerChoice.unknown => 'unknown',
+              ReflexAnswerChoice.notApplicable => 'not_applicable',
+            },
+      },
+      startedAt: _startedAt,
+      moduleTimings: Map<String, dynamic>.from(_moduleTimings),
     );
   }
 
   void _saveDraft() {
     final profile = _selectedProfile;
     if (profile == null) return;
+    final meta = _buildDraftMeta();
     saveReflexProfileDraft(
       subjectProfileId: profile.id,
       packageId: _packageId,
@@ -322,6 +322,10 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
           .toList(),
       currentModuleIndex: _currentModuleIndex,
       questionnaireFor: _questionnaireFor ?? 'child',
+      filterAnswers: meta.filterAnswers,
+      startedAt: meta.startedAt,
+      moduleTimings: meta.moduleTimings,
+      supersededItemIds: meta.supersededItemIds,
     ).ignore();
   }
 
@@ -331,10 +335,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
     _draftService.saveLocal(profile.id, {
       'saved_at': DateTime.now().toIso8601String(),
       'answers': {
-        '__meta': {
-          'module_index': _currentModuleIndex,
-          'questionnaire_for': _questionnaireFor ?? 'child',
-        },
+        '__meta': _buildDraftMeta().toJson(),
         for (final e in _answers.entries) e.key: _answerToJson(e.value),
       },
       'warning_confirmations': _warningConfirmations.values
@@ -408,6 +409,8 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       setState(() {
         _questionnaireStarted = true;
         _currentModuleIndex = 0;
+        _startedAt = DateTime.now();
+        _moduleTimings.clear();
       });
       return;
     }
@@ -442,6 +445,10 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       setState(() {
         _questionnaireStarted = true;
         _currentModuleIndex = 0;
+        _startedAt = DateTime.now();
+        _moduleTimings.clear();
+        _answers.clear();
+        _warningConfirmations.clear();
       });
     }
   }
@@ -449,10 +456,9 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   void _restoreDraft(Map<String, dynamic> row) {
     final answersRaw =
         (row['answers'] as Map<String, dynamic>?) ?? <String, dynamic>{};
-    final meta =
+    final metaRaw =
         (answersRaw['__meta'] as Map<String, dynamic>?) ?? <String, dynamic>{};
-    final moduleIndex = (meta['module_index'] as num?)?.toInt() ?? 0;
-    final questionnaireFor = meta['questionnaire_for'] as String? ?? 'child';
+    final meta = ReflexDraftMeta.fromJson(metaRaw);
 
     final restoredAnswers = <String, ReflexAnswerValue>{};
     for (final entry in answersRaw.entries) {
@@ -460,6 +466,9 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       final raw = entry.value;
       if (raw is Map<String, dynamic>) {
         restoredAnswers[entry.key] = _answerFromJson(raw);
+      } else if (raw is Map) {
+        restoredAnswers[entry.key] =
+            _answerFromJson(Map<String, dynamic>.from(raw));
       }
     }
 
@@ -484,9 +493,13 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       _warningConfirmations
         ..clear()
         ..addAll(confirmations);
-      _questionnaireFor = questionnaireFor;
+      _questionnaireFor = meta.questionnaireFor;
       _questionnaireStarted = true;
-      _currentModuleIndex = moduleIndex;
+      _currentModuleIndex = meta.moduleIndex;
+      _startedAt = meta.startedAt ?? DateTime.now();
+      _moduleTimings
+        ..clear()
+        ..addAll(meta.moduleTimings);
     });
 
     // Restore text controllers for free-text answers

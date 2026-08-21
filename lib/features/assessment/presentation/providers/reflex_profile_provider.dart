@@ -5,6 +5,7 @@ import '../../../../core/l10n/active_localizations.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../domain/models/reflex_profile_assessment.dart';
+import '../../domain/reflex_draft_meta.dart';
 
 class ReflexSubjectProfile {
   const ReflexSubjectProfile({
@@ -241,6 +242,10 @@ Future<void> saveReflexProfileDraft({
   required List<Map<String, dynamic>> warningConfirmations,
   required int currentModuleIndex,
   required String questionnaireFor,
+  Map<String, String> filterAnswers = const {},
+  DateTime? startedAt,
+  Map<String, dynamic> moduleTimings = const {},
+  List<String> supersededItemIds = const [],
 }) async {
   try {
     final userId = Supabase.instance.client.auth.currentUser?.id;
@@ -248,10 +253,15 @@ Future<void> saveReflexProfileDraft({
 
     final payload = {
       ...answersJson,
-      '__meta': {
-        'module_index': currentModuleIndex,
-        'questionnaire_for': questionnaireFor,
-      },
+      '__meta': ReflexDraftMeta(
+        moduleIndex: currentModuleIndex,
+        questionnaireFor: questionnaireFor,
+        questionnaireVersion: questionnaireVersion,
+        filterAnswers: filterAnswers,
+        startedAt: startedAt,
+        moduleTimings: moduleTimings,
+        supersededItemIds: supersededItemIds,
+      ).toJson(),
     };
 
     final existing = await Supabase.instance.client
