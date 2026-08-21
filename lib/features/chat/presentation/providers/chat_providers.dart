@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/repositories/supabase_chat_repository.dart';
 import '../../domain/models/chat_channel.dart';
 import '../../domain/models/chat_message.dart';
@@ -118,3 +120,21 @@ final markReadProvider =
     AsyncNotifierProvider.autoDispose<MarkReadNotifier, void>(
   MarkReadNotifier.new,
 );
+
+/// Whether the signed-in user may currently send into [channelId].
+///
+/// Calls the very predicate `messages_insert_member` delegates to, so the
+/// composer and the policy cannot drift apart. The client cannot evaluate it
+/// locally: `members_select_own` exposes only the user's own membership row,
+/// so the other members of a direct channel are not readable from the app.
+final channelWritableProvider =
+    FutureProvider.family<bool, String>((ref, channelId) async {
+  ref.watch(authStateProvider);
+  if (Supabase.instance.client.auth.currentUser == null) return false;
+
+  final result = await Supabase.instance.client.rpc(
+    'can_write_chat_channel',
+    params: {'p_channel_id': channelId},
+  );
+  return result == true;
+});

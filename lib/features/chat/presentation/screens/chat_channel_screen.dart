@@ -498,22 +498,35 @@ class _ChatChannelScreenState extends ConsumerState<ChatChannelScreen> {
             ),
           ),
           TypingIndicator(channelId: widget.channelId),
-          MessageInputBar(
-            channel: channel ??
-                ChatChannel(
-                  id: widget.channelId,
-                  type: ChannelType.direct,
-                  createdAt: DateTime.now(),
-                  currentUserRole: MemberRole.member,
-                  unreadCount: 0,
-                ),
-            onSend: _sendMessage,
-            onCallRequest:
-                kVideoCallsEnabled && isPractitioner ? _sendCallRequest : null,
-            onTyping: () => ref
-                .read(chatRepositoryProvider)
-                .broadcastTyping(widget.channelId),
-          ),
+          if (ref.watch(channelWritableProvider(widget.channelId)).valueOrNull ==
+              false)
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                AppLocalizations.of(context).chatWriteLockedNoRelationship,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+              ),
+            )
+          else
+            MessageInputBar(
+              channel: channel ??
+                  ChatChannel(
+                    id: widget.channelId,
+                    type: ChannelType.direct,
+                    createdAt: DateTime.now(),
+                    currentUserRole: MemberRole.member,
+                    unreadCount: 0,
+                  ),
+              onSend: _sendMessage,
+              onCallRequest:
+                  kVideoCallsEnabled && isPractitioner ? _sendCallRequest : null,
+              onTyping: () => ref
+                  .read(chatRepositoryProvider)
+                  .broadcastTyping(widget.channelId),
+            ),
         ],
       ),
     );
