@@ -71,3 +71,19 @@ const bool kInviteEnabled = false;
 /// Nur wirksam wenn zusätzlich [kInviteEnabled] true ist. I1 hängt nicht an
 /// dieser Konstante.
 const bool kInviteImpulseI2Enabled = false;
+
+/// Adult-Selbstauskunfts-Fragebogen (`adult_v3`, P2.A).
+///
+/// Gated: For-Whom-Karte „Für mich selbst“ (statt Coming-Soon), Auswahl der
+/// Adult-Definition in `ReflexProfileScreen`, Filtermodul „Deine
+/// Lebenssituation“, vier Antwortflächen (Ja/Nein/?/n. z.), Altersgate ≥ 16,
+/// Zusammenfassung vor Absenden, Adult-Draft-Meta
+/// (`filter_answers` / `superseded_item_ids`). Ergebnis-UI (Phase 7) und
+/// Safety-/Bewegungs-Flags (Phase 6) sind eigene Gates.
+///
+/// Flag AUS = Adult-Pfad zeigt weiterhin Coming-Soon.
+/// Flag AN = vollständiger Adult-Fragebogen (ohne Movement, ohne Hard-Gate).
+///
+/// VOR Store-Rollout: interne QA der Phasen 5–7, Copy-Freigaben, und die
+/// Movement-/Safety-Flags bewusst belassen bzw. freigeben.
+const bool kAdultReflexQuestionnaireEnabled = true;
