@@ -78,12 +78,15 @@ const bool kInviteImpulseI2Enabled = false;
 /// Adult-Definition in `ReflexProfileScreen`, Filtermodul „Deine
 /// Lebenssituation“, vier Antwortflächen (Ja/Nein/?/n. z.), Altersgate ≥ 16,
 /// Zusammenfassung vor Absenden, Adult-Draft-Meta
-/// (`filter_answers` / `superseded_item_ids`). Ergebnis-UI (Phase 7) und
-/// Safety-/Bewegungs-Flags (Phase 6) sind eigene Gates.
+/// (`filter_answers` / `superseded_item_ids`), Safety-Hinweisdialog
+/// (Phase 6). Ergebnis-UI ist Phase 7; Movement-/Hard-Gate sind eigene Flags.
 ///
 /// Flag AUS = Adult-Pfad zeigt weiterhin Coming-Soon.
-/// Flag AN = vollständiger Adult-Fragebogen (ohne Movement, ohne Hard-Gate).
+/// Flag AN = vollständiger Adult-Fragebogen (Movement/Hard-Gate weiter
+/// über ihre eigenen Flags).
 ///
-/// VOR Store-Rollout: interne QA der Phasen 5–7, Copy-Freigaben, und die
-/// Movement-/Safety-Flags bewusst belassen bzw. freigeben.
-const bool kAdultReflexQuestionnaireEnabled = true;
+/// `true` erst, wenn der Adult-Ergebnisschirm aus Phase 7 steht
+/// (Plan §15.1). Bis dahin bleibt das Flag aus — Submit würde sonst auf
+/// den Kinder-Ergebnisschirm landen und Adult-Scores falsch darstellen.
+/// Umgelegt wird es im Phase-7-Commit.
+const bool kAdultReflexQuestionnaireEnabled = false;
