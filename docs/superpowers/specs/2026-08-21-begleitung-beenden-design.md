@@ -210,19 +210,63 @@ zwischen Mitgliedern dieses Kanals" würde einen bereits getrennten Absender X
 autorisieren, sobald zwei *andere* Mitglieder Y und Z eine aktive Beziehung
 haben.
 
+**Diese Bedingung darf jedoch nicht inline in der Policy stehen.** RLS gilt auch
+für Unterabfragen innerhalb eines Policy-Ausdrucks: `members_select_own` ist
+`user_id = auth.uid()`, der Absender sieht in `chat_channel_members` also
+ausschließlich seine **eigene** Zeile. Ein inline `EXISTS (… JOIN
+chat_channel_members other … WHERE other.user_id <> auth.uid())` findet damit
+**immer null Zeilen** und verweigert jeden Schreibzugriff im Direct-Kanal — auch
+bei bestehender aktiver Beziehung. Lokal am 2026-08-21 belegt:
+`other_members_visible_to_sender = 0`, während dieselbe Prüfung über eine
+`SECURITY DEFINER`-Funktion `true` liefert.
+
+Genau dieselbe Blindheit ist der Grund, warum die UI die Regel nicht selbst
+auswerten kann (§4.3.1). Beides wird deshalb über **eine** Funktion gelöst:
+
 ```sql
--- Zusatzbedingung nur für type = 'direct'
-EXISTS (
-  SELECT 1
-  FROM public.chat_channel_members other
-  JOIN public.trainer_client_relationships r
-    ON r.status = 'active'
-   AND (
-        (r.trainer_id = auth.uid() AND r.client_id  = other.user_id)
-     OR (r.client_id  = auth.uid() AND r.trainer_id = other.user_id)
-   )
-  WHERE other.channel_id = chat_messages.channel_id
-    AND other.user_id <> auth.uid()
+CREATE OR REPLACE FUNCTION public.can_write_chat_channel(p_channel_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $function$
+  SELECT
+    EXISTS (
+      SELECT 1 FROM public.chat_channel_members m
+       WHERE m.channel_id = p_channel_id AND m.user_id = auth.uid()
+    )
+    AND (
+      NOT EXISTS (
+        SELECT 1 FROM public.chat_channels c
+         WHERE c.id = p_channel_id AND c.type = 'direct'
+      )
+      OR EXISTS (
+        SELECT 1
+          FROM public.chat_channel_members other
+          JOIN public.trainer_client_relationships r
+            ON r.status = 'active'
+           AND (
+                (r.trainer_id = auth.uid() AND r.client_id  = other.user_id)
+             OR (r.client_id  = auth.uid() AND r.trainer_id = other.user_id)
+           )
+         WHERE other.channel_id = p_channel_id
+           AND other.user_id   <> auth.uid()
+      )
+    );
+$function$;
+```
+
+Die Policy delegiert:
+
+```sql
+WITH CHECK (
+  sender_id = auth.uid()
+  AND EXISTS (
+    SELECT 1 FROM public.chat_channel_members m
+     WHERE m.channel_id = chat_messages.channel_id AND m.user_id = auth.uid()
+  )
+  AND public.can_write_chat_channel(chat_messages.channel_id)
 )
 ```
 
@@ -230,10 +274,33 @@ Der Absender ist damit immer eine Seite der Beziehung, die Gegenseite immer ein
 Mitglied genau dieses Kanals. Die `OR`-Zweige halten die Regel symmetrisch
 (BB-5).
 
+Die zweite Klausel ist bewusst redundant zur ersten Prüfung *innerhalb* der
+Funktion: sie ist der einzige Teil, den der Absender unter RLS selbst auswerten
+kann, und stellt sicher, dass die Definer-Funktion nicht das alleinige Gate ist.
+
+Die Funktion heißt `can_write_chat_channel`, nicht `…_direct_channel`: sie
+entscheidet nach der Delegation über **jeden** Kanaltyp, nicht nur Direct.
+
+Sicherheitsbetrachtung zur Definer-Delegation: Die Funktion nimmt ausschließlich
+eine Kanal-ID entgegen und leitet alles Weitere aus `auth.uid()` ab. Ein
+beliebiger Kanalparameter liefert `false`, solange der Aufrufer dort kein
+Mitglied ist; es gibt keinen Parameter, über den sich eine fremde Identität
+behaupten ließe. `search_path` ist gepinnt, `EXECUTE` ist `PUBLIC`/`anon`
+entzogen.
+
 Dass `members_insert_deny` das Hinzufügen von Mitgliedern heute clientseitig
 verbietet, macht die unspezifische Variante nicht sicher — sie wäre nur
 schwerer auszunutzen. Die Policy muss unabhängig von der aktuellen
 Datenlage korrekt sein.
+
+### 4.3.1 Testkonsequenz der Delegation
+
+Weil Policy und UI jetzt **dieselbe** Funktion benutzen, ist eine Assertion der
+Form „die Mirror-Funktion stimmt mit der Policy überein" tautologisch und belegt
+nichts. Die eigentlichen Gate-Tests sind daher `INSERT`-Versuche über
+`throws_ok`/`lives_ok` je Akteur und Zustand. Die direkten Aufrufe von
+`can_write_chat_channel` bleiben als Unit-Test der Funktion erhalten, sind aber
+ausdrücklich **nicht** der Nachweis, dass die Policy greift.
 
 Die Regel ist **symmetrisch** — nach dem Ende schreibt keine Seite mehr, damit
 der Klient nicht ins Leere sendet. `messages_select_member` bleibt unangetastet:

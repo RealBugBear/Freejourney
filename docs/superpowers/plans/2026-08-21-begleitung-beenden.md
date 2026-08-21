@@ -12,6 +12,35 @@
 
 **Spec:** `docs/superpowers/specs/2026-08-21-begleitung-beenden-design.md` — read it first. This plan implements it and does not restate its reasoning.
 
+## Amendment 2026-08-21 — Task 4 policy shape
+
+Tasks 1–3 are implemented and committed (`942bb26`, `ee168bb`, `1357fd2`); a
+clean `supabase db reset --local` replayed green and the suites stand at
+26 / 10 / 95.
+
+Task 4 was **blocked and its policy has been corrected.** The original inline
+`EXISTS (… JOIN chat_channel_members other …)` in `messages_insert_member`
+cannot work: RLS applies to subqueries inside a policy expression, and
+`members_select_own` is `user_id = auth.uid()`, so the sender sees only their
+own membership row. The subquery matched zero rows and denied **every**
+direct-channel write, including legitimate ones. Reproduced independently on
+2026-08-21: `other_members_visible_to_sender = 0` while the definer function
+returned `true` for the same actor and channel.
+
+The predicate now lives solely in `public.can_write_chat_channel(uuid)` and the
+policy delegates to it. The function was renamed from `can_write_direct_channel`
+because after the delegation it decides for every channel type. Both the
+delegating policy and the three-clause shape below were verified live on the
+local database before this amendment was written.
+
+Anyone re-reading Task 4: do **not** "simplify" the delegation back into an
+inline subquery. It looks equivalent and is not.
+
+If you already applied the earlier version of
+`2026082103_direct_chat_write_requires_relationship.sql` locally, replace the
+file with the corrected version below and re-run
+`supabase db reset --local` rather than layering a second policy edit on top.
+
 ## Global Constraints
 
 - **Working directory:** `/Users/alexandermessinger/dev/claudvibes/reflexjourney`. Never `/Users/alexandermessinger/dev/corejourney` (obsolete clone) and never `claudvibes/corejourney/app` (empty shell).
@@ -978,50 +1007,21 @@ Create `supabase/migrations/2026082103_direct_chat_write_requires_relationship.s
 -- Spec: docs/superpowers/specs/2026-08-21-begleitung-beenden-design.md §4.3
 -- Idempotent: safe to replay.
 
-DROP POLICY IF EXISTS messages_insert_member ON public.chat_messages;
-CREATE POLICY messages_insert_member ON public.chat_messages
-  FOR INSERT
-  WITH CHECK (
-    sender_id = auth.uid()
-    AND EXISTS (
-      SELECT 1
-        FROM public.chat_channel_members m
-       WHERE m.channel_id = chat_messages.channel_id
-         AND m.user_id    = auth.uid()
-    )
-    AND (
-      -- Non-direct channels keep the old rule.
-      NOT EXISTS (
-        SELECT 1
-          FROM public.chat_channels c
-         WHERE c.id   = chat_messages.channel_id
-           AND c.type = 'direct'
-      )
-      OR EXISTS (
-        -- The relationship is bound to the SENDER and to another member of
-        -- THIS channel. A looser "relationship between channel members" test
-        -- would authorize an unrelated sender in a channel with three or more
-        -- members, which the schema permits.
-        SELECT 1
-          FROM public.chat_channel_members other
-          JOIN public.trainer_client_relationships r
-            ON r.status = 'active'
-           AND (
-                (r.trainer_id = auth.uid() AND r.client_id  = other.user_id)
-             OR (r.client_id  = auth.uid() AND r.trainer_id = other.user_id)
-           )
-         WHERE other.channel_id = chat_messages.channel_id
-           AND other.user_id   <> auth.uid()
-      )
-    )
-  );
-
--- Read-side mirror for the UI. `members_select_own` only exposes a user's OWN
--- membership row, so the client cannot enumerate the other members and cannot
--- evaluate the policy above for itself. Without this the composer would have to
--- guess, and a wrong guess leaves a dead Send button — so the same predicate is
--- exposed as one boolean, keeping UI and policy on a single source of truth.
-CREATE OR REPLACE FUNCTION public.can_write_direct_channel(p_channel_id uuid)
+-- The whole predicate lives in ONE SECURITY DEFINER function, used by both the
+-- policy and the UI.
+--
+-- It cannot be written inline in the policy. RLS applies to subqueries inside a
+-- policy expression too, and members_select_own is `user_id = auth.uid()`, so
+-- the sender sees ONLY THEIR OWN row in chat_channel_members. An inline
+-- `EXISTS (… JOIN chat_channel_members other … WHERE other.user_id <> auth.uid())`
+-- therefore always matches zero rows and denies every direct-channel write,
+-- even with a perfectly valid active relationship. Verified locally on
+-- 2026-08-21: other_members_visible_to_sender = 0 while the definer function
+-- returns true for the same actor and channel.
+--
+-- Named can_write_chat_channel, not …_direct_channel: after the delegation it
+-- decides for EVERY channel type, not only direct ones.
+CREATE OR REPLACE FUNCTION public.can_write_chat_channel(p_channel_id uuid)
 RETURNS boolean
 LANGUAGE sql
 STABLE
@@ -1053,41 +1053,67 @@ AS $function$
     );
 $function$;
 
-REVOKE ALL ON FUNCTION public.can_write_direct_channel(uuid) FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.can_write_direct_channel(uuid) TO authenticated;
+REVOKE ALL ON FUNCTION public.can_write_chat_channel(uuid) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.can_write_chat_channel(uuid) TO authenticated;
+
+DROP POLICY IF EXISTS messages_insert_member ON public.chat_messages;
+CREATE POLICY messages_insert_member ON public.chat_messages
+  FOR INSERT
+  WITH CHECK (
+    sender_id = auth.uid()
+    -- Deliberately redundant with the function's own first check: this is the
+    -- one clause the sender CAN evaluate under RLS, so the definer function is
+    -- not the sole gate.
+    AND EXISTS (
+      SELECT 1
+        FROM public.chat_channel_members m
+       WHERE m.channel_id = chat_messages.channel_id
+         AND m.user_id    = auth.uid()
+    )
+    AND public.can_write_chat_channel(chat_messages.channel_id)
+  );
 ```
 
+Both shapes were verified on the local database on 2026-08-21: with the
+delegating policy a trainer holding an active relationship inserts successfully,
+while an unrelated third member of the same channel is still rejected with
+`new row violates row-level security policy`.
+
 Add these assertions to `2026082103_direct_chat_write_test.sql`, each immediately
-after the corresponding `throws_ok`/`lives_ok` for the same actor and state, so
-the RPC and the policy are proven to agree:
+after the corresponding `throws_ok`/`lives_ok` for the same actor and state.
+
+**These are unit tests of the function, not proof that the policy works.** Since
+the policy now calls the same function, an assertion that the two "agree" is
+tautological. The real gate tests are the `INSERT` attempts — keep those
+assertions exactly as written and never relax one to make a run go green:
 
 ```sql
 -- as X, three-member channel, unrelated
 SELECT is(
-  public.can_write_direct_channel('2c200000-0000-4000-8000-000000000001'),
+  public.can_write_chat_channel('2c200000-0000-4000-8000-000000000001'),
   false,
-  'mirror agrees: the unrelated third member cannot write'
+  'function: unrelated third member is not allowed to write'
 );
 
 -- as Y, while the relationship is active
 SELECT is(
-  public.can_write_direct_channel('2c200000-0000-4000-8000-000000000001'),
+  public.can_write_chat_channel('2c200000-0000-4000-8000-000000000001'),
   true,
-  'mirror agrees: the active trainer can write'
+  'function: active trainer is allowed to write'
 );
 
 -- as Y, after the relationship ended
 SELECT is(
-  public.can_write_direct_channel('2c200000-0000-4000-8000-000000000001'),
+  public.can_write_chat_channel('2c200000-0000-4000-8000-000000000001'),
   false,
-  'mirror agrees: the former trainer cannot write'
+  'function: former trainer is not allowed to write'
 );
 
 -- as X, community channel
 SELECT is(
-  public.can_write_direct_channel('2c200000-0000-4000-8000-000000000002'),
+  public.can_write_chat_channel('2c200000-0000-4000-8000-000000000002'),
   true,
-  'mirror agrees: community channels stay writable'
+  'function: community channels stay writable'
 );
 ```
 
@@ -1748,8 +1774,8 @@ git commit -m "feat(accompaniment): let clients end a trainer accompaniment"
 - Modify: `lib/features/chat/presentation/screens/chat_channel_screen.dart`
 
 **Interfaces:**
-- Consumes: `public.can_write_direct_channel(uuid)` from Task 4; `chatWriteLockedNoRelationship` from Task 6.
-- Produces: `directChannelWritableProvider` — `FutureProvider.family<bool, String>` keyed by channel id.
+- Consumes: `public.can_write_chat_channel(uuid)` from Task 4; `chatWriteLockedNoRelationship` from Task 6.
+- Produces: `channelWritableProvider` — `FutureProvider.family<bool, String>` keyed by channel id.
 
 Without this, the RLS from Task 4 turns a send into a raw Postgres error behind
 a Send button that looks enabled. A gated feature must never leave a dead
@@ -1763,17 +1789,17 @@ matching the file's existing provider style:
 ```dart
 /// Whether the signed-in user may currently send into [channelId].
 ///
-/// Mirrors the `messages_insert_member` policy exactly by calling the same
-/// predicate server-side. The client cannot evaluate it locally:
-/// `members_select_own` exposes only the user's own membership row, so the
-/// other members of a direct channel are not readable from the app.
-final directChannelWritableProvider =
+/// Calls the very predicate `messages_insert_member` delegates to, so the
+/// composer and the policy cannot drift apart. The client cannot evaluate it
+/// locally: `members_select_own` exposes only the user's own membership row,
+/// so the other members of a direct channel are not readable from the app.
+final channelWritableProvider =
     FutureProvider.family<bool, String>((ref, channelId) async {
   ref.watch(authStateProvider);
   if (Supabase.instance.client.auth.currentUser == null) return false;
 
   final result = await Supabase.instance.client.rpc(
-    'can_write_direct_channel',
+    'can_write_chat_channel',
     params: {'p_channel_id': channelId},
   );
   return result == true;
@@ -1790,7 +1816,7 @@ In `lib/features/chat/presentation/screens/chat_channel_screen.dart`, the
 `TypingIndicator(channelId: widget.channelId)`. Replace that mount with:
 
 ```dart
-if (ref.watch(directChannelWritableProvider(widget.channelId)).valueOrNull ==
+if (ref.watch(channelWritableProvider(widget.channelId)).valueOrNull ==
     false)
   Padding(
     padding: const EdgeInsets.all(16),
@@ -1958,3 +1984,21 @@ Three things need an explicit decision and are deliberately **not** part of this
 1. **Live apply** of `2026082101` (already written, still unapplied), `2026082102` and `2026082103`, in that order.
 2. **Deploy** of `notify-accompaniment-ended`.
 3. **Backfill** of historical `disconnected` rows, based on the §8.1 dry-run counts.
+
+## Known gap this plan does not close
+
+`docs/SECURITY_FINDING_2026-08-21_relationship_write_access.md` (P0, found
+2026-08-21 while reviewing `trainer_notes`) records that
+`trainer_client_relationships` is directly writable by both parties:
+`authenticated` holds `UPDATE` on every column and `cj: tcr all trainer` is
+`FOR ALL`.
+
+The consequence for this plan: **a former trainer can clear
+`ended_by_client_at` on their own row** and then return through the ordinary
+reconcile. The durability guarantee in Task 2 holds against the reconcile logic,
+not against a direct write.
+
+Nothing here should change because of it — the reflex share still stays revoked
+(`2026082101` requires an active relationship *and* a live share, verified), and
+the feature is correct as specified. But do not describe the end as
+tamper-proof in copy or evidence until that finding is fixed in its own round.
