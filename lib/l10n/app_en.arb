@@ -3159,6 +3159,77 @@
   "@reflexProfileAdultComingSoonBody": {
     "description": "Adult coming soon body"
   },
+  "answerNotApplicable": "Not applicable",
+  "@answerNotApplicable": {
+    "description": "Adult answer: not applicable to my life situation"
+  },
+  "reflexProfileAdultSelfReport": "Adult self-report questionnaire",
+  "@reflexProfileAdultSelfReport": {
+    "description": "For-whom subtitle when adult path is enabled"
+  },
+  "reflexProfileAdultOrientationTitle": "Your answer patterns — not a finding",
+  "@reflexProfileAdultOrientationTitle": {
+    "description": "Adult start screen title"
+  },
+  "reflexProfileAdultOrientationBody": "This questionnaire collects your own observations. It shows answer patterns only. It does not establish a reflex finding and does not replace a personal assessment.",
+  "@reflexProfileAdultOrientationBody": {
+    "description": "Adult start screen body — no diagnostic claims"
+  },
+  "reflexProfileSelectAdultProfile": "Select profile",
+  "@reflexProfileSelectAdultProfile": {
+    "description": "Adult profile picker heading"
+  },
+  "reflexProfileNewAdultProfile": "New adult profile",
+  "@reflexProfileNewAdultProfile": {
+    "description": "Create adult profile heading"
+  },
+  "reflexProfileAdultAgeHelper": "From age 16. Under 16, please use the child questionnaire (parent report).",
+  "@reflexProfileAdultAgeHelper": {
+    "description": "Birth date helper for adult age gate"
+  },
+  "reflexProfileAdultUnder16Hint": "This adult questionnaire is for age 16 and older. For younger people, please use the child questionnaire — it is a parent report about a child, not a self-report.",
+  "@reflexProfileAdultUnder16Hint": {
+    "description": "Shown when adult profile age is under 16"
+  },
+  "reflexProfileAdultItemProgress": "{answered} of {visible} visible items answered",
+  "@reflexProfileAdultItemProgress": {
+    "description": "Adult module progress item counter",
+    "placeholders": {
+      "answered": {"type": "int"},
+      "visible": {"type": "int"}
+    }
+  },
+  "reflexProfileAdultContinueToSummary": "Review answers",
+  "@reflexProfileAdultContinueToSummary": {
+    "description": "CTA from last adult module to summary"
+  },
+  "reflexProfileAdultSummaryTitle": "Before you submit",
+  "@reflexProfileAdultSummaryTitle": {
+    "description": "Adult pre-submit summary title"
+  },
+  "reflexProfileAdultSummaryDisclaimer": "Your profile will show answer patterns only — not a diagnosis or reflex proof.",
+  "@reflexProfileAdultSummaryDisclaimer": {
+    "description": "Adult summary non-diagnostic reminder"
+  },
+  "reflexProfileAdultSummaryAnswered": "Answered: {count}",
+  "@reflexProfileAdultSummaryAnswered": {
+    "description": "Adult summary answered count",
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "reflexProfileAdultSummarySkipped": "Skipped (? / not applicable): {count}",
+  "@reflexProfileAdultSummarySkipped": {
+    "description": "Adult summary skipped count",
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "reflexProfileAdultSummaryHidden": "Hidden by filters: {count}",
+  "@reflexProfileAdultSummaryHidden": {
+    "description": "Adult summary hidden count",
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "reflexProfileAdultSummaryOpenHeading": "Open questions",
+  "@reflexProfileAdultSummaryOpenHeading": {
+    "description": "Adult summary open items heading"
+  },
   "reflexProfileOrientationTitle": "Guidance Only — Not a Verdict",
   "@reflexProfileOrientationTitle": {
     "description": "Start screen disclaimer title"

@@ -5428,6 +5428,102 @@ abstract class AppLocalizations {
   /// **'Der Fragebogen für Erwachsene befindet sich noch in Entwicklung. Du kannst ihn bald hier ausfüllen.'**
   String get reflexProfileAdultComingSoonBody;
 
+  /// Adult answer: not applicable to my life situation
+  ///
+  /// In de, this message translates to:
+  /// **'Trifft nicht zu'**
+  String get answerNotApplicable;
+
+  /// For-whom subtitle when adult path is enabled
+  ///
+  /// In de, this message translates to:
+  /// **'Selbstauskunft für Erwachsene'**
+  String get reflexProfileAdultSelfReport;
+
+  /// Adult start screen title
+  ///
+  /// In de, this message translates to:
+  /// **'Deine Antwortmuster — kein Befund'**
+  String get reflexProfileAdultOrientationTitle;
+
+  /// Adult start screen body — no diagnostic claims
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Fragebogen sammelt deine eigenen Beobachtungen. Er zeigt nur Antwortmuster. Er stellt keinen Reflexnachweis fest und ersetzt keine persönliche Einschätzung.'**
+  String get reflexProfileAdultOrientationBody;
+
+  /// Adult profile picker heading
+  ///
+  /// In de, this message translates to:
+  /// **'Profil auswählen'**
+  String get reflexProfileSelectAdultProfile;
+
+  /// Create adult profile heading
+  ///
+  /// In de, this message translates to:
+  /// **'Neues Erwachsenenprofil'**
+  String get reflexProfileNewAdultProfile;
+
+  /// Birth date helper for adult age gate
+  ///
+  /// In de, this message translates to:
+  /// **'Ab 16 Jahren. Unter 16 bitte den Kinderfragebogen nutzen (Elternbericht).'**
+  String get reflexProfileAdultAgeHelper;
+
+  /// Shown when adult profile age is under 16
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Erwachsenenfragebogen ist ab 16 Jahren. Für jüngere Personen bitte den Kinderfragebogen nutzen — das ist ein Elternbericht über ein Kind, keine Selbstauskunft.'**
+  String get reflexProfileAdultUnder16Hint;
+
+  /// Adult module progress item counter
+  ///
+  /// In de, this message translates to:
+  /// **'{answered} von {visible} sichtbaren Angaben beantwortet'**
+  String reflexProfileAdultItemProgress(int answered, int visible);
+
+  /// CTA from last adult module to summary
+  ///
+  /// In de, this message translates to:
+  /// **'Angaben prüfen'**
+  String get reflexProfileAdultContinueToSummary;
+
+  /// Adult pre-submit summary title
+  ///
+  /// In de, this message translates to:
+  /// **'Bevor du absendest'**
+  String get reflexProfileAdultSummaryTitle;
+
+  /// Adult summary non-diagnostic reminder
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Profil zeigt nur Antwortmuster — keine Diagnose und keinen Reflexnachweis.'**
+  String get reflexProfileAdultSummaryDisclaimer;
+
+  /// Adult summary answered count
+  ///
+  /// In de, this message translates to:
+  /// **'Beantwortet: {count}'**
+  String reflexProfileAdultSummaryAnswered(int count);
+
+  /// Adult summary skipped count
+  ///
+  /// In de, this message translates to:
+  /// **'Übersprungen (? / n. z.): {count}'**
+  String reflexProfileAdultSummarySkipped(int count);
+
+  /// Adult summary hidden count
+  ///
+  /// In de, this message translates to:
+  /// **'Durch Filter ausgeblendet: {count}'**
+  String reflexProfileAdultSummaryHidden(int count);
+
+  /// Adult summary open items heading
+  ///
+  /// In de, this message translates to:
+  /// **'Offene Fragen'**
+  String get reflexProfileAdultSummaryOpenHeading;
+
   /// Start screen disclaimer title
   ///
   /// In de, this message translates to:

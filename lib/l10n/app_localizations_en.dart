@@ -3158,6 +3158,67 @@ class AppLocalizationsEn extends AppLocalizations {
       'The adult questionnaire is still in development. You\'ll soon be able to fill it out here.';
 
   @override
+  String get answerNotApplicable => 'Not applicable';
+
+  @override
+  String get reflexProfileAdultSelfReport => 'Adult self-report questionnaire';
+
+  @override
+  String get reflexProfileAdultOrientationTitle =>
+      'Your answer patterns — not a finding';
+
+  @override
+  String get reflexProfileAdultOrientationBody =>
+      'This questionnaire collects your own observations. It shows answer patterns only. It does not establish a reflex finding and does not replace a personal assessment.';
+
+  @override
+  String get reflexProfileSelectAdultProfile => 'Select profile';
+
+  @override
+  String get reflexProfileNewAdultProfile => 'New adult profile';
+
+  @override
+  String get reflexProfileAdultAgeHelper =>
+      'From age 16. Under 16, please use the child questionnaire (parent report).';
+
+  @override
+  String get reflexProfileAdultUnder16Hint =>
+      'This adult questionnaire is for age 16 and older. For younger people, please use the child questionnaire — it is a parent report about a child, not a self-report.';
+
+  @override
+  String reflexProfileAdultItemProgress(int answered, int visible) {
+    return '$answered of $visible visible items answered';
+  }
+
+  @override
+  String get reflexProfileAdultContinueToSummary => 'Review answers';
+
+  @override
+  String get reflexProfileAdultSummaryTitle => 'Before you submit';
+
+  @override
+  String get reflexProfileAdultSummaryDisclaimer =>
+      'Your profile will show answer patterns only — not a diagnosis or reflex proof.';
+
+  @override
+  String reflexProfileAdultSummaryAnswered(int count) {
+    return 'Answered: $count';
+  }
+
+  @override
+  String reflexProfileAdultSummarySkipped(int count) {
+    return 'Skipped (? / not applicable): $count';
+  }
+
+  @override
+  String reflexProfileAdultSummaryHidden(int count) {
+    return 'Hidden by filters: $count';
+  }
+
+  @override
+  String get reflexProfileAdultSummaryOpenHeading => 'Open questions';
+
+  @override
   String get reflexProfileOrientationTitle => 'Guidance Only — Not a Verdict';
 
   @override

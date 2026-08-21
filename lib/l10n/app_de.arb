@@ -3159,6 +3159,77 @@
   "@reflexProfileAdultComingSoonBody": {
     "description": "Adult coming soon body"
   },
+  "answerNotApplicable": "Trifft nicht zu",
+  "@answerNotApplicable": {
+    "description": "Adult answer: not applicable to my life situation"
+  },
+  "reflexProfileAdultSelfReport": "Selbstauskunft für Erwachsene",
+  "@reflexProfileAdultSelfReport": {
+    "description": "For-whom subtitle when adult path is enabled"
+  },
+  "reflexProfileAdultOrientationTitle": "Deine Antwortmuster — kein Befund",
+  "@reflexProfileAdultOrientationTitle": {
+    "description": "Adult start screen title"
+  },
+  "reflexProfileAdultOrientationBody": "Dieser Fragebogen sammelt deine eigenen Beobachtungen. Er zeigt nur Antwortmuster. Er stellt keinen Reflexnachweis fest und ersetzt keine persönliche Einschätzung.",
+  "@reflexProfileAdultOrientationBody": {
+    "description": "Adult start screen body — no diagnostic claims"
+  },
+  "reflexProfileSelectAdultProfile": "Profil auswählen",
+  "@reflexProfileSelectAdultProfile": {
+    "description": "Adult profile picker heading"
+  },
+  "reflexProfileNewAdultProfile": "Neues Erwachsenenprofil",
+  "@reflexProfileNewAdultProfile": {
+    "description": "Create adult profile heading"
+  },
+  "reflexProfileAdultAgeHelper": "Ab 16 Jahren. Unter 16 bitte den Kinderfragebogen nutzen (Elternbericht).",
+  "@reflexProfileAdultAgeHelper": {
+    "description": "Birth date helper for adult age gate"
+  },
+  "reflexProfileAdultUnder16Hint": "Dieser Erwachsenenfragebogen ist ab 16 Jahren. Für jüngere Personen bitte den Kinderfragebogen nutzen — das ist ein Elternbericht über ein Kind, keine Selbstauskunft.",
+  "@reflexProfileAdultUnder16Hint": {
+    "description": "Shown when adult profile age is under 16"
+  },
+  "reflexProfileAdultItemProgress": "{answered} von {visible} sichtbaren Angaben beantwortet",
+  "@reflexProfileAdultItemProgress": {
+    "description": "Adult module progress item counter",
+    "placeholders": {
+      "answered": {"type": "int"},
+      "visible": {"type": "int"}
+    }
+  },
+  "reflexProfileAdultContinueToSummary": "Angaben prüfen",
+  "@reflexProfileAdultContinueToSummary": {
+    "description": "CTA from last adult module to summary"
+  },
+  "reflexProfileAdultSummaryTitle": "Bevor du absendest",
+  "@reflexProfileAdultSummaryTitle": {
+    "description": "Adult pre-submit summary title"
+  },
+  "reflexProfileAdultSummaryDisclaimer": "Dein Profil zeigt nur Antwortmuster — keine Diagnose und keinen Reflexnachweis.",
+  "@reflexProfileAdultSummaryDisclaimer": {
+    "description": "Adult summary non-diagnostic reminder"
+  },
+  "reflexProfileAdultSummaryAnswered": "Beantwortet: {count}",
+  "@reflexProfileAdultSummaryAnswered": {
+    "description": "Adult summary answered count",
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "reflexProfileAdultSummarySkipped": "Übersprungen (? / n. z.): {count}",
+  "@reflexProfileAdultSummarySkipped": {
+    "description": "Adult summary skipped count",
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "reflexProfileAdultSummaryHidden": "Durch Filter ausgeblendet: {count}",
+  "@reflexProfileAdultSummaryHidden": {
+    "description": "Adult summary hidden count",
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "reflexProfileAdultSummaryOpenHeading": "Offene Fragen",
+  "@reflexProfileAdultSummaryOpenHeading": {
+    "description": "Adult summary open items heading"
+  },
   "reflexProfileOrientationTitle": "Eine Orientierung, keine Diagnose",
   "@reflexProfileOrientationTitle": {
     "description": "Start screen disclaimer title"

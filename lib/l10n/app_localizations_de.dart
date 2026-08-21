@@ -3170,6 +3170,67 @@ class AppLocalizationsDe extends AppLocalizations {
       'Der Fragebogen für Erwachsene befindet sich noch in Entwicklung. Du kannst ihn bald hier ausfüllen.';
 
   @override
+  String get answerNotApplicable => 'Trifft nicht zu';
+
+  @override
+  String get reflexProfileAdultSelfReport => 'Selbstauskunft für Erwachsene';
+
+  @override
+  String get reflexProfileAdultOrientationTitle =>
+      'Deine Antwortmuster — kein Befund';
+
+  @override
+  String get reflexProfileAdultOrientationBody =>
+      'Dieser Fragebogen sammelt deine eigenen Beobachtungen. Er zeigt nur Antwortmuster. Er stellt keinen Reflexnachweis fest und ersetzt keine persönliche Einschätzung.';
+
+  @override
+  String get reflexProfileSelectAdultProfile => 'Profil auswählen';
+
+  @override
+  String get reflexProfileNewAdultProfile => 'Neues Erwachsenenprofil';
+
+  @override
+  String get reflexProfileAdultAgeHelper =>
+      'Ab 16 Jahren. Unter 16 bitte den Kinderfragebogen nutzen (Elternbericht).';
+
+  @override
+  String get reflexProfileAdultUnder16Hint =>
+      'Dieser Erwachsenenfragebogen ist ab 16 Jahren. Für jüngere Personen bitte den Kinderfragebogen nutzen — das ist ein Elternbericht über ein Kind, keine Selbstauskunft.';
+
+  @override
+  String reflexProfileAdultItemProgress(int answered, int visible) {
+    return '$answered von $visible sichtbaren Angaben beantwortet';
+  }
+
+  @override
+  String get reflexProfileAdultContinueToSummary => 'Angaben prüfen';
+
+  @override
+  String get reflexProfileAdultSummaryTitle => 'Bevor du absendest';
+
+  @override
+  String get reflexProfileAdultSummaryDisclaimer =>
+      'Dein Profil zeigt nur Antwortmuster — keine Diagnose und keinen Reflexnachweis.';
+
+  @override
+  String reflexProfileAdultSummaryAnswered(int count) {
+    return 'Beantwortet: $count';
+  }
+
+  @override
+  String reflexProfileAdultSummarySkipped(int count) {
+    return 'Übersprungen (? / n. z.): $count';
+  }
+
+  @override
+  String reflexProfileAdultSummaryHidden(int count) {
+    return 'Durch Filter ausgeblendet: $count';
+  }
+
+  @override
+  String get reflexProfileAdultSummaryOpenHeading => 'Offene Fragen';
+
+  @override
   String get reflexProfileOrientationTitle =>
       'Eine Orientierung, keine Diagnose';
 
