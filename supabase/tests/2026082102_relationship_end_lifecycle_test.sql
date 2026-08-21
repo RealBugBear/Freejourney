@@ -329,5 +329,43 @@ SELECT is(
   'exactly one active relationship exists after re-linking'
 );
 
+-- ── Notification claim is single-shot ───────────────────────────────────────
+
+INSERT INTO public.trainer_client_relationships
+  (id, trainer_id, client_id, status, linked_at, ended_by_client_at)
+VALUES ('2b300000-0000-4000-8000-000000000040',
+        '2b100000-0000-4000-8000-000000000002',
+        '2b100000-0000-4000-8000-000000000004',
+        'disconnected', now(), now());
+
+-- Data-modifying WITH must be statement-top-level (cannot nest inside is()).
+WITH claim AS (
+   UPDATE public.trainer_client_relationships
+      SET end_notification_sent_at = now()
+    WHERE id = '2b300000-0000-4000-8000-000000000040'
+      AND ended_by_client_at       IS NOT NULL
+      AND end_notification_sent_at IS NULL
+    RETURNING id
+)
+SELECT is(
+  (SELECT count(*)::integer FROM claim),
+  1,
+  'the first claim succeeds'
+);
+
+WITH claim AS (
+   UPDATE public.trainer_client_relationships
+      SET end_notification_sent_at = now()
+    WHERE id = '2b300000-0000-4000-8000-000000000040'
+      AND ended_by_client_at       IS NOT NULL
+      AND end_notification_sent_at IS NULL
+    RETURNING id
+)
+SELECT is(
+  (SELECT count(*)::integer FROM claim),
+  0,
+  'a replayed call claims nothing and therefore sends nothing'
+);
+
 SELECT * FROM finish();
 ROLLBACK;

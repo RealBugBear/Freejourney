@@ -77,6 +77,22 @@ export function buildDefaultClientLabel(locale: SupportedLocale): string {
   return locale === 'en' ? 'Client' : 'Klient';
 }
 
+export function buildAccompanimentEndedCopy(
+  locale: SupportedLocale,
+  clientLabel: string,
+): NotificationCopy {
+  if (locale === 'en') {
+    return {
+      title: 'Accompaniment ended',
+      body: `${clientLabel} has ended the accompaniment.`,
+    };
+  }
+  return {
+    title: 'Begleitung beendet',
+    body: `${clientLabel} hat die Begleitung beendet.`,
+  };
+}
+
 export function buildCallRequestCopy(
   locale: SupportedLocale,
 ): NotificationCopy {
