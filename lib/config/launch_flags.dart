@@ -49,3 +49,25 @@ const bool kCommunityEnabled = false;
 /// Kommunikation, AGB/Widerruf (Anwalts-Baustein 8), T25 (RevenueCat/IAP,
 /// echter Kaufweg) und alle erforderlichen T25-Migrationen live angewendet.
 const bool kPaywallEnabled = false;
+
+/// Nutzer-zu-Nutzer-Einladungen + Wirkungs-Visual (MVP Stufe 1).
+///
+/// Gated (nur App-Oberfläche): Route `/einladen`, Route `/einladung`
+/// (Einlösen), Einstellungs-Eintrag „Freunde einladen“, Onboarding-Schritt
+/// nach Einstiegsbereichen, Impulse I1/I2.
+/// Datenbank-Trigger, Website-Zielseite und Deep-Link-Landing (inkl.
+/// `PendingInviteStore`) zählen unabhängig von diesem Flag.
+///
+/// Flag AUS = Oberfläche unerreichbar (Redirect aufs Dashboard).
+/// Flag AN = Einladen-Screen, Einlösen und Impulse sichtbar.
+///
+/// VOR Aktivierung: Migration `2026082105_referral_program` live,
+/// Phase-5 Deep Links auf iPhone + Android grün, Datenschutzerklärung
+/// um „Einladungsbeziehung“ ergänzt, AASA-Pfade `/einladung` live.
+const bool kInviteEnabled = false;
+
+/// Impuls I2 (Golden-Day) — gebaut/testbar, zum Start aus (D9).
+///
+/// Nur wirksam wenn zusätzlich [kInviteEnabled] true ist. I1 hängt nicht an
+/// dieser Konstante.
+const bool kInviteImpulseI2Enabled = false;
