@@ -35,9 +35,11 @@ nach der Wiederbelebung bei `0`. Diese Ebene hält.
 
 ## 2. Scope
 
-**In Scope:** Beenden durch den Klienten; dauerhafte Trennung; Widerruf der
-Reflexprofil-Freigabe; Absage offener Termine; Ende der Chat-Schreibrechte;
-Benachrichtigung des Trainers; Bestätigungsdialog.
+**In Scope:** Beenden durch den Klienten; dauerhafte Trennung; **Reparatur der
+gebrochenen Wechsel-Semantik** (ein Wechsel markiert die verdrängte Beziehung
+ebenfalls als klientenbeendet, §4.1); Widerruf der Reflexprofil-Freigabe; Absage
+offener Termine; Ende der Chat-Schreibrechte; Benachrichtigung des Trainers;
+Bestätigungsdialog.
 
 **Nicht in Scope:** Löschen von Chatverläufen, `trainer_notes` oder
 Vergangenheitsterminen (Retention ist eine Rechtsfrage, siehe
@@ -52,6 +54,8 @@ Mehrfachbegleitung.
 | BB-2 | Trainer **wird** benachrichtigt |
 | BB-3 | Bestätigungsdialog benennt ausdrücklich alle drei Folgen |
 | BB-4 | Alle offenen Termine werden abgesagt |
+| BB-5 | Chat-Sperre bleibt **symmetrisch** — nach dem Ende schreibt keine Seite mehr |
+| BB-6 | **Kein** automatischer Backfill historischer `disconnected`-Zeilen. Zuerst ein Dry-Run-Count nach vermuteter Ursache (§8.1). Künftige Wechsel werden aber sofort korrekt markiert |
 
 ## 4. Design
 
@@ -59,29 +63,115 @@ Mehrfachbegleitung.
 
 Neue Spalte `trainer_client_relationships.ended_by_client_at timestamptz`.
 
-- `ensure_trainer_client_relationship()` prüft **vor** allen anderen Zweigen, ob
-  für das Paar eine Zeile mit gesetztem `ended_by_client_at` existiert. Wenn ja:
-  sofort `RETURN NULL`, ohne zu reaktivieren **und ohne neu anzulegen**.
+- `ensure_trainer_client_relationship()` erhält einen Marker-Guard. Die
+  **Reihenfolge der Zweige ist Teil des Vertrags**:
 
-  Dieser frühe Ausstieg ist der entscheidende Teil. Ein bloßes „Überspringen"
-  der Reaktivierung würde in den `INSERT`-Zweig am Ende der Funktion fallen und
-  eine *neue* aktive Beziehung anlegen — der Auferstehungspfad wäre offen
-  geblieben, nur unter neuer ID.
+  ```text
+  1. Auth- und Rollenprüfung                        (unverändert)
+  2. Aktive Zeile für das Paar?      -> RETURN deren id
+  3. IRGENDEINE Zeile des Paares mit
+     ended_by_client_at IS NOT NULL? -> RETURN NULL
+  4. Neueste disconnected Zeile?     -> reaktivieren, RETURN deren id
+  5. sonst                           -> INSERT, RETURN neue id
+  ```
 
-  `reconcile_trainer_clients()` wertet den Rückgabewert ohnehin nicht aus
-  (`PERFORM`), `NULL` ist dort also unproblematisch.
-- `accept_invite()` — eine ausdrückliche Klientenhandlung — setzt das Feld beim
-  Reaktivieren zurück auf `NULL`. Nur der Klient bringt die Beziehung zurück.
-- Bestehende Wechsel-Semantik bleibt: `accept_invite()` deaktiviert weiterhin
-  alte aktive Beziehungen, ohne sie als klientenbeendet zu markieren.
+  **Zu Schritt 3 — der frühe Ausstieg ist der entscheidende Teil.** Ein bloßes
+  „Überspringen" der Reaktivierung in Schritt 4 würde in den `INSERT`-Zweig 5
+  fallen und eine *neue* aktive Beziehung anlegen — der Auferstehungspfad wäre
+  offen geblieben, nur unter neuer ID.
+
+  **Zu Schritt 2 vor Schritt 3 — ebenfalls bewusst.** Eine aktive Beziehung ist
+  die Grundwahrheit. Läge der Guard davor, würde eine übrig gebliebene markierte
+  Altzeile den Rückgabewert einer gültigen aktiven Beziehung auf `NULL` ziehen.
+  `reconcile_trainer_clients()` wertet den Rückgabewert zwar nicht aus
+  (`PERFORM`), aber der Vertrag der Funktion darf nicht von Altlasten abhängen.
+
+  Der Guard ist bewusst **paarweit** („irgendeine Zeile"), nicht zeilenweise —
+  siehe §4.1.1.
+- **Der Trainerwechsel markiert ebenfalls.** `accept_invite()` Schritt 2
+  deaktiviert heute alle aktiven Beziehungen des Klienten, ohne sie zu
+  markieren — damit bliebe der verdrängte Trainer über Reconcile wiederbelebbar
+  und die gebrochene Wechsel-Semantik aus §1 ungefixt. Ein Wechsel ist genauso
+  eine bewusste Klientenhandlung wie ein Beenden, also setzt Schritt 2 künftig
+  `ended_by_client_at = now()` für jede verdrängte Zeile mit.
+- `accept_invite()` setzt das Feld beim Reaktivieren zurück — **paarweit**, nicht
+  nur auf der ausgewählten Zeile (§4.1.1). Nur der Klient bringt eine Beziehung
+  zurück.
 
 Warum eine Spalte und kein neuer `status`-Wert: `status` wird an vielen Stellen
 in Dart und SQL auf genau `pending|active|disconnected` geprüft; ein vierter
 Wert wäre eine breite, riskante Änderung. Die Spalte ist additiv.
 
+### 4.1.1 Mehrere `disconnected`-Zeilen pro Paar
+
+**Das Schema erlaubt beliebig viele `disconnected`-Zeilen pro Trainer-Klient-Paar.**
+Verifiziert am 2026-08-21: die Unique-Indizes decken nur
+`WHERE status='active'` (`uq_trainer_client_active`, `uq_trainer_client_active_pair`)
+und `pending+discovery` ab. Für `disconnected` existiert keine Eindeutigkeit.
+
+Damit ist jede zeilenweise Markerlogik fehlerhaft. Konkret: würde
+`accept_invite()` den Marker nur auf der von ihm ausgewählten Zeile löschen,
+bliebe eine zweite markierte Zeile stehen — und der paarweite Guard aus §4.1
+Schritt 3 würde die Beziehung danach dauerhaft von der Reconciliation
+ausschließen. Das Paar wäre still verklemmt.
+
+Verschärfend: `accept_invite()` wählt seine Zeile heute mit `LIMIT 1` **ganz
+ohne `ORDER BY`** (`20260424_atomic_trainer_switch.sql`), also
+nichtdeterministisch. `ensure_trainer_client_relationship()` ordnet immerhin
+nach `linked_at DESC NULLS LAST, created_at DESC`.
+
+**Verbindliche Paar-Semantik:**
+
+1. **Eine kanonische Reihenfolge**, identisch in beiden Funktionen:
+   `ORDER BY linked_at DESC NULLS LAST, created_at DESC, id DESC`.
+   Der `id`-Tiebreaker macht die Auswahl auch bei identischen Zeitstempeln
+   deterministisch.
+2. **Wiederverwendet wird immer genau diese eine Zeile** — es entsteht keine
+   weitere `disconnected`-Zeile für ein Paar, das schon eine hat.
+3. **Marker werden paarweit gesetzt und paarweit gelöscht**:
+   `UPDATE ... WHERE trainer_id = :t AND client_id = :c`, nie `WHERE id = :one`.
+
+Ein Unique-Index auf `disconnected` pro Paar wäre die sauberere Lösung, würde
+aber an vorhandenen Duplikaten in der Live-DB scheitern. Deduplizierung ist eine
+mögliche spätere Aufräumarbeit und **nicht** Teil dieser Änderung.
+
+**Nebenbefund:** `uq_trainer_client_active` und `uq_trainer_client_active_pair`
+sind zwei identische partielle Unique-Indizes auf demselben Prädikat. Redundant,
+harmlos, hier nicht angefasst.
+
 ### 4.2 RPC `end_trainer_relationship(p_trainer_id uuid)`
 
-`SECURITY DEFINER`, `GRANT EXECUTE` nur an `authenticated`. Eine Transaktion:
+**Härtung — verbindlich für diesen und jeden neuen `SECURITY DEFINER`-RPC:**
+
+```sql
+CREATE OR REPLACE FUNCTION public.end_trainer_relationship(p_trainer_id uuid)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $function$ ... $function$;
+
+REVOKE ALL ON FUNCTION public.end_trainer_relationship(uuid)
+  FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.end_trainer_relationship(uuid)
+  TO authenticated;
+```
+
+Das `REVOKE` ist **nicht optional**. PostgreSQL vergibt `EXECUTE` bei
+`CREATE FUNCTION` standardmäßig an `PUBLIC`; „wir granten nur `authenticated`"
+ist ohne vorheriges `REVOKE` schlicht falsch. Am 2026-08-21 lokal belegt: eine
+frisch angelegte Funktion liefert für `public`, `anon` **und** `authenticated`
+jeweils `has_function_privilege = t`. Ohne `REVOKE` wäre der RPC für `anon`
+aufrufbar.
+
+Ebenfalls verbindlich: `search_path` gepinnt und **alle** Objekte im Rumpf
+schema-qualifiziert (`public.trainer_client_relationships`, `public.appointments`),
+damit ein untergeschobenes Objekt die Definer-Rechte nicht kapern kann.
+`pg_temp` steht am Ende, damit temporäre Objekte nichts überschatten — konsistent
+mit der bereits ausgelieferten `2026082101`, deren Trigger-Funktion die Härtung
+schon so umsetzt (dort verifiziert: `has_function_privilege('public', …) = f`).
+
+Eine Transaktion:
 
 1. Prüft, dass **der Aufrufer** (`auth.uid()`) eine `active` Beziehung zu
    `p_trainer_id` als `client_id` hat. Sonst `RAISE EXCEPTION`. Niemand kann
@@ -164,17 +254,24 @@ ALTER TABLE public.trainer_client_relationships
   ADD COLUMN IF NOT EXISTS ended_by_client_at timestamptz;
 ```
 
-Additiv, nullable, kein Backfill. Bestehende `disconnected`-Zeilen bleiben
-`NULL` und damit weiterhin reconcile-fähig — das ist gewollt: sie stammen aus
-Wechseln, nicht aus bewussten Beendigungen.
+Additiv, nullable, kein Backfill (BB-6).
+
+Bestehende `disconnected`-Zeilen bleiben `NULL` und damit weiterhin
+reconcile-fähig. Das ist **keine** Aussage darüber, ob sie es verdienen — seit
+§4.1 gilt ein Wechsel ausdrücklich als bewusste Beendigung, historische
+Wechselzeilen wären also inhaltlich markierungswürdig. Sie bleiben nur deshalb
+unangetastet, weil ein Massen-Update auf Beziehungen echter Nutzer eine eigene
+Entscheidung ist: es macht jeden vergangenen Wechsel endgültig und kann
+Begleitungen kappen, die faktisch weiterlaufen. Grundlage dafür ist der Dry-Run
+aus §8.1, nicht diese Spec.
 
 ## 6. Sicherheit und RLS
 
 | Objekt | Änderung | Wirkung |
 |---|---|---|
-| `end_trainer_relationship` | neu, `SECURITY DEFINER`, nur `authenticated` | prüft `auth.uid()` als `client_id`; fremde Beziehungen unmöglich |
-| `ensure_trainer_client_relationship` | belebt klientenbeendete Zeilen nicht mehr | schließt den Auferstehungspfad |
-| `accept_invite` | setzt `ended_by_client_at = NULL` | nur der Klient holt die Beziehung zurück |
+| `end_trainer_relationship` | neu, `SECURITY DEFINER`, `search_path` gepinnt, `REVOKE ... FROM PUBLIC, anon` **vor** `GRANT ... TO authenticated` | prüft `auth.uid()` als `client_id`; fremde Beziehungen unmöglich; für `anon` nicht aufrufbar |
+| `ensure_trainer_client_relationship` | paarweiter Marker-Guard nach der Aktiv-Prüfung | schließt den Auferstehungspfad, ohne gültige aktive Beziehungen zu beschädigen |
+| `accept_invite` | markiert verdrängte Zeilen; löscht Marker paarweit; deterministische Zeilenauswahl | repariert die gebrochene Wechsel-Semantik; nur der Klient holt eine Beziehung zurück |
 | `messages_insert_member` | Direct-Kanäle verlangen aktive Beziehung | Schreibrechte enden beidseitig; Lesen unberührt |
 
 Keine Lockerung bestehender Policies. Keine neue Datenkategorie.
@@ -200,6 +297,18 @@ Keine Lockerung bestehender Policies. Keine neue Datenkategorie.
 - `accept_invite` mit neuem Code stellt die Beziehung wieder her und leert
   `ended_by_client_at`; Reflexprofil-Freigabe bleibt widerrufen und muss neu
   erteilt werden
+- **Wechsel markiert:** nach `accept_invite` zu Trainer B ist die verdrängte
+  Beziehung zu Trainer A `disconnected` **mit** gesetztem `ended_by_client_at`,
+  und ein Reconcile-Lauf von A belebt sie nicht wieder
+- **Duplikate (§4.1.1):** bei zwei `disconnected`-Zeilen für dasselbe Paar,
+  davon eine markiert, stellt `accept_invite` die Beziehung wieder her und
+  **keine** Zeile des Paares behält den Marker; ein anschließender
+  Reconcile-Lauf lässt die Beziehung aktiv
+- **Determinismus:** bei zwei `disconnected`-Zeilen mit identischem `linked_at`
+  und `created_at` wählen `accept_invite` und
+  `ensure_trainer_client_relationship` dieselbe Zeile
+- `end_trainer_relationship` ist für `anon` **nicht** ausführbar
+  (`has_function_privilege('anon', …) = false`)
 
 **Flutter:** Widget-Test für Aktion + Dialog; Test, dass der Composer bei
 beendeter Beziehung durch den Hinweis ersetzt wird.
@@ -215,11 +324,32 @@ beendeter Beziehung durch den Hinweis ersetzt wird.
   angewendet** und sollte gemeinsam mit dieser Änderung eingeplant werden.
 - `git push`: nie.
 
+### 8.1 Dry-Run vor jedem Backfill-Entscheid (BB-6)
+
+Historische `disconnected`-Zeilen werden **nicht** automatisch markiert. Vor
+einer Entscheidung darüber liefert eine **lesende** Abfrage eine Häufigkeits-
+verteilung nach vermuteter Ursache — ausschließlich Aggregate, keine IDs, keine
+Namen, keine Zeitstempel einzelner Nutzer (§5 der CLAUDE.md-Redaktionsregel):
+
+| Bucket | Heuristik | Bedeutung |
+|---|---|---|
+| `likely_switch` | Klient hat eine andere **aktive** Beziehung | klassischer Trainerwechsel |
+| `no_active_trainer` | Klient hat gar keine aktive Beziehung | Abbruch oder Altbestand |
+| `resurrectable_chat` | Direct-Chat-Kanal zwischen dem Paar existiert | wird beim nächsten Reconcile wiederbelebt |
+| `resurrectable_appt` | offener Termin (`proposed`/`planned`/`confirmed`) | wird beim nächsten Reconcile wiederbelebt |
+| `duplicate_pair` | Paar hat > 1 `disconnected`-Zeile | betrifft §4.1.1 |
+
+Die letzten drei überschneiden sich bewusst mit den ersten beiden; sie werden
+als eigene Zähler ausgegeben, nicht als disjunkte Partition. Erst diese Zahlen
+begründen einen Backfill-Vorschlag — oder belegen, dass keiner nötig ist.
+
+Ohne Backfill gilt: künftige Wechsel und Beendigungen sind sauber, historische
+Zeilen bleiben reconcile-fähig. Das ist der bewusst gewählte Zwischenstand.
+
 ## 9. Offene Punkte
 
-1. **Symmetrische Chat-Sperre** — als Empfehlung gesetzt (§4.3). Falls nur der
-   Trainer gesperrt werden soll, ist das eine Einzeiler-Änderung an der Policy.
-2. **Bestehende `disconnected`-Zeilen** bleiben reconcile-fähig (§5). Wer die
-   gebrochene Wechsel-Semantik rückwirkend schließen will, braucht einen
-   separaten Backfill-Entscheid — dann würden alte Wechsel endgültig.
-3. **`trainer_notes`** bleibt bewusst unangetastet; eigene Rechtsfrage.
+1. **`trainer_notes`** bleibt bewusst unangetastet; eigene Rechtsfrage
+   (`docs/legal/DATENSCHUTZERKLAERUNG_ENTWURF.md` §7.2).
+2. **Deduplizierung** der `disconnected`-Zeilen und der beiden redundanten
+   Aktiv-Indizes (§4.1.1) — spätere Aufräumarbeit, hier nur dokumentiert.
+3. **Backfill-Entscheid** offen bis zum Dry-Run aus §8.1.
