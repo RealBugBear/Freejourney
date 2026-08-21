@@ -1965,11 +1965,241 @@ git commit -m "docs(evidence): record accompaniment-end verification and backfil
 
 ---
 
+## Task 10: Lock the relationship lifecycle against direct writes
+
+> **Do this immediately after Task 4.** It is numbered 10 only to avoid
+> renumbering tasks already in flight; it has no dependency on Tasks 5–9. Until
+> it lands, the durability guarantee of Tasks 1–3 is false.
+
+**Files:**
+- Create: `supabase/migrations/2026082104_protect_relationship_lifecycle.sql`
+- Create: `supabase/tests/2026082104_relationship_lifecycle_protection_test.sql`
+
+**Interfaces:**
+- Consumes: the marker columns from Task 1; `end_trainer_relationship` and `accept_invite`.
+- Produces: trigger `trg_prevent_direct_relationship_lifecycle_change`.
+
+### Why this task exists
+
+`ended_by_client_at` is not a guarantee, only a value in a table both parties can
+write. `authenticated` holds `UPDATE` on every column and `cj: tcr all trainer`
+is `FOR ALL`. Three bypasses were proven on the local database on 2026-08-21,
+each in a rolled-back transaction:
+
+| As | Action | Result |
+|---|---|---|
+| Ex-trainer | `UPDATE … SET ended_by_client_at = NULL` | succeeds |
+| Ex-trainer | `UPDATE … SET status = 'active'` (marker untouched) | succeeds — **the marker is not even needed** |
+| Ex-trainer | `INSERT` a fresh `active` row for the same pair | succeeds — 2 rows, 1 active |
+| Client | `UPDATE … SET trainer_id = <other trainer>` | succeeds |
+
+Protecting only the two marker columns would therefore be security theatre: the
+second and third rows above never touch them. The protected set must include
+`status`, `trainer_id` and `client_id`, and the guard must cover `INSERT` as
+well as `UPDATE`.
+
+`trainer_notes` is deliberately **not** protected here. `saveNotes`
+(`trainer_provider.dart:58-63`) writes it directly today, and moving that behind
+an RPC belongs to the separate finding round
+(`docs/SECURITY_FINDING_2026-08-21_relationship_write_access.md`).
+
+### Why `current_user`, not `auth.role()`
+
+The house pattern (`prevent_direct_role_change`, `prevent_direct_premium_change`)
+guards with `auth.role() != 'service_role'`. **That pattern does not transfer
+here.** Those columns are written by Edge Functions holding the service-role key.
+Ours are written by `SECURITY DEFINER` RPCs invoked *by ordinary users*, and the
+JWT claim stays `authenticated` inside such a function — so an `auth.role()`
+guard would reject `accept_invite()` and `end_trainer_relationship()` too.
+
+Measured on 2026-08-21:
+
+| Context | `current_user` | `auth.role()` |
+|---|---|---|
+| Inside `SECURITY DEFINER` | `postgres` | `authenticated` |
+| Direct REST write | `authenticated` | `authenticated` |
+
+`current_user` separates them; `auth.role()` does not.
+
+Do **not** implement this with a session GUC (`set_config('app.…')`) that the
+RPCs set and the trigger checks. `authenticated` may call `set_config` itself, so
+an attacker can raise the flag before writing. It looks like a guard and is not.
+
+- [ ] **Step 1: Write the failing test**
+
+Create `supabase/tests/2026082104_relationship_lifecycle_protection_test.sql`.
+Use the fixture style of the other suites in this directory (synthetic UUIDs,
+`@example.invalid` emails, `BEGIN … ROLLBACK`). Assert, as `authenticated`:
+
+```sql
+-- Fixture: trainer T, client C, one disconnected+marked relationship REL,
+-- plus a second trainer T2 for the re-point case.
+
+-- 1. the client cannot clear the marker
+SELECT throws_ok(
+  $$ UPDATE public.trainer_client_relationships
+        SET ended_by_client_at = NULL WHERE id = '<REL>' $$,
+  NULL, NULL,
+  'the client cannot clear the client-end marker directly'
+);
+
+-- 2. the former trainer cannot clear the marker
+SELECT throws_ok(
+  $$ UPDATE public.trainer_client_relationships
+        SET ended_by_client_at = NULL WHERE id = '<REL>' $$,
+  NULL, NULL,
+  'the former trainer cannot clear the client-end marker directly'
+);
+
+-- 3. the former trainer cannot flip the status back, marker untouched
+SELECT throws_ok(
+  $$ UPDATE public.trainer_client_relationships
+        SET status = 'active' WHERE id = '<REL>' $$,
+  NULL, NULL,
+  'the former trainer cannot reactivate the relationship directly'
+);
+
+-- 4. the former trainer cannot insert a replacement active row
+SELECT throws_ok(
+  $$ INSERT INTO public.trainer_client_relationships
+       (trainer_id, client_id, status, linked_at)
+     VALUES ('<T>', '<C>', 'active', now()) $$,
+  NULL, NULL,
+  'relationships cannot be created by a direct insert'
+);
+
+-- 5. the client cannot re-point the relationship at another trainer
+SELECT throws_ok(
+  $$ UPDATE public.trainer_client_relationships
+        SET trainer_id = '<T2>' WHERE id = '<REL>' $$,
+  NULL, NULL,
+  'the client cannot re-point the relationship at another trainer'
+);
+
+-- 6. the notification claim column is protected too
+SELECT throws_ok(
+  $$ UPDATE public.trainer_client_relationships
+        SET end_notification_sent_at = NULL WHERE id = '<REL>' $$,
+  NULL, NULL,
+  'the notification claim cannot be reset directly'
+);
+
+-- 7. no regression: the trainer can still write notes on an ACTIVE relationship
+SELECT lives_ok(
+  $$ UPDATE public.trainer_client_relationships
+        SET trainer_notes = 'ok' WHERE id = '<ACTIVE_REL>' $$,
+  'writing trainer notes directly still works'
+);
+
+-- 8+9. no regression: the definer paths still work.
+--      Call end_trainer_relationship() on an active pair and accept_invite()
+--      with a pending code, both as authenticated, both with lives_ok.
+```
+
+- [ ] **Step 2: Run and confirm every negative case fails**
+
+```bash
+docker exec -i supabase_db_reflexjourney psql -U postgres -d postgres < supabase/tests/2026082104_relationship_lifecycle_protection_test.sql 2>&1 | grep -E "^ not ok"
+```
+
+Expected: assertions 1–6 fail — today every one of those writes succeeds. 7–9
+should already pass. **If any of 1–6 passes at this stage, stop** — your fixture
+is not running as `authenticated` and the suite is proving nothing.
+
+- [ ] **Step 3: Write the migration**
+
+Create `supabase/migrations/2026082104_protect_relationship_lifecycle.sql`:
+
+```sql
+-- trainer_client_relationships IS the authorization model: the trainer read
+-- policies on enrollments, training_sessions, progress_entries and
+-- mood_checkins all test for an active row in it. RLS there is row-level and
+-- authenticated holds UPDATE on every column, so without this trigger either
+-- party can rewrite the columns that define access.
+--
+-- Idempotent: safe to replay.
+
+CREATE OR REPLACE FUNCTION public.prevent_direct_relationship_lifecycle_change()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $function$
+BEGIN
+  -- current_user, NOT auth.role(). Inside a SECURITY DEFINER RPC current_user
+  -- is the function owner while the JWT claim stays 'authenticated', so
+  -- auth.role() cannot tell a legitimate accept_invite() call from a direct
+  -- REST write and would reject both.
+  IF current_user NOT IN ('authenticated', 'anon') THEN
+    RETURN NEW;
+  END IF;
+
+  IF TG_OP = 'INSERT' THEN
+    RAISE EXCEPTION
+      'Relationships are created through accept_invite() only. '
+      'Direct inserts are not permitted.';
+  END IF;
+
+  IF OLD.status                   IS DISTINCT FROM NEW.status
+  OR OLD.trainer_id               IS DISTINCT FROM NEW.trainer_id
+  OR OLD.client_id                IS DISTINCT FROM NEW.client_id
+  OR OLD.ended_by_client_at       IS DISTINCT FROM NEW.ended_by_client_at
+  OR OLD.end_notification_sent_at IS DISTINCT FROM NEW.end_notification_sent_at
+  THEN
+    RAISE EXCEPTION
+      'Changing relationship lifecycle columns directly is not permitted. '
+      'Use accept_invite() or end_trainer_relationship().';
+  END IF;
+
+  RETURN NEW;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.prevent_direct_relationship_lifecycle_change()
+  FROM PUBLIC, anon, authenticated;
+
+DROP TRIGGER IF EXISTS trg_prevent_direct_relationship_lifecycle_change
+  ON public.trainer_client_relationships;
+CREATE TRIGGER trg_prevent_direct_relationship_lifecycle_change
+  BEFORE INSERT OR UPDATE ON public.trainer_client_relationships
+  FOR EACH ROW
+  EXECUTE FUNCTION public.prevent_direct_relationship_lifecycle_change();
+```
+
+- [ ] **Step 4: Apply, re-run, and check for regressions across every suite**
+
+```bash
+docker exec -i supabase_db_reflexjourney psql -U postgres -d postgres -v ON_ERROR_STOP=1 < supabase/migrations/2026082104_protect_relationship_lifecycle.sql
+supabase db reset --local
+for t in 2026071901_multi_grant_entitlements_test 2026082101_reflex_share_revocation_test \
+         2026082102_relationship_end_lifecycle_test 2026082103_direct_chat_write_test \
+         2026082104_relationship_lifecycle_protection_test; do
+  echo "== $t"
+  docker exec -i supabase_db_reflexjourney psql -U postgres -d postgres < supabase/tests/$t.sql 2>&1 | grep -E "Looks like|^ 1\.\."
+done
+```
+
+Expected: every suite reports its plan line with no `Looks like you failed`. The
+existing suites' fixtures run as `postgres`, so the trigger permits them — if one
+of them now fails, that fixture was relying on a write path real users should not
+have, and that is worth reporting rather than working around.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add supabase/migrations/2026082104_protect_relationship_lifecycle.sql supabase/tests/2026082104_relationship_lifecycle_protection_test.sql
+git diff --cached --name-status
+git commit -m "fix(security): block direct writes to relationship lifecycle columns"
+```
+
+---
+
 ## Definition of done
 
-- [ ] `supabase db reset --local` replays green including both new migrations
-- [ ] `2026082102` suite green; `2026082103` suite green
+- [ ] `supabase db reset --local` replays green including all three new migrations
+- [ ] `2026082102`, `2026082103` and `2026082104` suites green
 - [ ] `2026082101` (10 tests) and `2026071901` (95 tests) still green — no regression
+- [ ] **Task 10 landed** — the client-end marker is enforced by the database, not merely written. Without it the feature's central promise is false.
 - [ ] `make release-readiness-mobile` → 0 errors, 0 warnings, 100% tests pass
 - [ ] `deno check` clean for the new function
 - [ ] Every new string in both `.arb` files; `python3 scripts/i18n_check.py` parity passes
@@ -1985,20 +2215,19 @@ Three things need an explicit decision and are deliberately **not** part of this
 2. **Deploy** of `notify-accompaniment-ended`.
 3. **Backfill** of historical `disconnected` rows, based on the §8.1 dry-run counts.
 
-## Known gap this plan does not close
+## Related finding — partly closed here
 
-`docs/SECURITY_FINDING_2026-08-21_relationship_write_access.md` (P0, found
-2026-08-21 while reviewing `trainer_notes`) records that
-`trainer_client_relationships` is directly writable by both parties:
-`authenticated` holds `UPDATE` on every column and `cj: tcr all trainer` is
-`FOR ALL`.
+`docs/SECURITY_FINDING_2026-08-21_relationship_write_access.md` (P0) records that
+`trainer_client_relationships` is directly writable by both parties.
 
-The consequence for this plan: **a former trainer can clear
-`ended_by_client_at` on their own row** and then return through the ordinary
-reconcile. The durability guarantee in Task 2 holds against the reconcile logic,
-not against a direct write.
+**Task 10 closes the part that defeats this feature**: status, both markers,
+`trainer_id`, `client_id`, and direct inserts. What remains open there and is
+*not* addressed by this plan:
 
-Nothing here should change because of it — the reflex share still stays revoked
-(`2026082101` requires an active relationship *and* a live share, verified), and
-the feature is correct as specified. But do not describe the end as
-tamper-proof in copy or evidence until that finding is fixed in its own round.
+- `trainer_notes` is still client-readable and client-writable, and `saveNotes`
+  still writes it directly without a status check.
+- `cj: tcr update client` still exists with no caller, and `cj: tcr all trainer`
+  is still `FOR ALL` rather than `FOR SELECT`. Task 10 neutralises their effect
+  on the lifecycle columns; it does not remove them.
+
+Those belong to the separate finding round.
