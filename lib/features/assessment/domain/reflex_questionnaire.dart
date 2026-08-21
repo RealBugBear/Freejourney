@@ -75,8 +75,10 @@ enum AdultHintBand {
   insufficientData,
 }
 
-/// Amphibian reflex special display (0/1/2 of 2), not a percent bar.
+/// Amphibian reflex special display (0/1/2 of answered items), not a percent bar.
 enum AmphibianDisplay {
+  /// Both amphibian items unanswered / unknown / n.a. — no data basis.
+  insufficientData,
   noneMatching,
   singleHint,
   clearSingleHint,

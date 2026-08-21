@@ -220,6 +220,35 @@ void main() {
       expect(two.reflexScores[PrimitiveReflex.stnr]!.positiveCount, 1);
     });
 
+    test('12b. amphibian answeredCount 0 → insufficientData (§7.4)', () {
+      final bothUnknown = score({
+        's017': const ReflexAnswerValue(isUnknown: true),
+        's102': const ReflexAnswerValue(isUnknown: true),
+      });
+      expect(bothUnknown.amphibian.answeredCount, 0);
+      expect(bothUnknown.amphibian.positiveCount, 0);
+      expect(
+        bothUnknown.amphibian.display,
+        AmphibianDisplay.insufficientData,
+      );
+
+      final bothNa = score({
+        's017': const ReflexAnswerValue(isNotApplicable: true),
+        's102': const ReflexAnswerValue(isNotApplicable: true),
+      });
+      expect(bothNa.amphibian.answeredCount, 0);
+      expect(bothNa.amphibian.display, AmphibianDisplay.insufficientData);
+
+      // One applicable "no" still has a data basis → noneMatching, not insufficient.
+      final oneNo = score({
+        's017': const ReflexAnswerValue(isUnknown: true),
+        's102': const ReflexAnswerValue(yesNoUnknown: false),
+      });
+      expect(oneNo.amphibian.answeredCount, 1);
+      expect(oneNo.amphibian.positiveCount, 0);
+      expect(oneNo.amphibian.display, AmphibianDisplay.noneMatching);
+    });
+
     test('13. passing child definition into adult engine throws', () {
       expect(
         () => engine.score(

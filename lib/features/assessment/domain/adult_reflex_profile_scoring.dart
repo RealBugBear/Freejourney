@@ -103,7 +103,10 @@ class AdultReflexProfileScoringService {
       amphibian: AdultAmphibianScore(
         positiveCount: amphPositive,
         answeredCount: amphAnswered,
-        display: _amphibianDisplay(amphPositive),
+        display: _amphibianDisplay(
+          answeredCount: amphAnswered,
+          positiveCount: amphPositive,
+        ),
         showDisclaimer: true,
       ),
       meta: AdultScoreMeta(
@@ -158,7 +161,11 @@ _AnswerClass _classifyAnswer(ReflexAnswerValue? answer) {
   return _AnswerClass.missing;
 }
 
-AmphibianDisplay _amphibianDisplay(int positiveCount) {
+AmphibianDisplay _amphibianDisplay({
+  required int answeredCount,
+  required int positiveCount,
+}) {
+  if (answeredCount == 0) return AmphibianDisplay.insufficientData;
   return switch (positiveCount) {
     0 => AmphibianDisplay.noneMatching,
     1 => AmphibianDisplay.singleHint,
