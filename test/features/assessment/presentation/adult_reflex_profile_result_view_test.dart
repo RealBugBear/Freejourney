@@ -7,6 +7,8 @@ import 'package:corejourney/features/assessment/domain/adult_reflex_result_copy.
 import 'package:corejourney/features/assessment/domain/models/reflex_profile_assessment.dart';
 import 'package:corejourney/features/assessment/domain/reflex_questionnaire.dart';
 import 'package:corejourney/features/assessment/presentation/adult_score_band_l10n.dart';
+import 'package:corejourney/features/assessment/presentation/widgets/adult_amphibian_detail_tile.dart';
+import 'package:corejourney/features/assessment/presentation/widgets/adult_reflex_detail_tile.dart';
 import 'package:corejourney/features/assessment/presentation/widgets/adult_reflex_profile_result_view.dart';
 import 'package:corejourney/l10n/app_localizations.dart';
 import 'package:corejourney/l10n/app_localizations_de.dart';
@@ -118,10 +120,10 @@ void main() {
 
       expect(find.text('Dein Reflexprofil'), findsOneWidget);
       expect(find.textContaining('Gehäuftes Antwortmuster'), findsWidgets);
-      expect(find.text('1 Merkmal beantwortet'), findsOneWidget);
+      expect(find.text('1 von 2 Merkmalen beantwortet'), findsOneWidget);
       expect(find.textContaining('Gesamt'), findsNothing);
       expect(find.textContaining('Durchschnitt'), findsNothing);
-      expect(find.textContaining('von 2'), findsNothing);
+      expect(find.textContaining('Aufgrund der wenigen'), findsNothing);
     });
 
     testWidgets('legacy version shows legacy notice instead of bars',
@@ -208,72 +210,104 @@ void main() {
   });
 
   group('adult copy hygiene', () {
-    test('amphibian disclaimer matches adult_v3 Teil B §2 (DE first)', () {
+    test('adult result chrome has no amphibian justification copy', () {
       final de = AppLocalizationsDe();
       final en = AppLocalizationsEn();
-      expect(
-        de.adultResultAmphibianDisclaimer,
-        startsWith(
-          'Aufgrund der wenigen verfügbaren Merkmale ist dies kein stabiler '
-          'Profilwert und kein Reflexnachweis.',
-        ),
-      );
-      expect(de.adultResultAmphibianDisclaimer.contains('kein Reflexnachweis'),
-          isTrue);
-      expect(de.adultResultAmphibianDisclaimer.contains('stabiler Profilwert'),
-          isTrue);
-      expect(en.adultResultAmphibianDisclaimer.contains('stable profile value'),
-          isTrue);
-      expect(en.adultResultAmphibianDisclaimer.contains('reflex finding'),
-          isTrue);
+      final corpus = [
+        de.adultResultTitle,
+        de.adultResultDisclaimer,
+        de.adultResultHintListTitle,
+        de.adultAmphibianInsufficientData,
+        de.adultAmphibianNoneMatching,
+        de.adultAmphibianSingleHint,
+        de.adultAmphibianClearSingleHint,
+        de.adultResultLegacyBody,
+        en.adultResultTitle,
+        en.adultResultDisclaimer,
+        en.adultResultHintListTitle,
+        en.adultAmphibianInsufficientData,
+        en.adultAmphibianNoneMatching,
+        en.adultAmphibianSingleHint,
+        en.adultAmphibianClearSingleHint,
+        en.adultResultLegacyBody,
+      ].join('\n');
+
+      expect(corpus.contains('stabiler Profilwert'), isFalse);
+      expect(corpus.contains('Aufgrund der wenigen'), isFalse);
+      expect(corpus.contains('stable profile value'), isFalse);
+      expect(corpus.contains('few available features'), isFalse);
     });
 
-    testWidgets('amphibian disclaimer visible for every AmphibianDisplay',
+    testWidgets('amphibian card is last in same list with name once',
         (tester) async {
       final de = AppLocalizationsDe();
-      final disclaimer = de.adultResultAmphibianDisclaimer;
+      final amphName = PrimitiveReflex.amphibian.copy.label('de');
 
-      for (final display in AmphibianDisplay.values) {
-        final scores = AdultQuestionnaireScore(
-          scoringVersion: kAdultScoringVersion,
-          questionnaireVersion: 'adult_v3',
-          reflexScores: const {},
-          amphibian: AdultAmphibianScore(
-            positiveCount: display == AmphibianDisplay.clearSingleHint ? 2 : 0,
-            answeredCount:
-                display == AmphibianDisplay.insufficientData ? 0 : 1,
-            display: display,
-            showDisclaimer: false, // UI must show anyway
+      await tester.pumpWidget(
+        _harness(
+          child: AdultReflexProfileResultView(
+            assessment: _adultAssessment(scores: _sampleAdultScores()),
+            packageId: 'moro',
+            isFirstResultDisplay: false,
           ),
-          meta: const AdultScoreMeta(
-            hiddenItemIds: [],
-            notApplicableItemIds: [],
-            unknownItemIds: [],
-            noPublicTotalScore: true,
-            movementIncluded: false,
-            filterAnswers: {},
-          ),
-        ).toJson();
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
 
-        await tester.pumpWidget(
-          _harness(
-            child: AdultReflexProfileResultView(
-              assessment: _adultAssessment(scores: scores),
-              packageId: 'moro',
-              isFirstResultDisplay: false,
-            ),
-          ),
-        );
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 50));
+      expect(find.byType(AdultReflexDetailTile), findsNWidgets(2));
+      expect(find.byType(AdultAmphibianDetailTile), findsOneWidget);
+      expect(find.text(amphName), findsOneWidget);
 
-        expect(
-          find.text(disclaimer),
-          findsOneWidget,
-          reason: 'disclaimer missing for $display',
-        );
-        expect(find.text(amphibianDisplayLabel(de, display)), findsOneWidget);
-      }
+      final lastRegular = tester.getTopLeft(
+        find.byType(AdultReflexDetailTile).last,
+      );
+      final amph = tester.getTopLeft(find.byType(AdultAmphibianDetailTile));
+      expect(amph.dy, greaterThan(lastRegular.dy));
+
+      expect(find.text(de.adultAmphibianNoneMatching), findsOneWidget);
+      expect(find.textContaining('stabiler Profilwert'), findsNothing);
+      expect(find.textContaining('Aufgrund der wenigen'), findsNothing);
+    });
+
+    testWidgets('insufficientData shows short Keine Angaben label',
+        (tester) async {
+      final de = AppLocalizationsDe();
+      final scores = AdultQuestionnaireScore(
+        scoringVersion: kAdultScoringVersion,
+        questionnaireVersion: 'adult_v3',
+        reflexScores: const {},
+        amphibian: const AdultAmphibianScore(
+          positiveCount: 0,
+          answeredCount: 0,
+          display: AmphibianDisplay.insufficientData,
+          showDisclaimer: true,
+        ),
+        meta: const AdultScoreMeta(
+          hiddenItemIds: [],
+          notApplicableItemIds: [],
+          unknownItemIds: [],
+          noPublicTotalScore: true,
+          movementIncluded: false,
+          filterAnswers: {},
+        ),
+      ).toJson();
+
+      await tester.pumpWidget(
+        _harness(
+          child: AdultReflexProfileResultView(
+            assessment: _adultAssessment(scores: scores),
+            packageId: 'moro',
+            isFirstResultDisplay: false,
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(find.text(de.adultAmphibianInsufficientData), findsOneWidget);
+      expect(de.adultAmphibianInsufficientData, 'Keine Angaben');
+      expect(find.text(de.adultHintBandInsufficientData), findsNothing);
     });
 
     test('band and amphibian labels exist in DE/EN', () {
@@ -290,6 +324,11 @@ void main() {
       expect(
         de.adultAmphibianInsufficientData,
         isNot(de.adultAmphibianNoneMatching),
+      );
+      expect(de.adultAmphibianInsufficientData, 'Keine Angaben');
+      expect(
+        de.adultAmphibianInsufficientData,
+        isNot(de.adultHintBandInsufficientData),
       );
     });
 
@@ -309,11 +348,9 @@ void main() {
       final corpus = [
         de.adultResultTitle,
         de.adultResultDisclaimer,
-        de.adultResultAmphibianDisclaimer,
         de.adultResultLegacyBody,
         en.adultResultTitle,
         en.adultResultDisclaimer,
-        en.adultResultAmphibianDisclaimer,
         en.adultResultLegacyBody,
         for (final copy in adultReflexResultCopyByReflex.values) ...[
           copy.shortDescriptionDe,

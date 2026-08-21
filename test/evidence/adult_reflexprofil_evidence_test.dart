@@ -10,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:corejourney/core/theme/app_colors.dart';
 import 'package:corejourney/features/assessment/domain/adult_reflex_profile_scoring.dart';
 import 'package:corejourney/features/assessment/domain/models/reflex_profile_assessment.dart';
+import 'package:corejourney/features/assessment/domain/reflex_answer_json.dart';
 import 'package:corejourney/features/assessment/domain/reflex_questionnaire.dart';
 import 'package:corejourney/features/assessment/presentation/widgets/adult_answer_choice_grid.dart';
 import 'package:corejourney/features/assessment/presentation/widgets/adult_reflex_profile_result_view.dart';
@@ -52,9 +53,9 @@ Map<String, dynamic> _sampleScores() {
       ),
     },
     amphibian: const AdultAmphibianScore(
-      positiveCount: 0,
-      answeredCount: 1,
-      display: AmphibianDisplay.noneMatching,
+      positiveCount: 1,
+      answeredCount: 2,
+      display: AmphibianDisplay.singleHint,
       showDisclaimer: true,
     ),
     meta: const AdultScoreMeta(
@@ -71,6 +72,7 @@ Map<String, dynamic> _sampleScores() {
 ReflexProfileAssessment _assessment({
   required Map<String, dynamic> scores,
   String version = 'adult_v3',
+  Map<String, dynamic> answers = const {},
 }) {
   return ReflexProfileAssessment(
     id: 'evidence',
@@ -79,7 +81,7 @@ ReflexProfileAssessment _assessment({
     questionnaireVersion: version,
     scoringVersion: kAdultScoringVersion,
     status: 'completed',
-    answers: const {},
+    answers: answers,
     scores: scores,
     warningConfirmations: const [],
     safetyStatus: 'clear',
@@ -87,6 +89,16 @@ ReflexProfileAssessment _assessment({
     createdAt: DateTime(2026, 8, 21),
   );
 }
+
+/// One amphibian item matching → one filled dot (§10.2b evidence).
+Map<String, dynamic> _amphibianSampleAnswers() => {
+      's017': reflexAnswerToJson(
+        const ReflexAnswerValue(yesNoUnknown: true),
+      ),
+      's102': reflexAnswerToJson(
+        const ReflexAnswerValue(yesNoUnknown: false),
+      ),
+    };
 
 ThemeData _evidenceTheme({required Brightness brightness}) {
   final base = ThemeData(
@@ -234,7 +246,7 @@ void main() {
         key: lightKey,
         brightness: Brightness.light,
         child: AdultReflexProfileResultView(
-          assessment: _assessment(scores: _sampleScores()),
+          assessment: _assessment(scores: _sampleScores(), answers: _amphibianSampleAnswers()),
           packageId: 'moro',
           isFirstResultDisplay: false,
         ),
@@ -249,7 +261,7 @@ void main() {
         key: darkKey,
         brightness: Brightness.dark,
         child: AdultReflexProfileResultView(
-          assessment: _assessment(scores: _sampleScores()),
+          assessment: _assessment(scores: _sampleScores(), answers: _amphibianSampleAnswers()),
           packageId: 'moro',
           isFirstResultDisplay: false,
         ),
@@ -315,7 +327,7 @@ void main() {
         key: inviteKey,
         brightness: Brightness.light,
         child: AdultReflexProfileResultView(
-          assessment: _assessment(scores: _sampleScores()),
+          assessment: _assessment(scores: _sampleScores(), answers: _amphibianSampleAnswers()),
           packageId: 'moro',
           isFirstResultDisplay: false,
         ),
