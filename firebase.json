@@ -4,7 +4,7 @@
       "android": {
         "default": {
           "projectId": "corejourney-prod",
-          "appId": "1:673501917704:android:63ddd42b1717d282e657bd",
+          "appId": "1:673501917704:android:b154a14e7ca8b3dee657bd",
           "fileOutput": "android/app/google-services.json"
         }
       },
