@@ -60,3 +60,83 @@ $function$;
 
 REVOKE ALL ON FUNCTION public.end_trainer_relationship(uuid) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.end_trainer_relationship(uuid) TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.ensure_trainer_client_relationship(p_client_id uuid)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $function$
+DECLARE
+  v_trainer_id uuid := auth.uid();
+  v_relationship_id uuid;
+BEGIN
+  IF v_trainer_id IS NULL THEN
+    RAISE EXCEPTION 'Nicht eingeloggt';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM public.profiles
+     WHERE id = v_trainer_id AND role = 'trainer'
+  ) THEN
+    RAISE EXCEPTION 'Nur Trainer koennen Klienten verknuepfen';
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM public.profiles WHERE id = p_client_id) THEN
+    RAISE EXCEPTION 'Klient nicht gefunden';
+  END IF;
+
+  -- 2. An active row is the ground truth and wins over any stale marker.
+  SELECT id INTO v_relationship_id
+    FROM public.trainer_client_relationships
+   WHERE trainer_id = v_trainer_id
+     AND client_id  = p_client_id
+     AND status     = 'active'
+   LIMIT 1;
+
+  IF v_relationship_id IS NOT NULL THEN
+    RETURN v_relationship_id;
+  END IF;
+
+  -- 3. Pair-wide guard. Early RETURN NULL: merely skipping branch 4 would fall
+  --    through to the INSERT and recreate the relationship under a new id.
+  IF EXISTS (
+    SELECT 1 FROM public.trainer_client_relationships
+     WHERE trainer_id = v_trainer_id
+       AND client_id  = p_client_id
+       AND ended_by_client_at IS NOT NULL
+  ) THEN
+    RETURN NULL;
+  END IF;
+
+  -- 4. Reuse the canonical disconnected row. Ordering must match accept_invite.
+  SELECT id INTO v_relationship_id
+    FROM public.trainer_client_relationships
+   WHERE trainer_id = v_trainer_id
+     AND client_id  = p_client_id
+     AND status     = 'disconnected'
+   ORDER BY linked_at DESC NULLS LAST, created_at DESC, id DESC
+   LIMIT 1;
+
+  IF v_relationship_id IS NOT NULL THEN
+    UPDATE public.trainer_client_relationships
+       SET status    = 'active',
+           linked_at = COALESCE(linked_at, now())
+     WHERE id = v_relationship_id;
+    RETURN v_relationship_id;
+  END IF;
+
+  -- 5. First contact.
+  INSERT INTO public.trainer_client_relationships
+    (trainer_id, client_id, status, linked_at)
+  VALUES (v_trainer_id, p_client_id, 'active', now())
+  RETURNING id INTO v_relationship_id;
+
+  RETURN v_relationship_id;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.ensure_trainer_client_relationship(uuid)
+  FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.ensure_trainer_client_relationship(uuid)
+  TO authenticated;

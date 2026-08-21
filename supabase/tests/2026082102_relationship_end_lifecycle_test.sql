@@ -156,5 +156,72 @@ SELECT is(
   'a completed appointment stays as history'
 );
 
+-- ── Resurrection guard ─────────────────────────────────────────────────────
+-- The relationship from Task 1 is disconnected and marked. A reconcile run by
+-- the trainer must not bring it back, and must not create a replacement row.
+
+SELECT set_config('request.jwt.claims',
+  '{"sub":"2b100000-0000-4000-8000-000000000001","role":"authenticated"}', true);
+SELECT set_config('request.jwt.claim.role','authenticated', true);
+SET LOCAL ROLE authenticated;
+
+SELECT is(
+  public.ensure_trainer_client_relationship('2b100000-0000-4000-8000-000000000003'),
+  NULL,
+  'ensure() refuses to resurrect a client-ended relationship'
+);
+
+RESET ROLE;
+SELECT set_config('request.jwt.claim.role','service_role', true);
+SELECT set_config('request.jwt.claims','{"role":"service_role"}', true);
+
+SELECT is(
+  (SELECT count(*)::integer FROM public.trainer_client_relationships
+    WHERE trainer_id='2b100000-0000-4000-8000-000000000001'
+      AND client_id ='2b100000-0000-4000-8000-000000000003'),
+  1,
+  'no replacement row was inserted under a new id'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM public.trainer_client_relationships
+    WHERE trainer_id='2b100000-0000-4000-8000-000000000001'
+      AND client_id ='2b100000-0000-4000-8000-000000000003'
+      AND status='active'),
+  0,
+  'the pair has no active relationship after the reconcile attempt'
+);
+
+-- An active relationship still wins over a stale marker on another row.
+INSERT INTO public.trainer_client_relationships
+  (id, trainer_id, client_id, status, linked_at, ended_by_client_at)
+VALUES ('2b300000-0000-4000-8000-000000000009',
+        '2b100000-0000-4000-8000-000000000002',
+        '2b100000-0000-4000-8000-000000000003',
+        'disconnected', now() - interval '10 days', now() - interval '10 days');
+INSERT INTO public.trainer_client_relationships
+  (id, trainer_id, client_id, status, linked_at)
+VALUES ('2b300000-0000-4000-8000-000000000010',
+        '2b100000-0000-4000-8000-000000000002',
+        '2b100000-0000-4000-8000-000000000003', 'active', now());
+
+SELECT set_config('request.jwt.claims',
+  '{"sub":"2b100000-0000-4000-8000-000000000002","role":"authenticated"}', true);
+SELECT set_config('request.jwt.claim.role','authenticated', true);
+SET LOCAL ROLE authenticated;
+
+SELECT is(
+  public.ensure_trainer_client_relationship('2b100000-0000-4000-8000-000000000003'),
+  '2b300000-0000-4000-8000-000000000010'::uuid,
+  'an active row is returned even when another row of the pair is marked'
+);
+
+RESET ROLE;
+SELECT set_config('request.jwt.claim.role','service_role', true);
+SELECT set_config('request.jwt.claims','{"role":"service_role"}', true);
+
+DELETE FROM public.trainer_client_relationships
+ WHERE id IN ('2b300000-0000-4000-8000-000000000009',
+              '2b300000-0000-4000-8000-000000000010');
+
 SELECT * FROM finish();
 ROLLBACK;
