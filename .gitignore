@@ -54,8 +54,7 @@ app.*.map.json
 
 # Supabase functions local secrets
 supabase/.env
-supabase/.temp/*
-!supabase/.temp/cli-latest
+supabase/.temp/
 
 # Firebase service account keys
 *-firebase-adminsdk-*.json
