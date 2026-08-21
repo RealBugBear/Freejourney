@@ -193,9 +193,6 @@ void main() {
     await tester.pumpWidget(_harness(repo: repo, initialCode: 'ABCDEFGH'));
     await tester.pumpAndSettle();
 
-    final l10n = AppLocalizations.of(
-      tester.element(find.byType(InviteRedeemScreen)),
-    );
     await tester.tap(find.byKey(const Key('invite-redeem-submit')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('invite-confirm-decline')));
@@ -210,9 +207,6 @@ void main() {
     await tester.pumpWidget(_onboardingHarness(repo: repo));
     await tester.pumpAndSettle();
 
-    final l10n = AppLocalizations.of(
-      tester.element(find.byType(InviteRedeemScreen)),
-    );
     await tester.tap(find.byKey(const Key('invite-redeem-skip')));
     await tester.pumpAndSettle();
 
@@ -225,9 +219,6 @@ void main() {
     await tester.pumpWidget(_onboardingHarness(repo: repo));
     await tester.pumpAndSettle();
 
-    final l10n = AppLocalizations.of(
-      tester.element(find.byType(InviteRedeemScreen)),
-    );
     await tester.tap(find.byKey(const Key('invite-redeem-submit')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('invite-confirm-decline')));
