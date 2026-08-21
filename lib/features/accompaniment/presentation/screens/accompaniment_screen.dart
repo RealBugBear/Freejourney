@@ -17,6 +17,7 @@ import '../../../chat/presentation/widgets/direct_messages_action.dart';
 import '../../../trainer/domain/models/appointment.dart';
 import '../../../trainer/presentation/providers/trainer_discovery_provider.dart';
 import '../../../trainer/presentation/providers/trainer_provider.dart';
+import '../widgets/end_accompaniment_dialog.dart';
 
 class AccompanimentScreen extends ConsumerWidget {
   const AccompanimentScreen({super.key});
@@ -168,6 +169,35 @@ class AccompanimentScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _endAccompaniment(
+    BuildContext context,
+    WidgetRef ref, {
+    required String trainerId,
+    required String relationshipId,
+  }) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showEndAccompanimentDialog(context);
+    if (confirmed != true) return;
+
+    try {
+      await endTrainerRelationship(
+        ref,
+        trainerId: trainerId,
+        relationshipId: relationshipId,
+      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.accompanimentEnded)));
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.accompanimentEndFailed('$e'))),
+        );
+      }
+    }
+  }
+
   Future<void> _confirmWithdrawRequest(
     BuildContext context,
     WidgetRef ref,
@@ -258,6 +288,12 @@ class AccompanimentScreen extends ConsumerWidget {
                 onAppointments: () => context.push(Routes.appointmentProposals),
                 onFindAnother: () => context.push(Routes.trainerDiscovery),
                 onSwitchWithCode: () => _showSwitchTrainerDialog(context, ref),
+                onEndAccompaniment: () => _endAccompaniment(
+                  context,
+                  ref,
+                  trainerId: activeConnection.trainerId,
+                  relationshipId: activeConnection.relationshipId,
+                ),
               )
             else if (pendingConnections.isNotEmpty)
               _PendingRequestCard(
@@ -719,6 +755,7 @@ class _ConnectedTrainerCard extends ConsumerWidget {
     required this.onAppointments,
     required this.onFindAnother,
     required this.onSwitchWithCode,
+    required this.onEndAccompaniment,
   });
 
   final String trainerName;
@@ -727,6 +764,7 @@ class _ConnectedTrainerCard extends ConsumerWidget {
   final VoidCallback onAppointments;
   final VoidCallback onFindAnother;
   final VoidCallback onSwitchWithCode;
+  final VoidCallback onEndAccompaniment;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -847,6 +885,16 @@ class _ConnectedTrainerCard extends ConsumerWidget {
                   label: Text(l10n.accompanimentEnterCode),
                 ),
               ],
+            ),
+            const SizedBox(height: 4),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                key: const Key('accompaniment_end_action'),
+                onPressed: onEndAccompaniment,
+                style: TextButton.styleFrom(foregroundColor: cs.error),
+                child: Text(l10n.accompanimentEndAction),
+              ),
             ),
           ],
         ),

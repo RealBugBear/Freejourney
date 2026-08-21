@@ -2034,7 +2034,7 @@
   "@accompanimentEndConsequenceChat": {
     "description": "Consequence: messaging ends, history kept"
   },
-  "accompanimentEndConsequenceAppointments": "All open appointments will be cancelled.",
+  "accompanimentEndConsequenceAppointments": "All open appointments will be canceled.",
   "@accompanimentEndConsequenceAppointments": {
     "description": "Consequence: open appointments are cancelled"
   },

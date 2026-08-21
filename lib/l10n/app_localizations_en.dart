@@ -2299,7 +2299,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accompanimentEndConsequenceAppointments =>
-      'All open appointments will be cancelled.';
+      'All open appointments will be canceled.';
 
   @override
   String get accompanimentEndTrainerNotice => 'Your trainer will be informed.';
