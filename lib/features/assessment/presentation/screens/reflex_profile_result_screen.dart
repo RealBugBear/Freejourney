@@ -15,6 +15,7 @@ import '../../../trainer/presentation/providers/trainer_provider.dart';
 import '../../../invite/presentation/widgets/invite_impulse_i1_slot.dart';
 import '../reflex_profile_pdf_copy.dart';
 import '../reflex_score_band_l10n.dart';
+import '../widgets/adult_reflex_profile_result_view.dart';
 import 'reflex_profile_result_helpers.dart';
 
 class ReflexProfileResultScreen extends ConsumerWidget {
@@ -66,6 +67,16 @@ class ReflexProfileResultScreen extends ConsumerWidget {
           data: (assessment) {
             if (assessment == null || !assessment.isCompleted) {
               return _EmptyResult(packageId: packageId);
+            }
+            if (assessment.questionnaireType == 'adult_self_report') {
+              if (assessment.questionnaireVersion == 'adult_v3') {
+                return AdultReflexProfileResultView(
+                  assessment: assessment,
+                  packageId: packageId,
+                  isFirstResultDisplay: passedAssessment == null,
+                );
+              }
+              return AdultReflexProfileLegacyNotice(assessment: assessment);
             }
             return _ResultContent(
               assessment: assessment,

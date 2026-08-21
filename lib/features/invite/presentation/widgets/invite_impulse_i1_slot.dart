@@ -47,6 +47,12 @@ class _InviteImpulseI1SlotState extends ConsumerState<InviteImpulseI1Slot> {
   }
 
   Future<void> _evaluate() async {
+    if (!kInviteEnabled || !widget.isFirstResultDisplay) {
+      if (!mounted) return;
+      setState(() => _shouldShow = false);
+      return;
+    }
+
     final result = await evaluateInviteImpulseI1(
       inviteEnabled: kInviteEnabled,
       isFirstResultDisplay: widget.isFirstResultDisplay,

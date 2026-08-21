@@ -82,14 +82,12 @@ const bool kInviteImpulseI2Enabled = false;
 /// (Phase 6). Ergebnis-UI ist Phase 7; Movement-/Hard-Gate sind eigene Flags.
 ///
 /// Flag AUS = Adult-Pfad zeigt weiterhin Coming-Soon.
-/// Flag AN = vollständiger Adult-Fragebogen (Movement/Hard-Gate weiter
-/// über ihre eigenen Flags).
+/// Flag AN = vollständiger Adult-Fragebogen inkl. Adult-Ergebnisschirm
+/// (Movement/Hard-Gate weiter über ihre eigenen Flags).
 ///
-/// `true` erst, wenn der Adult-Ergebnisschirm aus Phase 7 steht
-/// (Plan §15.1). Bis dahin bleibt das Flag aus — Submit würde sonst auf
-/// den Kinder-Ergebnisschirm landen und Adult-Scores falsch darstellen.
-/// Umgelegt wird es im Phase-7-Commit.
-const bool kAdultReflexQuestionnaireEnabled = false;
+/// Plan §15.1: erst true, wenn der Adult-Ergebnisschirm (Phase 7) steht —
+/// hier freigeschaltet zusammen mit dem Ergebnis-UI-Commit.
+const bool kAdultReflexQuestionnaireEnabled = true;
 
 /// Freiwillige Adult-Bewegungsprüfungen (s005/s006, P2.A Phase 6).
 ///

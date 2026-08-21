@@ -141,6 +141,12 @@ bool _adultScores(
   };
 }
 
+bool isAdultPositiveIndication(
+  ReflexQuestion question,
+  ReflexAnswerValue answer,
+) =>
+    _isPositiveIndication(question, answer);
+
 bool _isPositiveIndication(
   ReflexQuestion question,
   ReflexAnswerValue answer,
@@ -327,4 +333,79 @@ class AdultQuestionnaireScore {
         'amphibian': amphibian.toJson(),
         'meta': meta.toJson(),
       };
+
+  /// Parses the nested adult scores map written by [toJson].
+  ///
+  /// Returns null when the shape is not adult_v3 (missing `reflexes`).
+  static AdultQuestionnaireScore? tryParse(Map<String, dynamic> raw) {
+    final reflexesRaw = raw['reflexes'];
+    final amphibianRaw = raw['amphibian'];
+    final metaRaw = raw['meta'];
+    if (reflexesRaw is! Map || amphibianRaw is! Map || metaRaw is! Map) {
+      return null;
+    }
+
+    final reflexes = <PrimitiveReflex, AdultReflexScoreResult>{};
+    for (final entry in reflexesRaw.entries) {
+      final key = entry.key.toString();
+      final reflex = PrimitiveReflex.values
+          .where((r) => r.name == key)
+          .firstOrNull;
+      final value = entry.value;
+      if (reflex == null || value is! Map) continue;
+      reflexes[reflex] = AdultReflexScoreResult(
+        reflex: reflex,
+        positiveCount: (value['positive_count'] as num?)?.toInt() ?? 0,
+        answeredCount: (value['answered_count'] as num?)?.toInt() ?? 0,
+        possibleCount: (value['possible_count'] as num?)?.toInt() ?? 0,
+        unknownCount: (value['unknown_count'] as num?)?.toInt() ?? 0,
+        notApplicableCount:
+            (value['not_applicable_count'] as num?)?.toInt() ?? 0,
+        missingCount: (value['missing_count'] as num?)?.toInt() ?? 0,
+        percent: (value['percent'] as num?)?.toDouble(),
+        percentDisplay: (value['percent_display'] as num?)?.toInt(),
+        band: AdultHintBand.values.firstWhere(
+          (b) => b.name == value['band'],
+          orElse: () => AdultHintBand.insufficientData,
+        ),
+      );
+    }
+
+    final amph = Map<String, dynamic>.from(amphibianRaw);
+    final meta = Map<String, dynamic>.from(metaRaw);
+    return AdultQuestionnaireScore(
+      scoringVersion: raw['scoring_version'] as String? ?? kAdultScoringVersion,
+      questionnaireVersion:
+          raw['questionnaire_version'] as String? ?? 'adult_v3',
+      reflexScores: reflexes,
+      amphibian: AdultAmphibianScore(
+        positiveCount: (amph['positive_count'] as num?)?.toInt() ?? 0,
+        answeredCount: (amph['answered_count'] as num?)?.toInt() ?? 0,
+        display: AmphibianDisplay.values.firstWhere(
+          (d) => d.name == amph['display'],
+          orElse: () => AmphibianDisplay.insufficientData,
+        ),
+        showDisclaimer: amph['show_disclaimer'] as bool? ?? true,
+      ),
+      meta: AdultScoreMeta(
+        hiddenItemIds: (meta['hidden_item_ids'] as List?)
+                ?.map((e) => e.toString())
+                .toList() ??
+            const [],
+        notApplicableItemIds: (meta['not_applicable_item_ids'] as List?)
+                ?.map((e) => e.toString())
+                .toList() ??
+            const [],
+        unknownItemIds: (meta['unknown_item_ids'] as List?)
+                ?.map((e) => e.toString())
+                .toList() ??
+            const [],
+        noPublicTotalScore: meta['no_public_total_score'] as bool? ?? true,
+        movementIncluded: meta['movement_included'] as bool? ?? false,
+        filterAnswers: (meta['filter_answers'] as Map?)
+                ?.map((k, v) => MapEntry(k.toString(), v.toString())) ??
+            const {},
+      ),
+    );
+  }
 }
