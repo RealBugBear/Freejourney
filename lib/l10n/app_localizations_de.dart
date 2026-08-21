@@ -2159,6 +2159,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get progressProfileDetails => 'Details';
 
   @override
+  String get progressAdultLegacyCardBody =>
+      'Erstellt mit älterer Methode. Tippen, um den Hinweis zu öffnen.';
+
+  @override
+  String get progressAdultNoPatternsYet => 'Noch keine Antwortmuster';
+
+  @override
   String progressProfileAgeYears(int years) {
     String _temp0 = intl.Intl.pluralLogic(
       years,
@@ -2703,6 +2710,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get profileActivate => 'Aktivieren';
+
+  @override
+  String get profileViewReflexProfile => 'Reflexprofil ansehen';
+
+  @override
+  String get profileStartReflexProfile => 'Reflexprofil ausfüllen';
 
   @override
   String get profileAdd => 'Profil hinzufügen';

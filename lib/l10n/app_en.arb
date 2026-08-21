@@ -1834,6 +1834,14 @@
   "@progressProfileDetails": {
     "description": "Action label on a reflex profile card with results"
   },
+  "progressAdultLegacyCardBody": "Created with an older method. Tap to open the notice.",
+  "@progressAdultLegacyCardBody": {
+    "description": "Progress strip card for non-adult_v3 adult assessments (§10.3a)"
+  },
+  "progressAdultNoPatternsYet": "No answer patterns yet",
+  "@progressAdultNoPatternsYet": {
+    "description": "Adult progress card when parsed scores have no ranked patterns"
+  },
   "progressProfileAgeYears": "{years, plural, one{{years} year} other{{years} years}}",
   "@progressProfileAgeYears": {
     "description": "Age shown on a reflex profile card",
@@ -2536,6 +2544,14 @@
   "profileActivate": "Activate",
   "@profileActivate": {
     "description": "Action activating a training subject profile"
+  },
+  "profileViewReflexProfile": "View reflex profile",
+  "@profileViewReflexProfile": {
+    "description": "Profile section: open completed reflex result (§10.3a)"
+  },
+  "profileStartReflexProfile": "Fill out reflex profile",
+  "@profileStartReflexProfile": {
+    "description": "Profile section: start questionnaire when no assessment (§10.3a)"
   },
   "profileAdd": "Add Profile",
   "@profileAdd": {

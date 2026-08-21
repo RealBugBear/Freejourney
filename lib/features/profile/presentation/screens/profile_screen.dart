@@ -19,6 +19,7 @@ import '../../../../features/premium/presentation/providers/premium_provider.dar
 import '../../../../features/trainer/presentation/providers/trainer_provider.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../providers/profile_provider.dart';
+import '../widgets/subject_profile_reflex_action_tile.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -396,10 +397,10 @@ class _SubjectProfilesSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final profilesAsync = ref.watch(allReflexSubjectProfilesProvider);
+    final summariesAsync = ref.watch(profilesWithAssessmentsProvider);
     final selected = ref.watch(selectedSubjectProfileProvider);
 
-    return profilesAsync.when(
+    return summariesAsync.when(
       loading: () => const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: LinearProgressIndicator(),
@@ -408,8 +409,8 @@ class _SubjectProfilesSection extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Text(l10n.profileSubjectProfilesLoadFailed('$error')),
       ),
-      data: (profiles) {
-        if (profiles.isEmpty) {
+      data: (summaries) {
+        if (summaries.isEmpty) {
           return ListTile(
             leading: const Icon(Icons.person_add_alt_outlined),
             title: Text(l10n.profileCreateFirst),
@@ -420,17 +421,19 @@ class _SubjectProfilesSection extends ConsumerWidget {
 
         return Column(
           children: [
-            for (final profile in profiles)
+            for (final summary in summaries) ...[
               ListTile(
                 leading: Icon(
-                  profile.profileType == 'adult_self'
+                  summary.profile.profileType == 'adult_self'
                       ? Icons.person_outline
                       : Icons.child_care_outlined,
-                  color: selected?.id == profile.id ? AppColors.primary : null,
+                  color: selected?.id == summary.profile.id
+                      ? AppColors.primary
+                      : null,
                 ),
-                title: Text(profile.displayName),
+                title: Text(summary.profile.displayName),
                 subtitle: Text(
-                  _subjectProfileSubtitle(profile, l10n),
+                  _subjectProfileSubtitle(summary.profile, l10n),
                   style: const TextStyle(fontSize: 12),
                 ),
                 trailing: Row(
@@ -442,21 +445,42 @@ class _SubjectProfilesSection extends ConsumerWidget {
                       onPressed: () => _showSubjectProfileEditor(
                         context,
                         ref,
-                        profile,
+                        summary.profile,
                       ),
                     ),
-                    if (selected?.id == profile.id)
+                    if (selected?.id == summary.profile.id)
                       const Icon(Icons.check_circle, color: AppColors.primary)
                     else
                       TextButton(
                         onPressed: () => ref
                             .read(selectedSubjectProfileIdProvider.notifier)
-                            .select(profile.id),
+                            .select(summary.profile.id),
                         child: Text(l10n.profileActivate),
                       ),
                   ],
                 ),
               ),
+              SubjectProfileReflexActionTile(
+                summary: summary,
+                onPressed: () {
+                  ref
+                      .read(selectedSubjectProfileIdProvider.notifier)
+                      .select(summary.profile.id);
+                  final assessment = summary.latestAssessment;
+                  if (assessment != null) {
+                    context.push(
+                      Routes.reflexProfileResult,
+                      extra: {'assessment': assessment},
+                    );
+                  } else {
+                    context.push(
+                      Routes.reflexProfile,
+                      extra: {'subjectProfileId': summary.profile.id},
+                    );
+                  }
+                },
+              ),
+            ],
             ListTile(
               leading: const Icon(Icons.add_circle_outline),
               title: Text(l10n.profileAdd),

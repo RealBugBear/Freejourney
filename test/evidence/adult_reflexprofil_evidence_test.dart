@@ -12,8 +12,11 @@ import 'package:corejourney/features/assessment/domain/adult_reflex_profile_scor
 import 'package:corejourney/features/assessment/domain/models/reflex_profile_assessment.dart';
 import 'package:corejourney/features/assessment/domain/reflex_answer_json.dart';
 import 'package:corejourney/features/assessment/domain/reflex_questionnaire.dart';
+import 'package:corejourney/features/assessment/presentation/providers/reflex_profile_provider.dart';
 import 'package:corejourney/features/assessment/presentation/widgets/adult_answer_choice_grid.dart';
+import 'package:corejourney/features/assessment/presentation/widgets/adult_progress_profile_card.dart';
 import 'package:corejourney/features/assessment/presentation/widgets/adult_reflex_profile_result_view.dart';
+import 'package:corejourney/features/profile/presentation/widgets/subject_profile_reflex_action_tile.dart';
 import 'package:corejourney/l10n/app_localizations.dart';
 
 const _out = 'docs/evidence/adult-reflexprofil';
@@ -334,5 +337,91 @@ void main() {
       ),
     );
     await _capture(tester, inviteKey, 'adult_result_invite_placement.png');
+
+    // 5) Progress strip — adult card (no radar) beside child-sized chrome
+    final progressKey = GlobalKey();
+    final adultSummary = ReflexProfileSummary(
+      profile: const ReflexSubjectProfile(
+        id: 'adult-1',
+        displayName: 'Alex',
+        profileType: 'adult_self',
+      ),
+      latestAssessment: _assessment(
+        scores: _sampleScores(),
+        answers: _amphibianSampleAnswers(),
+      ),
+    );
+    await tester.pumpWidget(
+      _frame(
+        key: progressKey,
+        brightness: Brightness.light,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Reflexprofile',
+                style: ThemeData.light(useMaterial3: true)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 248,
+                child: AdultProgressProfileCard(
+                  summary: adultSummary,
+                  onTap: () {},
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    expect(find.text('Alex'), findsOneWidget);
+    await _capture(tester, progressKey, '05_progress_adult_reflex_card.png');
+
+    // 6) Profile section — view / fill rows
+    final profileKey = GlobalKey();
+    await tester.pumpWidget(
+      _frame(
+        key: profileKey,
+        brightness: Brightness.light,
+        child: ListView(
+          padding: const EdgeInsets.all(8),
+          children: [
+            const ListTile(
+              leading: Icon(Icons.person_outline),
+              title: Text('Alex'),
+              subtitle: Text('Erwachsenenprofil'),
+            ),
+            SubjectProfileReflexActionTile(
+              summary: adultSummary,
+              onPressed: () {},
+            ),
+            const ListTile(
+              leading: Icon(Icons.child_care_outlined),
+              title: Text('Sam'),
+              subtitle: Text('Kinderprofil'),
+            ),
+            SubjectProfileReflexActionTile(
+              summary: const ReflexProfileSummary(
+                profile: ReflexSubjectProfile(
+                  id: 'child-1',
+                  displayName: 'Sam',
+                  profileType: 'child',
+                ),
+              ),
+              onPressed: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+    expect(find.text('Reflexprofil ansehen'), findsOneWidget);
+    expect(find.text('Reflexprofil ausfüllen'), findsOneWidget);
+    await _capture(tester, profileKey, '06_profile_reflex_actions.png');
   });
 }

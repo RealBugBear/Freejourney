@@ -14,6 +14,7 @@ import '../../../../core/widgets/error_retry_widget.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../chat/presentation/widgets/direct_messages_action.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
+import '../../../assessment/presentation/widgets/adult_progress_profile_card.dart';
 import '../../../assessment/presentation/widgets/reflex_radar_chart.dart';
 import '../../../mood/domain/models/mood_daily_aggregate.dart';
 import '../../../mood/presentation/providers/mood_provider.dart';
@@ -631,6 +632,22 @@ class _ReflexProfileCardState extends ConsumerState<_ReflexProfileCard> {
             );
           }
           final summary = summaries[i];
+          final assessment = summary.latestAssessment;
+          if (assessment != null && isAdultProgressAssessment(assessment)) {
+            return AdultProgressProfileCard(
+              summary: summary,
+              isSelected: summary.profile.id == selectedProfileId,
+              onTap: () {
+                ref
+                    .read(selectedSubjectProfileIdProvider.notifier)
+                    .select(summary.profile.id);
+                context.push(
+                  Routes.reflexProfileResult,
+                  extra: {'assessment': assessment},
+                );
+              },
+            );
+          }
           return _ProfileRadarCard(
             summary: summary,
             isSelected: summary.profile.id == selectedProfileId,
@@ -638,7 +655,6 @@ class _ReflexProfileCardState extends ConsumerState<_ReflexProfileCard> {
               ref
                   .read(selectedSubjectProfileIdProvider.notifier)
                   .select(summary.profile.id);
-              final assessment = summary.latestAssessment;
               if (assessment != null) {
                 context.push(
                   Routes.reflexProfileResult,

@@ -19,6 +19,8 @@ group by 1, 2, 3;
 | `02_adult_result_dark.png` | Adult_v3 result, dark |
 | `03_adult_result_legacy.png` | Legacy-method notice |
 | `04_adult_answer_grid_2x2.png` | Four-way answer grid (Ja/Nein/?/n.z.) |
+| `05_progress_adult_reflex_card.png` | Fortschritt-Karte: adult_v3, kein Radar (§10.3a) |
+| `06_profile_reflex_actions.png` | Profil-Bereich: ansehen / ausfüllen (§10.3a) |
 | `adult_result_invite_placement.png` | Result with invite slot below export actions (§10.2a) |
 | `adult_result_invite_placement_mock.png` | Earlier layout mock (kept for comparison) |
 

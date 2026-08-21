@@ -67,11 +67,15 @@ class ReflexProfileSummary {
   final ReflexProfileAssessment? latestAssessment;
 }
 
-/// All child profiles owned by the current user, each paired with their latest
-/// completed assessment (or null if none exists yet).
+/// All subject profiles owned by the current user (child and adult_self), each
+/// paired with their latest completed assessment (or null if none exists yet).
+///
+/// Uses [allReflexSubjectProfilesProvider] so adult profiles appear in the
+/// progress “Reflexprofile” strip (§10.3a). Mood cards keep the child-only
+/// [reflexSubjectProfilesProvider] separately.
 final profilesWithAssessmentsProvider =
     FutureProvider<List<ReflexProfileSummary>>((ref) async {
-  final profiles = await ref.watch(reflexSubjectProfilesProvider.future);
+  final profiles = await ref.watch(allReflexSubjectProfilesProvider.future);
   if (profiles.isEmpty) return [];
 
   final profileIds = profiles.map((p) => p.id).toList();

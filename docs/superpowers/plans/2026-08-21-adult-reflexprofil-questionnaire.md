@@ -656,6 +656,22 @@ Der Seiten-Disclaimer oben gilt für die gesamte Liste, Amphibien eingeschlossen
 | alte Version | Banner „Erstellt mit älterer Methode“; keine Misch-Vergleiche |
 | Methodenwechsel | History-Bruch markieren |
 
+### 10.3a Das Profil wiederfinden (Founder-Befund 2026-08-21, im Simulator)
+
+Nach dem Absenden konnte der Founder das PDF teilen — danach war das Erwachsenenprofil **nirgends mehr auffindbar**. Drei Ursachen, alle außerhalb des Ergebnisschirms; im Review der Phasen 5–7 übersehen, weil nur der Schirm selbst geprüft wurde und nicht der Weg dorthin:
+
+1. **Fortschritt-Karte „Reflexprofile"** speist sich aus `profilesWithAssessmentsProvider` → `reflexSubjectProfilesProvider`, und der filtert `profileType == 'child'` ([`reflex_profile_provider.dart:141`](../../../lib/features/assessment/presentation/providers/reflex_profile_provider.dart)). Erwachsenenprofile erscheinen dort gar nicht.
+2. **Profil-Bereich → „Trainingsprofile"** listet das Erwachsenenprofil zwar (nutzt `allReflexSubjectProfilesProvider`), aber die Zeile kann nur umbenennen und aktivieren. Kein Weg zum Ergebnis.
+3. Selbst sichtbar gemacht, würde das Kärtchen `ReflexRadarChart(mini: true)` aus `radarScoresFromAssessment(assessment.scores, …)` rendern — Kinder-Scores-Form. Bei Adult-Scores derselbe `reflexes`/`amphibian`/`meta`-Müll wie beim Ergebnisschirm vor §10.4, und Radar ist für Adult ohnehin ausgeschlossen (§10.1).
+
+**Founder-Entscheidung: nur das aktuelle Profil wiederfinden, kein Verlauf.** Frühere Durchgänge bleiben Phase 8 (§11.2) — dort auch die Frage, wie zwei Durchgänge nebeneinander stehen, ohne wie eine Wirkungsmessung auszusehen.
+
+Umsetzung:
+
+- `profilesWithAssessmentsProvider` auf `allReflexSubjectProfilesProvider` umstellen. **Den child-only-Provider selbst nicht anfassen** — sein einziger weiterer Nutzer ist die Stimmungs-/Energie-/Stress-Karte in [`progress_overview_screen.dart:190`](../../../lib/features/progress/presentation/screens/progress_overview_screen.dart), und ob die Erwachsene einschließen soll, ist eine eigene Entscheidung.
+- Kärtchen für `adult_self`: **kein Mini-Radar.** Name, Datum, und die zwei bis drei stärksten Antwortmuster als kurze Zeilen (Reflexname + Bandtext). Antippen öffnet `Routes.reflexProfileResult` wie bei Kindern.
+- Profil-Bereich: pro Profil eine Zeile „Reflexprofil ansehen" → Ergebnis; ohne abgeschlossenes Assessment stattdessen „Reflexprofil ausfüllen" → Fragebogen.
+
 ### 10.4 Child Result
 
 Unverändert lassen (Radar, alte Band-Labels). Branch explizit — **auf die Version, nicht auf den Typ** (Revision 2026-08-21b):

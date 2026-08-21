@@ -3782,6 +3782,18 @@ abstract class AppLocalizations {
   /// **'Details'**
   String get progressProfileDetails;
 
+  /// Progress strip card for non-adult_v3 adult assessments (§10.3a)
+  ///
+  /// In de, this message translates to:
+  /// **'Erstellt mit älterer Methode. Tippen, um den Hinweis zu öffnen.'**
+  String get progressAdultLegacyCardBody;
+
+  /// Adult progress card when parsed scores have no ranked patterns
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine Antwortmuster'**
+  String get progressAdultNoPatternsYet;
+
   /// Age shown on a reflex profile card
   ///
   /// In de, this message translates to:
@@ -4670,6 +4682,18 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Aktivieren'**
   String get profileActivate;
+
+  /// Profile section: open completed reflex result (§10.3a)
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil ansehen'**
+  String get profileViewReflexProfile;
+
+  /// Profile section: start questionnaire when no assessment (§10.3a)
+  ///
+  /// In de, this message translates to:
+  /// **'Reflexprofil ausfüllen'**
+  String get profileStartReflexProfile;
 
   /// Action adding a training subject profile
   ///
