@@ -7312,6 +7312,192 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Der lokale oder entfernte Cache war nicht verwendbar. Du trainierst mit dem geprüften Offline-Inhalt dieser Version.'**
   String get trainingOfflineSnapshotNotice;
+
+  /// Invite screen app bar title
+  ///
+  /// In de, this message translates to:
+  /// **'Einladen'**
+  String get inviteTitle;
+
+  /// Impact tree headline when no activations yet
+  ///
+  /// In de, this message translates to:
+  /// **'Verschenke einen guten Start'**
+  String get inviteTreeHeadlineZero;
+
+  /// Impact tree headline with activation count
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, =1{1 Mensch ist über deine Einladung gestartet.} other{{count} Menschen sind über deine Einladung gestartet.}}'**
+  String inviteTreeHeadline(int count);
+
+  /// Hint under empty impact tree
+  ///
+  /// In de, this message translates to:
+  /// **'Wenn jemand über deine Einladung sein erstes Training abschließt, wächst hier ein Zweig.'**
+  String get inviteTreeEmptyHint;
+
+  /// Explainer under the impact tree
+  ///
+  /// In de, this message translates to:
+  /// **'Der Selbstcheck ist kostenlos, dauert fünf Minuten und braucht kein Konto. Du kannst ihn weitergeben.'**
+  String get inviteWhy;
+
+  /// Primary share button
+  ///
+  /// In de, this message translates to:
+  /// **'Einladung teilen'**
+  String get inviteShareAction;
+
+  /// Label above personal invite code
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Code'**
+  String get inviteCodeLabel;
+
+  /// Snackbar after copying invite code
+  ///
+  /// In de, this message translates to:
+  /// **'Code kopiert'**
+  String get inviteCodeCopied;
+
+  /// Privacy footnote on invite screen
+  ///
+  /// In de, this message translates to:
+  /// **'Du erfährst nur, wie viele Menschen begonnen haben. Nie wer.'**
+  String get invitePrivacyFootnote;
+
+  /// Editable share sheet body including invite link
+  ///
+  /// In de, this message translates to:
+  /// **'Falls du dich fragst, ob frühkindliche Reflexe bei euch eine Rolle spielen: Hier gibt es einen kostenlosen 5-Minuten-Check – ohne Anmeldung und ohne App. {link}'**
+  String inviteShareMessage(String link);
+
+  /// Semantics label for impact tree card; no branch count
+  ///
+  /// In de, this message translates to:
+  /// **'Wachsender Baum. {count} Menschen sind über deine Einladung gestartet.'**
+  String inviteTreeSemantics(int count);
+
+  /// Offline error when invite overview or redeem needs network
+  ///
+  /// In de, this message translates to:
+  /// **'Dafür braucht es kurz Internet. Versuch es später noch einmal.'**
+  String get inviteErrorOffline;
+
+  /// Settings entry title for invite feature
+  ///
+  /// In de, this message translates to:
+  /// **'Freunde einladen'**
+  String get inviteEntryTitle;
+
+  /// Settings entry subtitle for invite feature
+  ///
+  /// In de, this message translates to:
+  /// **'Den kostenlosen Selbstcheck weitergeben'**
+  String get inviteEntrySubtitle;
+
+  /// Invite impulse card title (I1/I2)
+  ///
+  /// In de, this message translates to:
+  /// **'Verschenke einen guten Start'**
+  String get impulseInviteTitle;
+
+  /// Invite impulse card body
+  ///
+  /// In de, this message translates to:
+  /// **'Kennst du jemanden, der sich dieselbe Frage stellt? Der 5-Minuten-Check ist kostenlos.'**
+  String get impulseInviteBody;
+
+  /// Onboarding / redeem screen headline
+  ///
+  /// In de, this message translates to:
+  /// **'Hat dich jemand eingeladen?'**
+  String get inviteRedeemQuestion;
+
+  /// Paste invite code from clipboard
+  ///
+  /// In de, this message translates to:
+  /// **'Aus Zwischenablage einfügen'**
+  String get inviteRedeemPaste;
+
+  /// Skip invite redeem during onboarding
+  ///
+  /// In de, this message translates to:
+  /// **'Überspringen'**
+  String get inviteRedeemSkip;
+
+  /// Confirm sheet title before redeem RPC
+  ///
+  /// In de, this message translates to:
+  /// **'Einladung annehmen?'**
+  String get inviteConfirmTitle;
+
+  /// Confirm sheet privacy body
+  ///
+  /// In de, this message translates to:
+  /// **'Die Person, die dich eingeladen hat, sieht später nur, dass eine weitere Person über ihre Einladung mit dem Training begonnen hat – niemals deinen Namen.'**
+  String get inviteConfirmBody;
+
+  /// Confirm sheet accept button
+  ///
+  /// In de, this message translates to:
+  /// **'Einladung annehmen'**
+  String get inviteConfirmAccept;
+
+  /// Confirm sheet decline button
+  ///
+  /// In de, this message translates to:
+  /// **'Nicht jetzt'**
+  String get inviteConfirmDecline;
+
+  /// Snackbar after successful redeem
+  ///
+  /// In de, this message translates to:
+  /// **'Einladung angenommen.'**
+  String get inviteRedeemSuccess;
+
+  /// Redeem error: unknown_code
+  ///
+  /// In de, this message translates to:
+  /// **'Diesen Code kennen wir nicht. Prüf bitte die Schreibweise.'**
+  String get inviteErrorUnknownCode;
+
+  /// Redeem error: code_inactive
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Code ist nicht mehr gültig.'**
+  String get inviteErrorCodeInactive;
+
+  /// Redeem error: own_code
+  ///
+  /// In de, this message translates to:
+  /// **'Das ist dein eigener Code.'**
+  String get inviteErrorOwnCode;
+
+  /// Redeem error: already_referred
+  ///
+  /// In de, this message translates to:
+  /// **'Zu deinem Konto gehört schon eine Einladung.'**
+  String get inviteErrorAlreadyReferred;
+
+  /// Redeem error: account_too_old
+  ///
+  /// In de, this message translates to:
+  /// **'Eine Einladung lässt sich nur in den ersten 30 Tagen eines Kontos annehmen.'**
+  String get inviteErrorAccountTooOld;
+
+  /// Neutral message for unexpected redeem/contract failures (not offline)
+  ///
+  /// In de, this message translates to:
+  /// **'Das hat gerade nicht geklappt. Versuch es bitte später noch einmal.'**
+  String get inviteErrorUnexpected;
+
+  /// Text field label for invite code entry
+  ///
+  /// In de, this message translates to:
+  /// **'Einladungscode'**
+  String get inviteCodeFieldLabel;
 }
 
 class _AppLocalizationsDelegate

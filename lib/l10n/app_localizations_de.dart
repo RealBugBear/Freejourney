@@ -4326,4 +4326,119 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get trainingOfflineSnapshotNotice =>
       'Der lokale oder entfernte Cache war nicht verwendbar. Du trainierst mit dem geprüften Offline-Inhalt dieser Version.';
+
+  @override
+  String get inviteTitle => 'Einladen';
+
+  @override
+  String get inviteTreeHeadlineZero => 'Verschenke einen guten Start';
+
+  @override
+  String inviteTreeHeadline(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Menschen sind über deine Einladung gestartet.',
+      one: '1 Mensch ist über deine Einladung gestartet.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get inviteTreeEmptyHint =>
+      'Wenn jemand über deine Einladung sein erstes Training abschließt, wächst hier ein Zweig.';
+
+  @override
+  String get inviteWhy =>
+      'Der Selbstcheck ist kostenlos, dauert fünf Minuten und braucht kein Konto. Du kannst ihn weitergeben.';
+
+  @override
+  String get inviteShareAction => 'Einladung teilen';
+
+  @override
+  String get inviteCodeLabel => 'Dein Code';
+
+  @override
+  String get inviteCodeCopied => 'Code kopiert';
+
+  @override
+  String get invitePrivacyFootnote =>
+      'Du erfährst nur, wie viele Menschen begonnen haben. Nie wer.';
+
+  @override
+  String inviteShareMessage(String link) {
+    return 'Falls du dich fragst, ob frühkindliche Reflexe bei euch eine Rolle spielen: Hier gibt es einen kostenlosen 5-Minuten-Check – ohne Anmeldung und ohne App. $link';
+  }
+
+  @override
+  String inviteTreeSemantics(int count) {
+    return 'Wachsender Baum. $count Menschen sind über deine Einladung gestartet.';
+  }
+
+  @override
+  String get inviteErrorOffline =>
+      'Dafür braucht es kurz Internet. Versuch es später noch einmal.';
+
+  @override
+  String get inviteEntryTitle => 'Freunde einladen';
+
+  @override
+  String get inviteEntrySubtitle => 'Den kostenlosen Selbstcheck weitergeben';
+
+  @override
+  String get impulseInviteTitle => 'Verschenke einen guten Start';
+
+  @override
+  String get impulseInviteBody =>
+      'Kennst du jemanden, der sich dieselbe Frage stellt? Der 5-Minuten-Check ist kostenlos.';
+
+  @override
+  String get inviteRedeemQuestion => 'Hat dich jemand eingeladen?';
+
+  @override
+  String get inviteRedeemPaste => 'Aus Zwischenablage einfügen';
+
+  @override
+  String get inviteRedeemSkip => 'Überspringen';
+
+  @override
+  String get inviteConfirmTitle => 'Einladung annehmen?';
+
+  @override
+  String get inviteConfirmBody =>
+      'Die Person, die dich eingeladen hat, sieht später nur, dass eine weitere Person über ihre Einladung mit dem Training begonnen hat – niemals deinen Namen.';
+
+  @override
+  String get inviteConfirmAccept => 'Einladung annehmen';
+
+  @override
+  String get inviteConfirmDecline => 'Nicht jetzt';
+
+  @override
+  String get inviteRedeemSuccess => 'Einladung angenommen.';
+
+  @override
+  String get inviteErrorUnknownCode =>
+      'Diesen Code kennen wir nicht. Prüf bitte die Schreibweise.';
+
+  @override
+  String get inviteErrorCodeInactive => 'Dieser Code ist nicht mehr gültig.';
+
+  @override
+  String get inviteErrorOwnCode => 'Das ist dein eigener Code.';
+
+  @override
+  String get inviteErrorAlreadyReferred =>
+      'Zu deinem Konto gehört schon eine Einladung.';
+
+  @override
+  String get inviteErrorAccountTooOld =>
+      'Eine Einladung lässt sich nur in den ersten 30 Tagen eines Kontos annehmen.';
+
+  @override
+  String get inviteErrorUnexpected =>
+      'Das hat gerade nicht geklappt. Versuch es bitte später noch einmal.';
+
+  @override
+  String get inviteCodeFieldLabel => 'Einladungscode';
 }

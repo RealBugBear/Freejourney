@@ -4703,5 +4703,144 @@
   "trainingOfflineSnapshotNotice": "The local or remote cache could not be used. This session uses the verified offline content for this version.",
   "@trainingOfflineSnapshotNotice": {
     "description": "Visible fallback notice for invalid, empty, or failed cache"
+  },
+  "inviteTitle": "Invite",
+  "@inviteTitle": {
+    "description": "Invite screen app bar title"
+  },
+  "inviteTreeHeadlineZero": "Give someone a good start",
+  "@inviteTreeHeadlineZero": {
+    "description": "Impact tree headline when no activations yet"
+  },
+  "inviteTreeHeadline": "{count, plural, =1{1 person has started through your invitation.} other{{count} people have started through your invitation.}}",
+  "@inviteTreeHeadline": {
+    "description": "Impact tree headline with activation count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inviteTreeEmptyHint": "When someone completes their first training through your invitation, a branch grows here.",
+  "@inviteTreeEmptyHint": {
+    "description": "Hint under empty impact tree"
+  },
+  "inviteWhy": "The self-check is free, takes five minutes and needs no account. You can pass it on.",
+  "@inviteWhy": {
+    "description": "Explainer under the impact tree"
+  },
+  "inviteShareAction": "Share invitation",
+  "@inviteShareAction": {
+    "description": "Primary share button"
+  },
+  "inviteCodeLabel": "Your code",
+  "@inviteCodeLabel": {
+    "description": "Label above personal invite code"
+  },
+  "inviteCodeCopied": "Code copied",
+  "@inviteCodeCopied": {
+    "description": "Snackbar after copying invite code"
+  },
+  "invitePrivacyFootnote": "You only learn how many people have started. Never who.",
+  "@invitePrivacyFootnote": {
+    "description": "Privacy footnote on invite screen"
+  },
+  "inviteShareMessage": "If you are wondering whether retained primitive reflexes play a role for you: here is a free 5-minute check – no sign-up, no app. {link}",
+  "@inviteShareMessage": {
+    "description": "Editable share sheet body including invite link",
+    "placeholders": {
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "inviteTreeSemantics": "Growing tree. {count} people have started through your invitation.",
+  "@inviteTreeSemantics": {
+    "description": "Semantics label for impact tree card; no branch count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inviteErrorOffline": "This needs a moment of internet. Please try again later.",
+  "@inviteErrorOffline": {
+    "description": "Offline error when invite overview or redeem needs network"
+  },
+  "inviteEntryTitle": "Invite friends",
+  "@inviteEntryTitle": {
+    "description": "Settings entry title for invite feature"
+  },
+  "inviteEntrySubtitle": "Pass on the free self-check",
+  "@inviteEntrySubtitle": {
+    "description": "Settings entry subtitle for invite feature"
+  },
+  "impulseInviteTitle": "Give someone a good start",
+  "@impulseInviteTitle": {
+    "description": "Invite impulse card title (I1/I2)"
+  },
+  "impulseInviteBody": "Do you know someone asking the same question? The 5-minute check is free.",
+  "@impulseInviteBody": {
+    "description": "Invite impulse card body"
+  },
+  "inviteRedeemQuestion": "Did someone invite you?",
+  "@inviteRedeemQuestion": {
+    "description": "Onboarding / redeem screen headline"
+  },
+  "inviteRedeemPaste": "Paste from clipboard",
+  "@inviteRedeemPaste": {
+    "description": "Paste invite code from clipboard"
+  },
+  "inviteRedeemSkip": "Skip",
+  "@inviteRedeemSkip": {
+    "description": "Skip invite redeem during onboarding"
+  },
+  "inviteConfirmTitle": "Accept invitation?",
+  "@inviteConfirmTitle": {
+    "description": "Confirm sheet title before redeem RPC"
+  },
+  "inviteConfirmBody": "The person who invited you will later only see that one more person has started training through their invitation – never your name.",
+  "@inviteConfirmBody": {
+    "description": "Confirm sheet privacy body"
+  },
+  "inviteConfirmAccept": "Accept invitation",
+  "@inviteConfirmAccept": {
+    "description": "Confirm sheet accept button"
+  },
+  "inviteConfirmDecline": "Not now",
+  "@inviteConfirmDecline": {
+    "description": "Confirm sheet decline button"
+  },
+  "inviteRedeemSuccess": "Invitation accepted.",
+  "@inviteRedeemSuccess": {
+    "description": "Snackbar after successful redeem"
+  },
+  "inviteErrorUnknownCode": "We do not know this code. Please check the spelling.",
+  "@inviteErrorUnknownCode": {
+    "description": "Redeem error: unknown_code"
+  },
+  "inviteErrorCodeInactive": "This code is no longer valid.",
+  "@inviteErrorCodeInactive": {
+    "description": "Redeem error: code_inactive"
+  },
+  "inviteErrorOwnCode": "That is your own code.",
+  "@inviteErrorOwnCode": {
+    "description": "Redeem error: own_code"
+  },
+  "inviteErrorAlreadyReferred": "Your account already has an invitation.",
+  "@inviteErrorAlreadyReferred": {
+    "description": "Redeem error: already_referred"
+  },
+  "inviteErrorAccountTooOld": "An invitation can only be accepted within an account's first 30 days.",
+  "@inviteErrorAccountTooOld": {
+    "description": "Redeem error: account_too_old"
+  },
+  "inviteErrorUnexpected": "That did not work just now. Please try again later.",
+  "@inviteErrorUnexpected": {
+    "description": "Neutral message for unexpected redeem/contract failures (not offline)"
+  },
+  "inviteCodeFieldLabel": "Invitation code",
+  "@inviteCodeFieldLabel": {
+    "description": "Text field label for invite code entry"
   }
 }

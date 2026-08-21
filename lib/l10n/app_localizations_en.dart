@@ -4318,4 +4318,119 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get trainingOfflineSnapshotNotice =>
       'The local or remote cache could not be used. This session uses the verified offline content for this version.';
+
+  @override
+  String get inviteTitle => 'Invite';
+
+  @override
+  String get inviteTreeHeadlineZero => 'Give someone a good start';
+
+  @override
+  String inviteTreeHeadline(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people have started through your invitation.',
+      one: '1 person has started through your invitation.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get inviteTreeEmptyHint =>
+      'When someone completes their first training through your invitation, a branch grows here.';
+
+  @override
+  String get inviteWhy =>
+      'The self-check is free, takes five minutes and needs no account. You can pass it on.';
+
+  @override
+  String get inviteShareAction => 'Share invitation';
+
+  @override
+  String get inviteCodeLabel => 'Your code';
+
+  @override
+  String get inviteCodeCopied => 'Code copied';
+
+  @override
+  String get invitePrivacyFootnote =>
+      'You only learn how many people have started. Never who.';
+
+  @override
+  String inviteShareMessage(String link) {
+    return 'If you are wondering whether retained primitive reflexes play a role for you: here is a free 5-minute check – no sign-up, no app. $link';
+  }
+
+  @override
+  String inviteTreeSemantics(int count) {
+    return 'Growing tree. $count people have started through your invitation.';
+  }
+
+  @override
+  String get inviteErrorOffline =>
+      'This needs a moment of internet. Please try again later.';
+
+  @override
+  String get inviteEntryTitle => 'Invite friends';
+
+  @override
+  String get inviteEntrySubtitle => 'Pass on the free self-check';
+
+  @override
+  String get impulseInviteTitle => 'Give someone a good start';
+
+  @override
+  String get impulseInviteBody =>
+      'Do you know someone asking the same question? The 5-minute check is free.';
+
+  @override
+  String get inviteRedeemQuestion => 'Did someone invite you?';
+
+  @override
+  String get inviteRedeemPaste => 'Paste from clipboard';
+
+  @override
+  String get inviteRedeemSkip => 'Skip';
+
+  @override
+  String get inviteConfirmTitle => 'Accept invitation?';
+
+  @override
+  String get inviteConfirmBody =>
+      'The person who invited you will later only see that one more person has started training through their invitation – never your name.';
+
+  @override
+  String get inviteConfirmAccept => 'Accept invitation';
+
+  @override
+  String get inviteConfirmDecline => 'Not now';
+
+  @override
+  String get inviteRedeemSuccess => 'Invitation accepted.';
+
+  @override
+  String get inviteErrorUnknownCode =>
+      'We do not know this code. Please check the spelling.';
+
+  @override
+  String get inviteErrorCodeInactive => 'This code is no longer valid.';
+
+  @override
+  String get inviteErrorOwnCode => 'That is your own code.';
+
+  @override
+  String get inviteErrorAlreadyReferred =>
+      'Your account already has an invitation.';
+
+  @override
+  String get inviteErrorAccountTooOld =>
+      'An invitation can only be accepted within an account\'s first 30 days.';
+
+  @override
+  String get inviteErrorUnexpected =>
+      'That did not work just now. Please try again later.';
+
+  @override
+  String get inviteCodeFieldLabel => 'Invitation code';
 }
