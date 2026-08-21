@@ -5524,6 +5524,30 @@ abstract class AppLocalizations {
   /// **'Offene Fragen'**
   String get reflexProfileAdultSummaryOpenHeading;
 
+  /// Adult safety notice dialog title (expert draft v0)
+  ///
+  /// In de, this message translates to:
+  /// **'Hinweis'**
+  String get reflexProfileAdultSafetyNoticeTitle;
+
+  /// Adult safety notice body without movement appendix — Expertendokument §6 wörtlich
+  ///
+  /// In de, this message translates to:
+  /// **'Deine Angabe kann bedeuten, dass einzelne Bewegungen oder Trainingsübungen angepasst oder vorher fachlich besprochen werden sollten. Dieses Ergebnis bewertet deine Diagnose nicht.'**
+  String get reflexProfileAdultSafetyNoticeBody;
+
+  /// Adult safety notice closing sentence — only when movement flag is on
+  ///
+  /// In de, this message translates to:
+  /// **'Führe die gekennzeichneten Übungen nicht ohne die hier empfohlene Rücksprache durch.'**
+  String get reflexProfileAdultSafetyNoticeMovementAppendix;
+
+  /// Adult safety notice confirm — documents display only, no liability transfer
+  ///
+  /// In de, this message translates to:
+  /// **'Hinweis gelesen.'**
+  String get reflexProfileAdultSafetyNoticeConfirm;
+
   /// Start screen disclaimer title
   ///
   /// In de, this message translates to:

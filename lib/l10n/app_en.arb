@@ -3230,6 +3230,22 @@
   "@reflexProfileAdultSummaryOpenHeading": {
     "description": "Adult summary open items heading"
   },
+  "reflexProfileAdultSafetyNoticeTitle": "Notice",
+  "@reflexProfileAdultSafetyNoticeTitle": {
+    "description": "Adult safety notice dialog title (expert draft v0)"
+  },
+  "reflexProfileAdultSafetyNoticeBody": "Your answer may mean that individual movements or training exercises should be adapted or discussed with a professional first. This result does not evaluate your diagnosis.",
+  "@reflexProfileAdultSafetyNoticeBody": {
+    "description": "Adult safety notice body without movement appendix — EN of expert draft §6"
+  },
+  "reflexProfileAdultSafetyNoticeMovementAppendix": "Do not perform the marked exercises without the consultation recommended here.",
+  "@reflexProfileAdultSafetyNoticeMovementAppendix": {
+    "description": "Adult safety notice closing sentence — only when movement flag is on"
+  },
+  "reflexProfileAdultSafetyNoticeConfirm": "Notice read.",
+  "@reflexProfileAdultSafetyNoticeConfirm": {
+    "description": "Adult safety notice confirm — documents display only, no liability transfer"
+  },
   "reflexProfileOrientationTitle": "Guidance Only — Not a Verdict",
   "@reflexProfileOrientationTitle": {
     "description": "Start screen disclaimer title"

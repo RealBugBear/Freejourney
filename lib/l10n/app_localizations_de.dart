@@ -3231,6 +3231,20 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reflexProfileAdultSummaryOpenHeading => 'Offene Fragen';
 
   @override
+  String get reflexProfileAdultSafetyNoticeTitle => 'Hinweis';
+
+  @override
+  String get reflexProfileAdultSafetyNoticeBody =>
+      'Deine Angabe kann bedeuten, dass einzelne Bewegungen oder Trainingsübungen angepasst oder vorher fachlich besprochen werden sollten. Dieses Ergebnis bewertet deine Diagnose nicht.';
+
+  @override
+  String get reflexProfileAdultSafetyNoticeMovementAppendix =>
+      'Führe die gekennzeichneten Übungen nicht ohne die hier empfohlene Rücksprache durch.';
+
+  @override
+  String get reflexProfileAdultSafetyNoticeConfirm => 'Hinweis gelesen.';
+
+  @override
   String get reflexProfileOrientationTitle =>
       'Eine Orientierung, keine Diagnose';
 

@@ -3230,6 +3230,22 @@
   "@reflexProfileAdultSummaryOpenHeading": {
     "description": "Adult summary open items heading"
   },
+  "reflexProfileAdultSafetyNoticeTitle": "Hinweis",
+  "@reflexProfileAdultSafetyNoticeTitle": {
+    "description": "Adult safety notice dialog title (expert draft v0)"
+  },
+  "reflexProfileAdultSafetyNoticeBody": "Deine Angabe kann bedeuten, dass einzelne Bewegungen oder Trainingsübungen angepasst oder vorher fachlich besprochen werden sollten. Dieses Ergebnis bewertet deine Diagnose nicht.",
+  "@reflexProfileAdultSafetyNoticeBody": {
+    "description": "Adult safety notice body without movement appendix — Expertendokument §6 wörtlich"
+  },
+  "reflexProfileAdultSafetyNoticeMovementAppendix": "Führe die gekennzeichneten Übungen nicht ohne die hier empfohlene Rücksprache durch.",
+  "@reflexProfileAdultSafetyNoticeMovementAppendix": {
+    "description": "Adult safety notice closing sentence — only when movement flag is on"
+  },
+  "reflexProfileAdultSafetyNoticeConfirm": "Hinweis gelesen.",
+  "@reflexProfileAdultSafetyNoticeConfirm": {
+    "description": "Adult safety notice confirm — documents display only, no liability transfer"
+  },
   "reflexProfileOrientationTitle": "Eine Orientierung, keine Diagnose",
   "@reflexProfileOrientationTitle": {
     "description": "Start screen disclaimer title"
