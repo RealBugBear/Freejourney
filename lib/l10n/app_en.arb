@@ -3246,6 +3246,104 @@
   "@reflexProfileAdultSafetyNoticeConfirm": {
     "description": "Adult safety notice confirm — documents display only, no liability transfer"
   },
+  "adultResultTitle": "Your Reflex Profile",
+  "@adultResultTitle": {
+    "description": "Adult result screen title"
+  },
+  "adultResultSubline": "Adult profile · {date} · {questionnaireVersion} / {scoringVersion}",
+  "@adultResultSubline": {
+    "description": "Adult result meta subline",
+    "placeholders": {
+      "date": {"type": "String"},
+      "questionnaireVersion": {"type": "String"},
+      "scoringVersion": {"type": "String"}
+    }
+  },
+  "adultResultDisclaimer": "These are your subjective answer patterns only. They are not a reflex finding and not a diagnosis.",
+  "@adultResultDisclaimer": {
+    "description": "Adult result non-diagnostic disclaimer"
+  },
+  "adultResultHintListTitle": "Answer patterns by reflex",
+  "@adultResultHintListTitle": {
+    "description": "Adult result list heading — no overall score"
+  },
+  "adultResultFeaturesAnswered": "{answered} of {possible} features answered",
+  "@adultResultFeaturesAnswered": {
+    "description": "Adult result coverage line",
+    "placeholders": {
+      "answered": {"type": "int"},
+      "possible": {"type": "int"}
+    }
+  },
+  "adultResultAmphibianTitle": "Amphibian reflex",
+  "@adultResultAmphibianTitle": {
+    "description": "Adult amphibian section title"
+  },
+  "adultResultAmphibianAnswered": "{count, plural, =1{1 feature answered} other{{count} features answered}}",
+  "@adultResultAmphibianAnswered": {
+    "description": "Amphibian answeredCount — never a fixed 'of 2'",
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "adultResultAmphibianDisclaimer": "The amphibian reflex is shown separately and is not a percentage bar. It only reflects the answered amphibian items.",
+  "@adultResultAmphibianDisclaimer": {
+    "description": "Required amphibian additional text"
+  },
+  "adultResultDetailHintStrength": "Hint strength",
+  "@adultResultDetailHintStrength": {
+    "description": "Adult detail section: hint strength"
+  },
+  "adultResultDetailDataBasis": "Data basis",
+  "@adultResultDetailDataBasis": {
+    "description": "Adult detail section: data basis"
+  },
+  "adultResultDetailMatchingAnswers": "Matching answers",
+  "@adultResultDetailMatchingAnswers": {
+    "description": "Adult detail section: positive indications"
+  },
+  "adultResultDetailAlternatives": "Alternative explanations",
+  "@adultResultDetailAlternatives": {
+    "description": "Adult detail section: alternatives"
+  },
+  "adultResultDetailLimits": "Limits",
+  "@adultResultDetailLimits": {
+    "description": "Adult detail section: limits"
+  },
+  "adultResultLegacyTitle": "Created with an older method",
+  "@adultResultLegacyTitle": {
+    "description": "Legacy adult assessment banner title"
+  },
+  "adultResultLegacyBody": "This adult profile was created with a previous questionnaire version. Values are not shown and are not compared with current profiles.",
+  "@adultResultLegacyBody": {
+    "description": "Legacy adult assessment body"
+  },
+  "adultResultLegacyVersion": "Version: {questionnaireVersion} · Scoring: {scoringVersion}",
+  "@adultResultLegacyVersion": {
+    "description": "Legacy adult version line",
+    "placeholders": {
+      "questionnaireVersion": {"type": "String"},
+      "scoringVersion": {"type": "String"}
+    }
+  },
+  "adultHintBandFewMatching": "Few matching answers",
+  "@adultHintBandFewMatching": {"description": "Adult band 0–29"},
+  "adultHintBandSomeMatching": "Some matching answers",
+  "@adultHintBandSomeMatching": {"description": "Adult band 30–59"},
+  "adultHintBandClusteredPattern": "Clustered answer pattern",
+  "@adultHintBandClusteredPattern": {"description": "Adult band 60–79"},
+  "adultHintBandStronglyClustered": "Strongly clustered pattern",
+  "@adultHintBandStronglyClustered": {"description": "Adult band 80–100"},
+  "adultHintBandInsufficientData": "Not enough data",
+  "@adultHintBandInsufficientData": {"description": "Adult band insufficient"},
+  "adultAmphibianInsufficientData": "Not enough data",
+  "@adultAmphibianInsufficientData": {
+    "description": "AmphibianDisplay.insufficientData — not noneMatching"
+  },
+  "adultAmphibianNoneMatching": "No matching single hint",
+  "@adultAmphibianNoneMatching": {"description": "AmphibianDisplay.noneMatching"},
+  "adultAmphibianSingleHint": "Single matching hint",
+  "@adultAmphibianSingleHint": {"description": "AmphibianDisplay.singleHint"},
+  "adultAmphibianClearSingleHint": "Clear matching hint",
+  "@adultAmphibianClearSingleHint": {"description": "AmphibianDisplay.clearSingleHint"},
   "reflexProfileOrientationTitle": "Guidance Only — Not a Verdict",
   "@reflexProfileOrientationTitle": {
     "description": "Start screen disclaimer title"

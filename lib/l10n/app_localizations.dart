@@ -5548,6 +5548,158 @@ abstract class AppLocalizations {
   /// **'Hinweis gelesen.'**
   String get reflexProfileAdultSafetyNoticeConfirm;
 
+  /// Adult result screen title
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Reflexprofil'**
+  String get adultResultTitle;
+
+  /// Adult result meta subline
+  ///
+  /// In de, this message translates to:
+  /// **'Erwachsenenprofil · {date} · {questionnaireVersion} / {scoringVersion}'**
+  String adultResultSubline(
+      String date, String questionnaireVersion, String scoringVersion);
+
+  /// Adult result non-diagnostic disclaimer
+  ///
+  /// In de, this message translates to:
+  /// **'Das sind nur deine subjektiven Antwortmuster. Sie sind kein Reflexnachweis und keine Diagnose.'**
+  String get adultResultDisclaimer;
+
+  /// Adult result list heading — no overall score
+  ///
+  /// In de, this message translates to:
+  /// **'Antwortmuster nach Reflex'**
+  String get adultResultHintListTitle;
+
+  /// Adult result coverage line
+  ///
+  /// In de, this message translates to:
+  /// **'{answered} von {possible} Merkmalen beantwortet'**
+  String adultResultFeaturesAnswered(int answered, int possible);
+
+  /// Adult amphibian section title
+  ///
+  /// In de, this message translates to:
+  /// **'Amphibienreflex'**
+  String get adultResultAmphibianTitle;
+
+  /// Amphibian answeredCount — never a fixed 'of 2'
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, =1{1 Merkmal beantwortet} other{{count} Merkmale beantwortet}}'**
+  String adultResultAmphibianAnswered(int count);
+
+  /// Required amphibian additional text
+  ///
+  /// In de, this message translates to:
+  /// **'Der Amphibienreflex wird getrennt dargestellt und ist kein Prozentbalken. Er spiegelt nur die beantworteten Amphibien-Angaben wider.'**
+  String get adultResultAmphibianDisclaimer;
+
+  /// Adult detail section: hint strength
+  ///
+  /// In de, this message translates to:
+  /// **'Hinweisstärke'**
+  String get adultResultDetailHintStrength;
+
+  /// Adult detail section: data basis
+  ///
+  /// In de, this message translates to:
+  /// **'Datengrundlage'**
+  String get adultResultDetailDataBasis;
+
+  /// Adult detail section: positive indications
+  ///
+  /// In de, this message translates to:
+  /// **'Passende eigene Angaben'**
+  String get adultResultDetailMatchingAnswers;
+
+  /// Adult detail section: alternatives
+  ///
+  /// In de, this message translates to:
+  /// **'Alternativerklärungen'**
+  String get adultResultDetailAlternatives;
+
+  /// Adult detail section: limits
+  ///
+  /// In de, this message translates to:
+  /// **'Grenzen'**
+  String get adultResultDetailLimits;
+
+  /// Legacy adult assessment banner title
+  ///
+  /// In de, this message translates to:
+  /// **'Erstellt mit älterer Methode'**
+  String get adultResultLegacyTitle;
+
+  /// Legacy adult assessment body
+  ///
+  /// In de, this message translates to:
+  /// **'Dieses Erwachsenenprofil wurde mit einer früheren Fragebogen-Version erstellt. Werte werden nicht angezeigt und nicht mit aktuellen Profilen verglichen.'**
+  String get adultResultLegacyBody;
+
+  /// Legacy adult version line
+  ///
+  /// In de, this message translates to:
+  /// **'Version: {questionnaireVersion} · Scoring: {scoringVersion}'**
+  String adultResultLegacyVersion(
+      String questionnaireVersion, String scoringVersion);
+
+  /// Adult band 0–29
+  ///
+  /// In de, this message translates to:
+  /// **'Wenige passende Angaben'**
+  String get adultHintBandFewMatching;
+
+  /// Adult band 30–59
+  ///
+  /// In de, this message translates to:
+  /// **'Einige passende Angaben'**
+  String get adultHintBandSomeMatching;
+
+  /// Adult band 60–79
+  ///
+  /// In de, this message translates to:
+  /// **'Gehäuftes Antwortmuster'**
+  String get adultHintBandClusteredPattern;
+
+  /// Adult band 80–100
+  ///
+  /// In de, this message translates to:
+  /// **'Stark gehäuftes Muster'**
+  String get adultHintBandStronglyClustered;
+
+  /// Adult band insufficient
+  ///
+  /// In de, this message translates to:
+  /// **'Keine ausreichende Datengrundlage'**
+  String get adultHintBandInsufficientData;
+
+  /// AmphibianDisplay.insufficientData — not noneMatching
+  ///
+  /// In de, this message translates to:
+  /// **'Keine ausreichende Datengrundlage'**
+  String get adultAmphibianInsufficientData;
+
+  /// AmphibianDisplay.noneMatching
+  ///
+  /// In de, this message translates to:
+  /// **'Kein passender Einzelhinweis'**
+  String get adultAmphibianNoneMatching;
+
+  /// AmphibianDisplay.singleHint
+  ///
+  /// In de, this message translates to:
+  /// **'Einzelner passender Hinweis'**
+  String get adultAmphibianSingleHint;
+
+  /// AmphibianDisplay.clearSingleHint
+  ///
+  /// In de, this message translates to:
+  /// **'Klarer passender Hinweis'**
+  String get adultAmphibianClearSingleHint;
+
   /// Start screen disclaimer title
   ///
   /// In de, this message translates to:

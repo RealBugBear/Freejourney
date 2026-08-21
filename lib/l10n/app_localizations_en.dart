@@ -3233,6 +3233,100 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reflexProfileAdultSafetyNoticeConfirm => 'Notice read.';
 
   @override
+  String get adultResultTitle => 'Your Reflex Profile';
+
+  @override
+  String adultResultSubline(
+      String date, String questionnaireVersion, String scoringVersion) {
+    return 'Adult profile · $date · $questionnaireVersion / $scoringVersion';
+  }
+
+  @override
+  String get adultResultDisclaimer =>
+      'These are your subjective answer patterns only. They are not a reflex finding and not a diagnosis.';
+
+  @override
+  String get adultResultHintListTitle => 'Answer patterns by reflex';
+
+  @override
+  String adultResultFeaturesAnswered(int answered, int possible) {
+    return '$answered of $possible features answered';
+  }
+
+  @override
+  String get adultResultAmphibianTitle => 'Amphibian reflex';
+
+  @override
+  String adultResultAmphibianAnswered(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count features answered',
+      one: '1 feature answered',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adultResultAmphibianDisclaimer =>
+      'The amphibian reflex is shown separately and is not a percentage bar. It only reflects the answered amphibian items.';
+
+  @override
+  String get adultResultDetailHintStrength => 'Hint strength';
+
+  @override
+  String get adultResultDetailDataBasis => 'Data basis';
+
+  @override
+  String get adultResultDetailMatchingAnswers => 'Matching answers';
+
+  @override
+  String get adultResultDetailAlternatives => 'Alternative explanations';
+
+  @override
+  String get adultResultDetailLimits => 'Limits';
+
+  @override
+  String get adultResultLegacyTitle => 'Created with an older method';
+
+  @override
+  String get adultResultLegacyBody =>
+      'This adult profile was created with a previous questionnaire version. Values are not shown and are not compared with current profiles.';
+
+  @override
+  String adultResultLegacyVersion(
+      String questionnaireVersion, String scoringVersion) {
+    return 'Version: $questionnaireVersion · Scoring: $scoringVersion';
+  }
+
+  @override
+  String get adultHintBandFewMatching => 'Few matching answers';
+
+  @override
+  String get adultHintBandSomeMatching => 'Some matching answers';
+
+  @override
+  String get adultHintBandClusteredPattern => 'Clustered answer pattern';
+
+  @override
+  String get adultHintBandStronglyClustered => 'Strongly clustered pattern';
+
+  @override
+  String get adultHintBandInsufficientData => 'Not enough data';
+
+  @override
+  String get adultAmphibianInsufficientData => 'Not enough data';
+
+  @override
+  String get adultAmphibianNoneMatching => 'No matching single hint';
+
+  @override
+  String get adultAmphibianSingleHint => 'Single matching hint';
+
+  @override
+  String get adultAmphibianClearSingleHint => 'Clear matching hint';
+
+  @override
   String get reflexProfileOrientationTitle => 'Guidance Only — Not a Verdict';
 
   @override

@@ -3245,6 +3245,102 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reflexProfileAdultSafetyNoticeConfirm => 'Hinweis gelesen.';
 
   @override
+  String get adultResultTitle => 'Dein Reflexprofil';
+
+  @override
+  String adultResultSubline(
+      String date, String questionnaireVersion, String scoringVersion) {
+    return 'Erwachsenenprofil · $date · $questionnaireVersion / $scoringVersion';
+  }
+
+  @override
+  String get adultResultDisclaimer =>
+      'Das sind nur deine subjektiven Antwortmuster. Sie sind kein Reflexnachweis und keine Diagnose.';
+
+  @override
+  String get adultResultHintListTitle => 'Antwortmuster nach Reflex';
+
+  @override
+  String adultResultFeaturesAnswered(int answered, int possible) {
+    return '$answered von $possible Merkmalen beantwortet';
+  }
+
+  @override
+  String get adultResultAmphibianTitle => 'Amphibienreflex';
+
+  @override
+  String adultResultAmphibianAnswered(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Merkmale beantwortet',
+      one: '1 Merkmal beantwortet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adultResultAmphibianDisclaimer =>
+      'Der Amphibienreflex wird getrennt dargestellt und ist kein Prozentbalken. Er spiegelt nur die beantworteten Amphibien-Angaben wider.';
+
+  @override
+  String get adultResultDetailHintStrength => 'Hinweisstärke';
+
+  @override
+  String get adultResultDetailDataBasis => 'Datengrundlage';
+
+  @override
+  String get adultResultDetailMatchingAnswers => 'Passende eigene Angaben';
+
+  @override
+  String get adultResultDetailAlternatives => 'Alternativerklärungen';
+
+  @override
+  String get adultResultDetailLimits => 'Grenzen';
+
+  @override
+  String get adultResultLegacyTitle => 'Erstellt mit älterer Methode';
+
+  @override
+  String get adultResultLegacyBody =>
+      'Dieses Erwachsenenprofil wurde mit einer früheren Fragebogen-Version erstellt. Werte werden nicht angezeigt und nicht mit aktuellen Profilen verglichen.';
+
+  @override
+  String adultResultLegacyVersion(
+      String questionnaireVersion, String scoringVersion) {
+    return 'Version: $questionnaireVersion · Scoring: $scoringVersion';
+  }
+
+  @override
+  String get adultHintBandFewMatching => 'Wenige passende Angaben';
+
+  @override
+  String get adultHintBandSomeMatching => 'Einige passende Angaben';
+
+  @override
+  String get adultHintBandClusteredPattern => 'Gehäuftes Antwortmuster';
+
+  @override
+  String get adultHintBandStronglyClustered => 'Stark gehäuftes Muster';
+
+  @override
+  String get adultHintBandInsufficientData =>
+      'Keine ausreichende Datengrundlage';
+
+  @override
+  String get adultAmphibianInsufficientData =>
+      'Keine ausreichende Datengrundlage';
+
+  @override
+  String get adultAmphibianNoneMatching => 'Kein passender Einzelhinweis';
+
+  @override
+  String get adultAmphibianSingleHint => 'Einzelner passender Hinweis';
+
+  @override
+  String get adultAmphibianClearSingleHint => 'Klarer passender Hinweis';
+
+  @override
   String get reflexProfileOrientationTitle =>
       'Eine Orientierung, keine Diagnose';
 
