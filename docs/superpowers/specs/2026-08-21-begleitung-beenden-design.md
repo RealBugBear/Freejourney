@@ -197,9 +197,43 @@ weiterschreiben. Nachrichten werden direkt per
 (`supabase_chat_repository.dart:225`), die Policy ist also der reale Gate.
 
 `messages_insert_member` wird erweitert: bei Kanälen vom Typ `'direct'` ist
-zusätzlich eine **aktive Trainer-Klient-Beziehung zwischen den beiden
-Kanalmitgliedern** erforderlich. `'community'` und `'application_review'`
-bleiben unverändert.
+zusätzlich eine aktive Trainer-Klient-Beziehung erforderlich.
+`'community'` und `'application_review'` bleiben unverändert.
+
+**Die Beziehung muss an `auth.uid()` und ein *anderes* Mitglied desselben
+Kanals gebunden werden — nicht an „zwei Kanalmitglieder".** Das Schema erzwingt
+für `direct` **keine** Zweiermitgliedschaft; verifiziert am 2026-08-21 sind auf
+`chat_channel_members` nur PK `(channel_id, user_id)`, die Fremdschlüssel und
+der `role`-CHECK definiert. Ein Kanal mit drei Mitgliedern ist also
+schemakonform. Eine unspezifische Prüfung „existiert eine aktive Beziehung
+zwischen Mitgliedern dieses Kanals" würde einen bereits getrennten Absender X
+autorisieren, sobald zwei *andere* Mitglieder Y und Z eine aktive Beziehung
+haben.
+
+```sql
+-- Zusatzbedingung nur für type = 'direct'
+EXISTS (
+  SELECT 1
+  FROM public.chat_channel_members other
+  JOIN public.trainer_client_relationships r
+    ON r.status = 'active'
+   AND (
+        (r.trainer_id = auth.uid() AND r.client_id  = other.user_id)
+     OR (r.client_id  = auth.uid() AND r.trainer_id = other.user_id)
+   )
+  WHERE other.channel_id = chat_messages.channel_id
+    AND other.user_id <> auth.uid()
+)
+```
+
+Der Absender ist damit immer eine Seite der Beziehung, die Gegenseite immer ein
+Mitglied genau dieses Kanals. Die `OR`-Zweige halten die Regel symmetrisch
+(BB-5).
+
+Dass `members_insert_deny` das Hinzufügen von Mitgliedern heute clientseitig
+verbietet, macht die unspezifische Variante nicht sicher — sie wäre nur
+schwerer auszunutzen. Die Policy muss unabhängig von der aktuellen
+Datenlage korrekt sein.
 
 Die Regel ist **symmetrisch** — nach dem Ende schreibt keine Seite mehr, damit
 der Klient nicht ins Leere sendet. `messages_select_member` bleibt unangetastet:
@@ -221,7 +255,54 @@ Bewertung: „<Klient> hat die Begleitung beendet."
 Fehlschlag der Benachrichtigung darf das Beenden **nie** blockieren: der RPC
 läuft zuerst und committet; der Funktionsaufruf ist fire-and-forget.
 
+**Genau daraus folgt aber ein Missbrauchspfad.** Weil der RPC bereits
+committet ist, bleibt der Aufrufer dauerhaft „Klient der beendeten Beziehung"
+und erfüllt die Autorisierungsprüfung beliebig oft. Ohne weitere Sicherung kann
+er die Function in einer Schleife aufrufen und den Trainer mit Push-
+Benachrichtigungen zuspammen. Eine reine Berechtigungsprüfung ist hier also
+kein ausreichender Schutz.
+
+**Idempotenz über einen atomaren Claim.** Neue Spalte
+`trainer_client_relationships.end_notification_sent_at timestamptz`. Die
+Function sendet erst, nachdem sie das Recht dazu exklusiv beansprucht hat:
+
+```sql
+UPDATE public.trainer_client_relationships
+   SET end_notification_sent_at = now()
+ WHERE id = :relationship_id
+   AND client_id = :caller_uid
+   AND ended_by_client_at       IS NOT NULL
+   AND end_notification_sent_at IS NULL
+RETURNING id;
+```
+
+Null Zeilen zurück → bereits beansprucht oder nicht berechtigt → HTTP 200 mit
+`{ skipped: 'already_sent' }`, **kein** Push. Nebenläufigkeit ist damit
+abgedeckt: das `UPDATE` nimmt eine Zeilensperre, ein paralleler zweiter Aufruf
+blockiert, wertet die `WHERE`-Klausel danach gegen die neu committete Zeile aus
+und trifft null Zeilen. Genau ein Anspruchsteller, ohne Advisory Lock.
+
+**Semantik ist bewusst At-most-once.** Schlägt FCM nach dem Claim fehl, wird
+nicht erneut gesendet. Das ist die richtige Richtung: die Spec verbietet ohnehin
+jede Zustellbehauptung (§1.3 der Studio-Spec-Linie, hier §4.4), und eine
+verpasste Benachrichtigung ist deutlich harmloser als eine Spam-Schleife auf
+das Gerät eines Trainers.
+
+**Zurücksetzen beim Wiederverbinden.** `accept_invite()` löscht
+`ended_by_client_at` paarweit (§4.1.1) — es muss `end_notification_sent_at`
+im selben `UPDATE` mit löschen. Sonst bliebe eine später erneut beendete
+Begleitung für immer stumm.
+
+`notification_jobs` wurde als Transportweg geprüft und verworfen: die Tabelle
+bedient die geplante Reminder-Pipeline über Cron (Verzögerung statt Sofort-
+Push) und trägt einen Unique-Index auf `(user_id, type, local_date)`, der eine
+zweite Beendigung am selben Tag blockieren würde.
+
 Kein Kalender-, E-Mail- oder Chat-Hinweis. Keine Zustellgarantie in der Copy.
+
+> **Vorbestehend, hier nicht behoben:** dieselbe Replay-Lücke haben die
+> bestehenden `notify-*`-Functions (z. B. `notify-appointment-confirmed`
+> prüft nur `trainee_id === user.id` und sendet dann). Eigener Task.
 
 ### 4.5 Klienten-UI
 
@@ -251,8 +332,12 @@ Der Dialog kommt in eine eigene Datei — `accompaniment_screen.dart` hat bereit
 
 ```sql
 ALTER TABLE public.trainer_client_relationships
-  ADD COLUMN IF NOT EXISTS ended_by_client_at timestamptz;
+  ADD COLUMN IF NOT EXISTS ended_by_client_at       timestamptz,
+  ADD COLUMN IF NOT EXISTS end_notification_sent_at timestamptz;
 ```
+
+`end_notification_sent_at` ist der Idempotenz-Claim aus §4.4. Beide Spalten
+werden von `accept_invite()` beim Wiederverbinden paarweit geleert.
 
 Additiv, nullable, kein Backfill (BB-6).
 
@@ -271,7 +356,8 @@ aus §8.1, nicht diese Spec.
 |---|---|---|
 | `end_trainer_relationship` | neu, `SECURITY DEFINER`, `search_path` gepinnt, `REVOKE ... FROM PUBLIC, anon` **vor** `GRANT ... TO authenticated` | prüft `auth.uid()` als `client_id`; fremde Beziehungen unmöglich; für `anon` nicht aufrufbar |
 | `ensure_trainer_client_relationship` | paarweiter Marker-Guard nach der Aktiv-Prüfung | schließt den Auferstehungspfad, ohne gültige aktive Beziehungen zu beschädigen |
-| `accept_invite` | markiert verdrängte Zeilen; löscht Marker paarweit; deterministische Zeilenauswahl | repariert die gebrochene Wechsel-Semantik; nur der Klient holt eine Beziehung zurück |
+| `accept_invite` | markiert verdrängte Zeilen; löscht `ended_by_client_at` **und** `end_notification_sent_at` paarweit; deterministische Zeilenauswahl | repariert die gebrochene Wechsel-Semantik; nur der Klient holt eine Beziehung zurück |
+| `notify-accompaniment-ended` | atomarer Claim auf `end_notification_sent_at` vor dem Senden | Replay durch den Klienten kann den Trainer nicht zuspammen |
 | `messages_insert_member` | Direct-Kanäle verlangen aktive Beziehung | Schreibrechte enden beidseitig; Lesen unberührt |
 
 Keine Lockerung bestehender Policies. Keine neue Datenkategorie.
@@ -293,7 +379,22 @@ Keine Lockerung bestehender Policies. Keine neue Datenkategorie.
 - ohne aktive Beziehung schlägt der Aufruf sauber fehl
 - getrennter Trainer kann nicht mehr in den Direct-Kanal schreiben
 - getrennter Trainer **kann** den bisherigen Verlauf weiter lesen
+- Klient kann nach dem Ende ebenfalls nicht mehr schreiben (BB-5, Symmetrie)
 - Community-Kanäle bleiben unbeeinflusst
+- **Drei-Mitglieder-Regression (§4.3):** Direct-Kanal mit X, Y, Z; X hat keine
+  aktive Beziehung, Y↔Z schon. X darf **nicht** schreiben dürfen. Genau dieser
+  Fall unterscheidet die gebundene von der unspezifischen Policy
+- Gegenprobe zum vorigen Fall: Y darf schreiben, weil Y↔Z aktiv ist
+
+**Idempotenz der Benachrichtigung** (§4.4):
+
+- zweiter Aufruf gegen dieselbe beendete Beziehung liefert
+  `skipped: 'already_sent'` und sendet nicht
+- nebenläufige Aufrufe: genau ein Claim gewinnt — im Test über zwei
+  Transaktionen mit demselben `UPDATE ... WHERE end_notification_sent_at IS NULL`
+- fremder Aufrufer kann den Claim nicht setzen
+- nach `accept_invite` und erneutem Beenden ist wieder genau eine
+  Benachrichtigung möglich (beide Marker wurden geleert)
 - `accept_invite` mit neuem Code stellt die Beziehung wieder her und leert
   `ended_by_client_at`; Reflexprofil-Freigabe bleibt widerrufen und muss neu
   erteilt werden
