@@ -3266,24 +3266,6 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get adultResultAmphibianTitle => 'Amphibienreflex';
-
-  @override
-  String adultResultAmphibianAnswered(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Merkmale beantwortet',
-      one: '1 Merkmal beantwortet',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get adultResultAmphibianDisclaimer =>
-      'Aufgrund der wenigen verfügbaren Merkmale ist dies kein stabiler Profilwert und kein Reflexnachweis. Der Amphibienreflex wird getrennt dargestellt und ist kein Prozentbalken.';
-
-  @override
   String get adultResultDetailHintStrength => 'Hinweisstärke';
 
   @override
@@ -3328,17 +3310,16 @@ class AppLocalizationsDe extends AppLocalizations {
       'Keine ausreichende Datengrundlage';
 
   @override
-  String get adultAmphibianInsufficientData =>
-      'Keine ausreichende Datengrundlage';
+  String get adultAmphibianInsufficientData => 'Keine Angaben';
 
   @override
   String get adultAmphibianNoneMatching => 'Kein passender Einzelhinweis';
 
   @override
-  String get adultAmphibianSingleHint => 'Einzelner passender Hinweis';
+  String get adultAmphibianSingleHint => 'Einzelner Hinweis';
 
   @override
-  String get adultAmphibianClearSingleHint => 'Klarer passender Hinweis';
+  String get adultAmphibianClearSingleHint => 'Deutlicher Einzelhinweis';
 
   @override
   String get reflexProfileOrientationTitle =>

@@ -3275,19 +3275,6 @@
       "possible": {"type": "int"}
     }
   },
-  "adultResultAmphibianTitle": "Amphibian reflex",
-  "@adultResultAmphibianTitle": {
-    "description": "Adult amphibian section title"
-  },
-  "adultResultAmphibianAnswered": "{count, plural, =1{1 feature answered} other{{count} features answered}}",
-  "@adultResultAmphibianAnswered": {
-    "description": "Amphibian answeredCount — never a fixed 'of 2'",
-    "placeholders": {"count": {"type": "int"}}
-  },
-  "adultResultAmphibianDisclaimer": "Due to the few available features, this is not a stable profile value and not a reflex finding. The amphibian reflex is shown separately and is not a percentage bar.",
-  "@adultResultAmphibianDisclaimer": {
-    "description": "Required amphibian additional text — adult_v3 Teil B §2 first, then UI note"
-  },
   "adultResultDetailHintStrength": "Hint strength",
   "@adultResultDetailHintStrength": {
     "description": "Adult detail section: hint strength"
@@ -3334,15 +3321,15 @@
   "@adultHintBandStronglyClustered": {"description": "Adult band 80–100"},
   "adultHintBandInsufficientData": "Not enough data",
   "@adultHintBandInsufficientData": {"description": "Adult band insufficient"},
-  "adultAmphibianInsufficientData": "Not enough data",
+  "adultAmphibianInsufficientData": "No answers",
   "@adultAmphibianInsufficientData": {
-    "description": "AmphibianDisplay.insufficientData — not noneMatching"
+    "description": "AmphibianDisplay.insufficientData — short card label (§10.2b)"
   },
   "adultAmphibianNoneMatching": "No matching single hint",
   "@adultAmphibianNoneMatching": {"description": "AmphibianDisplay.noneMatching"},
-  "adultAmphibianSingleHint": "Single matching hint",
+  "adultAmphibianSingleHint": "Single hint",
   "@adultAmphibianSingleHint": {"description": "AmphibianDisplay.singleHint"},
-  "adultAmphibianClearSingleHint": "Clear matching hint",
+  "adultAmphibianClearSingleHint": "Clear single hint",
   "@adultAmphibianClearSingleHint": {"description": "AmphibianDisplay.clearSingleHint"},
   "reflexProfileOrientationTitle": "Guidance Only — Not a Verdict",
   "@reflexProfileOrientationTitle": {

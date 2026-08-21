@@ -3254,24 +3254,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get adultResultAmphibianTitle => 'Amphibian reflex';
-
-  @override
-  String adultResultAmphibianAnswered(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count features answered',
-      one: '1 feature answered',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get adultResultAmphibianDisclaimer =>
-      'Due to the few available features, this is not a stable profile value and not a reflex finding. The amphibian reflex is shown separately and is not a percentage bar.';
-
-  @override
   String get adultResultDetailHintStrength => 'Hint strength';
 
   @override
@@ -3315,16 +3297,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adultHintBandInsufficientData => 'Not enough data';
 
   @override
-  String get adultAmphibianInsufficientData => 'Not enough data';
+  String get adultAmphibianInsufficientData => 'No answers';
 
   @override
   String get adultAmphibianNoneMatching => 'No matching single hint';
 
   @override
-  String get adultAmphibianSingleHint => 'Single matching hint';
+  String get adultAmphibianSingleHint => 'Single hint';
 
   @override
-  String get adultAmphibianClearSingleHint => 'Clear matching hint';
+  String get adultAmphibianClearSingleHint => 'Clear single hint';
 
   @override
   String get reflexProfileOrientationTitle => 'Guidance Only — Not a Verdict';

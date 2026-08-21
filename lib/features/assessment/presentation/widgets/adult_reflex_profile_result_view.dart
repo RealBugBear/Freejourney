@@ -13,8 +13,8 @@ import '../../domain/models/reflex_profile_assessment.dart';
 import '../../domain/reflex_answer_json.dart';
 import '../../domain/reflex_questionnaire.dart';
 import '../../domain/services/reflex_profile_pdf_service.dart';
-import '../adult_score_band_l10n.dart';
 import '../reflex_profile_pdf_copy.dart';
+import 'adult_amphibian_detail_tile.dart';
 import 'adult_reflex_detail_tile.dart';
 
 /// Adult_v3 result body (§10.1–10.2a).
@@ -98,15 +98,21 @@ class AdultReflexProfileResultView extends ConsumerWidget {
               locale: locale,
             ),
           ),
-        const SizedBox(height: 8),
-        Text(
-          l10n.adultResultAmphibianTitle,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w900,
-              ),
+        AdultAmphibianDetailTile(
+          score: parsed.amphibian,
+          itemMatched: _amphibianItemMatched(
+            assessment: assessment,
+            hiddenItemIds: parsed.meta.hiddenItemIds,
+          ),
+          possibleCount: _amphibianPossibleCount(
+            hiddenItemIds: parsed.meta.hiddenItemIds,
+          ),
+          matchingAnswers: _matchingAnswerTexts(
+            assessment: assessment,
+            reflex: PrimitiveReflex.amphibian,
+            locale: locale,
+          ),
         ),
-        const SizedBox(height: 8),
-        _AmphibianBlock(score: parsed.amphibian),
         const SizedBox(height: 18),
         OutlinedButton.icon(
           onPressed: () => _sharePdf(context, assessment),
@@ -163,60 +169,6 @@ class AdultReflexProfileResultView extends ConsumerWidget {
         );
       }
     }
-  }
-}
-
-class _AmphibianBlock extends StatelessWidget {
-  const _AmphibianBlock({required this.score});
-
-  final AdultAmphibianScore score;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final cs = Theme.of(context).colorScheme;
-    final label = amphibianDisplayLabel(l10n, score.display);
-
-    return Card(
-      color: cs.surfaceContainerHighest.withValues(alpha: 0.55),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              PrimitiveReflex.amphibian.copy
-                  .label(Localizations.localeOf(context).languageCode),
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              l10n.adultResultAmphibianAnswered(score.answeredCount),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: cs.onSurfaceVariant,
-                  ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              l10n.adultResultAmphibianDisclaimer,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: cs.onSurfaceVariant,
-                    height: 1.4,
-                  ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 
@@ -291,4 +243,40 @@ List<String> _matchingAnswerTexts({
     texts.add(question.text(locale));
   }
   return texts;
+}
+
+List<ReflexQuestion> _amphibianQuestions({
+  required List<String> hiddenItemIds,
+}) {
+  final hidden = hiddenItemIds.toSet();
+  return adultSelfQuestionnaireV3.questions
+      .where((q) => q.reflexes.contains(PrimitiveReflex.amphibian))
+      .where((q) => !hidden.contains(q.id))
+      .toList(growable: false);
+}
+
+int _amphibianPossibleCount({required List<String> hiddenItemIds}) =>
+    _amphibianQuestions(hiddenItemIds: hiddenItemIds).length;
+
+List<bool> _amphibianItemMatched({
+  required ReflexProfileAssessment assessment,
+  required List<String> hiddenItemIds,
+}) {
+  return [
+    for (final question in _amphibianQuestions(hiddenItemIds: hiddenItemIds))
+      _isPositiveAmphibianAnswer(assessment, question),
+  ];
+}
+
+bool _isPositiveAmphibianAnswer(
+  ReflexProfileAssessment assessment,
+  ReflexQuestion question,
+) {
+  final raw = assessment.answers[question.id];
+  if (raw is! Map) return false;
+  final answer = reflexAnswerFromJson(Map<String, dynamic>.from(raw));
+  if (!answer.isAnswered || answer.isUnknown || answer.isNotApplicable) {
+    return false;
+  }
+  return isAdultPositiveIndication(question, answer);
 }

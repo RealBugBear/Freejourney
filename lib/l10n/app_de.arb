@@ -3275,19 +3275,6 @@
       "possible": {"type": "int"}
     }
   },
-  "adultResultAmphibianTitle": "Amphibienreflex",
-  "@adultResultAmphibianTitle": {
-    "description": "Adult amphibian section title"
-  },
-  "adultResultAmphibianAnswered": "{count, plural, =1{1 Merkmal beantwortet} other{{count} Merkmale beantwortet}}",
-  "@adultResultAmphibianAnswered": {
-    "description": "Amphibian answeredCount — never a fixed 'of 2'",
-    "placeholders": {"count": {"type": "int"}}
-  },
-  "adultResultAmphibianDisclaimer": "Aufgrund der wenigen verfügbaren Merkmale ist dies kein stabiler Profilwert und kein Reflexnachweis. Der Amphibienreflex wird getrennt dargestellt und ist kein Prozentbalken.",
-  "@adultResultAmphibianDisclaimer": {
-    "description": "Required amphibian additional text — adult_v3 Teil B §2 first, then UI note"
-  },
   "adultResultDetailHintStrength": "Hinweisstärke",
   "@adultResultDetailHintStrength": {
     "description": "Adult detail section: hint strength"
@@ -3334,15 +3321,15 @@
   "@adultHintBandStronglyClustered": {"description": "Adult band 80–100"},
   "adultHintBandInsufficientData": "Keine ausreichende Datengrundlage",
   "@adultHintBandInsufficientData": {"description": "Adult band insufficient"},
-  "adultAmphibianInsufficientData": "Keine ausreichende Datengrundlage",
+  "adultAmphibianInsufficientData": "Keine Angaben",
   "@adultAmphibianInsufficientData": {
-    "description": "AmphibianDisplay.insufficientData — not noneMatching"
+    "description": "AmphibianDisplay.insufficientData — short card label (§10.2b)"
   },
   "adultAmphibianNoneMatching": "Kein passender Einzelhinweis",
   "@adultAmphibianNoneMatching": {"description": "AmphibianDisplay.noneMatching"},
-  "adultAmphibianSingleHint": "Einzelner passender Hinweis",
+  "adultAmphibianSingleHint": "Einzelner Hinweis",
   "@adultAmphibianSingleHint": {"description": "AmphibianDisplay.singleHint"},
-  "adultAmphibianClearSingleHint": "Klarer passender Hinweis",
+  "adultAmphibianClearSingleHint": "Deutlicher Einzelhinweis",
   "@adultAmphibianClearSingleHint": {"description": "AmphibianDisplay.clearSingleHint"},
   "reflexProfileOrientationTitle": "Eine Orientierung, keine Diagnose",
   "@reflexProfileOrientationTitle": {

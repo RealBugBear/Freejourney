@@ -5579,24 +5579,6 @@ abstract class AppLocalizations {
   /// **'{answered} von {possible} Merkmalen beantwortet'**
   String adultResultFeaturesAnswered(int answered, int possible);
 
-  /// Adult amphibian section title
-  ///
-  /// In de, this message translates to:
-  /// **'Amphibienreflex'**
-  String get adultResultAmphibianTitle;
-
-  /// Amphibian answeredCount — never a fixed 'of 2'
-  ///
-  /// In de, this message translates to:
-  /// **'{count, plural, =1{1 Merkmal beantwortet} other{{count} Merkmale beantwortet}}'**
-  String adultResultAmphibianAnswered(int count);
-
-  /// Required amphibian additional text — adult_v3 Teil B §2 first, then UI note
-  ///
-  /// In de, this message translates to:
-  /// **'Aufgrund der wenigen verfügbaren Merkmale ist dies kein stabiler Profilwert und kein Reflexnachweis. Der Amphibienreflex wird getrennt dargestellt und ist kein Prozentbalken.'**
-  String get adultResultAmphibianDisclaimer;
-
   /// Adult detail section: hint strength
   ///
   /// In de, this message translates to:
@@ -5676,10 +5658,10 @@ abstract class AppLocalizations {
   /// **'Keine ausreichende Datengrundlage'**
   String get adultHintBandInsufficientData;
 
-  /// AmphibianDisplay.insufficientData — not noneMatching
+  /// AmphibianDisplay.insufficientData — short card label (§10.2b)
   ///
   /// In de, this message translates to:
-  /// **'Keine ausreichende Datengrundlage'**
+  /// **'Keine Angaben'**
   String get adultAmphibianInsufficientData;
 
   /// AmphibianDisplay.noneMatching
@@ -5691,13 +5673,13 @@ abstract class AppLocalizations {
   /// AmphibianDisplay.singleHint
   ///
   /// In de, this message translates to:
-  /// **'Einzelner passender Hinweis'**
+  /// **'Einzelner Hinweis'**
   String get adultAmphibianSingleHint;
 
   /// AmphibianDisplay.clearSingleHint
   ///
   /// In de, this message translates to:
-  /// **'Klarer passender Hinweis'**
+  /// **'Deutlicher Einzelhinweis'**
   String get adultAmphibianClearSingleHint;
 
   /// Start screen disclaimer title
