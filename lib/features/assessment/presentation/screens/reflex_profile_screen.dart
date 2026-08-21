@@ -11,6 +11,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../domain/adult_questionnaire_visibility.dart';
 import '../../domain/adult_reflex_profile_scoring.dart';
 import '../../domain/adult_reflex_questionnaire_definitions.dart';
+import '../../domain/adult_safety_notice.dart';
 import '../../domain/draft_persistence_service.dart';
 import '../../domain/questionnaire_draft_meta_builder.dart';
 import '../../domain/reflex_answer_json.dart';
@@ -69,7 +70,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
     return AdultQuestionnaireVisibility(
       definition: _definition,
       answers: _answers,
-      movementChecksEnabled: false,
+      movementChecksEnabled: kAdultMovementChecksEnabled,
     );
   }
   Map<String, dynamic>? get _routeExtraMap {
@@ -200,7 +201,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
         question.warningRule ==
             ReflexWarningRule.professionalClearanceRequired &&
         !_warningConfirmations.containsKey(question.id)) {
-      final confirmed = await _showProfessionalClearanceDialog(question);
+      final confirmed = await _showAdultSafetyNoticeDialog(question);
       if (!confirmed) return;
     }
 
@@ -210,6 +211,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
     });
     _saveLocalDraft();
   }
+
   Future<void> _setYesNoAnswer(ReflexQuestion question, bool? value) async {
     if (value == true &&
         question.warningRule ==
@@ -227,6 +229,50 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       );
     });
     _saveLocalDraft();
+  }
+
+  /// Adult safety notice — expert draft v0. Confirmation only records that
+  /// the notice was shown (no liability transfer). Hard-gate behaviour is
+  /// behind [kAdultSafetyHardGateEnabled] and not implemented in v1.
+  Future<bool> _showAdultSafetyNoticeDialog(ReflexQuestion question) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => PopScope(
+        canPop: false,
+        child: Builder(
+          builder: (context) {
+            final l10n = AppLocalizations.of(context);
+            final body = l10n.reflexProfileAdultSafetyNoticeBody;
+            final content = kAdultMovementChecksEnabled
+                ? '$body ${l10n.reflexProfileAdultSafetyNoticeMovementAppendix}'
+                : body;
+            return AlertDialog(
+              title: Text(l10n.reflexProfileAdultSafetyNoticeTitle),
+              content: SingleChildScrollView(child: Text(content)),
+              actions: [
+                FilledButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text(l10n.reflexProfileAdultSafetyNoticeConfirm),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+
+    if (confirmed == true) {
+      setState(() {
+        _warningConfirmations[question.id] = ReflexWarningConfirmation(
+          questionId: question.id,
+          confirmedAt: DateTime.now(),
+          messageVersion: AdultSafetyNotice.messageVersion,
+        );
+      });
+      return true;
+    }
+    return false;
   }
 
   Future<bool> _showProfessionalClearanceDialog(
@@ -297,7 +343,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
         final adultScore = const AdultReflexProfileScoringService().score(
           definition: _definition,
           answers: _answers,
-          movementChecksEnabled: false,
+          movementChecksEnabled: kAdultMovementChecksEnabled,
         );
         scoresJson = adultScore.toJson();
         questionnaireType = 'adult_self_report';
@@ -369,7 +415,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       questionnaireFor: _questionnaireFor ?? 'child',
       startedAt: _startedAt,
       moduleTimings: Map<String, dynamic>.from(_moduleTimings),
-      movementChecksEnabled: false,
+      movementChecksEnabled: kAdultMovementChecksEnabled,
     );
   }
 
