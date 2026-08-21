@@ -4,17 +4,22 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../domain/adult_questionnaire_visibility.dart';
+import '../../domain/adult_reflex_profile_scoring.dart';
+import '../../domain/adult_reflex_questionnaire_definitions.dart';
 import '../../domain/draft_persistence_service.dart';
+import '../../domain/questionnaire_draft_meta_builder.dart';
 import '../../domain/reflex_answer_json.dart';
 import '../../domain/reflex_draft_meta.dart';
 import '../../domain/reflex_profile_scoring.dart';
 import '../../domain/reflex_questionnaire.dart';
 import '../../domain/reflex_questionnaire_definitions.dart';
 import '../providers/reflex_profile_provider.dart';
-
+import '../widgets/adult_answer_choice_grid.dart';
 class ReflexProfileScreen extends ConsumerStatefulWidget {
   const ReflexProfileScreen({super.key});
 
@@ -48,9 +53,25 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   String? _pendingSubjectProfileId;
   DateTime? _startedAt;
   final Map<String, dynamic> _moduleTimings = {};
+  DateTime? _moduleEnteredAt;
+  String? _moduleTimingKey;
+  bool _showSummary = false;
 
-  ReflexQuestionnaireDefinition get _definition => childParentQuestionnaireV1;
+  bool get _isAdultPath =>
+      _questionnaireFor == 'adult' && kAdultReflexQuestionnaireEnabled;
 
+  ReflexQuestionnaireDefinition get _definition => _isAdultPath
+      ? adultSelfQuestionnaireV3
+      : childParentQuestionnaireV1;
+
+  AdultQuestionnaireVisibility? get _adultVisibility {
+    if (!_isAdultPath) return null;
+    return AdultQuestionnaireVisibility(
+      definition: _definition,
+      answers: _answers,
+      movementChecksEnabled: false,
+    );
+  }
   Map<String, dynamic>? get _routeExtraMap {
     final extra = GoRouterState.of(context).extra;
     if (extra is Map<String, dynamic>) return extra;
@@ -127,6 +148,32 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       return;
     }
 
+    if (_isAdultPath) {
+      if (!isAdultQuestionnaireAgeEligible(birthDate)) {
+        _showError(l10n.reflexProfileAdultUnder16Hint);
+        return;
+      }
+      setState(() => _saving = true);
+      try {
+        final profile = await createAdultSelfProfile(
+          ref,
+          displayName: name,
+          birthDate: birthDate,
+        );
+        if (mounted) {
+          setState(() => _selectedProfile = profile);
+          await _checkForDraft(profile.id);
+        }
+      } catch (e) {
+        _showError(
+          AppLocalizations.of(context).reflexProfileCreateChildFailed('$e'),
+        );
+      } finally {
+        if (mounted) setState(() => _saving = false);
+      }
+      return;
+    }
+
     setState(() => _saving = true);
     try {
       final profile = await createChildReflexSubjectProfile(
@@ -145,6 +192,24 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
     }
   }
 
+  Future<void> _setAdultAnswer(
+    ReflexQuestion question,
+    ReflexAnswerChoice choice,
+  ) async {
+    if (choice == ReflexAnswerChoice.yes &&
+        question.warningRule ==
+            ReflexWarningRule.professionalClearanceRequired &&
+        !_warningConfirmations.containsKey(question.id)) {
+      final confirmed = await _showProfessionalClearanceDialog(question);
+      if (!confirmed) return;
+    }
+
+    setState(() {
+      _highlightedQuestionIds.remove(question.id);
+      _answers[question.id] = ReflexAnswerValue.fromChoice(choice);
+    });
+    _saveLocalDraft();
+  }
   Future<void> _setYesNoAnswer(ReflexQuestion question, bool? value) async {
     if (value == true &&
         question.warningRule ==
@@ -215,6 +280,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
     final missing = visibleQuestions.where((q) {
       if (q.answerType == ReflexAnswerType.freeText) return false;
       if (q.answerType == ReflexAnswerType.multiSelectWithText) return false;
+      if (q.role == ReflexQuestionRole.movement) return false;
       return !(_answers[q.id]?.isAnswered ?? false);
     }).toList();
 
@@ -225,20 +291,33 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
 
     setState(() => _saving = true);
     try {
-      final score = _scoringService.score(
-        definition: _definition,
-        answers: _answers,
-      );
-      final scoresJson = {
-        for (final entry in score.reflexScores.entries)
-          entry.key.name: entry.value.toJson(),
-      };
+      final Map<String, dynamic> scoresJson;
+      final String questionnaireType;
+      if (_isAdultPath) {
+        final adultScore = const AdultReflexProfileScoringService().score(
+          definition: _definition,
+          answers: _answers,
+          movementChecksEnabled: false,
+        );
+        scoresJson = adultScore.toJson();
+        questionnaireType = 'adult_self_report';
+      } else {
+        final score = _scoringService.score(
+          definition: _definition,
+          answers: _answers,
+        );
+        scoresJson = {
+          for (final entry in score.reflexScores.entries)
+            entry.key.name: entry.value.toJson(),
+        };
+        questionnaireType = 'child_parent_report';
+      }
 
       await submitReflexProfileAssessment(
         ref,
         subjectProfileId: profile.id,
         packageId: _packageId,
-        questionnaireType: 'child_parent_report',
+        questionnaireType: questionnaireType,
         questionnaireVersion: _definition.version,
         answers: {
           for (final entry in _answers.entries)
@@ -283,22 +362,14 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       reflexAnswerFromJson(raw);
 
   ReflexDraftMeta _buildDraftMeta() {
-    return ReflexDraftMeta(
+    return buildQuestionnaireDraftMeta(
+      definition: _definition,
+      answers: _answers,
       moduleIndex: _currentModuleIndex,
       questionnaireFor: _questionnaireFor ?? 'child',
-      questionnaireVersion: _definition.version,
-      filterAnswers: {
-        for (final entry in _answers.entries)
-          if (entry.key.startsWith('f_') && entry.value.choice != null)
-            entry.key: switch (entry.value.choice!) {
-              ReflexAnswerChoice.yes => 'yes',
-              ReflexAnswerChoice.no => 'no',
-              ReflexAnswerChoice.unknown => 'unknown',
-              ReflexAnswerChoice.notApplicable => 'not_applicable',
-            },
-      },
       startedAt: _startedAt,
       moduleTimings: Map<String, dynamic>.from(_moduleTimings),
+      movementChecksEnabled: false,
     );
   }
 
@@ -409,9 +480,11 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       setState(() {
         _questionnaireStarted = true;
         _currentModuleIndex = 0;
+        _showSummary = false;
         _startedAt = DateTime.now();
         _moduleTimings.clear();
       });
+      _beginModuleTiming(0);
       return;
     }
 
@@ -445,11 +518,13 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       setState(() {
         _questionnaireStarted = true;
         _currentModuleIndex = 0;
+        _showSummary = false;
         _startedAt = DateTime.now();
         _moduleTimings.clear();
         _answers.clear();
         _warningConfirmations.clear();
       });
+      _beginModuleTiming(0);
     }
   }
 
@@ -496,12 +571,13 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       _questionnaireFor = meta.questionnaireFor;
       _questionnaireStarted = true;
       _currentModuleIndex = meta.moduleIndex;
+      _showSummary = false;
       _startedAt = meta.startedAt ?? DateTime.now();
       _moduleTimings
         ..clear()
         ..addAll(meta.moduleTimings);
     });
-
+    _beginModuleTiming(_currentModuleIndex);
     // Restore text controllers for free-text answers
     for (final entry in restoredAnswers.entries) {
       final text = entry.value.text;
@@ -512,6 +588,9 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   List<ReflexQuestion> get _visibleQuestions {
+    if (_isAdultPath) {
+      return _adultVisibility!.visibleQuestions;
+    }
     return _definition.questions.where((question) {
       if (question.followUpOf == 'q031') {
         return _answers['q031']?.yesNoUnknown == false;
@@ -568,7 +647,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
 
   @override
   Widget build(BuildContext context) {
-    final profilesAsync = ref.watch(reflexSubjectProfilesProvider);
+    final profilesAsync = ref.watch(allReflexSubjectProfilesProvider);
     final locale = Localizations.localeOf(context).languageCode;
 
     return PopScope(
@@ -595,16 +674,29 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                     .reflexProfileLoadProfilesFailed('$error')),
               ),
             ),
-            data: (profiles) {
+            data: (allProfiles) {
+              final profiles = _isAdultPath
+                  ? allProfiles
+                      .where((p) => p.profileType == 'adult_self')
+                      .toList()
+                  : allProfiles
+                      .where((p) => p.profileType == 'child')
+                      .toList();
               _resolvePendingSubjectProfile(profiles);
               if (_questionnaireFor == null) {
                 return _buildForWhom();
               }
-              if (_questionnaireFor == 'adult') {
+              if (_questionnaireFor == 'adult' &&
+                  !kAdultReflexQuestionnaireEnabled) {
                 return _buildAdultComingSoon();
               }
               if (!_questionnaireStarted) {
-                return _buildStart(profiles);
+                return _isAdultPath
+                    ? _buildAdultStart(profiles)
+                    : _buildStart(profiles);
+              }
+              if (_isAdultPath && _showSummary) {
+                return _buildAdultSummary();
               }
               return _buildQuestionnaire();
             },
@@ -656,18 +748,33 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
           child: ListTile(
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            leading: Icon(Icons.person_outline,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                size: 28),
+            leading: Icon(
+              Icons.person_outline,
+              color: kAdultReflexQuestionnaireEnabled
+                  ? AppColors.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
+              size: 28,
+            ),
             title: Text(
               l10n.reflexProfileForMyself,
               style: TextStyle(
                 fontWeight: FontWeight.w800,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                color: kAdultReflexQuestionnaireEnabled
+                    ? null
+                    : Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
-            subtitle: Text(l10n.reflexProfileForMyselfComingSoon),
-            trailing: const Icon(Icons.lock_outline, size: 16),
+            subtitle: Text(
+              kAdultReflexQuestionnaireEnabled
+                  ? l10n.reflexProfileAdultSelfReport
+                  : l10n.reflexProfileForMyselfComingSoon,
+            ),
+            trailing: Icon(
+              kAdultReflexQuestionnaireEnabled
+                  ? Icons.arrow_forward_ios
+                  : Icons.lock_outline,
+              size: 16,
+            ),
             onTap: () => setState(() => _questionnaireFor = 'adult'),
           ),
         ),
@@ -711,6 +818,231 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAdultStart(List<ReflexSubjectProfile> profiles) {
+    final l10n = AppLocalizations.of(context);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+      children: [
+        const Icon(Icons.insights_outlined, size: 44, color: AppColors.primary),
+        const SizedBox(height: 18),
+        Text(
+          l10n.reflexProfileAdultOrientationTitle,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          l10n.reflexProfileAdultOrientationBody,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                height: 1.45,
+              ),
+        ),
+        const SizedBox(height: 20),
+        if (profiles.isNotEmpty) ...[
+          Text(
+            l10n.reflexProfileSelectAdultProfile,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+          ),
+          const SizedBox(height: 8),
+          for (final profile in profiles)
+            Card(
+              child: ListTile(
+                leading: Icon(
+                  _selectedProfile?.id == profile.id
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_unchecked,
+                  color: _selectedProfile?.id == profile.id
+                      ? AppColors.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                title: Text(
+                  profile.displayName.isEmpty
+                      ? l10n.profile
+                      : profile.displayName,
+                ),
+                subtitle: profile.ageYears != null
+                    ? Text(l10n.yearsCount(profile.ageYears!))
+                    : null,
+                onTap: () => setState(() => _selectedProfile = profile),
+              ),
+            ),
+          const SizedBox(height: 8),
+          FilledButton.icon(
+            onPressed: _selectedProfile == null
+                ? null
+                : () {
+                    final birth = _selectedProfile!.birthDate;
+                    if (birth != null &&
+                        !isAdultQuestionnaireAgeEligible(birth)) {
+                      _showError(l10n.reflexProfileAdultUnder16Hint);
+                      return;
+                    }
+                    _checkForDraft(_selectedProfile!.id);
+                  },
+            icon: const Icon(Icons.assignment_outlined),
+            label: Text(l10n.reflexProfileStartQuestionnaire),
+          ),
+          const SizedBox(height: 24),
+        ],
+        Text(
+          l10n.reflexProfileNewAdultProfile,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+        ),
+        const SizedBox(height: 10),
+        TextField(
+          controller: _nameController,
+          textCapitalization: TextCapitalization.words,
+          decoration: InputDecoration(
+            labelText: l10n.reflexProfileNameOrNickname,
+            border: const OutlineInputBorder(),
+          ),
+        ),
+        const SizedBox(height: 12),
+        InkWell(
+          onTap: () async {
+            final now = DateTime.now();
+            final picked = await showDatePicker(
+              context: context,
+              initialDate: _selectedBirthDate ??
+                  DateTime(now.year - 30, now.month, now.day),
+              firstDate: DateTime(now.year - 100),
+              lastDate: now,
+              helpText: l10n.reflexProfilePickBirthDate,
+            );
+            if (picked != null) {
+              setState(() => _selectedBirthDate = picked);
+            }
+          },
+          borderRadius: BorderRadius.circular(4),
+          child: InputDecorator(
+            decoration: InputDecoration(
+              labelText: l10n.reflexProfileBirthDateRequired,
+              border: const OutlineInputBorder(),
+              suffixIcon: const Icon(Icons.calendar_month_outlined),
+              helperText: l10n.reflexProfileAdultAgeHelper,
+            ),
+            child: Text(
+              _selectedBirthDate == null
+                  ? l10n.reflexProfileSelectDate
+                  : '${_selectedBirthDate!.day.toString().padLeft(2, '0')}.'
+                      '${_selectedBirthDate!.month.toString().padLeft(2, '0')}.'
+                      '${_selectedBirthDate!.year}',
+              style: _selectedBirthDate == null
+                  ? TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant)
+                  : null,
+            ),
+          ),
+        ),
+        const SizedBox(height: 14),
+        FilledButton.icon(
+          onPressed: _saving ? null : _createProfile,
+          icon: const Icon(Icons.person_add_alt_1_outlined),
+          label: Text(
+            _saving ? l10n.saving : l10n.reflexProfileCreateAndStart,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAdultSummary() {
+    final l10n = AppLocalizations.of(context);
+    final visible = _visibleQuestions;
+    final answered = visible
+        .where((q) =>
+            q.role != ReflexQuestionRole.movement &&
+            (_answers[q.id]?.isAnswered ?? false))
+        .length;
+    final skipped = visible
+        .where((q) {
+          final a = _answers[q.id];
+          if (a == null) return false;
+          return a.isUnknown || a.isNotApplicable;
+        })
+        .length;
+    final hidden = _adultVisibility?.supersededAnswerIds.length ??
+        _definition.questions.length - visible.length;
+    final open = visible
+        .where((q) {
+          if (q.role == ReflexQuestionRole.movement) return false;
+          if (q.answerType == ReflexAnswerType.freeText) return false;
+          return !(_answers[q.id]?.isAnswered ?? false);
+        })
+        .toList();
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+      children: [
+        Text(
+          l10n.reflexProfileAdultSummaryTitle,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          l10n.reflexProfileAdultSummaryDisclaimer,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                height: 1.45,
+              ),
+        ),
+        const SizedBox(height: 16),
+        Text(l10n.reflexProfileAdultSummaryAnswered(answered)),
+        Text(l10n.reflexProfileAdultSummarySkipped(skipped)),
+        Text(l10n.reflexProfileAdultSummaryHidden(hidden)),
+        if (open.isNotEmpty) ...[
+          const SizedBox(height: 20),
+          Text(
+            l10n.reflexProfileAdultSummaryOpenHeading,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+          ),
+          const SizedBox(height: 8),
+          for (final q in open.take(12))
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(q.text(Localizations.localeOf(context).languageCode)),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+              onTap: () {
+                final modules = _activeAdultModules;
+                final module = q.adultModule;
+                final index =
+                    module == null ? 0 : modules.indexOf(module).clamp(0, modules.length - 1);
+                setState(() {
+                  _showSummary = false;
+                  _currentModuleIndex = index;
+                });
+              },
+            ),
+        ],
+        const SizedBox(height: 24),
+        Row(
+          children: [
+            OutlinedButton(
+              onPressed: () => setState(() => _showSummary = false),
+              child: Text(l10n.back),
+            ),
+            const Spacer(),
+            FilledButton.icon(
+              onPressed: open.isNotEmpty || _saving ? null : _submit,
+              icon: const Icon(Icons.check_circle_outline),
+              label: Text(_saving ? l10n.saving : l10n.finish),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -870,7 +1202,7 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
     );
   }
 
-  List<ReflexQuestionModule> get _activeModules {
+  List<ReflexQuestionModule> get _activeChildModules {
     final seen = <ReflexQuestionModule>{};
     final result = <ReflexQuestionModule>[];
     for (final q in _visibleQuestions) {
@@ -879,15 +1211,79 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
     return result;
   }
 
+  List<AdultQuestionModule> get _activeAdultModules {
+    final seen = <AdultQuestionModule>{};
+    final result = <AdultQuestionModule>[];
+    for (final q in _visibleQuestions) {
+      final module = q.adultModule;
+      if (module == null) continue;
+      if (seen.add(module)) result.add(module);
+    }
+    return result;
+  }
+
+  int get _moduleCount =>
+      _isAdultPath ? _activeAdultModules.length : _activeChildModules.length;
+
+  List<ReflexQuestion> _questionsForCurrentModule(int safeIndex) {
+    if (_isAdultPath) {
+      final modules = _activeAdultModules;
+      if (modules.isEmpty) return const [];
+      final current = modules[safeIndex];
+      return _visibleQuestions
+          .where((q) => q.adultModule == current)
+          .toList();
+    }
+    final modules = _activeChildModules;
+    if (modules.isEmpty) return const [];
+    final current = modules[safeIndex];
+    return _visibleQuestions.where((q) => q.module == current).toList();
+  }
+
+  String _currentModuleTitle(int safeIndex, String locale) {
+    if (_isAdultPath) {
+      final modules = _activeAdultModules;
+      if (modules.isEmpty) return '';
+      return modules[safeIndex].title(locale);
+    }
+    final modules = _activeChildModules;
+    if (modules.isEmpty) return '';
+    return modules[safeIndex].title(locale);
+  }
+
+  void _flushModuleTiming() {
+    final key = _moduleTimingKey;
+    final entered = _moduleEnteredAt;
+    if (key == null || entered == null) return;
+    final elapsed =
+        DateTime.now().difference(entered).inMilliseconds / 1000.0;
+    final previous = (_moduleTimings[key] as num?)?.toDouble() ?? 0;
+    _moduleTimings[key] = previous + elapsed;
+    _moduleEnteredAt = null;
+    _moduleTimingKey = null;
+  }
+
+  void _beginModuleTiming(int moduleIndex) {
+    _flushModuleTiming();
+    if (_isAdultPath) {
+      final modules = _activeAdultModules;
+      if (moduleIndex < 0 || moduleIndex >= modules.length) return;
+      _moduleTimingKey = modules[moduleIndex].name;
+    } else {
+      final modules = _activeChildModules;
+      if (moduleIndex < 0 || moduleIndex >= modules.length) return;
+      _moduleTimingKey = modules[moduleIndex].name;
+    }
+    _moduleEnteredAt = DateTime.now();
+  }
+
   void _nextModule() {
-    final activeModules = _activeModules;
-    final currentModule = activeModules[_currentModuleIndex];
-    final questionsForModule =
-        _visibleQuestions.where((q) => q.module == currentModule).toList();
+    final questionsForModule = _questionsForCurrentModule(_currentModuleIndex);
 
     final missing = questionsForModule.where((q) {
       if (q.answerType == ReflexAnswerType.freeText) return false;
       if (q.answerType == ReflexAnswerType.multiSelectWithText) return false;
+      if (q.role == ReflexQuestionRole.movement) return false;
       return !(_answers[q.id]?.isAnswered ?? false);
     }).toList();
 
@@ -910,9 +1306,16 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
       return;
     }
 
+    final isLast = _currentModuleIndex >= _moduleCount - 1;
+    _flushModuleTiming();
     setState(() {
       _highlightedQuestionIds = {};
-      _currentModuleIndex++;
+      if (isLast && _isAdultPath) {
+        _showSummary = true;
+      } else {
+        _currentModuleIndex++;
+        _beginModuleTiming(_currentModuleIndex);
+      }
     });
     _saveDraft();
     _questionnaireScrollController.animateTo(
@@ -923,7 +1326,15 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   }
 
   void _prevModule() {
-    setState(() => _currentModuleIndex--);
+    if (_showSummary) {
+      setState(() => _showSummary = false);
+      return;
+    }
+    _flushModuleTiming();
+    setState(() {
+      _currentModuleIndex--;
+      _beginModuleTiming(_currentModuleIndex);
+    });
     _questionnaireScrollController.animateTo(
       0,
       duration: const Duration(milliseconds: 300),
@@ -934,14 +1345,19 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
   Widget _buildQuestionnaire() {
     final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
-    final activeModules = _activeModules;
-    final safeIndex = _currentModuleIndex.clamp(0, activeModules.length - 1);
-    final currentModule = activeModules[safeIndex];
-    final questionsForModule =
-        _visibleQuestions.where((q) => q.module == currentModule).toList();
+    final moduleCount = _moduleCount;
+    if (moduleCount == 0) {
+      return Center(child: Text(l10n.reflexProfileAnswerAllChoice));
+    }
+    final safeIndex = _currentModuleIndex.clamp(0, moduleCount - 1);
+    final questionsForModule = _questionsForCurrentModule(safeIndex);
     final isFirst = safeIndex == 0;
-    final isLast = safeIndex == activeModules.length - 1;
-    final progress = (safeIndex + 1) / activeModules.length;
+    final isLast = safeIndex == moduleCount - 1;
+    final progress = (safeIndex + 1) / moduleCount;
+    final visibleCount = _visibleQuestions.length;
+    final answeredVisible = _visibleQuestions
+        .where((q) => _answers[q.id]?.isAnswered ?? false)
+        .length;
 
     return Column(
       children: [
@@ -969,7 +1385,9 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                         child: Text(
                           _selectedProfile?.displayName.isNotEmpty == true
                               ? _selectedProfile!.displayName
-                              : l10n.reflexProfileChildFallback,
+                              : (_isAdultPath
+                                  ? l10n.profile
+                                  : l10n.reflexProfileChildFallback),
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w800,
@@ -989,17 +1407,26 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
               ),
               const SizedBox(height: 16),
               Text(
-                l10n.reflexProfileSectionOf(
-                  safeIndex + 1,
-                  activeModules.length,
-                ),
+                l10n.reflexProfileSectionOf(safeIndex + 1, moduleCount),
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
               ),
+              if (_isAdultPath) ...[
+                const SizedBox(height: 4),
+                Text(
+                  l10n.reflexProfileAdultItemProgress(
+                    answeredVisible,
+                    visibleCount,
+                  ),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
+              ],
               const SizedBox(height: 4),
               Text(
-                currentModule.title(locale),
+                _currentModuleTitle(safeIndex, locale),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w900,
                     ),
@@ -1024,13 +1451,27 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
                   ),
                 const Spacer(),
                 FilledButton.icon(
-                  onPressed: _saving ? null : (isLast ? _submit : _nextModule),
-                  icon: Icon(isLast
+                  onPressed: _saving
+                      ? null
+                      : (isLast
+                          ? (_isAdultPath
+                              ? () {
+                                  _flushModuleTiming();
+                                  setState(() => _showSummary = true);
+                                  _saveDraft();
+                                }
+                              : _submit)
+                          : _nextModule),
+                  icon: Icon(isLast && !_isAdultPath
                       ? Icons.check_circle_outline
                       : Icons.arrow_forward),
                   label: Text(_saving
                       ? l10n.saving
-                      : (isLast ? l10n.finish : l10n.next)),
+                      : (isLast
+                          ? (_isAdultPath
+                              ? l10n.reflexProfileAdultContinueToSummary
+                              : l10n.finish)
+                          : l10n.next)),
                 ),
               ],
             ),
@@ -1100,11 +1541,15 @@ class _ReflexProfileScreenState extends ConsumerState<ReflexProfileScreen>
               const SizedBox(height: 12),
               switch (question.answerType) {
                 ReflexAnswerType.yesNoUnknown => _buildYesNoUnknown(question),
-                // Adult four-way answers land in Phase 5. Until then, keep the
-                // existing three-button control so the enum addition compiles
-                // without unlocking the adult questionnaire UI.
                 ReflexAnswerType.yesNoUnknownNotApplicable =>
-                  _buildYesNoUnknown(question),
+                  AdultAnswerChoiceGrid(
+                    value: _answers[question.id],
+                    onSelected: (choice) => _setAdultAnswer(question, choice),
+                    yesLabel: l10n.yes,
+                    noLabel: l10n.no,
+                    unknownLabel: l10n.answerUnknown,
+                    notApplicableLabel: l10n.answerNotApplicable,
+                  ),
                 ReflexAnswerType.monthsNumber => _buildMonths(question),
                 ReflexAnswerType.freeText => _buildFreeText(question),
                 ReflexAnswerType.multiSelectWithText =>
@@ -1302,7 +1747,11 @@ class _AnswerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 160),
@@ -1346,6 +1795,7 @@ class _AnswerButton extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

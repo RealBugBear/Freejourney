@@ -343,6 +343,7 @@ Future<void> recordReflexProfileSkipped(
 Future<ReflexSubjectProfile> createAdultSelfProfile(
   WidgetRef ref, {
   String? displayName,
+  DateTime? birthDate,
 }) async {
   final userId = Supabase.instance.client.auth.currentUser?.id;
   if (userId == null) throw Exception('Not signed in.');
@@ -350,13 +351,29 @@ Future<ReflexSubjectProfile> createAdultSelfProfile(
   final resolvedName =
       displayName ?? (await lookupActiveAppLocalizations()).selfName;
 
+  final payload = <String, dynamic>{
+    'owner_user_id': userId,
+    'profile_type': 'adult_self',
+    'display_name': resolvedName.trim().isEmpty
+        ? (await lookupActiveAppLocalizations()).selfName
+        : resolvedName.trim(),
+  };
+  if (birthDate != null) {
+    final now = DateTime.now();
+    final ageMonths =
+        (now.year - birthDate.year) * 12 + (now.month - birthDate.month);
+    final ageYears = ageMonths ~/ 12;
+    payload['birth_date'] =
+        '${birthDate.year.toString().padLeft(4, '0')}'
+        '-${birthDate.month.toString().padLeft(2, '0')}'
+        '-${birthDate.day.toString().padLeft(2, '0')}';
+    payload['age_years'] = ageYears;
+    payload['age_months'] = ageMonths;
+  }
+
   final row = await Supabase.instance.client
       .from('reflex_subject_profiles')
-      .insert({
-        'owner_user_id': userId,
-        'profile_type': 'adult_self',
-        'display_name': resolvedName,
-      })
+      .insert(payload)
       .select()
       .single();
 
