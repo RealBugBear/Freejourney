@@ -2018,6 +2018,55 @@
       }
     }
   },
+  "accompanimentEndAction": "Begleitung beenden",
+  "@accompanimentEndAction": {
+    "description": "Action to end the current trainer accompaniment"
+  },
+  "accompanimentEndDialogTitle": "Begleitung wirklich beenden?",
+  "@accompanimentEndDialogTitle": {
+    "description": "Confirmation dialog title before ending accompaniment"
+  },
+  "accompanimentEndConsequenceProfiles": "Dein Trainer kann deine Reflexprofile nicht mehr sehen.",
+  "@accompanimentEndConsequenceProfiles": {
+    "description": "Consequence: reflex profile access ends"
+  },
+  "accompanimentEndConsequenceChat": "Ihr könnt euch keine Nachrichten mehr schreiben. Euer bisheriger Verlauf bleibt erhalten.",
+  "@accompanimentEndConsequenceChat": {
+    "description": "Consequence: messaging ends, history kept"
+  },
+  "accompanimentEndConsequenceAppointments": "Alle offenen Termine werden abgesagt.",
+  "@accompanimentEndConsequenceAppointments": {
+    "description": "Consequence: open appointments are cancelled"
+  },
+  "accompanimentEndTrainerNotice": "Dein Trainer wird darüber informiert.",
+  "@accompanimentEndTrainerNotice": {
+    "description": "Notice that the trainer will be informed (no delivery claim)"
+  },
+  "accompanimentEndReconnectHint": "Du kannst dich später mit einem neuen Code wieder verbinden.",
+  "@accompanimentEndReconnectHint": {
+    "description": "Hint that reconnecting later is possible"
+  },
+  "accompanimentEndConfirm": "Begleitung beenden",
+  "@accompanimentEndConfirm": {
+    "description": "Destructive confirm button in the end-accompaniment dialog"
+  },
+  "accompanimentEnded": "Begleitung beendet.",
+  "@accompanimentEnded": {
+    "description": "Snackbar after successfully ending accompaniment"
+  },
+  "accompanimentEndFailed": "Begleitung konnte nicht beendet werden: {error}",
+  "@accompanimentEndFailed": {
+    "description": "Error snackbar when ending accompaniment fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatWriteLockedNoRelationship": "Diese Begleitung ist beendet. Du kannst den Verlauf weiter lesen, aber keine Nachrichten mehr senden.",
+  "@chatWriteLockedNoRelationship": {
+    "description": "Composer replacement when a direct chat is no longer writable"
+  },
   "accompanimentWithdrawTitle": "Anfrage zurückziehen?",
   "@accompanimentWithdrawTitle": {
     "description": "Confirmation title before withdrawing a trainer request"

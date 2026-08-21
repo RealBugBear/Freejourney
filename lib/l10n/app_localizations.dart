@@ -4005,6 +4005,72 @@ abstract class AppLocalizations {
   /// **'Wechsel konnte nicht gespeichert werden: {error}'**
   String accompanimentSwitchFailed(String error);
 
+  /// Action to end the current trainer accompaniment
+  ///
+  /// In de, this message translates to:
+  /// **'Begleitung beenden'**
+  String get accompanimentEndAction;
+
+  /// Confirmation dialog title before ending accompaniment
+  ///
+  /// In de, this message translates to:
+  /// **'Begleitung wirklich beenden?'**
+  String get accompanimentEndDialogTitle;
+
+  /// Consequence: reflex profile access ends
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Trainer kann deine Reflexprofile nicht mehr sehen.'**
+  String get accompanimentEndConsequenceProfiles;
+
+  /// Consequence: messaging ends, history kept
+  ///
+  /// In de, this message translates to:
+  /// **'Ihr könnt euch keine Nachrichten mehr schreiben. Euer bisheriger Verlauf bleibt erhalten.'**
+  String get accompanimentEndConsequenceChat;
+
+  /// Consequence: open appointments are cancelled
+  ///
+  /// In de, this message translates to:
+  /// **'Alle offenen Termine werden abgesagt.'**
+  String get accompanimentEndConsequenceAppointments;
+
+  /// Notice that the trainer will be informed (no delivery claim)
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Trainer wird darüber informiert.'**
+  String get accompanimentEndTrainerNotice;
+
+  /// Hint that reconnecting later is possible
+  ///
+  /// In de, this message translates to:
+  /// **'Du kannst dich später mit einem neuen Code wieder verbinden.'**
+  String get accompanimentEndReconnectHint;
+
+  /// Destructive confirm button in the end-accompaniment dialog
+  ///
+  /// In de, this message translates to:
+  /// **'Begleitung beenden'**
+  String get accompanimentEndConfirm;
+
+  /// Snackbar after successfully ending accompaniment
+  ///
+  /// In de, this message translates to:
+  /// **'Begleitung beendet.'**
+  String get accompanimentEnded;
+
+  /// Error snackbar when ending accompaniment fails
+  ///
+  /// In de, this message translates to:
+  /// **'Begleitung konnte nicht beendet werden: {error}'**
+  String accompanimentEndFailed(String error);
+
+  /// Composer replacement when a direct chat is no longer writable
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Begleitung ist beendet. Du kannst den Verlauf weiter lesen, aber keine Nachrichten mehr senden.'**
+  String get chatWriteLockedNoRelationship;
+
   /// Confirmation title before withdrawing a trainer request
   ///
   /// In de, this message translates to:

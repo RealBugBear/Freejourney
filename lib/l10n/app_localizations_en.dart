@@ -2284,6 +2284,46 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get accompanimentEndAction => 'End accompaniment';
+
+  @override
+  String get accompanimentEndDialogTitle => 'Really end this accompaniment?';
+
+  @override
+  String get accompanimentEndConsequenceProfiles =>
+      'Your trainer will no longer see your reflex profiles.';
+
+  @override
+  String get accompanimentEndConsequenceChat =>
+      'You will no longer be able to message each other. Your existing history stays.';
+
+  @override
+  String get accompanimentEndConsequenceAppointments =>
+      'All open appointments will be cancelled.';
+
+  @override
+  String get accompanimentEndTrainerNotice => 'Your trainer will be informed.';
+
+  @override
+  String get accompanimentEndReconnectHint =>
+      'You can connect again later with a new code.';
+
+  @override
+  String get accompanimentEndConfirm => 'End accompaniment';
+
+  @override
+  String get accompanimentEnded => 'Accompaniment ended.';
+
+  @override
+  String accompanimentEndFailed(String error) {
+    return 'Couldn\'t end the accompaniment: $error';
+  }
+
+  @override
+  String get chatWriteLockedNoRelationship =>
+      'This accompaniment has ended. You can still read the history, but you can no longer send messages.';
+
+  @override
   String get accompanimentWithdrawTitle => 'Withdraw Request?';
 
   @override

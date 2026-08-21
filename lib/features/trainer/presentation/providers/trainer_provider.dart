@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/l10n/active_localizations.dart';
+import '../../../../core/logging/app_logger.dart';
 import '../../../../features/auth/presentation/providers/auth_provider.dart';
 import '../../../assessment/domain/models/reflex_profile_assessment.dart';
 import '../../domain/models/appointment.dart';
@@ -799,3 +800,39 @@ final chatPartnerNameProvider =
   final l10n = await lookupActiveAppLocalizations();
   return role == 'trainer' ? l10n.trainerYourTrainer : l10n.trainerYourClient;
 });
+
+/// Ends the accompaniment with [trainerId] for the signed-in client.
+///
+/// The RPC disconnects the relationship, marks it as deliberately ended,
+/// cancels open appointments, and — through a database trigger — revokes the
+/// reflex profile shares. The trainer notification is fire-and-forget: it must
+/// never make a successful end look like a failure.
+Future<void> endTrainerRelationship(
+  WidgetRef ref, {
+  required String trainerId,
+  required String relationshipId,
+}) async {
+  final client = Supabase.instance.client;
+
+  await client.rpc(
+    'end_trainer_relationship',
+    params: {'p_trainer_id': trainerId},
+  );
+
+  try {
+    await client.functions.invoke(
+      'notify-accompaniment-ended',
+      body: {'relationship_id': relationshipId},
+    );
+  } catch (error, stackTrace) {
+    appLogger.w(
+      'accompaniment-ended notification failed',
+      error: error,
+      stackTrace: stackTrace,
+    );
+  }
+
+  ref.invalidate(trainerClientsProvider);
+  ref.invalidate(clientTrainerIdProvider);
+  ref.invalidate(clientTrainerConnectionsProvider);
+}

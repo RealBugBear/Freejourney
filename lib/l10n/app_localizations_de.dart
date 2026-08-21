@@ -2303,6 +2303,47 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get accompanimentEndAction => 'Begleitung beenden';
+
+  @override
+  String get accompanimentEndDialogTitle => 'Begleitung wirklich beenden?';
+
+  @override
+  String get accompanimentEndConsequenceProfiles =>
+      'Dein Trainer kann deine Reflexprofile nicht mehr sehen.';
+
+  @override
+  String get accompanimentEndConsequenceChat =>
+      'Ihr könnt euch keine Nachrichten mehr schreiben. Euer bisheriger Verlauf bleibt erhalten.';
+
+  @override
+  String get accompanimentEndConsequenceAppointments =>
+      'Alle offenen Termine werden abgesagt.';
+
+  @override
+  String get accompanimentEndTrainerNotice =>
+      'Dein Trainer wird darüber informiert.';
+
+  @override
+  String get accompanimentEndReconnectHint =>
+      'Du kannst dich später mit einem neuen Code wieder verbinden.';
+
+  @override
+  String get accompanimentEndConfirm => 'Begleitung beenden';
+
+  @override
+  String get accompanimentEnded => 'Begleitung beendet.';
+
+  @override
+  String accompanimentEndFailed(String error) {
+    return 'Begleitung konnte nicht beendet werden: $error';
+  }
+
+  @override
+  String get chatWriteLockedNoRelationship =>
+      'Diese Begleitung ist beendet. Du kannst den Verlauf weiter lesen, aber keine Nachrichten mehr senden.';
+
+  @override
   String get accompanimentWithdrawTitle => 'Anfrage zurückziehen?';
 
   @override
