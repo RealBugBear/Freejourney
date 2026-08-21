@@ -10,8 +10,8 @@ import 'package:corejourney/l10n/app_localizations_en.dart';
 
 void main() {
   group('Phase 6 default flags', () {
-    test('questionnaire stays off until Phase 7 result UI', () {
-      expect(kAdultReflexQuestionnaireEnabled, isFalse);
+    test('questionnaire enabled with Phase 7 result UI', () {
+      expect(kAdultReflexQuestionnaireEnabled, isTrue);
     });
 
     test('movement and hard-gate stay off by default', () {
