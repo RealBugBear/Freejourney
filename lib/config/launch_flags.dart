@@ -90,3 +90,34 @@ const bool kInviteImpulseI2Enabled = false;
 /// den Kinder-Ergebnisschirm landen und Adult-Scores falsch darstellen.
 /// Umgelegt wird es im Phase-7-Commit.
 const bool kAdultReflexQuestionnaireEnabled = false;
+
+/// Freiwillige Adult-Bewegungsprüfungen (s005/s006, P2.A Phase 6).
+///
+/// Gated: Sichtbarkeit der Movement-Items im Adult-Fragebogen, optionales
+/// Movement-Modul nach dem Safety-Kapitel, inverse Scoring dieser Items in
+/// der Adult-Engine, Intro-Text vor dem Bewegungsteil, und der
+/// Safety-Hinweis-Schlusssatz zu „gekennzeichneten Übungen“.
+///
+/// Flag AUS = Movement unsichtbar und implizit übersprungen;
+/// `possibleCount` ohne Movement-Items; Safety-Hinweis ohne Schlusssatz.
+/// Flag AN = Movement nach Safety erreichbar (nach Expertenfreigabe).
+///
+/// VOR Aktivierung: Expertenfreigabe der Prüfblätter
+/// (`Reflexprofil_Sicherheitspruefung_Experten.docx`), Copy-Abnahme und
+/// Store-/QA-Freigabe von [kAdultReflexQuestionnaireEnabled].
+const bool kAdultMovementChecksEnabled = false;
+
+/// Harte Adult-Safety-Sperren (Stufe A/B/C, Trainingsstopp) — P2.A Phase 6.
+///
+/// Gated (wenn später freigegeben): automatische Trainingssperre,
+/// Stufen-Mapping Frage→A/B/C, und alle UI-/Persistenzpfade, die Zugang
+/// zu Übungen oder Movement an eine Safety-Stufe koppeln.
+///
+/// Flag AUS = nur neutrale situationsbezogene Hinweise („Hinweis gelesen.“);
+/// keine Sperre, keine Stufen, keine Notfallnummern.
+/// Flag AN = Hard-Gate-Logik (erst nach Expertenfreigabe der Stufen-
+/// Zuordnung und ggf. Migration neuer `safety_status`-Werte).
+///
+/// VOR Aktivierung: Freigabe Expertendokument §3/§11.1 und Migration
+/// neuer Status-Werte falls nötig.
+const bool kAdultSafetyHardGateEnabled = false;
