@@ -5591,10 +5591,10 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 Merkmal beantwortet} other{{count} Merkmale beantwortet}}'**
   String adultResultAmphibianAnswered(int count);
 
-  /// Required amphibian additional text
+  /// Required amphibian additional text — adult_v3 Teil B §2 first, then UI note
   ///
   /// In de, this message translates to:
-  /// **'Der Amphibienreflex wird getrennt dargestellt und ist kein Prozentbalken. Er spiegelt nur die beantworteten Amphibien-Angaben wider.'**
+  /// **'Aufgrund der wenigen verfügbaren Merkmale ist dies kein stabiler Profilwert und kein Reflexnachweis. Der Amphibienreflex wird getrennt dargestellt und ist kein Prozentbalken.'**
   String get adultResultAmphibianDisclaimer;
 
   /// Adult detail section: hint strength

@@ -208,6 +208,74 @@ void main() {
   });
 
   group('adult copy hygiene', () {
+    test('amphibian disclaimer matches adult_v3 Teil B §2 (DE first)', () {
+      final de = AppLocalizationsDe();
+      final en = AppLocalizationsEn();
+      expect(
+        de.adultResultAmphibianDisclaimer,
+        startsWith(
+          'Aufgrund der wenigen verfügbaren Merkmale ist dies kein stabiler '
+          'Profilwert und kein Reflexnachweis.',
+        ),
+      );
+      expect(de.adultResultAmphibianDisclaimer.contains('kein Reflexnachweis'),
+          isTrue);
+      expect(de.adultResultAmphibianDisclaimer.contains('stabiler Profilwert'),
+          isTrue);
+      expect(en.adultResultAmphibianDisclaimer.contains('stable profile value'),
+          isTrue);
+      expect(en.adultResultAmphibianDisclaimer.contains('reflex finding'),
+          isTrue);
+    });
+
+    testWidgets('amphibian disclaimer visible for every AmphibianDisplay',
+        (tester) async {
+      final de = AppLocalizationsDe();
+      final disclaimer = de.adultResultAmphibianDisclaimer;
+
+      for (final display in AmphibianDisplay.values) {
+        final scores = AdultQuestionnaireScore(
+          scoringVersion: kAdultScoringVersion,
+          questionnaireVersion: 'adult_v3',
+          reflexScores: const {},
+          amphibian: AdultAmphibianScore(
+            positiveCount: display == AmphibianDisplay.clearSingleHint ? 2 : 0,
+            answeredCount:
+                display == AmphibianDisplay.insufficientData ? 0 : 1,
+            display: display,
+            showDisclaimer: false, // UI must show anyway
+          ),
+          meta: const AdultScoreMeta(
+            hiddenItemIds: [],
+            notApplicableItemIds: [],
+            unknownItemIds: [],
+            noPublicTotalScore: true,
+            movementIncluded: false,
+            filterAnswers: {},
+          ),
+        ).toJson();
+
+        await tester.pumpWidget(
+          _harness(
+            child: AdultReflexProfileResultView(
+              assessment: _adultAssessment(scores: scores),
+              packageId: 'moro',
+              isFirstResultDisplay: false,
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 50));
+
+        expect(
+          find.text(disclaimer),
+          findsOneWidget,
+          reason: 'disclaimer missing for $display',
+        );
+        expect(find.text(amphibianDisplayLabel(de, display)), findsOneWidget);
+      }
+    });
+
     test('band and amphibian labels exist in DE/EN', () {
       final de = AppLocalizationsDe();
       final en = AppLocalizationsEn();

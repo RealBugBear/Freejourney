@@ -3284,9 +3284,9 @@
     "description": "Amphibian answeredCount — never a fixed 'of 2'",
     "placeholders": {"count": {"type": "int"}}
   },
-  "adultResultAmphibianDisclaimer": "Der Amphibienreflex wird getrennt dargestellt und ist kein Prozentbalken. Er spiegelt nur die beantworteten Amphibien-Angaben wider.",
+  "adultResultAmphibianDisclaimer": "Aufgrund der wenigen verfügbaren Merkmale ist dies kein stabiler Profilwert und kein Reflexnachweis. Der Amphibienreflex wird getrennt dargestellt und ist kein Prozentbalken.",
   "@adultResultAmphibianDisclaimer": {
-    "description": "Required amphibian additional text"
+    "description": "Required amphibian additional text — adult_v3 Teil B §2 first, then UI note"
   },
   "adultResultDetailHintStrength": "Hinweisstärke",
   "@adultResultDetailHintStrength": {

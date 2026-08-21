@@ -3269,7 +3269,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adultResultAmphibianDisclaimer =>
-      'The amphibian reflex is shown separately and is not a percentage bar. It only reflects the answered amphibian items.';
+      'Due to the few available features, this is not a stable profile value and not a reflex finding. The amphibian reflex is shown separately and is not a percentage bar.';
 
   @override
   String get adultResultDetailHintStrength => 'Hint strength';

@@ -3281,7 +3281,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get adultResultAmphibianDisclaimer =>
-      'Der Amphibienreflex wird getrennt dargestellt und ist kein Prozentbalken. Er spiegelt nur die beantworteten Amphibien-Angaben wider.';
+      'Aufgrund der wenigen verfügbaren Merkmale ist dies kein stabiler Profilwert und kein Reflexnachweis. Der Amphibienreflex wird getrennt dargestellt und ist kein Prozentbalken.';
 
   @override
   String get adultResultDetailHintStrength => 'Hinweisstärke';

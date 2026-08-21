@@ -205,16 +205,14 @@ class _AmphibianBlock extends StatelessWidget {
                     color: cs.onSurfaceVariant,
                   ),
             ),
-            if (score.showDisclaimer) ...[
-              const SizedBox(height: 10),
-              Text(
-                l10n.adultResultAmphibianDisclaimer,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: cs.onSurfaceVariant,
-                      height: 1.4,
-                    ),
-              ),
-            ],
+            const SizedBox(height: 10),
+            Text(
+              l10n.adultResultAmphibianDisclaimer,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: cs.onSurfaceVariant,
+                    height: 1.4,
+                  ),
+            ),
           ],
         ),
       ),
