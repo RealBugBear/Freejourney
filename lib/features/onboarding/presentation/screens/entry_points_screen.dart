@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../providers/entry_points_provider.dart';
@@ -88,7 +89,15 @@ class _EntryPointsScreenState extends ConsumerState<EntryPointsScreen> {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: () => context.go(Routes.dashboard),
+                  onPressed: () {
+                    if (kInviteEnabled) {
+                      context.go(
+                        '${Routes.inviteAccept}?onboarding=1',
+                      );
+                    } else {
+                      context.go(Routes.dashboard);
+                    }
+                  },
                   child: Text(l10n.next),
                 ),
               ),

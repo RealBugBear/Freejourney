@@ -349,6 +349,27 @@ class MoodRepository {
     await _syncService.enqueueDelete(tableName: 'mood_checkins', recordId: id);
   }
 
+  /// True if any check-in for this user in [window] has mood ≤ 2 (scale 1–5).
+  Future<bool> hasLowMoodInWindow({
+    required Duration window,
+    int maxMood = 2,
+  }) async {
+    final userId = _userId;
+    if (userId == null) return false;
+    final from = _clock.now().toUtc().subtract(window);
+    final row = await (_db.select(_db.moodCheckinsTable)
+          ..where(
+            (t) =>
+                t.userId.equals(userId) &
+                t.recordedAt.isBiggerOrEqualValue(from) &
+                t.mood.isNotNull() &
+                t.mood.isSmallerOrEqualValue(maxMood),
+          )
+          ..limit(1))
+        .getSingleOrNull();
+    return row != null;
+  }
+
   String? _normalizeNote(String? input) {
     final trimmed = input?.trim();
     if (trimmed == null || trimmed.isEmpty) return null;

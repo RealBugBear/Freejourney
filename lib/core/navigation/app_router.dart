@@ -45,6 +45,8 @@ import '../../features/journal/presentation/screens/journal_screen.dart';
 import '../../features/progress/presentation/screens/progress_overview_screen.dart';
 import '../../features/dev_tools/presentation/screens/dev_tools_screen.dart';
 import '../../features/premium/presentation/screens/paywall_screen.dart';
+import '../../features/invite/presentation/screens/invite_screen.dart';
+import '../../features/invite/presentation/screens/invite_redeem_screen.dart';
 import '../../features/chat/domain/models/chat_channel.dart';
 import '../../features/admin/presentation/screens/admin_panel_screen.dart';
 import '../../features/accompaniment/presentation/screens/accompaniment_screen.dart';
@@ -105,6 +107,8 @@ class Routes {
   static const onboardingEntryPoints = '/onboarding/entry-points';
   static const experienceFeed = '/experience/:channelId';
   static const paywall = '/paywall';
+  static const invite = '/einladen';
+  static const inviteAccept = '/einladung';
 }
 
 /// T04 (D1=A): Solange Community/Feed deaktiviert sind, landet jede direkte
@@ -118,6 +122,11 @@ String? communityGateRedirect(BuildContext context, GoRouterState state) =>
 /// Code, ist aber vor der Aktivierung (R8-Trigger + AGB + T25) unerreichbar.
 String? paywallGateRedirect(BuildContext context, GoRouterState state) =>
     kPaywallEnabled ? null : Routes.dashboard;
+
+/// Einladungen: Solange [kInviteEnabled] aus ist, leiten `/einladen` und
+/// `/einladung` aufs Dashboard um. Flag gated nur die App-Oberfläche.
+String? inviteGateRedirect(BuildContext context, GoRouterState state) =>
+    kInviteEnabled ? null : Routes.dashboard;
 
 /// Bridges a Stream into a [Listenable] so GoRouter can react to auth changes.
 class _StreamRefreshListenable extends ChangeNotifier {
@@ -418,6 +427,21 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'paywall',
         redirect: paywallGateRedirect,
         builder: (context, state) => const PaywallScreen(),
+      ),
+      GoRoute(
+        path: Routes.invite,
+        name: 'invite',
+        redirect: inviteGateRedirect,
+        builder: (context, state) => const InviteScreen(),
+      ),
+      GoRoute(
+        path: Routes.inviteAccept,
+        name: 'invite-accept',
+        redirect: inviteGateRedirect,
+        builder: (context, state) => InviteRedeemScreen(
+          initialCode: state.uri.queryParameters['c'],
+          isOnboarding: state.uri.queryParameters['onboarding'] == '1',
+        ),
       ),
       GoRoute(
         path: Routes.trainerDiscovery,

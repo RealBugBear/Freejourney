@@ -12,6 +12,7 @@ import '../../domain/reflex_questionnaire.dart';
 import '../providers/reflex_profile_provider.dart';
 import '../widgets/reflex_radar_chart.dart';
 import '../../../trainer/presentation/providers/trainer_provider.dart';
+import '../../../invite/presentation/widgets/invite_impulse_i1_slot.dart';
 import '../reflex_profile_pdf_copy.dart';
 import '../reflex_score_band_l10n.dart';
 import 'reflex_profile_result_helpers.dart';
@@ -50,14 +51,16 @@ class ReflexProfileResultScreen extends ConsumerWidget {
     final packageId = _packageId(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context).reflexResultTitle)),
+      appBar:
+          AppBar(title: Text(AppLocalizations.of(context).reflexResultTitle)),
       body: SafeArea(
         child: assessmentAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, _) => Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
-              child: Text(AppLocalizations.of(context).reflexResultLoadFailed('$error')),
+              child: Text(AppLocalizations.of(context)
+                  .reflexResultLoadFailed('$error')),
             ),
           ),
           data: (assessment) {
@@ -68,6 +71,7 @@ class ReflexProfileResultScreen extends ConsumerWidget {
               assessment: assessment,
               packageId: packageId,
               activeConnection: activeConnection,
+              isFirstResultDisplay: passedAssessment == null,
             );
           },
         ),
@@ -80,11 +84,13 @@ class _ResultContent extends ConsumerWidget {
   const _ResultContent({
     required this.assessment,
     required this.packageId,
+    required this.isFirstResultDisplay,
     this.activeConnection,
   });
 
   final ReflexProfileAssessment assessment;
   final String packageId;
+  final bool isFirstResultDisplay;
   final ClientTrainerConnection? activeConnection;
 
   @override
@@ -176,6 +182,7 @@ class _ResultContent extends ConsumerWidget {
           ),
         ],
         const SizedBox(height: 18),
+        InviteImpulseI1Slot(isFirstResultDisplay: isFirstResultDisplay),
         Text(
           l10n.reflexResultAreasTitle,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -294,7 +301,8 @@ class _TrainerShareCard extends ConsumerWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        l10n.reflexResultShareWithTrainerBody(connection.displayName),
+                        l10n.reflexResultShareWithTrainerBody(
+                            connection.displayName),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: cs.onSurfaceVariant,
                               height: 1.35,
@@ -443,7 +451,8 @@ class _ScoreTile extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              l10n.reflexResultYesOfAnswered(score.yesCount, score.answeredCount),
+              l10n.reflexResultYesOfAnswered(
+                  score.yesCount, score.answeredCount),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: cs.onSurfaceVariant,
                   ),
@@ -591,7 +600,8 @@ class _EmptyResult extends StatelessWidget {
             FilledButton(
               onPressed: () =>
                   context.go(Routes.reflexProfile, extra: packageId),
-              child: Text(AppLocalizations.of(context).reflexResultStartProfile),
+              child:
+                  Text(AppLocalizations.of(context).reflexResultStartProfile),
             ),
           ],
         ),

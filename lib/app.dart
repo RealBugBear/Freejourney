@@ -13,10 +13,13 @@ import 'bootstrap/providers.dart';
 import 'config/launch_flags.dart';
 import 'core/l10n/app_languages.dart';
 import 'core/navigation/app_router.dart';
+import 'core/navigation/invite_deep_link.dart';
 import 'core/logging/app_logger.dart';
 import 'core/settings/settings_provider.dart';
+import 'core/storage/pending_invite_store.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
+import 'features/invite/domain/models/invite_overview.dart';
 import 'features/trainer/domain/services/calendar_service.dart';
 import 'features/trainer/presentation/providers/trainer_provider.dart';
 import 'features/video/presentation/providers/video_providers.dart';
@@ -89,6 +92,12 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
   }
 
   Future<void> _handleDeepLink(Uri uri) async {
+    final inviteLink = parseInviteDeepLink(uri);
+    if (inviteLink != null) {
+      await _handleInviteDeepLink(inviteLink);
+      return;
+    }
+
     final auth = Supabase.instance.client.auth;
     // Email links carry a token_hash (the same link the web fallback pages on
     // reflexjourney.app use); getSessionFromUrl cannot process those.
@@ -129,7 +138,8 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
               if (preferred != OtpType.email) {
                 await auth.verifyOTP(type: OtpType.email, tokenHash: tokenHash);
               } else {
-                await auth.verifyOTP(type: OtpType.signup, tokenHash: tokenHash);
+                await auth.verifyOTP(
+                    type: OtpType.signup, tokenHash: tokenHash);
               }
             }
           } else {
@@ -143,6 +153,31 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
       case AuthDeepLink.none:
         break;
     }
+  }
+
+  /// Stores a well-formed code (survives restart) and opens `/einladung` when
+  /// the invite UI flag is on. Landing/storage is independent of the flag.
+  Future<void> _handleInviteDeepLink(InviteDeepLink link) async {
+    final raw = link.code;
+    if (raw != null && raw.isNotEmpty) {
+      final normalized = PendingInviteStore.normalizeCode(raw);
+      if (InviteOverview.codePattern.hasMatch(normalized)) {
+        await pendingInviteStore.saveCode(normalized);
+      }
+    }
+
+    if (!kInviteEnabled) {
+      appLogger.i('Invite deep link stored; UI gated by kInviteEnabled');
+      return;
+    }
+
+    final ctx = rootNavigatorKey.currentContext;
+    if (ctx == null || !ctx.mounted) return;
+
+    final stored = await pendingInviteStore.readValidCode();
+    if (!ctx.mounted) return;
+    final query = stored != null ? '?c=$stored' : '';
+    ctx.go('${Routes.inviteAccept}$query');
   }
 
   void _goPostConfirmLanding() {
@@ -166,6 +201,17 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
 
   @override
   Widget build(BuildContext context) => const _CoreJourneyAppView();
+}
+
+/// Opens `/einladung` with a still-valid pending code after sign-in.
+/// Never auto-redeems — the confirm sheet remains required.
+Future<void> openPendingInviteAfterSignIn() async {
+  if (!kInviteEnabled) return;
+  final code = await pendingInviteStore.readValidCode();
+  if (code == null) return;
+  final ctx = rootNavigatorKey.currentContext;
+  if (ctx == null || !ctx.mounted) return;
+  ctx.go('${Routes.inviteAccept}?c=$code');
 }
 
 // ── App view ──────────────────────────────────────────────────────────────────
@@ -209,6 +255,10 @@ class _CoreJourneyAppView extends ConsumerWidget {
                 ),
           );
           unawaited(_syncReminderState(ref));
+          if (event == AuthChangeEvent.signedIn) {
+            // Pending code from a pre-auth invite link — never auto-redeem.
+            unawaited(openPendingInviteAfterSignIn());
+          }
         }
       }
       // On sign-out: settingsProvider re-creates with userId=null,

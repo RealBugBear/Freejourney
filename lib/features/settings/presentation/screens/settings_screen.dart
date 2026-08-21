@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../bootstrap/providers.dart';
+import '../../../../config/launch_flags.dart';
 import '../../../../core/l10n/app_languages.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/onboarding/onboarding_hint_provider.dart';
@@ -180,6 +181,16 @@ class SettingsScreen extends ConsumerWidget {
               onChanged: notifier.setThemeMode,
             ),
           ),
+          if (kInviteEnabled) ...[
+            _SectionHeader(title: l10n.inviteTitle),
+            ListTile(
+              leading: const Icon(Icons.card_giftcard_outlined),
+              title: Text(l10n.inviteEntryTitle),
+              subtitle: Text(l10n.inviteEntrySubtitle),
+              trailing: const Icon(Icons.chevron_right_rounded),
+              onTap: () => context.push(Routes.invite),
+            ),
+          ],
           _SectionHeader(title: l10n.settingsAdvanced),
           ListTile(
             leading: const Icon(Icons.help_outline),
