@@ -13,6 +13,17 @@ Sources consolidated here:
 
 ## Next up (update at the end of every session)
 
+> **Stand 2026-08-21 — zwei Stränge sind lokal fertig, aber nicht integriert.**
+> **Erwachsenenfragebogen (P2.A)** Phasen 2–7 umgesetzt, 97/97 Assessment-Tests grün, intern
+> testbar, öffentliche Freigabe hängt an der Fachprüfung (§17 des Plans). **Einladungen/Invite**
+> vollständig, beide Flags aus, Rollout-Gates 1–6 offen (`docs/evidence/invite-final/README.md`).
+> **Zwei Dinge blockieren „sauber":** (1) 186 Commits liegen nur lokal — der Branch
+> `i18n/english-localization` existiert nicht auf dem Remote und trägt i18n, Invite und den
+> Erwachsenenfragebogen übereinander. (2) `make release-readiness-mobile` ist rot: die
+> i18n-Allowlist (`routineMode`, `tutorialMode`, `trainingRoutineSubtitle`) und drei Fehler in
+> `immersive_session_screen_completion_test` — beide vorbestehend, beide unabhängig vom
+> Fragebogen. Solange das Gate rot ist, kann niemand „releasefähig" sagen.
+
 1. **Anwalt beauftragen (P0.6 — kritischer Pfad):** R1 ✅ angenommen 2026-07-07 — **das versandfertige Briefing liegt in `docs/legal/ANWALTS_BRIEFING.md`** (7 Leistungsbausteine + optionales AGB-Paket, Verarbeiter-Liste, Vetting-Ablauf, E-Mail-Anschreiben). **NEU 2026-07-19 (Founder-Auftrag „Rechtstexte so fertig wie möglich“):** Vollständige Entwürfe liegen als Anlagen 4–6 bei — `docs/legal/DATENSCHUTZERKLAERUNG_ENTWURF.md` (App+Website, ⚖️-Marker + Beleg-Anhang), `docs/legal/IMPRESSUM_ENTWURF.md`, `docs/legal/TRAINER_ERSTANSPRACHE_ART14_ENTWURF.md`; Briefing-Leistungen 1–3/6 auf „Prüfung/Redigat unseres Entwurfs“ umgestellt. **Founder jetzt (~30 Min.):** (1) Word-Datei `docs/legal/versand/Anwalts-Briefing_Reflex-Journey.docx` öffnen, 3 Platzhalter füllen (Rechtsform, Kontakt, Zeitrahmen), speichern; (2) 2–3 Kanzleien mit Schwerpunkt IT-/Datenschutzrecht auswählen (z. B. via anwalt.de-Suche „IT-Recht Datenschutz App“ oder Empfehlung); (3) E-Mail mit dem Anschreiben-Text (steht am Ende des Briefings) + **alle 7 Word-Dateien aus `docs/legal/versand/`** als Anhang senden (Briefing + Anlagen 1–6; 2026-07-19 per pandoc aus den Markdown-Quellen erzeugt, Konsistenz Anlage 1 = wörtliche Extraktion aus `consent_screen.dart`).
 2. **EN-Lokalisierung abschließen (i18n-Endspurt):** Der ausführungsfertige Prompt liegt in
    `docs/I18N_STRUCTURE_PROMPT.md` (2026-07-19) — zentrale Sprach-Registry, Rest-Externalisierung
@@ -147,7 +158,7 @@ Befund: `public/privacy.html` (Kontakt = private Gmail-Adresse, Stand Dez 2024, 
 
 ---
 
-## P2 — Content integration ⛔ blocked: Sina delivery (B, C) · A delivered 2026-08-01, decision pending
+## P2 — Content integration ⛔ blocked: Sina delivery (B, C) · **A umgesetzt 2026-08-21, Fachfreigabe offen**
 
 Expected deliverables (per CONTENT-STATUS and 2026-06-24 session):
 **A) Adult questionnaire** — revised questions + question→reflex mapping. **Delivered twice, independently (both 2026-08-01) — a decision is now pending, not content:**
@@ -156,8 +167,10 @@ Expected deliverables (per CONTENT-STATUS and 2026-06-24 session):
 **B) Final training videos** — selected/cut from the filmed footage, plus final exercise pictures.
 **C) FAQ/orientation content** (added 2026-07-03, founder decision) — the 20–30 most common questions + answers from Sina's forum, as the content base for an in-app help area.
 
-- [ ] A **(step 1, do this first)**: Compare the two adult versions and produce a decision paper — run `/Users/alexandermessinger/dev/ReflexJourney/docs/ADULT_QUESTIONNAIRE_COMPARISON_PROMPT.md` in a session opened in the `ReflexJourney` repo. It merges nothing and decides nothing; it delivers `erwachsenenbogen-vergleich.xlsx` + `erwachsenenbogen-vergleich-befund.md` for founder/Sina sign-off. Seven defects are already verified and written into the prompt, incl. inverted-polarity questions that would score backwards and safety questions (pregnancy, psychiatric treatment) carrying reflex crosses.
-- [ ] A **(step 2, blocked by step 1)**: Validate content (scoring rules per `specs/reflexprofil_planung.md`), seed into the questionnaire system following the child-questionnaire pattern (`reflex_profile_questionnaire_v1` migration as reference). Adding a 15th reflex would additionally require enum, migration, i18n and result-UI changes — founder decision, see step 1.
+- [x] A **(step 1)**: Vergleich der beiden Erwachsenenversionen und Entscheidungspapier — ✅ 2026-08-21 → Ergebnis ist der Katalog `adult_v3` (87 Score-, 4 Kontext-, 10 Sicherheits-, 2 Bewegungsitems) in `docs/superpowers/specs/Reflexprofil_Erwachsenenfragebogen_adult_v3_Arbeitsfassung.docx`. Der Amphibienreflex ist damit als 15. Reflex entschieden und im Enum, im Katalog und im Ergebnis-UI umgesetzt.
+- [x] A **(step 2, Umsetzung)**: Adult-Fragebogen im Assessment-Modul gebaut — ✅ 2026-08-21 → Plan `docs/superpowers/plans/2026-08-21-adult-reflexprofil-questionnaire.md`, Phasen 2–7, Commits `41960e8`…`45863a3`. Eigener Katalog `adult_v3`, eigene Engine `adult_equal_weight_v1`, 4-Antworten-Modell mit „trifft nicht zu", sieben Lebenslagen-Filter, Sicherheitsmodul aus dem Expertenentwurf, eigener Ergebnisschirm mit Balken statt Radar und ohne Gesamtscore. Kinderkatalog, Kinderschwellen und Kinder-Scoring unverändert. `flutter test test/features/assessment/` → 97/97; Evidence unter `docs/evidence/adult-reflexprofil/`. Flags: Fragebogen an, Bewegungsprüfungen und Safety-Hardgate aus.
+- [ ] A **(step 3, öffentliche Freigabe)** ⛔ blocked: Fachprüfung. Die Blocker stehen in §17 des Plans — Mehrfachzuordnungen (s029, s063, s023, s072), Amphibien-Items (s017, s102), Expertenabnahme der Sicherheitsfragen und Bewegungsprüfungen, Verständlichkeitstest mit 5–8 Personen ab 16, Grundratencheck mit 10–15 Personen, Datenschutz ab 16, rechtliche Einordnung Zweckbestimmung/Medizinprodukt. Dazu offen: die 14 Reflex-Kurztexte (aktuell Platzhalter) und der Wortlaut der sieben Filterfragen. **Bewusste Abweichung vom Quelldokument**, die der Prüfung vorzulegen ist: der Amphibien-Zusatztext aus adult_v3 Teil B §2 wird nicht angezeigt (Founder-Entscheidung, §10.2b).
+- [ ] A **(step 4)**: Phase 8 (Verlauf, Adult-PDF-Copy, Analytics-Stub) und Phase 9 (Rollout-Checkliste) — nicht Teil des Auftrags Phasen 2–7.
 - [ ] B: Upload media to Supabase Storage, populate the remote media URL columns (pipeline built 2026-05-30: `ExerciseImageWidget`/`ExerciseVideoWidget` URL-or-asset resolution, Drift cache sync).
 - [ ] Verify on-device: media loads remotely, falls back to assets offline.
 - [ ] C (Stufe 1): Build a curated, searchable FAQ/orientation section in the app from Sina's reviewed forum Q&As. **Not launch-blocking** — ships with or shortly after launch once content arrives. Every answer gets a copy review for therapy/medical-claim language before seeding. No bot, no free-text generation — static reviewed content only. ⛔ blocked: content (founder requested forum access / top-20–30 Q&As from Sina, 2026-07-03).
