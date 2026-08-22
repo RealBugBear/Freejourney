@@ -3666,11 +3666,17 @@
   "@reflexPdfTitle": {
     "description": "PDF document title"
   },
-  "reflexPdfGeneratedOn": "Erstellt am {date}",
-  "@reflexPdfGeneratedOn": {
-    "description": "PDF generated-on line",
+  "reflexPdfHeaderMeta": "Erstellt am {date} · {questionnaireVersion} / {scoringVersion}",
+  "@reflexPdfHeaderMeta": {
+    "description": "PDF header line with date and version",
     "placeholders": {
       "date": {
+        "type": "String"
+      },
+      "questionnaireVersion": {
+        "type": "String"
+      },
+      "scoringVersion": {
         "type": "String"
       }
     }
@@ -3688,41 +3694,9 @@
       }
     }
   },
-  "reflexPdfOverviewTitle": "Übersicht Reflexbereiche",
+  "reflexPdfOverviewTitle": "Reflexbereiche",
   "@reflexPdfOverviewTitle": {
-    "description": "PDF scores section title"
-  },
-  "reflexPdfAreaHeader": "Reflexbereich",
-  "@reflexPdfAreaHeader": {
-    "description": "PDF table header"
-  },
-  "reflexPdfPercentHeader": "Prozent",
-  "@reflexPdfPercentHeader": {
-    "description": "PDF table header"
-  },
-  "reflexPdfClassificationHeader": "Einordnung",
-  "@reflexPdfClassificationHeader": {
-    "description": "PDF table header"
-  },
-  "reflexPdfYesAnsweredHeader": "Ja / Beantwortet",
-  "@reflexPdfYesAnsweredHeader": {
-    "description": "PDF table header"
-  },
-  "reflexPdfAnswersTitle": "Antwortübersicht",
-  "@reflexPdfAnswersTitle": {
-    "description": "PDF answers title"
-  },
-  "reflexPdfQuestionHeader": "Frage",
-  "@reflexPdfQuestionHeader": {
-    "description": "PDF answers header"
-  },
-  "reflexPdfAnswerHeader": "Antwort",
-  "@reflexPdfAnswerHeader": {
-    "description": "PDF answers header"
-  },
-  "reflexPdfEmptyAnswer": "-",
-  "@reflexPdfEmptyAnswer": {
-    "description": "PDF empty answer placeholder"
+    "description": "PDF reflex list section title"
   },
   "reflexPdfFileNameStem": "reflexjourney_reflexprofil",
   "@reflexPdfFileNameStem": {

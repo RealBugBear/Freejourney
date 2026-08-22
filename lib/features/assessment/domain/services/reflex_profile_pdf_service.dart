@@ -9,126 +9,127 @@ import 'package:pdf/widgets.dart' as pw;
 import '../../../../core/l10n/app_languages.dart';
 import '../models/reflex_profile_assessment.dart';
 import '../reflex_questionnaire.dart';
-import '../reflex_questionnaire_definitions.dart';
+import 'reflex_profile_pdf_radar.dart';
 
-typedef ReflexProfilePdfDateCopy = String Function(String formattedDate);
+/// Subject header block height before the radar background is drawn.
+const _kPdfHeaderBlockHeight = 49.0;
+
 typedef ReflexProfilePdfCountCopy = String Function(int count);
+typedef ReflexProfilePdfHeaderMetaCopy = String Function(
+  String formattedDate,
+  String questionnaireVersion,
+  String scoringVersion,
+);
+typedef ReflexProfilePdfChildDataBasisCopy = String Function(
+  int yesCount,
+  int answeredCount,
+);
+typedef ReflexProfilePdfAdultDataBasisCopy = String Function(
+  int answeredCount,
+  int possibleCount,
+);
 
 /// All translated copy needed to create a reflex-profile summary PDF.
-///
-/// [generatedOn], [safetyNotice], and [months] accept complete ICU-formatted
-/// messages from the caller. This keeps sentence structure and plural rules in
-/// the localization layer instead of assembling translated fragments here.
 class ReflexProfilePdfCopy {
   const ReflexProfilePdfCopy({
     required this.title,
     required this.author,
-    required this.generatedOn,
+    required this.headerMeta,
     required this.summaryNotice,
     required this.safetyNotice,
-    required this.reflexOverviewTitle,
-    required this.reflexAreaHeader,
-    required this.percentHeader,
-    required this.classificationHeader,
-    required this.yesAnsweredHeader,
-    required this.answerOverviewTitle,
-    required this.questionHeader,
-    required this.answerHeader,
+    required this.reflexListTitle,
     required this.bandStrong,
     required this.bandElevated,
     required this.bandIndication,
     required this.bandInconspicuous,
     required this.bandInsufficientData,
-    required this.answerYes,
-    required this.answerNo,
-    required this.answerUnknown,
-    required this.months,
-    required this.emptyAnswer,
+    required this.adultBandFewMatching,
+    required this.adultBandSomeMatching,
+    required this.adultBandClusteredPattern,
+    required this.adultBandStronglyClustered,
+    required this.adultBandInsufficientData,
+    required this.amphibianInsufficientData,
+    required this.amphibianNoneMatching,
+    required this.amphibianSingleHint,
+    required this.amphibianClearSingleHint,
+    required this.childDataBasis,
+    required this.adultDataBasis,
     required this.fileNameStem,
   });
 
   final String title;
   final String author;
-  final ReflexProfilePdfDateCopy generatedOn;
+  final ReflexProfilePdfHeaderMetaCopy headerMeta;
   final String summaryNotice;
   final ReflexProfilePdfCountCopy safetyNotice;
-  final String reflexOverviewTitle;
-  final String reflexAreaHeader;
-  final String percentHeader;
-  final String classificationHeader;
-  final String yesAnsweredHeader;
-  final String answerOverviewTitle;
-  final String questionHeader;
-  final String answerHeader;
+  final String reflexListTitle;
   final String bandStrong;
   final String bandElevated;
   final String bandIndication;
   final String bandInconspicuous;
   final String bandInsufficientData;
-  final String answerYes;
-  final String answerNo;
-  final String answerUnknown;
-  final ReflexProfilePdfCountCopy months;
-  final String emptyAnswer;
+  final String adultBandFewMatching;
+  final String adultBandSomeMatching;
+  final String adultBandClusteredPattern;
+  final String adultBandStronglyClustered;
+  final String adultBandInsufficientData;
+  final String amphibianInsufficientData;
+  final String amphibianNoneMatching;
+  final String amphibianSingleHint;
+  final String amphibianClearSingleHint;
+  final ReflexProfilePdfChildDataBasisCopy childDataBasis;
+  final ReflexProfilePdfAdultDataBasisCopy adultDataBasis;
   final String fileNameStem;
+
+  String childBandLabel(ReflexScoreBand band) => switch (band) {
+        ReflexScoreBand.strong => bandStrong,
+        ReflexScoreBand.elevated => bandElevated,
+        ReflexScoreBand.indication => bandIndication,
+        ReflexScoreBand.inconspicuous => bandInconspicuous,
+        ReflexScoreBand.insufficientData => bandInsufficientData,
+      };
+
+  String adultBandLabel(AdultHintBand band) => switch (band) {
+        AdultHintBand.fewMatching => adultBandFewMatching,
+        AdultHintBand.someMatching => adultBandSomeMatching,
+        AdultHintBand.clusteredPattern => adultBandClusteredPattern,
+        AdultHintBand.stronglyClustered => adultBandStronglyClustered,
+        AdultHintBand.insufficientData => adultBandInsufficientData,
+      };
+
+  String amphibianBandLabel(AmphibianDisplay display) => switch (display) {
+        AmphibianDisplay.insufficientData => amphibianInsufficientData,
+        AmphibianDisplay.noneMatching => amphibianNoneMatching,
+        AmphibianDisplay.singleHint => amphibianSingleHint,
+        AmphibianDisplay.clearSingleHint => amphibianClearSingleHint,
+      };
 }
 
 /// Locale-resolved, render-ready content for a reflex-profile summary PDF.
-///
-/// Keeping content preparation separate from PDF layout makes locale behavior
-/// deterministic and directly testable without parsing generated PDF bytes.
 class ReflexProfilePdfContent {
   const ReflexProfilePdfContent({
     required this.title,
     required this.author,
-    required this.generatedOn,
+    required this.subjectName,
+    required this.headerMeta,
     required this.summaryNotice,
     required this.safetyNotice,
-    required this.reflexOverviewTitle,
-    required this.scoreHeaders,
-    required this.scoreRows,
-    required this.answerOverviewTitle,
-    required this.answerHeaders,
-    required this.answerRows,
+    required this.reflexListTitle,
+    required this.radarScores,
+    required this.listRows,
     required this.fileNameStem,
   });
 
   final String title;
   final String author;
-  final String generatedOn;
+  final String subjectName;
+  final String headerMeta;
   final String summaryNotice;
   final String? safetyNotice;
-  final String reflexOverviewTitle;
-  final List<String> scoreHeaders;
-  final List<ReflexProfilePdfScoreRow> scoreRows;
-  final String answerOverviewTitle;
-  final List<String> answerHeaders;
-  final List<ReflexProfilePdfAnswerRow> answerRows;
+  final String reflexListTitle;
+  final List<ReflexPdfRadarScore> radarScores;
+  final List<ReflexProfilePdfListRow> listRows;
   final String fileNameStem;
-}
-
-class ReflexProfilePdfScoreRow {
-  const ReflexProfilePdfScoreRow({
-    required this.label,
-    required this.percent,
-    required this.band,
-    required this.yesAnswered,
-  });
-
-  final String label;
-  final String percent;
-  final String band;
-  final String yesAnswered;
-}
-
-class ReflexProfilePdfAnswerRow {
-  const ReflexProfilePdfAnswerRow({
-    required this.question,
-    required this.answer,
-  });
-
-  final String question;
-  final String answer;
 }
 
 class ReflexProfilePdfService {
@@ -138,6 +139,7 @@ class ReflexProfilePdfService {
     ReflexProfileAssessment assessment, {
     required Locale locale,
     required ReflexProfilePdfCopy copy,
+    required String subjectName,
   }) {
     final completedAt = assessment.completedAt ?? assessment.createdAt;
     final localeCode = AppLanguages.normalize(locale.languageCode);
@@ -148,29 +150,29 @@ class ReflexProfilePdfService {
     return ReflexProfilePdfContent(
       title: copy.title,
       author: copy.author,
-      generatedOn: copy.generatedOn(formattedDate),
+      subjectName: subjectName,
+      headerMeta: copy.headerMeta(
+        formattedDate,
+        assessment.questionnaireVersion,
+        assessment.scoringVersion,
+      ),
       summaryNotice: copy.summaryNotice,
       safetyNotice: assessment.warningConfirmations.isEmpty
           ? null
           : copy.safetyNotice(assessment.warningConfirmations.length),
-      reflexOverviewTitle: copy.reflexOverviewTitle,
-      scoreHeaders: [
-        copy.reflexAreaHeader,
-        copy.percentHeader,
-        copy.classificationHeader,
-        copy.yesAnsweredHeader,
-      ],
-      scoreRows: _scoreRows(
-        assessment,
+      reflexListTitle: copy.reflexListTitle,
+      radarScores: radarScoresForPdf(
+        assessment.scores,
         localeCode: localeCode,
-        copy: copy,
       ),
-      answerOverviewTitle: copy.answerOverviewTitle,
-      answerHeaders: [copy.questionHeader, copy.answerHeader],
-      answerRows: _answerRows(
-        assessment,
+      listRows: listRowsForPdf(
+        scores: assessment.scores,
         localeCode: localeCode,
-        copy: copy,
+        childBandLabel: copy.childBandLabel,
+        adultBandLabel: copy.adultBandLabel,
+        amphibianBandLabel: copy.amphibianBandLabel,
+        childDataBasis: copy.childDataBasis,
+        adultDataBasis: copy.adultDataBasis,
       ),
       fileNameStem: copy.fileNameStem,
     );
@@ -180,238 +182,275 @@ class ReflexProfilePdfService {
     ReflexProfileAssessment assessment, {
     required Locale locale,
     required ReflexProfilePdfCopy copy,
+    required String subjectName,
     DateTime? generatedAt,
+  }) async {
+    final bytes = await renderSummaryPdfBytes(
+      assessment,
+      locale: locale,
+      copy: copy,
+      subjectName: subjectName,
+    );
+
+    final content = buildSummaryContent(
+      assessment,
+      locale: locale,
+      copy: copy,
+      subjectName: subjectName,
+    );
+    final directory = await getTemporaryDirectory();
+    final timestamp = DateFormat('yyyyMMdd_HHmm').format(
+      generatedAt ?? DateTime.now(),
+    );
+    final file =
+        File('${directory.path}/${content.fileNameStem}_$timestamp.pdf');
+    await file.writeAsBytes(bytes, flush: true);
+    return file;
+  }
+
+  Future<List<int>> renderSummaryPdfBytes(
+    ReflexProfileAssessment assessment, {
+    required Locale locale,
+    required ReflexProfilePdfCopy copy,
+    required String subjectName,
   }) async {
     final content = buildSummaryContent(
       assessment,
       locale: locale,
       copy: copy,
+      subjectName: subjectName,
     );
     final document = pw.Document(
       title: content.title,
       author: content.author,
     );
 
+    final listMetrics = _listMetricsForRowCount(content.listRows.length);
+
     document.addPage(
-      pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
-        margin: const pw.EdgeInsets.all(32),
-        build: (context) => [
-          pw.Text(
-            content.title,
-            style: pw.TextStyle(fontSize: 22, fontWeight: pw.FontWeight.bold),
-          ),
-          pw.SizedBox(height: 8),
-          pw.Text(
-            content.generatedOn,
-            style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey700),
-          ),
-          pw.SizedBox(height: 14),
-          pw.Container(
-            padding: const pw.EdgeInsets.all(10),
-            decoration: pw.BoxDecoration(
-              color: PdfColors.grey100,
-              borderRadius: pw.BorderRadius.circular(6),
-            ),
-            child: pw.Text(
-              content.summaryNotice,
-              style: const pw.TextStyle(fontSize: 10),
-            ),
-          ),
-          if (content.safetyNotice case final safetyNotice?) ...[
-            pw.SizedBox(height: 12),
-            pw.Container(
-              padding: const pw.EdgeInsets.all(10),
-              decoration: pw.BoxDecoration(
-                color: PdfColors.orange100,
-                borderRadius: pw.BorderRadius.circular(6),
-                border: pw.Border.all(color: PdfColors.orange400),
+      pw.Page(
+        pageTheme: pw.PageTheme(
+          pageFormat: PdfPageFormat.a4,
+          margin: const pw.EdgeInsets.all(32),
+          buildBackground: (context) {
+            return pw.Padding(
+              padding: const pw.EdgeInsets.only(top: _kPdfHeaderBlockHeight),
+              child: pw.Align(
+                alignment: pw.Alignment.topCenter,
+                child: reflexPdfRadarChart(scores: content.radarScores),
               ),
-              child: pw.Text(
-                safetyNotice,
+            );
+          },
+        ),
+        build: (context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.stretch,
+            children: [
+              pw.Text(
+                content.subjectName,
                 style: pw.TextStyle(
-                  fontSize: 10,
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              pw.SizedBox(height: 4),
+              pw.Text(
+                content.headerMeta,
+                style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700),
+              ),
+              pw.SizedBox(height: 12),
+              pw.SizedBox(height: kReflexPdfRadarHeight + 8),
+              pw.Container(
+                color: PdfColors.white,
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.stretch,
+                  children: [
+                    pw.Text(
+                      content.reflexListTitle,
+                      style: pw.TextStyle(
+                        fontSize: listMetrics.titleSize,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                    pw.SizedBox(height: 8),
+                    for (final row in content.listRows)
+                      pw.Padding(
+                        padding:
+                            pw.EdgeInsets.only(bottom: listMetrics.rowGap),
+                        child: _listRowWidget(row, listMetrics),
+                      ),
+                    if (content.safetyNotice case final safetyNotice?) ...[
+                      pw.SizedBox(height: 8),
+                      pw.Container(
+                        padding: const pw.EdgeInsets.all(8),
+                        decoration: pw.BoxDecoration(
+                          color: PdfColors.orange100,
+                          borderRadius: pw.BorderRadius.circular(6),
+                          border: pw.Border.all(color: PdfColors.orange400),
+                        ),
+                        child: pw.Text(
+                          safetyNotice,
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                    pw.SizedBox(height: 6),
+                    pw.Container(
+                      padding: const pw.EdgeInsets.all(8),
+                      decoration: pw.BoxDecoration(
+                        color: PdfColors.grey100,
+                        borderRadius: pw.BorderRadius.circular(6),
+                      ),
+                      child: pw.Text(
+                        content.summaryNotice,
+                        style: const pw.TextStyle(fontSize: 8),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+
+    return document.save();
+  }
+}
+
+class _ListMetrics {
+  const _ListMetrics({
+    required this.titleSize,
+    required this.nameSize,
+    required this.detailSize,
+    required this.rowGap,
+  });
+
+  final double titleSize;
+  final double nameSize;
+  final double detailSize;
+  final double rowGap;
+}
+
+_ListMetrics _listMetricsForRowCount(int rowCount) {
+  if (rowCount >= 14) {
+    return const _ListMetrics(
+      titleSize: 11,
+      nameSize: 8.5,
+      detailSize: 7.5,
+      rowGap: 3.5,
+    );
+  }
+  if (rowCount >= 11) {
+    return const _ListMetrics(
+      titleSize: 12,
+      nameSize: 9,
+      detailSize: 8,
+      rowGap: 4.5,
+    );
+  }
+  return const _ListMetrics(
+    titleSize: 13,
+    nameSize: 9.5,
+    detailSize: 8.5,
+    rowGap: 6,
+  );
+}
+
+pw.Widget _listRowWidget(ReflexProfilePdfListRow row, _ListMetrics metrics) {
+  if (row.isAmphibian) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Row(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.Expanded(
+              flex: 5,
+              child: pw.Text(
+                row.label,
+                style: pw.TextStyle(
+                  fontSize: metrics.nameSize,
                   fontWeight: pw.FontWeight.bold,
                 ),
               ),
             ),
+            pw.SizedBox(
+              width: 96,
+              child: pw.Text(
+                row.band,
+                style: pw.TextStyle(
+                  fontSize: metrics.detailSize,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+                textAlign: pw.TextAlign.right,
+              ),
+            ),
           ],
-          pw.SizedBox(height: 18),
-          pw.Text(
-            content.reflexOverviewTitle,
-            style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold),
+        ),
+        pw.SizedBox(height: 1),
+        pw.Text(
+          row.dataBasis,
+          style: pw.TextStyle(
+            fontSize: metrics.detailSize,
+            color: PdfColors.grey800,
           ),
-          pw.SizedBox(height: 8),
-          pw.TableHelper.fromTextArray(
-            headers: content.scoreHeaders,
-            data: content.scoreRows
-                .map(
-                  (score) => [
-                    score.label,
-                    score.percent,
-                    score.band,
-                    score.yesAnswered,
-                  ],
-                )
-                .toList(),
-            headerStyle:
-                pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold),
-            cellStyle: const pw.TextStyle(fontSize: 8),
-            headerDecoration: const pw.BoxDecoration(color: PdfColors.grey200),
-            cellAlignment: pw.Alignment.centerLeft,
-            cellPadding:
-                const pw.EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+        ),
+        pw.SizedBox(height: metrics.rowGap * 0.4),
+      ],
+    );
+  }
+
+  return pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: [
+      pw.Row(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Expanded(
+            flex: 5,
+            child: pw.Text(
+              row.label,
+              style: pw.TextStyle(
+                fontSize: metrics.nameSize,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
           ),
-          pw.SizedBox(height: 18),
-          pw.Text(
-            content.answerOverviewTitle,
-            style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold),
-          ),
-          pw.SizedBox(height: 8),
-          pw.TableHelper.fromTextArray(
-            headers: content.answerHeaders,
-            data: content.answerRows
-                .map(
-                  (answer) => [answer.question, answer.answer],
-                )
-                .toList(),
-            headerStyle:
-                pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold),
-            cellStyle: const pw.TextStyle(fontSize: 7.5),
-            headerDecoration: const pw.BoxDecoration(color: PdfColors.grey200),
-            cellAlignment: pw.Alignment.centerLeft,
-            columnWidths: {
-              0: const pw.FlexColumnWidth(2.2),
-              1: const pw.FlexColumnWidth(1),
-            },
-            cellPadding:
-                const pw.EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+          pw.SizedBox(
+            width: 42,
+            child: pw.Text(
+              row.percent,
+              style: pw.TextStyle(fontSize: metrics.detailSize),
+              textAlign: pw.TextAlign.right,
+            ),
           ),
         ],
       ),
-    );
-
-    final directory = await getTemporaryDirectory();
-    final timestamp = DateFormat('yyyyMMdd_HHmm').format(
-      generatedAt ?? DateTime.now(),
-    );
-    final file = File('${directory.path}/${content.fileNameStem}_$timestamp.pdf');
-    await file.writeAsBytes(await document.save(), flush: true);
-    return file;
-  }
-}
-
-class _RawPdfScoreRow {
-  const _RawPdfScoreRow({
-    required this.key,
-    required this.percent,
-    required this.band,
-    required this.yesCount,
-    required this.answeredCount,
-  });
-
-  final String key;
-  final double percent;
-  final ReflexScoreBand band;
-  final int yesCount;
-  final int answeredCount;
-}
-
-List<ReflexProfilePdfScoreRow> _scoreRows(
-  ReflexProfileAssessment assessment, {
-  required String localeCode,
-  required ReflexProfilePdfCopy copy,
-}) {
-  final rows = <_RawPdfScoreRow>[];
-  for (final entry in assessment.scores.entries) {
-    final raw = entry.value;
-    if (raw is! Map) continue;
-    rows.add(
-      _RawPdfScoreRow(
-        key: entry.key,
-        percent: (raw['percent'] as num?)?.toDouble() ?? 0,
-        band: _scoreBandFromName(raw['band'] as String? ?? ''),
-        yesCount: (raw['yes_count'] as num?)?.toInt() ?? 0,
-        answeredCount: (raw['answered_count'] as num?)?.toInt() ?? 0,
+      pw.SizedBox(height: 1),
+      pw.Text(
+        '${row.band} · ${row.dataBasis}',
+        style: pw.TextStyle(
+          fontSize: metrics.detailSize,
+          color: PdfColors.grey800,
+        ),
       ),
-    );
-  }
-  rows.sort((a, b) => b.percent.compareTo(a.percent));
-
-  return rows
-      .map(
-        (row) => ReflexProfilePdfScoreRow(
-          label: _reflexLabel(row.key, localeCode),
-          percent: '${row.percent.round()}%',
-          band: _bandLabel(row.band, copy),
-          yesAnswered: '${row.yesCount} / ${row.answeredCount}',
-        ),
-      )
-      .toList();
-}
-
-List<ReflexProfilePdfAnswerRow> _answerRows(
-  ReflexProfileAssessment assessment, {
-  required String localeCode,
-  required ReflexProfilePdfCopy copy,
-}) {
-  final questionById = {
-    for (final question in childParentQuestionnaireV1.questions)
-      question.id: '${question.number}. ${question.text(localeCode)}',
-  };
-  return assessment.answers.entries
-      .map(
-        (entry) => ReflexProfilePdfAnswerRow(
-          question: questionById[entry.key] ?? entry.key,
-          answer: _formatAnswer(entry.value, copy),
-        ),
-      )
-      .toList();
-}
-
-ReflexScoreBand _scoreBandFromName(String name) {
-  return ReflexScoreBand.values.firstWhere(
-    (band) => band.name == name,
-    orElse: () => ReflexScoreBand.insufficientData,
+      pw.SizedBox(height: metrics.rowGap * 0.4),
+    ],
   );
 }
 
-String _bandLabel(ReflexScoreBand band, ReflexProfilePdfCopy copy) {
-  return switch (band) {
-    ReflexScoreBand.strong => copy.bandStrong,
-    ReflexScoreBand.elevated => copy.bandElevated,
-    ReflexScoreBand.indication => copy.bandIndication,
-    ReflexScoreBand.inconspicuous => copy.bandInconspicuous,
-    ReflexScoreBand.insufficientData => copy.bandInsufficientData,
-  };
+/// Counts pages in raw PDF bytes (for tests).
+int countPdfPages(List<int> bytes) {
+  final source = String.fromCharCodes(bytes);
+  return RegExp(r'/Type\s*/Page(?!s)').allMatches(source).length;
 }
 
-String _formatAnswer(dynamic value, ReflexProfilePdfCopy copy) {
-  if (value is! Map) return value.toString();
-  final parts = <String>[];
-  final answer = value['answer'];
-  if (answer == 'yes') parts.add(copy.answerYes);
-  if (answer == 'no') parts.add(copy.answerNo);
-  if (answer == 'unknown') parts.add(copy.answerUnknown);
-
-  final rawMonths = value['months'];
-  if (rawMonths != null) {
-    final months = rawMonths is num
-        ? rawMonths.toInt()
-        : int.tryParse(rawMonths.toString());
-    if (months != null) parts.add(copy.months(months));
-  }
-
-  final selected = value['selected_options'];
-  if (selected is List && selected.isNotEmpty) parts.add(selected.join(', '));
-  final text = value['text'];
-  if (text is String && text.trim().isNotEmpty) parts.add(text.trim());
-  return parts.isEmpty ? copy.emptyAnswer : parts.join(' - ');
-}
-
-String _reflexLabel(String key, String localeCode) {
-  for (final reflex in PrimitiveReflex.values) {
-    if (reflex.name == key) return reflex.label(localeCode);
-  }
-  return key;
+/// Returns true when [needle] appears in the PDF (for tests).
+bool pdfBytesContain(List<int> bytes, String needle) {
+  return String.fromCharCodes(bytes).contains(needle);
 }

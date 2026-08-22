@@ -6108,11 +6108,12 @@ abstract class AppLocalizations {
   /// **'Reflexprofil Zusammenfassung'**
   String get reflexPdfTitle;
 
-  /// PDF generated-on line
+  /// PDF header line with date and version
   ///
   /// In de, this message translates to:
-  /// **'Erstellt am {date}'**
-  String reflexPdfGeneratedOn(String date);
+  /// **'Erstellt am {date} · {questionnaireVersion} / {scoringVersion}'**
+  String reflexPdfHeaderMeta(
+      String date, String questionnaireVersion, String scoringVersion);
 
   /// PDF summary notice
   ///
@@ -6126,59 +6127,11 @@ abstract class AppLocalizations {
   /// **'{count} Sicherheits-/Rücksprache-Hinweise wurden bestätigt. Training sollte nur nach ausdrücklicher Rücksprache mit Arzt, Therapeut oder Psychologe erfolgen.'**
   String reflexPdfSafetyNotice(int count);
 
-  /// PDF scores section title
+  /// PDF reflex list section title
   ///
   /// In de, this message translates to:
-  /// **'Übersicht Reflexbereiche'**
+  /// **'Reflexbereiche'**
   String get reflexPdfOverviewTitle;
-
-  /// PDF table header
-  ///
-  /// In de, this message translates to:
-  /// **'Reflexbereich'**
-  String get reflexPdfAreaHeader;
-
-  /// PDF table header
-  ///
-  /// In de, this message translates to:
-  /// **'Prozent'**
-  String get reflexPdfPercentHeader;
-
-  /// PDF table header
-  ///
-  /// In de, this message translates to:
-  /// **'Einordnung'**
-  String get reflexPdfClassificationHeader;
-
-  /// PDF table header
-  ///
-  /// In de, this message translates to:
-  /// **'Ja / Beantwortet'**
-  String get reflexPdfYesAnsweredHeader;
-
-  /// PDF answers title
-  ///
-  /// In de, this message translates to:
-  /// **'Antwortübersicht'**
-  String get reflexPdfAnswersTitle;
-
-  /// PDF answers header
-  ///
-  /// In de, this message translates to:
-  /// **'Frage'**
-  String get reflexPdfQuestionHeader;
-
-  /// PDF answers header
-  ///
-  /// In de, this message translates to:
-  /// **'Antwort'**
-  String get reflexPdfAnswerHeader;
-
-  /// PDF empty answer placeholder
-  ///
-  /// In de, this message translates to:
-  /// **'-'**
-  String get reflexPdfEmptyAnswer;
 
   /// PDF temp file name stem
   ///

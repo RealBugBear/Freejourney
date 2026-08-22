@@ -13,6 +13,7 @@ import '../../domain/models/reflex_profile_assessment.dart';
 import '../../domain/reflex_answer_json.dart';
 import '../../domain/reflex_questionnaire.dart';
 import '../../domain/services/reflex_profile_pdf_service.dart';
+import '../providers/reflex_profile_provider.dart';
 import '../reflex_profile_pdf_copy.dart';
 import 'adult_amphibian_detail_tile.dart';
 import 'adult_reflex_detail_tile.dart';
@@ -115,7 +116,7 @@ class AdultReflexProfileResultView extends ConsumerWidget {
         ),
         const SizedBox(height: 18),
         OutlinedButton.icon(
-          onPressed: () => _sharePdf(context, assessment),
+          onPressed: () => _sharePdf(context, ref, assessment),
           icon: const Icon(Icons.picture_as_pdf_outlined),
           label: Text(l10n.reflexResultSharePdf),
         ),
@@ -136,6 +137,7 @@ class AdultReflexProfileResultView extends ConsumerWidget {
 
   Future<void> _sharePdf(
     BuildContext context,
+    WidgetRef ref,
     ReflexProfileAssessment assessment,
   ) async {
     final l10n = AppLocalizations.of(context);
@@ -143,10 +145,15 @@ class AdultReflexProfileResultView extends ConsumerWidget {
       final box = context.findRenderObject() as RenderBox?;
       final screenSize = MediaQuery.of(context).size;
       final locale = Localizations.localeOf(context);
+      final profile = ref.read(selectedSubjectProfileProvider);
+      final subjectName = profile?.displayName.trim().isNotEmpty == true
+          ? profile!.displayName.trim()
+          : l10n.selfName;
       final file = await const ReflexProfilePdfService().createSummaryPdf(
         assessment,
         locale: locale,
         copy: reflexProfilePdfCopyFromL10n(l10n),
+        subjectName: subjectName,
       );
       final origin = box != null
           ? box.localToGlobal(Offset.zero) & box.size

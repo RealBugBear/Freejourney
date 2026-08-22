@@ -3582,8 +3582,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reflexPdfTitle => 'Reflexprofil Zusammenfassung';
 
   @override
-  String reflexPdfGeneratedOn(String date) {
-    return 'Erstellt am $date';
+  String reflexPdfHeaderMeta(
+      String date, String questionnaireVersion, String scoringVersion) {
+    return 'Erstellt am $date · $questionnaireVersion / $scoringVersion';
   }
 
   @override
@@ -3596,31 +3597,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get reflexPdfOverviewTitle => 'Übersicht Reflexbereiche';
-
-  @override
-  String get reflexPdfAreaHeader => 'Reflexbereich';
-
-  @override
-  String get reflexPdfPercentHeader => 'Prozent';
-
-  @override
-  String get reflexPdfClassificationHeader => 'Einordnung';
-
-  @override
-  String get reflexPdfYesAnsweredHeader => 'Ja / Beantwortet';
-
-  @override
-  String get reflexPdfAnswersTitle => 'Antwortübersicht';
-
-  @override
-  String get reflexPdfQuestionHeader => 'Frage';
-
-  @override
-  String get reflexPdfAnswerHeader => 'Antwort';
-
-  @override
-  String get reflexPdfEmptyAnswer => '-';
+  String get reflexPdfOverviewTitle => 'Reflexbereiche';
 
   @override
   String get reflexPdfFileNameStem => 'reflexjourney_reflexprofil';
