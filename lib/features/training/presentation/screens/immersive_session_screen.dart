@@ -33,6 +33,7 @@ class ImmersiveSessionScreen extends StatefulWidget {
     this.restoredState,
     this.companionSubjectProfileIds = const [],
     this.rhythmCuePlayerFactory,
+    this.announcementAssetBundle,
     required this.persistCompletion,
     required this.onCompleted,
     required this.onCancelled,
@@ -50,6 +51,11 @@ class ImmersiveSessionScreen extends StatefulWidget {
 
   /// Optional seam for deterministic widget tests without platform audio.
   final RhythmCuePlayer Function()? rhythmCuePlayerFactory;
+
+  /// Optional seam for the announcement manifest lookup. Defaults to
+  /// [rootBundle]; widget tests inject a bundle because the platform asset
+  /// channel stops answering after the first test in a process.
+  final AssetBundle? announcementAssetBundle;
 
   /// Must atomically persist session, progress and sync intent.
   final Future<void> Function(TrainingSessionState state) persistCompletion;
@@ -114,6 +120,30 @@ class _ImmersiveSessionScreenState extends State<ImmersiveSessionScreen>
     }
   }
 
+  /// Voice guidance is optional, so the readiness lookup is bounded. The
+  /// bundled lookup measures ~11 ms; anything near this budget is a stall.
+  static const _announcementReadinessTimeout = Duration(seconds: 3);
+
+  Future<({TrainingAnnouncementManifest? manifest, bool voiceReady})>
+      _resolveAnnouncementReadiness() async {
+    final bundle = widget.announcementAssetBundle ?? rootBundle;
+    final manifest =
+        await TrainingAnnouncementManifest.loadBundled(bundle: bundle);
+    final report = await manifest.preflight(
+      requestedLocale: _locale,
+      assetExists: (bundleAssetKey) =>
+          TrainingAnnouncementManifest.assetExistsInBundle(
+        bundle,
+        bundleAssetKey,
+      ),
+      requiredEntryIds: _requiredAnnouncementIds(
+        widget.exercises,
+        isDuo: _isDuo,
+      ),
+    );
+    return (manifest: manifest, voiceReady: report.isReady);
+  }
+
   Future<void> _initialize() async {
     try {
       if (widget.exercises.isEmpty) {
@@ -141,21 +171,14 @@ class _ImmersiveSessionScreenState extends State<ImmersiveSessionScreen>
       TrainingAnnouncementManifest? manifest;
       var voiceReady = false;
       try {
-        manifest = await TrainingAnnouncementManifest.loadBundled();
-        final report = await manifest.preflight(
-          requestedLocale: _locale,
-          assetExists: (bundleAssetKey) =>
-              TrainingAnnouncementManifest.assetExistsInBundle(
-            rootBundle,
-            bundleAssetKey,
-          ),
-          requiredEntryIds: _requiredAnnouncementIds(
-            widget.exercises,
-            isDuo: _isDuo,
-          ),
-        );
-        voiceReady = report.isReady;
+        final readiness = await _resolveAnnouncementReadiness()
+            .timeout(_announcementReadinessTimeout);
+        manifest = readiness.manifest;
+        voiceReady = readiness.voiceReady;
       } on Object {
+        // Voice guidance is optional. A missing, malformed or unresponsive
+        // manifest must never hold the session on the loading screen.
+        manifest = null;
         voiceReady = false;
       }
 

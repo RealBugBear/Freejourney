@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../support/asset_bundles.dart';
 import '../../../../support/noop_audioplayers_platform.dart';
 
 const _exercise = Exercise(
@@ -98,6 +99,7 @@ Widget _screen({
       sessionId: 'session-1',
       profileId: 'profile-1',
       completedSessions: 0,
+      announcementAssetBundle: DiskAssetBundle(),
       restoredState: restoredState,
       rhythmCuePlayerFactory: () => RhythmCuePlayer.forTesting(
         assetProbe: (_) async => true,
