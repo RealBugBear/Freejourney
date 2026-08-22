@@ -672,6 +672,27 @@ Umsetzung:
 - Kärtchen für `adult_self`: **kein Mini-Radar.** Name, Datum, und die zwei bis drei stärksten Antwortmuster als kurze Zeilen (Reflexname + Bandtext). Antippen öffnet `Routes.reflexProfileResult` wie bei Kindern.
 - Profil-Bereich: pro Profil eine Zeile „Reflexprofil ansehen" → Ergebnis; ohne abgeschlossenes Assessment stattdessen „Reflexprofil ausfüllen" → Fragebogen.
 
+### 10.3b PDF-Zusammenfassung (Founder-Auftrag 2026-08-22)
+
+**Befund:** `ReflexProfilePdfService.createSummaryPdf` wird von **beiden** Ergebnispfaden benutzt und enthält als zweiten Block eine Tabelle mit *jeder* Frage und Antwort — bei adult_v3 über 110 Zeilen. Deshalb ist das PDF eine `pw.MultiPage` und läuft über zwei Seiten. Ein Diagramm gibt es darin bisher nicht.
+
+**Ziel: eine Seite, mit Diagramm, ohne Frage-Antwort-Liste.** Aufbau von oben nach unten: Kopf (Name, Datum, Version), Diagramm, Reflexliste mit Prozentwert, Bandtext und Datengrundlage, unten der Nicht-Diagnose-Hinweis.
+
+**Diagrammwahl — jedes PDF spiegelt seinen Ergebnisschirm:**
+
+| | App zeigt | PDF zeigt |
+|---|---|---|
+| Kind | Radar (`ReflexRadarChart`) | **Radar**, im PDF neu gezeichnet |
+| Erwachsene | waagerechte Balken (§10.1) | **Balken** |
+
+Für Erwachsene bleibt es damit bei „kein Radar" aus §10.1 — der Founder hatte ein Netz erwogen, die Wahl aber ausdrücklich offen gelassen. Bei 14 Achsen drängeln sich die Beschriftungen, und die Netzfläche liest sich als Gesamtnote, die es nicht gibt. Die Balken sind zugleich die Werteliste und sparen genau den Platz, den die eine Seite braucht.
+
+**Die Frage-Antwort-Liste entfällt ersatzlos.** Sie ist der Grund für Seite zwei.
+
+**Reflexbeschreibungen: später.** Die vierzehn Kurztexte in `adult_reflex_result_copy.dart` sind Platzhalter mit `expertPending`; vierzehnmal „folgt nach fachlicher Freigabe" im PDF wäre schlechter als nichts. Layout so bauen, dass je eine kurze Zeile pro Reflex nachträglich passt (Richtwert 8–10 Wörter), aber heute nichts ausgeben.
+
+**Technischer Hinweis:** `ReflexRadarChart` ist ein Flutter-Widget und im `pdf`-Paket nicht verwendbar. Das Netz wird im PDF eigenständig gezeichnet (`pw.CustomPaint` mit Polygonen), nicht als gerendertes Bild eingebettet — sonst hängt das PDF an einem Render-Durchlauf und ist nicht mehr ohne Widget-Baum testbar.
+
 ### 10.4 Child Result
 
 Unverändert lassen (Radar, alte Band-Labels). Branch explizit — **auf die Version, nicht auf den Typ** (Revision 2026-08-21b):
