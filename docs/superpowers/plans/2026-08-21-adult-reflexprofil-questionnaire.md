@@ -678,14 +678,16 @@ Umsetzung:
 
 **Ziel: eine Seite, mit Diagramm, ohne Frage-Antwort-Liste.** Aufbau von oben nach unten: Kopf (Name, Datum, Version), Diagramm, Reflexliste mit Prozentwert, Bandtext und Datengrundlage, unten der Nicht-Diagnose-Hinweis.
 
-**Diagrammwahl — jedes PDF spiegelt seinen Ergebnisschirm:**
+**Diagrammwahl: Radar in beiden PDFs (Founder-Entscheidung 2026-08-22).**
 
-| | App zeigt | PDF zeigt |
-|---|---|---|
-| Kind | Radar (`ReflexRadarChart`) | **Radar**, im PDF neu gezeichnet |
-| Erwachsene | waagerechte Balken (§10.1) | **Balken** |
+Der Founder hatte die Wahl zunächst offen gelassen; meine Empfehlung war Balken für Erwachsene, passend zum Ergebnisschirm. Entschieden ist: **beide PDFs zeigen das Netz.**
 
-Für Erwachsene bleibt es damit bei „kein Radar" aus §10.1 — der Founder hatte ein Netz erwogen, die Wahl aber ausdrücklich offen gelassen. Bei 14 Achsen drängeln sich die Beschriftungen, und die Netzfläche liest sich als Gesamtnote, die es nicht gibt. Die Balken sind zugleich die Werteliste und sparen genau den Platz, den die eine Seite braucht.
+Damit weicht das Adult-**PDF** bewusst von §10.1 ab, wo für den Adult-*Ergebnisschirm* „kein Radar" gilt. Der Schirm in der App bleibt bei Balken; nur das PDF bekommt das Netz. Diese Abweichung ist der Fachprüfung vorzulegen (§17), nicht stillschweigend zu behandeln.
+
+Zwei Punkte, die daraus folgen und keine Geschmacksfragen sind:
+
+- **Amphibien gehört nicht ins Netz.** Der Reflex hat keinen Prozentwert, sondern die Sonderanzeige 0/1/2 von zwei Items (§7.4). Eine Achse dafür würde eine Zahl behaupten, die es nicht gibt. Amphibien erscheint ausschließlich in der Liste unter dem Netz, mit seinem Textbefund.
+- **Achsenbeschriftung über `PrimitiveReflexCopy.shortLabel`**, nicht über `label` — bei vierzehn Achsen überlappen die langen Namen. Die Kurzformen existieren bereits im Code.
 
 **Die Frage-Antwort-Liste entfällt ersatzlos.** Sie ist der Grund für Seite zwei.
 
@@ -990,6 +992,7 @@ Damit ist die Zielzeit 12–15 Min (adult_v3 „Bearbeitungsziel“) intern am P
 
 - Fachprüfung Zuordnungen mit >3 Reflexen, besonders **s029** und **s063** (auch s023, s072, Movement)
 - Fachprüfung Amphibien-Items **s017** und **s102**
+- **Bewusste Abweichung, der Prüfung vorzulegen:** das Adult-**PDF** zeigt ein Radar, obwohl §10.1 für den Adult-Ergebnisschirm keines vorsieht (Founder-Entscheidung 2026-08-22, §10.3b). Die App bleibt bei Balken
 - **Bewusste Abweichung vom Dokument, der Prüfung vorzulegen:** Der in adult_v3 Teil B §2 vorgeschriebene Amphibien-Zusatztext („Aufgrund der wenigen verfügbaren Merkmale …“) wird **nicht** angezeigt (Founder-Entscheidung 2026-08-21, §7.4/§10.2b). Der Seiten-Disclaimer trägt die Aussage für die gesamte Liste. Die Prüfung entscheidet, ob das so bleibt
 - Expertenfreigabe aller Sicherheitsfragen, Pop-ups und Bewegungsprüfungen (separates Experten-Dokument existiert außerhalb: `Reflexprofil_Sicherheitspruefung_Experten.docx` — inhaltlich noch nicht Produktfreigabe)
 - Verständlichkeitstest mit 5–8 Personen ab 16
