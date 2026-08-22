@@ -1,12 +1,15 @@
 {
   "identical_values": {
+    "adultResultLegacyVersion": "Version line is placeholders only (\"Version: {questionnaireVersion} - Scoring: {scoringVersion}\"); the surrounding labels are identical by design in both locales.",
     "appTitle": "Reflex Journey is the registered product name in every locale.",
+    "chatChannelTypeCommunity": "Community is the established product-area label in both languages.",
     "dashboard": "Dashboard is the established and correctly spelled UI noun in both languages.",
     "goldenDay": "Golden Day is a named in-product concept, not translatable sentence copy.",
     "goldenDayTitle": "Golden Day is a named in-product concept and the celebratory emoji is locale-independent.",
     "languageEnglish": "Language choices intentionally display the English autonym.",
     "languageGerman": "Language choices intentionally display the German autonym.",
     "moodExperienceImpressionEmotional": "Emotional is spelled identically and has the same meaning in both languages.",
+    "osmAttribution": "OpenStreetMap contributor credit is a proper attribution string shared across locales.",
     "packageShortAtnr": "ATNR is the canonical reflex acronym in both languages.",
     "packageShortBabinski": "Babinski is an eponym and canonical reflex name.",
     "packageShortBabkin": "Babkin is an eponym and canonical reflex name.",
@@ -30,49 +33,48 @@
     "progressRangeAll": "All is the existing German UI label and is idiomatic English.",
     "redeemAccessCodeBenefitPremium": "Premium is the locale-independent entitlement name.",
     "redeemAccessCodeBenefitStudio": "Studio is the locale-independent entitlement name.",
-    "routineMode": "Routine is the established product-mode label in both locales.",
     "silentMode": "Silent is an intentionally shared product-mode name.",
     "stressLabel": "Stress is spelled identically and has the same meaning in both languages.",
     "tabAdmin": "Admin is the identical technical role abbreviation in both languages.",
     "tabTrainer": "Trainer is the established role name in German product copy and identical in English.",
     "themeSystem": "System is the conventional platform-theme label in both languages.",
-    "trainerDiscoveryRadiusLabel": "The numeric radius and SI unit km are locale-independent.",
-    "trainerSetupBioLabel": "Bio is the conventional short profile label in both languages.",
-    "trainingMusicAmbientFlow": "Ambient Flow is the proper title of the bundled music track.",
-    "trainingPause": "Pause is spelled identically and is idiomatic in both languages.",
-    "trainingPositionLabel": "Position is spelled identically and is idiomatic in both languages.",
-    "trainingRoutineSubtitle": "Hands-free is an intentionally shared product-mode descriptor.",
-    "trainingSecondsAbbreviation": "sec is the deliberately shared compact time abbreviation.",
-    "trainingTempoFeedbackSummary": "Tempo and Feedback are established shared UI nouns; placeholders are locale-neutral.",
-    "trainingVideo": "Video is spelled identically and is idiomatic in both languages.",
-    "tutorialMode": "Tutorial is the established product-mode label in both locales.",
-    "osmAttribution": "OpenStreetMap contributor credit is a proper attribution string shared across locales.",
-    "trainerClientFallback": "Client is the existing German UI fallback label on the trainer detail screen and identical in English.",
-    "trainerFallbackName": "Trainer is the established role name in German product copy and identical in English.",
-    "trainerChatFallback": "Chat is the established product-area label in both languages.",
-    "trainerDiagReconcileOk": "Technical RPC status line intentionally identical.",
     "trainerApplicationBioOptional": "Bio optional is the existing German form label and identical in English.",
     "trainerApplicationMotivationOptional": "Motivation optional is the existing German form label and identical in English.",
+    "trainerChatFallback": "Chat is the established product-area label in both languages.",
+    "trainerClientFallback": "Client is the existing German UI fallback label on the trainer detail screen and identical in English.",
     "trainerDiagAppointmentTraineeIds": "Technical debug label intentionally identical.",
     "trainerDiagAuthUid": "Technical debug label intentionally identical aside from the id placeholder.",
     "trainerDiagEmail": "Technical debug label intentionally identical aside from the email placeholder.",
     "trainerDiagGetClientsRows": "Technical RPC debug label intentionally identical aside from the count placeholder.",
     "trainerDiagProfileName": "Technical debug label intentionally identical aside from the name placeholder.",
     "trainerDiagProfileRole": "Technical debug label intentionally identical aside from the role placeholder.",
+    "trainerDiagReconcileOk": "Technical RPC status line intentionally identical.",
     "trainerDiagRelationshipClientIds": "Technical debug label intentionally identical.",
     "trainerDiagRelationshipStatuses": "Technical debug label intentionally identical aside from the statuses placeholder.",
     "trainerDiagRelationshipsActive": "Technical debug label intentionally identical aside from the count placeholder.",
+    "trainerDiscoveryRadiusLabel": "The numeric radius and SI unit km are locale-independent.",
+    "trainerFallbackName": "Trainer is the established role name in German product copy and identical in English.",
+    "trainerPkgAtnr": "trainerPkgAtnr is an intentionally shared short package label.",
+    "trainerPkgBabinski": "trainerPkgBabinski is an intentionally shared short package label.",
+    "trainerPkgBabkin": "trainerPkgBabkin is an intentionally shared short package label.",
+    "trainerPkgLandau": "trainerPkgLandau is an intentionally shared short package label.",
     "trainerPkgMoro": "trainerPkgMoro is an intentionally shared short package label.",
     "trainerPkgSpinalGalant": "trainerPkgSpinalGalant is an intentionally shared short package label.",
-    "trainerPkgTlr": "trainerPkgTlr is an intentionally shared short package label.",
-    "trainerPkgBabkin": "trainerPkgBabkin is an intentionally shared short package label.",
-    "trainerPkgAtnr": "trainerPkgAtnr is an intentionally shared short package label.",
     "trainerPkgStnr": "trainerPkgStnr is an intentionally shared short package label.",
-    "trainerPkgBabinski": "trainerPkgBabinski is an intentionally shared short package label.",
-    "trainerPkgLandau": "trainerPkgLandau is an intentionally shared short package label.",
-    "chatChannelTypeCommunity": "Community is the established product-area label in both languages."
+    "trainerPkgTlr": "trainerPkgTlr is an intentionally shared short package label.",
+    "trainerSetupBioLabel": "Bio is the conventional short profile label in both languages.",
+    "trainingMusicAmbientFlow": "Ambient Flow is the proper title of the bundled music track.",
+    "trainingPause": "Pause is spelled identically and is idiomatic in both languages.",
+    "trainingPositionLabel": "Position is spelled identically and is idiomatic in both languages.",
+    "trainingSecondsAbbreviation": "sec is the deliberately shared compact time abbreviation.",
+    "trainingTempoFeedbackSummary": "Tempo and Feedback are established shared UI nouns; placeholders are locale-neutral.",
+    "trainingVideo": "Video is spelled identically and is idiomatic in both languages."
   },
   "claim_terms": {
+    "adultResultDisclaimer": {
+      "kind": "lawyer-owned",
+      "reason": "Adult result purpose statement (§17 legal review: Zweckbestimmung / medical-device classification). The term appears only as a NEGATION - \"not a reflex finding and not a diagnosis\" - which is what the claim rule exists to enforce. Must stay byte-stable until legal sign-off."
+    },
     "disclaimerText": {
       "kind": "lawyer-owned",
       "reason": "Safety disclaimer wording is lawyer-owned and may only change after legal review."
@@ -84,6 +86,14 @@
     "entryPointsEmotionSource": {
       "kind": "source-title",
       "reason": "Movements That Heal is a cited publication title and must remain verbatim."
+    },
+    "reflexProfileAdultSafetyNoticeBody": {
+      "kind": "lawyer-owned",
+      "reason": "Verbatim expert draft from Reflexprofil_Sicherheitspruefung_Experten.docx §6 (\"Dieses Ergebnis bewertet deine Diagnose nicht.\"). Not our wording to edit - byte-stable until the expert sign-off sheet is completed, then bumped to adult_safety_expertdraft_v1."
+    },
+    "reflexProfileAdultSummaryDisclaimer": {
+      "kind": "lawyer-owned",
+      "reason": "Same purpose statement shown before submitting the adult questionnaire; the term appears only as a negation. Must stay byte-stable until legal sign-off (§17)."
     }
   }
 }
