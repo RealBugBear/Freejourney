@@ -85,9 +85,20 @@ const bool kInviteImpulseI2Enabled = false;
 /// Flag AN = vollständiger Adult-Fragebogen inkl. Adult-Ergebnisschirm
 /// (Movement/Hard-Gate weiter über ihre eigenen Flags).
 ///
-/// Plan §15.1: erst true, wenn der Adult-Ergebnisschirm (Phase 7) steht —
-/// hier freigeschaltet zusammen mit dem Ergebnis-UI-Commit.
-const bool kAdultReflexQuestionnaireEnabled = true;
+/// Phase 7 (Ergebnisschirm) steht, damit ist die technische Vorbedingung aus
+/// Plan §15.1 erfüllt — der Code bleibt vollständig kompiliert und getestet.
+///
+/// VOR dem Umlegen auf true MÜSSEN die Fachfreigaben aus Plan §17 vorliegen:
+/// Prüfung der Mehrfachzuordnungen (s029, s063, s023, s072), Amphibien-Items
+/// (s017, s102), Expertenabnahme der Sicherheitsfragen, Verständlichkeitstest
+/// mit 5–8 Personen ab 16, Grundratencheck, Datenschutzprüfung ab 16 und die
+/// rechtliche Einordnung von Zweckbestimmung und Werbeaussagen. Offen sind
+/// außerdem die vierzehn Reflex-Kurztexte (heute Platzhalter mit
+/// `expertPending`) und der freigegebene Wortlaut der sieben Filterfragen.
+///
+/// Zum lokalen Ausprobieren einfach hier umlegen; der Store-Stand kommt aus
+/// einem Tag auf `main` und darf die Fläche nicht ungeprüft enthalten.
+const bool kAdultReflexQuestionnaireEnabled = false;
 
 /// Freiwillige Adult-Bewegungsprüfungen (s005/s006, P2.A Phase 6).
 ///
