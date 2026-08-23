@@ -7777,6 +7777,108 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Heute noch nicht geübt. Ohne Freischein endet deine Serie heute.'**
   String get streakNoticeWithoutCredits;
+
+  /// Anchor sheet title
+  ///
+  /// In de, this message translates to:
+  /// **'Wann sollen wir dich erinnern?'**
+  String get trainingAnchorTitle;
+
+  /// Anchor sheet body
+  ///
+  /// In de, this message translates to:
+  /// **'Am verlässlichsten läuft es, wenn das Training einen festen Platz im Tag hat.'**
+  String get trainingAnchorBody;
+
+  /// Badge on the recommended anchor
+  ///
+  /// In de, this message translates to:
+  /// **'Empfohlen'**
+  String get trainingAnchorRecommended;
+
+  /// Dismiss the anchor sheet
+  ///
+  /// In de, this message translates to:
+  /// **'Später'**
+  String get trainingAnchorLater;
+
+  /// Confirm the anchor sheet
+  ///
+  /// In de, this message translates to:
+  /// **'Erinnern'**
+  String get trainingAnchorConfirm;
+
+  /// Label above the adjustable time
+  ///
+  /// In de, this message translates to:
+  /// **'Erinnerung um'**
+  String get trainingAnchorTimeLabel;
+
+  /// Shown for late anchors only
+  ///
+  /// In de, this message translates to:
+  /// **'Vielen fällt das Einschlafen nach den Übungen schwerer. Plane etwas Abstand zum Zubettgehen ein.'**
+  String get trainingAnchorEveningHint;
+
+  /// Settings row label
+  ///
+  /// In de, this message translates to:
+  /// **'Trainingszeitpunkt'**
+  String get trainingAnchorSettingsLabel;
+
+  /// Anchor: on waking, adult wording
+  ///
+  /// In de, this message translates to:
+  /// **'Direkt nach dem Aufwachen'**
+  String get trainingAnchorWakeUpAdult;
+
+  /// Subline for the adult wake-up anchor
+  ///
+  /// In de, this message translates to:
+  /// **'geht im Liegen'**
+  String get trainingAnchorWakeUpAdultDetail;
+
+  /// Anchor: on waking, family wording
+  ///
+  /// In de, this message translates to:
+  /// **'Morgens nach dem Aufwachen'**
+  String get trainingAnchorWakeUpChild;
+
+  /// Anchor: after breakfast
+  ///
+  /// In de, this message translates to:
+  /// **'Nach dem Frühstück'**
+  String get trainingAnchorAfterBreakfast;
+
+  /// Anchor: midday
+  ///
+  /// In de, this message translates to:
+  /// **'Mittags oder in einer Pause'**
+  String get trainingAnchorMidday;
+
+  /// Anchor: evening
+  ///
+  /// In de, this message translates to:
+  /// **'Am Abend'**
+  String get trainingAnchorEvening;
+
+  /// Anchor: after nursery or school
+  ///
+  /// In de, this message translates to:
+  /// **'Nach Kita oder Schule'**
+  String get trainingAnchorAfterSchool;
+
+  /// Anchor: after dinner
+  ///
+  /// In de, this message translates to:
+  /// **'Nach dem Abendessen'**
+  String get trainingAnchorAfterDinner;
+
+  /// Anchor: a fixed clock time
+  ///
+  /// In de, this message translates to:
+  /// **'Zu einer festen Uhrzeit'**
+  String get trainingAnchorFixedTime;
 }
 
 class _AppLocalizationsDelegate

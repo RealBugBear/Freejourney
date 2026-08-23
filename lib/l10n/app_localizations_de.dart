@@ -4627,4 +4627,57 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get streakNoticeWithoutCredits =>
       'Heute noch nicht geübt. Ohne Freischein endet deine Serie heute.';
+
+  @override
+  String get trainingAnchorTitle => 'Wann sollen wir dich erinnern?';
+
+  @override
+  String get trainingAnchorBody =>
+      'Am verlässlichsten läuft es, wenn das Training einen festen Platz im Tag hat.';
+
+  @override
+  String get trainingAnchorRecommended => 'Empfohlen';
+
+  @override
+  String get trainingAnchorLater => 'Später';
+
+  @override
+  String get trainingAnchorConfirm => 'Erinnern';
+
+  @override
+  String get trainingAnchorTimeLabel => 'Erinnerung um';
+
+  @override
+  String get trainingAnchorEveningHint =>
+      'Vielen fällt das Einschlafen nach den Übungen schwerer. Plane etwas Abstand zum Zubettgehen ein.';
+
+  @override
+  String get trainingAnchorSettingsLabel => 'Trainingszeitpunkt';
+
+  @override
+  String get trainingAnchorWakeUpAdult => 'Direkt nach dem Aufwachen';
+
+  @override
+  String get trainingAnchorWakeUpAdultDetail => 'geht im Liegen';
+
+  @override
+  String get trainingAnchorWakeUpChild => 'Morgens nach dem Aufwachen';
+
+  @override
+  String get trainingAnchorAfterBreakfast => 'Nach dem Frühstück';
+
+  @override
+  String get trainingAnchorMidday => 'Mittags oder in einer Pause';
+
+  @override
+  String get trainingAnchorEvening => 'Am Abend';
+
+  @override
+  String get trainingAnchorAfterSchool => 'Nach Kita oder Schule';
+
+  @override
+  String get trainingAnchorAfterDinner => 'Nach dem Abendessen';
+
+  @override
+  String get trainingAnchorFixedTime => 'Zu einer festen Uhrzeit';
 }

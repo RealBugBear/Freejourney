@@ -4618,4 +4618,57 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get streakNoticeWithoutCredits =>
       'No practice yet today. Without a pass, your streak ends today.';
+
+  @override
+  String get trainingAnchorTitle => 'When should we remind you?';
+
+  @override
+  String get trainingAnchorBody =>
+      'It works most reliably when the training has a fixed place in the day.';
+
+  @override
+  String get trainingAnchorRecommended => 'Recommended';
+
+  @override
+  String get trainingAnchorLater => 'Later';
+
+  @override
+  String get trainingAnchorConfirm => 'Remind me';
+
+  @override
+  String get trainingAnchorTimeLabel => 'Remind me at';
+
+  @override
+  String get trainingAnchorEveningHint =>
+      'Many find it harder to fall asleep after the exercises. Leave some room before bedtime.';
+
+  @override
+  String get trainingAnchorSettingsLabel => 'Training time';
+
+  @override
+  String get trainingAnchorWakeUpAdult => 'Right after waking';
+
+  @override
+  String get trainingAnchorWakeUpAdultDetail => 'works lying down';
+
+  @override
+  String get trainingAnchorWakeUpChild => 'In the morning after waking';
+
+  @override
+  String get trainingAnchorAfterBreakfast => 'After breakfast';
+
+  @override
+  String get trainingAnchorMidday => 'Midday or during a break';
+
+  @override
+  String get trainingAnchorEvening => 'In the evening';
+
+  @override
+  String get trainingAnchorAfterSchool => 'After nursery or school';
+
+  @override
+  String get trainingAnchorAfterDinner => 'After dinner';
+
+  @override
+  String get trainingAnchorFixedTime => 'At a fixed time';
 }
