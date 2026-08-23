@@ -36,3 +36,41 @@ StreakCredits earnCredits({
     lastCountedDay: newDays.last,
   );
 }
+
+/// Rescues the gap between the last counting day and today (spec §4.5).
+///
+/// Founder decision D11: credits are spent **only** when they cover the whole
+/// gap. After a long absence the streak breaks and the credits are kept,
+/// instead of being burned on a series that is lost anyway.
+StreakCredits spendCredits({
+  required StreakCredits credits,
+  required Set<DateTime> trainingDays,
+  required DateTime today,
+  int lookbackDays = 400,
+}) {
+  bool counts(DateTime day) =>
+      trainingDays.contains(day) || credits.rescuedDays.contains(day);
+
+  DateTime? last;
+  var cursor = today;
+  for (var step = 0; step <= lookbackDays; step++) {
+    if (counts(cursor)) {
+      last = cursor;
+      break;
+    }
+    cursor = previousDay(cursor);
+  }
+  if (last == null) return credits;
+
+  final gap = <DateTime>{};
+  for (var day = nextDay(last); day.isBefore(today); day = nextDay(day)) {
+    gap.add(day);
+  }
+  if (gap.isEmpty) return credits;
+  if (gap.length > credits.available) return credits;
+
+  return credits.copyWith(
+    available: credits.available - gap.length,
+    rescuedDays: {...credits.rescuedDays, ...gap},
+  );
+}

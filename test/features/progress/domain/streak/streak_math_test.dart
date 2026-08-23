@@ -92,4 +92,101 @@ void main() {
       expect(result.progressToNext, 1);
     });
   });
+
+  group('spendCredits', () {
+    test('a one-day gap is rescued when a credit is available', () {
+      final credits = StreakCredits.empty.copyWith(available: 1);
+      final result = spendCredits(
+        credits: credits,
+        trainingDays: _days([1]),
+        today: DateTime(2026, 8, 3),
+      );
+      expect(result.available, 0);
+      expect(result.rescuedDays, {DateTime(2026, 8, 2)});
+    });
+
+    test('two consecutive missed days are rescued with two credits (D10)', () {
+      final credits = StreakCredits.empty.copyWith(available: 2);
+      final result = spendCredits(
+        credits: credits,
+        trainingDays: _days([1]),
+        today: DateTime(2026, 8, 4),
+      );
+      expect(result.available, 0);
+      expect(result.rescuedDays, {DateTime(2026, 8, 2), DateTime(2026, 8, 3)});
+    });
+
+    test('a three-day gap breaks the streak and keeps both credits (D11)', () {
+      final credits = StreakCredits.empty.copyWith(available: 2);
+      final result = spendCredits(
+        credits: credits,
+        trainingDays: _days([1]),
+        today: DateTime(2026, 8, 5),
+      );
+      expect(result.available, 2);
+      expect(result.rescuedDays, isEmpty);
+    });
+
+    test('today is never part of the gap', () {
+      final credits = StreakCredits.empty.copyWith(available: 2);
+      final result = spendCredits(
+        credits: credits,
+        trainingDays: _days([1]),
+        today: DateTime(2026, 8, 2),
+      );
+      expect(result.available, 2);
+      expect(result.rescuedDays, isEmpty);
+    });
+
+    test('an already rescued day counts as the last day', () {
+      final credits = StreakCredits.empty.copyWith(
+        available: 1,
+        rescuedDays: _days([2]),
+      );
+      final result = spendCredits(
+        credits: credits,
+        trainingDays: _days([1]),
+        today: DateTime(2026, 8, 4),
+      );
+      expect(result.available, 0);
+      expect(result.rescuedDays, {DateTime(2026, 8, 2), DateTime(2026, 8, 3)});
+    });
+
+    test('nothing happens before the first training day', () {
+      final result = spendCredits(
+        credits: StreakCredits.empty.copyWith(available: 2),
+        trainingDays: const <DateTime>{},
+        today: DateTime(2026, 8, 5),
+      );
+      expect(result.available, 2);
+      expect(result.rescuedDays, isEmpty);
+    });
+
+    test('the lookback stops at the configured horizon', () {
+      final credits = StreakCredits.empty.copyWith(available: 2);
+      final result = spendCredits(
+        credits: credits,
+        trainingDays: {DateTime(2024, 1, 1)},
+        today: DateTime(2026, 8, 5),
+        lookbackDays: 400,
+      );
+      expect(result.available, 2);
+      expect(result.rescuedDays, isEmpty);
+    });
+
+    test('spending twice on the same gap changes nothing', () {
+      final first = spendCredits(
+        credits: StreakCredits.empty.copyWith(available: 2),
+        trainingDays: _days([1]),
+        today: DateTime(2026, 8, 3),
+      );
+      final second = spendCredits(
+        credits: first,
+        trainingDays: _days([1]),
+        today: DateTime(2026, 8, 3),
+      );
+      expect(second.available, first.available);
+      expect(second.rescuedDays, first.rescuedDays);
+    });
+  });
 }
