@@ -181,5 +181,28 @@ void main() {
       ),
     );
     await _capture(tester, darkKey, '02_streak_row_dark.png');
+
+    final pickerKey = GlobalKey();
+    await tester.pumpWidget(
+      _frame(
+        key: pickerKey,
+        brightness: Brightness.light,
+        child: Builder(
+          builder: (context) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final name in ['Lena', 'Noah'])
+                CheckboxListTile(
+                  value: true,
+                  onChanged: (_) {},
+                  controlAffinity: ListTileControlAffinity.leading,
+                  title: Text(name),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await _capture(tester, pickerKey, '03_joint_training_picker.png');
   });
 }
