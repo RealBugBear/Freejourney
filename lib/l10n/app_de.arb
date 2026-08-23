@@ -5022,5 +5022,16 @@
   "streakLegendTrained": "trainiert",
   "@streakLegendTrained": { "description": "Legend: day with a session" },
   "streakLegendRescued": "Freischein",
-  "@streakLegendRescued": { "description": "Legend: day rescued by a credit" }
+  "@streakLegendRescued": { "description": "Legend: day rescued by a credit" },
+  "streakNoticeTitle": "Reflex Journey",
+  "@streakNoticeTitle": { "description": "Title of the evening streak notice" },
+  "streakNoticeWithCredits": "Heute noch nicht geübt. Wenn der Tag ohne Training endet, springt ein Freischein ein — du hast noch {count}.",
+  "@streakNoticeWithCredits": {
+    "description": "Evening notice while credits remain",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "streakNoticeWithoutCredits": "Heute noch nicht geübt. Ohne Freischein endet deine Serie heute.",
+  "@streakNoticeWithoutCredits": {
+    "description": "Evening notice with an empty ledger"
+  }
 }

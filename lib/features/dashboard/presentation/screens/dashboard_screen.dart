@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../bootstrap/providers.dart';
+import '../../../../app.dart';
 import '../../../../core/database/app_database.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/onboarding/onboarding_hint_gate.dart';
@@ -198,6 +199,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           title: l10n.reminderSessionTitle,
           body: l10n.reminderSessionBody,
         );
+        await syncStreakNotices(ref);
       }
 
       if (!mounted) return;

@@ -5022,5 +5022,16 @@
   "streakLegendTrained": "trained",
   "@streakLegendTrained": { "description": "Legend: day with a session" },
   "streakLegendRescued": "pass",
-  "@streakLegendRescued": { "description": "Legend: day rescued by a credit" }
+  "@streakLegendRescued": { "description": "Legend: day rescued by a credit" },
+  "streakNoticeTitle": "Reflex Journey",
+  "@streakNoticeTitle": { "description": "Title of the evening streak notice" },
+  "streakNoticeWithCredits": "No practice yet today. If the day ends without training, a pass steps in — you have {count} left.",
+  "@streakNoticeWithCredits": {
+    "description": "Evening notice while credits remain",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "streakNoticeWithoutCredits": "No practice yet today. Without a pass, your streak ends today.",
+  "@streakNoticeWithoutCredits": {
+    "description": "Evening notice with an empty ledger"
+  }
 }

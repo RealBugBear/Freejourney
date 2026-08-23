@@ -7759,6 +7759,24 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Freischein'**
   String get streakLegendRescued;
+
+  /// Title of the evening streak notice
+  ///
+  /// In de, this message translates to:
+  /// **'Reflex Journey'**
+  String get streakNoticeTitle;
+
+  /// Evening notice while credits remain
+  ///
+  /// In de, this message translates to:
+  /// **'Heute noch nicht geübt. Wenn der Tag ohne Training endet, springt ein Freischein ein — du hast noch {count}.'**
+  String streakNoticeWithCredits(int count);
+
+  /// Evening notice with an empty ledger
+  ///
+  /// In de, this message translates to:
+  /// **'Heute noch nicht geübt. Ohne Freischein endet deine Serie heute.'**
+  String get streakNoticeWithoutCredits;
 }
 
 class _AppLocalizationsDelegate

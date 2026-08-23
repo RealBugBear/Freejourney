@@ -4615,4 +4615,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get streakLegendRescued => 'Freischein';
+
+  @override
+  String get streakNoticeTitle => 'Reflex Journey';
+
+  @override
+  String streakNoticeWithCredits(int count) {
+    return 'Heute noch nicht geübt. Wenn der Tag ohne Training endet, springt ein Freischein ein — du hast noch $count.';
+  }
+
+  @override
+  String get streakNoticeWithoutCredits =>
+      'Heute noch nicht geübt. Ohne Freischein endet deine Serie heute.';
 }

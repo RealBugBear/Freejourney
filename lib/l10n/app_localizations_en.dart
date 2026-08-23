@@ -4606,4 +4606,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get streakLegendRescued => 'pass';
+
+  @override
+  String get streakNoticeTitle => 'Reflex Journey';
+
+  @override
+  String streakNoticeWithCredits(int count) {
+    return 'No practice yet today. If the day ends without training, a pass steps in — you have $count left.';
+  }
+
+  @override
+  String get streakNoticeWithoutCredits =>
+      'No practice yet today. Without a pass, your streak ends today.';
 }

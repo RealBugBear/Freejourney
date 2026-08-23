@@ -11,6 +11,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'bootstrap/bootstrap.dart';
 import 'bootstrap/providers.dart';
 import 'config/launch_flags.dart';
+import 'core/l10n/active_localizations.dart';
 import 'core/l10n/app_languages.dart';
 import 'core/navigation/app_router.dart';
 import 'core/navigation/invite_deep_link.dart';
@@ -18,8 +19,11 @@ import 'core/logging/app_logger.dart';
 import 'core/settings/settings_provider.dart';
 import 'core/storage/pending_invite_store.dart';
 import 'core/theme/app_theme.dart';
+import 'core/time/app_clock_provider.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
 import 'features/invite/domain/models/invite_overview.dart';
+import 'features/progress/domain/streak/streak_credits.dart';
+import 'features/progress/presentation/providers/streak_provider.dart';
 import 'features/trainer/domain/services/calendar_service.dart';
 import 'features/trainer/presentation/providers/trainer_provider.dart';
 import 'features/video/presentation/providers/video_providers.dart';
@@ -467,30 +471,61 @@ Future<void> _syncReminderState(
   await repository.syncFromSettings(next);
   await repository.refreshTimezoneIfChanged(next);
 
-  if (!next.remindersEnabled) {
-    await ns.cancelReminder();
+  try {
+    if (!next.remindersEnabled) {
+      await ns.cancelReminder();
+      return;
+    }
+
+    final serverEnabled = await repository.serverRemindersEnabled();
+    if (serverEnabled) {
+      await ns.cancelReminder();
+      appLogger.i('Local training reminder suppressed for server cohort');
+      return;
+    }
+
+    final prevEnabled = previous?.remindersEnabled ?? false;
+    if (!prevEnabled && next.remindersEnabled) {
+      final granted = await ns.requestPermission();
+      if (!granted) return;
+    }
+
+    // No BuildContext with the app locale is available here, so resolve the
+    // catalog for the active language directly.
+    final l10n = lookupAppLocalizations(Locale(next.languageCode));
+    await ns.scheduleReminder(
+      startMinutes: next.reminderStartMinutes,
+      title: l10n.reminderSessionTitle,
+      body: l10n.reminderSessionBody,
+    );
+  } finally {
+    await syncStreakNotices(ref);
+  }
+}
+
+Future<void> syncStreakNotices(WidgetRef ref) async {
+  final settings = ref.read(settingsProvider);
+  final ns = ref.read(notificationServiceProvider);
+
+  if (!settings.remindersEnabled) {
+    await ns.cancelStreakNotices();
     return;
   }
 
-  final serverEnabled = await repository.serverRemindersEnabled();
-  if (serverEnabled) {
-    await ns.cancelReminder();
-    appLogger.i('Local training reminder suppressed for server cohort');
+  final view = await ref.read(streakViewProvider.future);
+  if (view == null) {
+    await ns.cancelStreakNotices();
     return;
   }
 
-  final prevEnabled = previous?.remindersEnabled ?? false;
-  if (!prevEnabled && next.remindersEnabled) {
-    final granted = await ns.requestPermission();
-    if (!granted) return;
-  }
-
-  // No BuildContext with the app locale is available here, so resolve the
-  // catalog for the active language directly.
-  final l10n = lookupAppLocalizations(Locale(next.languageCode));
-  await ns.scheduleReminder(
-    startMinutes: next.reminderStartMinutes,
-    title: l10n.reminderSessionTitle,
-    body: l10n.reminderSessionBody,
+  final l10n = await lookupActiveAppLocalizations();
+  final today = dateOnly(ref.read(appClockProvider).now());
+  await ns.scheduleStreakNotices(
+    endMinutes: settings.reminderEndMinutes,
+    title: l10n.streakNoticeTitle,
+    bodyWithCredits: l10n.streakNoticeWithCredits,
+    bodyWithoutCredits: l10n.streakNoticeWithoutCredits,
+    credits: view.credits,
+    trainedToday: view.trainingDays.contains(today),
   );
 }

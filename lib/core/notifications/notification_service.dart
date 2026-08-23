@@ -12,6 +12,33 @@ const _kReminderId = 1;
 
 const _kAndroidChannelId = 'training_reminders';
 
+/// Notification ids reserved for the evening streak notice — one per planned
+/// day. Ids 1 (daily reminder) and 500–899 (trainer alerts) are taken.
+const int kStreakNoticeFirstId = 900;
+const int kStreakNoticeDays = 7;
+
+/// The fire times for the coming [kStreakNoticeDays] days.
+///
+/// A scheduled notification cannot check anything when it fires, so the slots
+/// are planned ahead and cancelled again once the day is trained (spec §5).
+List<DateTime> streakNoticeFireTimes({
+  required DateTime from,
+  required int endMinutes,
+  required bool trainedToday,
+}) {
+  final hour = endMinutes ~/ 60;
+  final minute = endMinutes % 60;
+  final times = <DateTime>[];
+
+  for (var offset = 0; offset < kStreakNoticeDays; offset++) {
+    final day = DateTime(from.year, from.month, from.day + offset);
+    final fireTime = DateTime(day.year, day.month, day.day, hour, minute);
+    if (offset == 0 && (trainedToday || !fireTime.isAfter(from))) continue;
+    times.add(fireTime);
+  }
+  return times;
+}
+
 class NotificationService {
   NotificationService._();
   static final NotificationService instance = NotificationService._();
@@ -204,5 +231,61 @@ class NotificationService {
       fromTomorrow: true,
     );
     appLogger.d('Reminder suppressed for today, rescheduled from tomorrow');
+  }
+
+  /// Cancels every planned streak notice.
+  Future<void> cancelStreakNotices() async {
+    if (!_enabled) return;
+    for (var offset = 0; offset < kStreakNoticeDays; offset++) {
+      await _plugin.cancel(kStreakNoticeFirstId + offset);
+    }
+  }
+
+  /// Plans one-off evening notices for the coming week (spec §5).
+  ///
+  /// One-off on purpose: a repeating notification cannot be suppressed for a
+  /// single day, and the notice must disappear the moment the day is trained.
+  Future<void> scheduleStreakNotices({
+    required int endMinutes,
+    required String title,
+    required String Function(int credits) bodyWithCredits,
+    required String bodyWithoutCredits,
+    required int credits,
+    required bool trainedToday,
+  }) async {
+    if (!_enabled || !_initialized) return;
+    await cancelStreakNotices();
+
+    final body = credits > 0 ? bodyWithCredits(credits) : bodyWithoutCredits;
+    final androidDetails = AndroidNotificationDetails(
+      _kAndroidChannelId,
+      await _channelName(),
+      importance: Importance.defaultImportance,
+      priority: Priority.defaultPriority,
+    );
+    const iosDetails = DarwinNotificationDetails();
+    final details =
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
+
+    final now = tz.TZDateTime.now(tz.local);
+    final fireTimes = streakNoticeFireTimes(
+      from: DateTime(now.year, now.month, now.day, now.hour, now.minute),
+      endMinutes: endMinutes,
+      trainedToday: trainedToday,
+    );
+
+    for (var i = 0; i < fireTimes.length; i++) {
+      final fireTime = fireTimes[i];
+      await _plugin.zonedSchedule(
+        kStreakNoticeFirstId + i,
+        title,
+        body,
+        tz.TZDateTime(tz.local, fireTime.year, fireTime.month, fireTime.day,
+            fireTime.hour, fireTime.minute),
+        details,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      );
+    }
+    appLogger.d('Streak notices scheduled: ${fireTimes.length}');
   }
 }

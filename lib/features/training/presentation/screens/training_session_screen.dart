@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../bootstrap/providers.dart';
+import '../../../../app.dart';
 import '../../../../core/database/app_database.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/notifications/notification_service.dart';
@@ -395,6 +396,7 @@ class _TrainingSessionScreenState extends ConsumerState<TrainingSessionScreen> {
           title: l10n.reminderSessionTitle,
           body: l10n.trainingReminderSessionBody,
         );
+        await syncStreakNotices(ref);
       } on Object catch (error) {
         debugPrint('Training reminder reschedule failed: $error');
       }
