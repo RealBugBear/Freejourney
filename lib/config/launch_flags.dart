@@ -143,9 +143,11 @@ const bool kAdultSafetyHardGateEnabled = false;
 /// `training_sessions` abgeleitet und übersteht einen Gerätewechsel.
 /// Flag AN = Konto wird hoch- und wieder heruntergeladen.
 ///
-/// VOR Aktivierung: `public.streak_credits` muss auf der Live-Datenbank
-/// existieren (Migration `2026082301_streak_credits.sql`, Founder-Freigabe
-/// nach CLAUDE.md §3). Wird der Schalter vorher umgelegt, parkt auf jedem
-/// Gerät ein dauerhaft scheiternder Sync-Auftrag, und der Abgleich beim
+/// Aktiviert am 2026-08-23, nachdem `public.streak_credits` auf der
+/// Live-Datenbank angelegt und read-only verifiziert wurde
+/// (`docs/evidence/serie-freischeine/live-apply-2026-08-23.md`).
+///
+/// NICHT auf `true` setzen, solange die Tabelle irgendwo fehlt: dann parkt auf
+/// jedem Gerät ein dauerhaft scheiternder Sync-Auftrag, und der Abgleich beim
 /// Anmelden bricht ab, bevor die restlichen Tabellen geladen sind.
-const bool kStreakCreditsServerSyncEnabled = false;
+const bool kStreakCreditsServerSyncEnabled = true;

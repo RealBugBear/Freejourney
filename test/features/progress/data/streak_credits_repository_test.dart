@@ -1,7 +1,8 @@
 // test/features/progress/data/streak_credits_repository_test.dart
+import 'dart:io';
+
 import 'package:corejourney/config/launch_flags.dart';
 import 'package:corejourney/core/database/app_database.dart';
-import 'package:corejourney/core/sync/sync_service.dart';
 import 'package:corejourney/features/progress/data/repositories/streak_credits_repository.dart';
 import 'package:corejourney/features/progress/domain/streak/streak_credits.dart';
 import 'package:drift/drift.dart';
@@ -143,36 +144,20 @@ void main() {
     expect(rows.single.available, 2);
   });
 
-  group('server sync gate', () {
-    test('an off gate keeps the ledger out of the outbox', () async {
-      // The server table only exists after 2026082301_streak_credits.sql is
-      // applied. Until the flag flips, a queued upsert would retry five times
-      // and then sit in sync_jobs forever.
-      expect(kStreakCreditsServerSyncEnabled, isFalse);
-
-      final syncing = StreakCreditsRepository(db, SyncService(db));
-      await syncing.saveCredits(
-        userId: 'user-1',
-        subjectProfileId: 'child-1',
-        credits: StreakCredits.empty.copyWith(available: 1),
-      );
-
-      final jobs = await db.select(db.syncJobsTable).get();
-      expect(
-        jobs.where((job) => job.tableName_ == 'streak_credits'),
-        isEmpty,
-      );
-
-      // ...but the ledger is still stored locally.
-      final stored = await syncing.loadCredits(
-        userId: 'user-1',
-        subjectProfileId: 'child-1',
-      );
-      expect(stored.available, 1);
-    });
-
-    // The mirror's outbox write is not covered here: enqueueUpsert kicks
-    // off drain() straight away, which needs an initialised Supabase.
-    // Its local column write is covered in streak_provider_test.dart.
+  test('the server sync gate is open now that the table exists', () {
+    // Flipped 2026-08-23 after public.streak_credits was created and verified
+    // on live — see docs/evidence/serie-freischeine/live-apply-2026-08-23.md.
+    // Never set this true while the table is missing anywhere: the outbox job
+    // would fail forever and rehydrate() would abort before the later tables.
+    expect(kStreakCreditsServerSyncEnabled, isTrue);
+    expect(
+      File('supabase/migrations/2026082301_streak_credits.sql').existsSync(),
+      isTrue,
+      reason: 'the migration that creates the table must stay in the repo',
+    );
   });
+
+  // The outbox write itself is not unit-tested: enqueueUpsert fires drain()
+  // straight away, which needs an initialised Supabase. Proof that it reaches
+  // the server is the live verification in docs/evidence/serie-freischeine/.
 }
