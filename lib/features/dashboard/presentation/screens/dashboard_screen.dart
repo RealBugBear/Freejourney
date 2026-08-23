@@ -12,6 +12,7 @@ import '../../../../core/navigation/app_router.dart';
 import '../../../../core/onboarding/onboarding_hint_gate.dart';
 import '../../../../core/onboarding/onboarding_hint_provider.dart';
 import '../../../../core/training/routine_tip_settings.dart';
+import '../../../../core/training/training_anchor_settings.dart';
 import '../../../../core/notifications/notification_service.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -27,7 +28,9 @@ import '../../../training/domain/models/training_session.dart';
 import '../../../training/domain/services/experience_prompt_service.dart';
 import '../../../training/domain/services/vorrunde_phase_service.dart';
 import '../../../training/presentation/providers/training_flow_provider.dart';
+import '../../../training/presentation/apply_training_anchor.dart';
 import '../../../training/presentation/screens/training_session_screen.dart';
+import '../../../training/presentation/widgets/training_anchor_sheet.dart';
 import '../../../consent/presentation/providers/consent_provider.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
 import '../../../profile/presentation/providers/profile_provider.dart';
@@ -103,17 +106,39 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _checkRoutineTip());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkOneTimePrompts());
   }
 
-  Future<void> _checkRoutineTip() async {
+  Future<void> _checkOneTimePrompts() async {
     final prefs = await SharedPreferences.getInstance();
     if (!mounted) return;
+
+    // At most one sheet per return. The anchor question comes first because it
+    // belongs to the moment right after the first session; the routine tip
+    // only becomes due from the second session on, so in practice they never
+    // compete — the guard is here so a future change cannot stack them.
+    if (TrainingAnchorSettings.shouldAsk(prefs)) {
+      await TrainingAnchorSettings.markAsked(prefs);
+      if (!mounted) return;
+      await _askTrainingAnchor();
+      return;
+    }
+
     if (RoutineTipSettings.shouldShowTip(prefs)) {
       await RoutineTipSettings.markTipShown(prefs);
       if (!mounted) return;
       _showRoutineTip();
     }
+  }
+
+  Future<void> _askTrainingAnchor() async {
+    final profile = ref.read(selectedSubjectProfileProvider);
+    final result = await showTrainingAnchorSheet(
+      context,
+      isAdultSelf: profile?.profileType == 'adult_self',
+    );
+    if (result == null || !mounted) return;
+    await applyTrainingAnchor(ref, result);
   }
 
   void _showRoutineTip() {
