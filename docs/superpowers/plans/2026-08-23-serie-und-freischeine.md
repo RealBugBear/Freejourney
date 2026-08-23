@@ -1037,6 +1037,14 @@ import '../../../../core/database/app_database.dart';
 import '../../../../core/sync/sync_service.dart';
 import '../../domain/streak/streak_credits.dart';
 
+/// Whether the ledger is pushed to Supabase.
+///
+/// Stays false until Task 10 creates `public.streak_credits`. Enqueuing an
+/// upsert for a table that does not exist parks a permanently failing job in
+/// the outbox (`SyncService` retries five times, then leaves the row behind),
+/// so the ledger is device-local until the server side lands.
+const bool kStreakCreditsServerSyncEnabled = false;
+
 /// Reads training days, and loads/stores the Freischein ledger.
 ///
 /// [syncService] may be null in tests that do not exercise the outbox.
@@ -1121,6 +1129,8 @@ class StreakCreditsRepository {
             updatedAt: Value(now),
           ),
         );
+
+    if (!kStreakCreditsServerSyncEnabled) return;
 
     await _syncService?.enqueueUpsert(
       tableName: 'streak_credits',
@@ -2378,19 +2388,29 @@ In `SyncService.rehydrate`, after the `training_sessions` block (around line
       }
 ```
 
-- [ ] **Step 4: Run everything**
+- [ ] **Step 4: Turn the ledger sync on**
+
+In `lib/features/progress/data/repositories/streak_credits_repository.dart`,
+flip `kStreakCreditsServerSyncEnabled` to `true` — the server table now exists,
+so the outbox write is safe. Add a test that a save enqueues exactly one
+`streak_credits` job.
+
+**Do this only together with the live apply in Step 6.** A build that pushes to
+a table the live database does not have yet parks failing jobs on real devices.
+
+- [ ] **Step 5: Run everything**
 
 Run: `make release-readiness-mobile`
 Expected: all green.
 
-- [ ] **Step 5: Commit — no live apply**
+- [ ] **Step 6: Commit — no live apply**
 
 ```bash
 git add supabase/migrations/ lib/core/sync/sync_service.dart
 git commit -m "feat(streak): server table and rehydration for the credit ledger (Task 10)"
 ```
 
-- [ ] **Step 6: Present the live-apply request to the founder**
+- [ ] **Step 7: Present the live-apply request to the founder**
 
 Show the exact SQL, which tables it touches, that no existing row is modified, and the rollback (`DROP TABLE public.streak_credits;`). Wait for an explicit go. Do not apply.
 
