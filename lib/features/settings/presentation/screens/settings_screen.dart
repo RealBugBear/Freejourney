@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../bootstrap/providers.dart';
 import '../../../../config/launch_flags.dart';
@@ -10,7 +11,10 @@ import '../../../../core/onboarding/onboarding_hint_provider.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../../core/sync/sync_status.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/training/training_anchor_settings.dart';
+import '../../../../features/assessment/presentation/providers/reflex_profile_provider.dart';
 import '../../../../features/progress/presentation/providers/progress_provider.dart';
+import '../../../../features/training/presentation/widgets/training_anchor_sheet.dart';
 import '../../../../features/training/domain/models/training_session.dart'
     show TrainingSessionMode;
 import '../../../../l10n/app_localizations.dart';
@@ -143,6 +147,36 @@ class SettingsScreen extends ConsumerWidget {
             onChanged: notifier.setRemindersEnabled,
           ),
           if (settings.remindersEnabled) ...[
+            Consumer(
+              builder: (context, ref, _) {
+                final prefs = ref.watch(sharedPreferencesProvider);
+                final anchor = TrainingAnchorSettings.anchor(prefs);
+                final profile = ref.watch(selectedSubjectProfileProvider);
+                final isAdultSelf = profile?.profileType == 'adult_self';
+                return ListTile(
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16),
+                  title: Text(l10n.trainingAnchorSettingsLabel),
+                  subtitle: anchor == null
+                      ? null
+                      : Text(trainingAnchorLabel(l10n, anchor,
+                          isAdultSelf: isAdultSelf)),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () async {
+                    final result = await showTrainingAnchorSheet(
+                      context,
+                      isAdultSelf: isAdultSelf,
+                    );
+                    if (result == null) return;
+                    // Spec §5: changing the anchor keeps a time the user has
+                    // already adjusted — only the anchor is rewritten.
+                    final prefs = await SharedPreferences.getInstance();
+                    await TrainingAnchorSettings.setAnchor(
+                        prefs, result.anchor);
+                  },
+                );
+              },
+            ),
             _TimePickerTile(
               label: '${l10n.reminderWindow} · ${l10n.reminderFrom}',
               time: settings.reminderStart,
