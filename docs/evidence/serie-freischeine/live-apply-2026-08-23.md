@@ -13,8 +13,7 @@ eine Datei direkt ausgeführt.
 
 - 39 Tabellen live, `streak_credits` nicht vorhanden
 - keine Tabelle live, die im Repo fehlt
-- zwei Spalten live, die keine Migration anlegt:
-  `journal_entries.day_key bigint`, `profiles.is_anonymous_default boolean`
+- zwei Spalten-Abweichungen (beide inzwischen behoben, siehe unten)
 
 ## Anwendung
 
@@ -35,9 +34,28 @@ Antwort der Query-API: `[]` — kein Fehler, keine Rückgabezeilen.
 Additiv. Keine bestehende Zeile gelesen, geändert oder gelöscht, keine
 bestehende Spalte angefasst. Rücknahme: `DROP TABLE public.streak_credits;`
 
+## Restliche Drift — behoben am selben Tag
+
+`2026082302_journal_day_key_and_profile_anonymous_default.sql` schließt die
+letzten beiden Abweichungen. Sie waren unterschiedlicher Natur:
+
+- `journal_entries.day_key` **fehlte nicht**. Die Basis-Migration legt sie als
+  `integer` an, live steht `bigint`. Der erste Vergleich listete Name **und**
+  Typ, deshalb sah es nach einer fehlenden Spalte aus. Funktional harmlos
+  (Epochentag, weit innerhalb des Wertebereichs), jetzt trotzdem angeglichen.
+- `profiles.is_anonymous_default` fehlte tatsächlich — keine Migration legt sie
+  an, obwohl `Profile.fromJson/toJson` sie liest und schreibt.
+
+**Ergebnis des erneuten Vollvergleichs:** Keine einzige Spalte existiert mehr
+live, die das Repo nicht beschreibt. Der verbleibende Unterschied (498 lokal
+gegen 414 live) sind ausschließlich die acht Tabellen, die absichtlich nicht
+live sind.
+
 ## Offen
 
-`2026072300_exercise_columns_and_moro_seed.sql` ist **nicht** live angewendet —
+`2026072300_exercise_columns_and_moro_seed.sql` und
+`2026082302_journal_day_key_and_profile_anonymous_default.sql` sind **nicht**
+live angewendet —
 dort ist sie ohnehin ein No-op (alles `IF NOT EXISTS` / `ON CONFLICT DO NOTHING`).
 Sie fehlt damit in der Migrationshistorie der Live-Datenbank; das ist bei einem
 späteren `db push` zu berücksichtigen.
