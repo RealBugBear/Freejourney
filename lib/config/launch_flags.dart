@@ -130,3 +130,22 @@ const bool kAdultMovementChecksEnabled = false;
 /// VOR Aktivierung: Freigabe Expertendokument §3/§11.1 und Migration
 /// neuer Status-Werte falls nötig.
 const bool kAdultSafetyHardGateEnabled = false;
+
+/// Server-Abgleich des Freischein-Kontos (Serie & Freischeine, Schritt 10).
+///
+/// Gated: das Einstellen eines `streak_credits`-Upserts in die
+/// Sync-Warteschlange (`StreakCreditsRepository.saveCredits`) **und** das
+/// Nachladen der Tabelle in `SyncService.rehydrate`. Beide Richtungen hängen
+/// an diesem einen Schalter, weil beide dieselbe Server-Tabelle brauchen.
+///
+/// Flag AUS = das Freischein-Konto lebt nur auf dem Gerät. Die Serie selbst ist
+/// davon unberührt — sie wird aus den ohnehin synchronisierten
+/// `training_sessions` abgeleitet und übersteht einen Gerätewechsel.
+/// Flag AN = Konto wird hoch- und wieder heruntergeladen.
+///
+/// VOR Aktivierung: `public.streak_credits` muss auf der Live-Datenbank
+/// existieren (Migration `2026082301_streak_credits.sql`, Founder-Freigabe
+/// nach CLAUDE.md §3). Wird der Schalter vorher umgelegt, parkt auf jedem
+/// Gerät ein dauerhaft scheiternder Sync-Auftrag, und der Abgleich beim
+/// Anmelden bricht ab, bevor die restlichen Tabellen geladen sind.
+const bool kStreakCreditsServerSyncEnabled = false;

@@ -2,17 +2,10 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 
+import '../../../../config/launch_flags.dart';
 import '../../../../core/database/app_database.dart';
 import '../../../../core/sync/sync_service.dart';
 import '../../domain/streak/streak_credits.dart';
-
-/// Whether the ledger is pushed to Supabase.
-///
-/// Stays false until Task 10 creates `public.streak_credits`. Enqueuing an
-/// upsert for a table that does not exist parks a permanently failing job in
-/// the outbox (`SyncService` retries five times, then leaves the row behind),
-/// so the ledger is device-local until the server side lands.
-const bool kStreakCreditsServerSyncEnabled = false;
 
 /// Reads training days, and loads/stores the Freischein ledger.
 ///

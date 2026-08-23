@@ -6,6 +6,7 @@ import 'package:drift/drift.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../config/launch_flags.dart';
 import '../database/app_database.dart';
 import '../logging/app_logger.dart';
 import 'connectivity_service.dart';
@@ -522,11 +523,63 @@ class SyncService {
             );
       }
 
+      // 5. Pull streak_credits — deliberately last. The whole rehydrate body
+      // shares one try block, so a failure here must not skip the tables
+      // above. Gated because the server table only exists after the migration
+      // 2026082301_streak_credits.sql has been applied.
+      var creditCount = 0;
+      if (kStreakCreditsServerSyncEnabled) {
+        final creditRows = await client
+            .from('streak_credits')
+            .select()
+            .eq('user_id', userId) as List<dynamic>;
+        creditCount = creditRows.length;
+
+        for (final raw in creditRows) {
+          final row = raw as Map<String, dynamic>;
+          final id = row['id'] as String;
+
+          // Skip records with pending local changes
+          final local = await (_db.select(_db.streakCreditsTable)
+                ..where((t) => t.id.equals(id)))
+              .getSingleOrNull();
+          if (local?.needsSync == true) continue;
+
+          // Postgres date[] -> the JSON list StreakCreditsRepository reads
+          final rescued = (row['rescued_days'] as List<dynamic>? ?? const [])
+              .map((value) => value as String)
+              .toList()
+            ..sort();
+          final lastCounted = row['last_counted_day'] as String?;
+
+          await _db.into(_db.streakCreditsTable).insertOnConflictUpdate(
+                StreakCreditsTableCompanion.insert(
+                  id: id,
+                  userId: row['user_id'] as String,
+                  subjectProfileId: row['subject_profile_id'] as String,
+                  available: Value(row['available'] as int? ?? 0),
+                  progressToNext: Value(row['progress_to_next'] as int? ?? 0),
+                  lastCountedDay: Value(
+                    lastCounted == null ? null : DateTime.parse(lastCounted),
+                  ),
+                  rescuedDays: Value(jsonEncode(rescued)),
+                  needsSync: const Value(false),
+                  updatedAt: Value(
+                    row['updated_at'] != null
+                        ? DateTime.parse(row['updated_at'] as String)
+                        : DateTime.now(),
+                  ),
+                ),
+              );
+        }
+      }
+
       appLogger.i(
         'SyncService.rehydrate: pulled ${enrollmentRows.length} enrollments, '
         '${progressRows.length} progress entries, '
         '${sessionRows.length} training sessions, '
-        '${journalRows.length} journal entries',
+        '${journalRows.length} journal entries, '
+        '$creditCount streak credits',
       );
     } on AuthException {
       appLogger.w('SyncService.rehydrate: auth error — skipping');
