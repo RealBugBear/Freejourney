@@ -4583,4 +4583,36 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get inviteCodeFieldLabel => 'Einladungscode';
+
+  @override
+  String streakTitle(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Serie · $days Tage',
+      one: 'Serie · 1 Tag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String streakCreditsLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Freischeine',
+      one: '1 Freischein',
+      zero: 'keine Freischeine',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get streakRescueNotice => 'Ein Freischein hat deine Serie gerettet.';
+
+  @override
+  String get streakLegendTrained => 'trainiert';
+
+  @override
+  String get streakLegendRescued => 'Freischein';
 }

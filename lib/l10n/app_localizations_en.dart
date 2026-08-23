@@ -4574,4 +4574,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inviteCodeFieldLabel => 'Invitation code';
+
+  @override
+  String streakTitle(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Streak · $days days',
+      one: 'Streak · 1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String streakCreditsLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count passes',
+      one: '1 pass',
+      zero: 'no passes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get streakRescueNotice => 'A pass saved your streak.';
+
+  @override
+  String get streakLegendTrained => 'trained';
+
+  @override
+  String get streakLegendRescued => 'pass';
 }

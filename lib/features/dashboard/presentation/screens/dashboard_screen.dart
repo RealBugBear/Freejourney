@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -31,6 +30,8 @@ import '../../../consent/presentation/providers/consent_provider.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
 import '../../../profile/presentation/providers/profile_provider.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
+import '../../../progress/presentation/providers/streak_provider.dart';
+import '../../../progress/presentation/widgets/streak_row.dart';
 import '../../../trainer/presentation/providers/trainer_provider.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -387,8 +388,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final showVorrundePrimary = enrollment == null &&
         vorrundePhase?.status == VorrundePhaseStatus.started;
     final flowState = ref.watch(trainingFlowProvider(packageId));
-    final sessionsThisWeek = ref.watch(thisWeekSessionsProvider).valueOrNull ??
-        const <TrainingSessionsTableData>[];
     final didVorrundeToday =
         ref.watch(todayVorrundeSessionProvider).valueOrNull ?? false;
     final proposals =
@@ -448,7 +447,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   movementCount: flowState.totalExercises,
                   estimatedMinutes: _estimatedMinutes(flowState.exercises),
                   now: now,
-                  sessionsThisWeek: sessionsThisWeek,
                   completedToday: completedToday,
                   hasActivePackage: enrollment != null,
                   showVorrundePrimary: showVorrundePrimary,
@@ -543,7 +541,6 @@ class _DailyUnitCard extends StatelessWidget {
     required this.movementCount,
     required this.estimatedMinutes,
     required this.now,
-    required this.sessionsThisWeek,
     required this.completedToday,
     required this.hasActivePackage,
     required this.showVorrundePrimary,
@@ -566,7 +563,6 @@ class _DailyUnitCard extends StatelessWidget {
   final int movementCount;
   final int estimatedMinutes;
   final DateTime now;
-  final List<TrainingSessionsTableData> sessionsThisWeek;
   final bool completedToday;
   final bool hasActivePackage;
   final bool showVorrundePrimary;
@@ -690,9 +686,19 @@ class _DailyUnitCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              _WeeklyRegularityStrip(
-                now: now,
-                sessions: sessionsThisWeek,
+              Consumer(
+                builder: (context, ref, _) {
+                  final view = ref.watch(streakViewProvider).valueOrNull;
+                  if (view == null) return const SizedBox.shrink();
+                  return StreakRow(
+                    view: view,
+                    today: now,
+                    // Re-evaluating clears newlyRescued, because the credit is
+                    // already persisted — that is the dismissal.
+                    onDismissRescueNotice: () =>
+                        ref.invalidate(streakViewProvider),
+                  );
+                },
               ),
               const SizedBox(height: 12),
               Text(
@@ -832,96 +838,6 @@ class _DailyImpulseCard extends StatelessWidget {
                 impulses[(weekday - 1).clamp(0, impulses.length - 1)],
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _WeeklyRegularityStrip extends StatelessWidget {
-  const _WeeklyRegularityStrip({required this.now, required this.sessions});
-
-  final DateTime now;
-  final List<TrainingSessionsTableData> sessions;
-
-  @override
-  Widget build(BuildContext context) {
-    final weekStart = DateTime(now.year, now.month, now.day)
-        .subtract(Duration(days: now.weekday - 1));
-    final completedWeekdays = {
-      for (final session in sessions) session.sessionDate.weekday,
-    };
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  AppLocalizations.of(context).thisWeek,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
-                ),
-                const Spacer(),
-                Text(
-                  AppLocalizations.of(context)
-                      .dashboardPracticedOfWeek(completedWeekdays.length),
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: List.generate(7, (index) {
-                final day = weekStart.add(Duration(days: index));
-                final complete = completedWeekdays.contains(day.weekday);
-                final isToday = day.year == now.year &&
-                    day.month == now.month &&
-                    day.day == now.day;
-                return Expanded(
-                  child: Column(
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 180),
-                        width: 18,
-                        height: 18,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: complete
-                              ? AppColors.primary
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainerHighest,
-                          border: Border.all(
-                            color: isToday
-                                ? AppColors.primary
-                                : Theme.of(context).dividerColor,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        DateFormat.E(
-                                Localizations.localeOf(context).toString())
-                            .format(day),
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                    ],
-                  ),
-                );
-              }),
             ),
           ],
         ),

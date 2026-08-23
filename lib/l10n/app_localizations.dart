@@ -7729,6 +7729,36 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Einladungscode'**
   String get inviteCodeFieldLabel;
+
+  /// Dashboard row: current streak length
+  ///
+  /// In de, this message translates to:
+  /// **'{days, plural, one{Serie · 1 Tag} other{Serie · {days} Tage}}'**
+  String streakTitle(int days);
+
+  /// Dashboard row: remaining Freischeine
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, =0{keine Freischeine} one{1 Freischein} other{{count} Freischeine}}'**
+  String streakCreditsLabel(int count);
+
+  /// Shown once after a credit was spent
+  ///
+  /// In de, this message translates to:
+  /// **'Ein Freischein hat deine Serie gerettet.'**
+  String get streakRescueNotice;
+
+  /// Legend: day with a session
+  ///
+  /// In de, this message translates to:
+  /// **'trainiert'**
+  String get streakLegendTrained;
+
+  /// Legend: day rescued by a credit
+  ///
+  /// In de, this message translates to:
+  /// **'Freischein'**
+  String get streakLegendRescued;
 }
 
 class _AppLocalizationsDelegate

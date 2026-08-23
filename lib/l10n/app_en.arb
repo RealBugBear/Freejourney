@@ -5004,5 +5004,23 @@
   "inviteCodeFieldLabel": "Invitation code",
   "@inviteCodeFieldLabel": {
     "description": "Text field label for invite code entry"
-  }
+  },
+  "streakTitle": "{days, plural, one{Streak · 1 day} other{Streak · {days} days}}",
+  "@streakTitle": {
+    "description": "Dashboard row: current streak length",
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "streakCreditsLabel": "{count, plural, =0{no passes} one{1 pass} other{{count} passes}}",
+  "@streakCreditsLabel": {
+    "description": "Dashboard row: remaining Freischeine",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "streakRescueNotice": "A pass saved your streak.",
+  "@streakRescueNotice": {
+    "description": "Shown once after a credit was spent"
+  },
+  "streakLegendTrained": "trained",
+  "@streakLegendTrained": { "description": "Legend: day with a session" },
+  "streakLegendRescued": "pass",
+  "@streakLegendRescued": { "description": "Legend: day rescued by a credit" }
 }
