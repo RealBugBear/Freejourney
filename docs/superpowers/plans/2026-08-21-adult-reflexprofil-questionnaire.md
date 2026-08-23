@@ -992,7 +992,7 @@ Damit ist die Zielzeit 12–15 Min (adult_v3 „Bearbeitungsziel“) intern am P
 
 - Fachprüfung Zuordnungen mit >3 Reflexen, besonders **s029** und **s063** (auch s023, s072, Movement)
 - Fachprüfung Amphibien-Items **s017** und **s102**
-- **Bewusste Abweichung, der Prüfung vorzulegen:** das Adult-**PDF** zeigt ein Radar, obwohl §10.1 für den Adult-Ergebnisschirm keines vorsieht (Founder-Entscheidung 2026-08-22, §10.3b). Die App bleibt bei Balken
+- **Bewusste Abweichung, der Prüfung vorzulegen:** Adult-**PDF und Adult-Ergebnisschirm** zeigen ein Radar, obwohl §10.1 für den Ergebnisschirm keines vorsieht (PDF: Founder-Entscheidung 2026-08-22, §10.3b; Schirm: Founder-Entscheidung 2026-08-23). Kind- und Adult-Ergebnis sind damit gleich aufgebaut — Radar oben, Balken darunter — und die Radar-Achsen kommen für beide aus `radarScoresForPdf`, damit Schirm und Export nicht auseinanderlaufen. Der Amphibienreflex bleibt in beiden Darstellungen aus dem Radar ausgeschlossen und behält seine eigene Karte
 - **Bewusste Abweichung vom Dokument, der Prüfung vorzulegen:** Der in adult_v3 Teil B §2 vorgeschriebene Amphibien-Zusatztext („Aufgrund der wenigen verfügbaren Merkmale …“) wird **nicht** angezeigt (Founder-Entscheidung 2026-08-21, §7.4/§10.2b). Der Seiten-Disclaimer trägt die Aussage für die gesamte Liste. Die Prüfung entscheidet, ob das so bleibt
 - Expertenfreigabe aller Sicherheitsfragen, Pop-ups und Bewegungsprüfungen (separates Experten-Dokument existiert außerhalb: `Reflexprofil_Sicherheitspruefung_Experten.docx` — inhaltlich noch nicht Produktfreigabe)
 - Verständlichkeitstest mit 5–8 Personen ab 16

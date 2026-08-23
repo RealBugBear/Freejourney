@@ -12,11 +12,13 @@ import '../../domain/adult_reflex_questionnaire_definitions.dart';
 import '../../domain/models/reflex_profile_assessment.dart';
 import '../../domain/reflex_answer_json.dart';
 import '../../domain/reflex_questionnaire.dart';
+import '../../domain/services/reflex_profile_pdf_radar.dart';
 import '../../domain/services/reflex_profile_pdf_service.dart';
 import '../providers/reflex_profile_provider.dart';
 import '../reflex_profile_pdf_copy.dart';
 import 'adult_amphibian_detail_tile.dart';
 import 'adult_reflex_detail_tile.dart';
+import 'reflex_radar_chart.dart';
 
 /// Adult_v3 result body (§10.1–10.2a).
 class AdultReflexProfileResultView extends ConsumerWidget {
@@ -47,6 +49,22 @@ class AdultReflexProfileResultView extends ConsumerWidget {
         final bp = b.percent ?? -1;
         return bp.compareTo(ap);
       });
+
+    // Founder decision 2026-08-23 (deviates from spec 10.1, which planned no
+    // adult radar): the adult screen shows the same radar as the adult PDF.
+    // Axes come from the PDF builder so screen and export cannot drift apart.
+    final radarScores = radarScoresForPdf(
+      assessment.scores,
+      localeCode: locale,
+    )
+        .map(
+          (score) => ReflexRadarScore(
+            label: score.label,
+            shortLabel: score.shortLabel,
+            percent: score.percent,
+          ),
+        )
+        .toList();
 
     final dateLabel = assessment.completedAt != null
         ? MaterialLocalizations.of(context).formatShortDate(
@@ -81,6 +99,28 @@ class AdultReflexProfileResultView extends ConsumerWidget {
                 color: cs.onSurfaceVariant,
                 height: 1.4,
               ),
+        ),
+        const SizedBox(height: 18),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AspectRatio(
+                  aspectRatio: 1.25,
+                  child: ReflexRadarChart(scores: radarScores),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  l10n.reflexResultChartCaption,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: cs.onSurfaceVariant,
+                      ),
+                ),
+              ],
+            ),
+          ),
         ),
         const SizedBox(height: 18),
         Text(

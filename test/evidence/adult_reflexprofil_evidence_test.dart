@@ -13,6 +13,8 @@ import 'package:corejourney/features/assessment/domain/models/reflex_profile_ass
 import 'package:corejourney/features/assessment/domain/reflex_answer_json.dart';
 import 'package:corejourney/features/assessment/domain/reflex_questionnaire.dart';
 import 'package:corejourney/features/assessment/presentation/providers/reflex_profile_provider.dart';
+import 'package:corejourney/features/assessment/presentation/screens/reflex_profile_result_helpers.dart';
+import 'package:corejourney/features/assessment/presentation/widgets/additional_answers_panel.dart';
 import 'package:corejourney/features/assessment/presentation/widgets/adult_answer_choice_grid.dart';
 import 'package:corejourney/features/assessment/presentation/widgets/adult_progress_profile_card.dart';
 import 'package:corejourney/features/assessment/presentation/widgets/adult_reflex_profile_result_view.dart';
@@ -24,6 +26,45 @@ const _phone = Size(390, 844);
 const _pixelRatio = 2.0;
 
 void _noopChoice(ReflexAnswerChoice _) {}
+
+/// Two typed-in notes, enough to show what the collapsed panel holds.
+List<(ReflexQuestionModule, List<RelevantAnswerItem>)> _additionalAnswerGroups() {
+  const sleepNote = ReflexQuestion(
+    id: 'ev-note-sleep',
+    number: 1,
+    module: ReflexQuestionModule.behaviorEmotion,
+    textDe: 'Gibt es sonst etwas, das euch auffällt?',
+    textEn: 'Is there anything else you notice?',
+    answerType: ReflexAnswerType.freeText,
+    role: ReflexQuestionRole.context,
+  );
+  const walkingAge = ReflexQuestion(
+    id: 'ev-note-walking',
+    number: 2,
+    module: ReflexQuestionModule.motorSkills,
+    textDe: 'Mit wie vielen Monaten lief euer Kind frei?',
+    textEn: 'At how many months did your child walk unaided?',
+    answerType: ReflexAnswerType.monthsNumber,
+    role: ReflexQuestionRole.context,
+  );
+
+  return [
+    (
+      walkingAge.module,
+      const [RelevantAnswerItem(question: walkingAge, selectedOptionLabels: [], months: 17)],
+    ),
+    (
+      sleepNote.module,
+      const [
+        RelevantAnswerItem(
+          question: sleepNote,
+          selectedOptionLabels: [],
+          freeText: 'Schläft seit dem Umzug schlechter ein.',
+        ),
+      ],
+    ),
+  ];
+}
 
 Map<String, dynamic> _sampleScores() {
   return AdultQuestionnaireScore(
@@ -52,6 +93,44 @@ Map<String, dynamic> _sampleScores() {
         missingCount: 1,
         percent: 25,
         percentDisplay: 25,
+        band: AdultHintBand.fewMatching,
+      ),
+      // Five axes so the evidence screenshots show a real radar rather than
+      // the "too little data" fallback (the chart needs at least three).
+      PrimitiveReflex.atnr: const AdultReflexScoreResult(
+        reflex: PrimitiveReflex.atnr,
+        positiveCount: 2,
+        answeredCount: 4,
+        possibleCount: 4,
+        unknownCount: 0,
+        notApplicableCount: 0,
+        missingCount: 0,
+        percent: 50,
+        percentDisplay: 50,
+        band: AdultHintBand.someMatching,
+      ),
+      PrimitiveReflex.tlr: const AdultReflexScoreResult(
+        reflex: PrimitiveReflex.tlr,
+        positiveCount: 3,
+        answeredCount: 4,
+        possibleCount: 5,
+        unknownCount: 1,
+        notApplicableCount: 0,
+        missingCount: 0,
+        percent: 75,
+        percentDisplay: 75,
+        band: AdultHintBand.stronglyClustered,
+      ),
+      PrimitiveReflex.spinalGalant: const AdultReflexScoreResult(
+        reflex: PrimitiveReflex.spinalGalant,
+        positiveCount: 1,
+        answeredCount: 5,
+        possibleCount: 5,
+        unknownCount: 0,
+        notApplicableCount: 0,
+        missingCount: 0,
+        percent: 20,
+        percentDisplay: 20,
         band: AdultHintBand.fewMatching,
       ),
     },
@@ -257,6 +336,30 @@ void main() {
     );
     expect(find.text('Dein Reflexprofil'), findsOneWidget);
     await _capture(tester, lightKey, '01_adult_result_light.png');
+
+    // Child result: the parent's own notes start collapsed (founder decision
+    // 2026-08-23), so the result reads as radar plus bars.
+    final collapsedKey = GlobalKey();
+    await tester.pumpWidget(
+      _frame(
+        key: collapsedKey,
+        brightness: Brightness.light,
+        child: AdditionalAnswersPanel(groups: _additionalAnswerGroups()),
+      ),
+    );
+    await _capture(
+      tester,
+      collapsedKey,
+      '09_child_additional_answers_collapsed.png',
+    );
+
+    await tester.tap(find.text('Ergänzende Angaben'));
+    await tester.pumpAndSettle();
+    await _capture(
+      tester,
+      collapsedKey,
+      '10_child_additional_answers_expanded.png',
+    );
 
     final darkKey = GlobalKey();
     await tester.pumpWidget(

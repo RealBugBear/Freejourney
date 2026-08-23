@@ -19,10 +19,14 @@ PdfColor get _pdfPrimaryFill => PdfColor.fromInt(_kPdfPrimaryFillArgb);
 /// One axis on the PDF reflex radar (excludes amphibian).
 class ReflexPdfRadarScore {
   const ReflexPdfRadarScore({
+    required this.label,
     required this.shortLabel,
     required this.percent,
   });
 
+  /// Full reflex name. The PDF draws [shortLabel]; the in-app radar, which
+  /// reuses these axes, needs the long form.
+  final String label;
   final String shortLabel;
   final double percent;
 }
@@ -216,6 +220,7 @@ List<ReflexPdfRadarScore> radarScoresForPdf(
       if (score == null || score.percent == null) continue;
       rows.add(
         ReflexPdfRadarScore(
+          label: reflex.label(localeCode),
           shortLabel: reflex.shortLabel(localeCode),
           percent: score.percent!,
         ),
@@ -235,6 +240,7 @@ List<ReflexPdfRadarScore> radarScoresForPdf(
     if (percent == null) continue;
     rows.add(
       ReflexPdfRadarScore(
+        label: reflex.label(localeCode),
         shortLabel: reflex.shortLabel(localeCode),
         percent: percent,
       ),

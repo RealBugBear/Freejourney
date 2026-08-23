@@ -6,10 +6,12 @@ import 'package:corejourney/features/assessment/domain/adult_reflex_profile_scor
 import 'package:corejourney/features/assessment/domain/adult_reflex_result_copy.dart';
 import 'package:corejourney/features/assessment/domain/models/reflex_profile_assessment.dart';
 import 'package:corejourney/features/assessment/domain/reflex_questionnaire.dart';
+import 'package:corejourney/features/assessment/domain/services/reflex_profile_pdf_radar.dart';
 import 'package:corejourney/features/assessment/presentation/adult_score_band_l10n.dart';
 import 'package:corejourney/features/assessment/presentation/widgets/adult_amphibian_detail_tile.dart';
 import 'package:corejourney/features/assessment/presentation/widgets/adult_reflex_detail_tile.dart';
 import 'package:corejourney/features/assessment/presentation/widgets/adult_reflex_profile_result_view.dart';
+import 'package:corejourney/features/assessment/presentation/widgets/reflex_radar_chart.dart';
 import 'package:corejourney/l10n/app_localizations.dart';
 import 'package:corejourney/l10n/app_localizations_de.dart';
 import 'package:corejourney/l10n/app_localizations_en.dart';
@@ -82,6 +84,48 @@ Map<String, dynamic> _sampleAdultScores() {
   ).toJson();
 }
 
+/// Three scored reflexes — the radar needs at least three axes to draw.
+Map<String, dynamic> _adultScoresWithThreeReflexes() {
+  AdultReflexScoreResult result(PrimitiveReflex reflex, double percent) {
+    return AdultReflexScoreResult(
+      reflex: reflex,
+      positiveCount: 2,
+      answeredCount: 4,
+      possibleCount: 5,
+      unknownCount: 0,
+      notApplicableCount: 0,
+      missingCount: 1,
+      percent: percent,
+      percentDisplay: percent.round(),
+      band: AdultHintBand.clusteredPattern,
+    );
+  }
+
+  return AdultQuestionnaireScore(
+    scoringVersion: kAdultScoringVersion,
+    questionnaireVersion: 'adult_v3',
+    reflexScores: {
+      PrimitiveReflex.moro: result(PrimitiveReflex.moro, 60),
+      PrimitiveReflex.flr: result(PrimitiveReflex.flr, 25),
+      PrimitiveReflex.atnr: result(PrimitiveReflex.atnr, 45),
+    },
+    amphibian: const AdultAmphibianScore(
+      positiveCount: 0,
+      answeredCount: 1,
+      display: AmphibianDisplay.noneMatching,
+      showDisclaimer: true,
+    ),
+    meta: const AdultScoreMeta(
+      hiddenItemIds: [],
+      notApplicableItemIds: [],
+      unknownItemIds: [],
+      noPublicTotalScore: true,
+      movementIncluded: false,
+      filterAnswers: {},
+    ),
+  ).toJson();
+}
+
 Widget _harness({
   required Widget child,
   ThemeData? theme,
@@ -106,6 +150,9 @@ void main() {
   group('adult result UI', () {
     testWidgets('shows title, band text, no overall score, amphibian count',
         (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 2000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       await tester.pumpWidget(
         _harness(
           child: AdultReflexProfileResultView(
@@ -147,6 +194,9 @@ void main() {
 
     testWidgets('dark theme still shows band text without relying on color alone',
         (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 2000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       await tester.pumpWidget(
         _harness(
           theme: ThemeData.dark(useMaterial3: true),
@@ -240,6 +290,9 @@ void main() {
 
     testWidgets('amphibian card is last in same list with name once',
         (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 2000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       final de = AppLocalizationsDe();
       final amphName = PrimitiveReflex.amphibian.copy.label('de');
 
@@ -272,6 +325,9 @@ void main() {
 
     testWidgets('insufficientData shows short Keine Angaben label',
         (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 2000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       final de = AppLocalizationsDe();
       final scores = AdultQuestionnaireScore(
         scoringVersion: kAdultScoringVersion,
@@ -363,6 +419,65 @@ void main() {
       for (final word in forbidden) {
         expect(corpus.contains(word.toLowerCase()), isFalse, reason: word);
       }
+    });
+  });
+
+  group('adult radar (10.3b)', () {
+    testWidgets('radar sits above the hint list', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 1800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        _harness(
+          child: AdultReflexProfileResultView(
+            assessment:
+                _adultAssessment(scores: _adultScoresWithThreeReflexes()),
+            packageId: 'moro',
+            isFirstResultDisplay: false,
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      final radar = find.byType(ReflexRadarChart);
+      final hintListTitle = find.text(AppLocalizationsDe().adultResultHintListTitle);
+      expect(radar, findsOneWidget);
+      expect(hintListTitle, findsOneWidget);
+      expect(
+        tester.getTopLeft(radar).dy,
+        lessThan(tester.getTopLeft(hintListTitle).dy),
+      );
+      expect(find.text(AppLocalizationsDe().radarNotEnoughData), findsNothing);
+    });
+
+    testWidgets('radar falls back to a notice below three axes',
+        (tester) async {
+      await tester.pumpWidget(
+        _harness(
+          child: AdultReflexProfileResultView(
+            assessment: _adultAssessment(scores: _sampleAdultScores()),
+            packageId: 'moro',
+            isFirstResultDisplay: false,
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(find.byType(ReflexRadarChart), findsOneWidget);
+      expect(find.text(AppLocalizationsDe().radarNotEnoughData), findsOneWidget);
+    });
+
+    test('radar axes exclude the amphibian reflex', () {
+      final axes = radarScoresForPdf(
+        _adultScoresWithThreeReflexes(),
+        localeCode: 'de',
+      );
+      final amphName = PrimitiveReflex.amphibian.copy.label('de');
+
+      expect(axes, hasLength(3));
+      expect(axes.map((axis) => axis.label), isNot(contains(amphName)));
     });
   });
 }
