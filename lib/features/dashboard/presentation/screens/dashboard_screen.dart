@@ -30,10 +30,63 @@ import '../../../training/presentation/screens/training_session_screen.dart';
 import '../../../consent/presentation/providers/consent_provider.dart';
 import '../../../assessment/presentation/providers/reflex_profile_provider.dart';
 import '../../../profile/presentation/providers/profile_provider.dart';
+import '../../../../core/sync/sync_service.dart';
+import '../../../progress/domain/streak/streak_credits.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
 import '../../../progress/presentation/providers/streak_provider.dart';
 import '../../../progress/presentation/widgets/streak_row.dart';
+import '../../../training/presentation/widgets/joint_training_sheet.dart';
 import '../../../trainer/presentation/providers/trainer_provider.dart';
+
+/// Records a training day for each of [subjectProfileIds] (spec §7.2, D12).
+///
+/// A profile that already has a finished session today is skipped, so a second
+/// tap cannot inflate anybody's series.
+Future<void> logTrainingDayForProfiles({
+  required AppDatabase db,
+  required SyncService? syncService,
+  required String userId,
+  required String packageId,
+  required List<String> subjectProfileIds,
+  required DateTime now,
+}) async {
+  final today = dateOnly(now);
+
+  for (final subjectProfileId in subjectProfileIds) {
+    final enrollment = await (db.select(db.enrollmentsTable)
+          ..where((t) => t.subjectProfileId.equals(subjectProfileId))
+          ..where((t) => t.packageId.equals(packageId))
+          ..where((t) => t.status.equals('active'))
+          ..limit(1))
+        .getSingleOrNull();
+    if (enrollment == null) continue;
+
+    final progress = await (db.select(db.progressEntriesTable)
+          ..where((t) => t.enrollmentId.equals(enrollment.id))
+          ..limit(1))
+        .getSingleOrNull();
+    if (progress == null) continue;
+
+    final already = await (db.select(db.trainingSessionsTable)
+          ..where((t) => t.subjectProfileId.equals(subjectProfileId))
+          ..where((t) => t.isCompleted.equals(true))
+          ..where((t) => t.sessionDate.isBiggerOrEqualValue(today))
+          ..where((t) => t.sessionDate.isSmallerThanValue(nextDay(today)))
+          ..limit(1))
+        .getSingleOrNull();
+    if (already != null) continue;
+
+    await saveCompletedSession(
+      db: db,
+      syncService: syncService,
+      enrollment: enrollment,
+      progress: progress,
+      completedExerciseIds: const [],
+      userId: userId,
+      now: now,
+    );
+  }
+}
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -159,38 +212,52 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final now = ref.read(appClockProvider).now();
     if (_isCompletedToday(progress, now)) return;
 
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.dashboardLogUnitTitle),
-        content: Text(l10n.dashboardLogUnitBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(l10n.dashboardLogUnitConfirm),
-          ),
-        ],
-      ),
-    );
+    final activeProfile = ref.read(selectedSubjectProfileProvider);
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+    if (activeProfile == null || userId == null) return;
 
-    if (confirmed != true || !mounted) return;
+    final l10n = AppLocalizations.of(context);
+    final packageId = ref.read(selectedPackageIdProvider);
+
+    // D12: the picker replaces the old confirmation — one question, not two.
+    final companions = await _askForJointTrainingProfiles(
+      packageId: packageId,
+      confirmLabel: l10n.dashboardLogUnitConfirm,
+    );
+    if (companions == null || !mounted) return;
+
+    if (companions.isEmpty) {
+      // Nobody else could join: keep the plain confirmation.
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(l10n.dashboardLogUnitTitle),
+          content: Text(l10n.dashboardLogUnitBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(l10n.cancel),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: Text(l10n.dashboardLogUnitConfirm),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true || !mounted) return;
+    }
 
     try {
-      final db = ref.read(databaseProvider);
-      final syncService = ref.read(syncServiceProvider);
-
-      await saveCompletedSession(
-        db: db,
-        syncService: syncService,
-        enrollment: enrollment,
-        progress: progress,
-        completedExerciseIds: const [],
+      await logTrainingDayForProfiles(
+        db: ref.read(databaseProvider),
+        syncService: ref.read(syncServiceProvider),
+        userId: userId,
+        packageId: packageId,
+        subjectProfileIds: [activeProfile.id, ...companions],
+        now: now,
       );
+      ref.invalidate(streakViewProvider);
 
       final settings = ref.read(settingsProvider);
       if (settings.remindersEnabled) {
@@ -207,7 +274,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       // Show experience prompt (once per day).
       final shouldShow = await ExperiencePromptService.shouldShow();
       if (shouldShow && mounted) {
-        final packageId = ref.read(selectedPackageIdProvider);
         await showTrainingExperienceSheet(
           context,
           enrollmentId: enrollment.id,
@@ -236,38 +302,44 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Future<void> _beginUnit(TrainingSessionMode mode) async {
     ref.read(settingsProvider.notifier).setTrainingMode(mode);
     final packageId = ref.read(selectedPackageIdProvider);
-    final companionSubjectProfileIds = await _askForJointTrainingProfiles(
+    final companions = await _askForJointTrainingProfiles(
       packageId: packageId,
+      confirmLabel: AppLocalizations.of(context).dashboardJointTrainingTogether,
     );
-    if (!mounted) return;
+    if (companions == null || !mounted) return;
     context.push(
       Routes.trainingSession,
       extra: TrainingSessionLaunchArgs(
         packageId: packageId,
-        companionSubjectProfileIds: companionSubjectProfileIds,
+        companionSubjectProfileIds: companions,
       ),
     );
   }
 
-  Future<List<String>> _askForJointTrainingProfiles({
+  /// Returns the chosen companion ids, `const []` when nobody could join, and
+  /// `null` when the user backed out of the sheet. Task 12 needs those two
+  /// cases kept apart.
+  Future<List<String>?> _askForJointTrainingProfiles({
     required String packageId,
+    required String confirmLabel,
   }) async {
     final activeProfile = ref.read(selectedSubjectProfileProvider);
-    if (activeProfile == null || activeProfile.profileType != 'child') {
-      return const [];
-    }
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+    if (activeProfile == null || userId == null) return const [];
 
+    // D13: every profile with a running enrollment, the adult one included —
+    // the old version bailed out unless the active profile was a child.
     final profiles =
         ref.read(allReflexSubjectProfilesProvider).valueOrNull ?? const [];
-    final childProfiles = profiles
-        .where((profile) =>
-            profile.profileType == 'child' && profile.id != activeProfile.id)
-        .toList();
-    if (childProfiles.isEmpty) return const [];
+    final others =
+        profiles.where((profile) => profile.id != activeProfile.id).toList();
+    if (others.isEmpty) return const [];
 
     final db = ref.read(databaseProvider);
-    final candidates = <_JointTrainingCandidate>[];
-    for (final profile in childProfiles) {
+    final today = dateOnly(ref.read(appClockProvider).now());
+    final candidates = <JointTrainingCandidate>[];
+
+    for (final profile in others) {
       final enrollment = await (db.select(db.enrollmentsTable)
             ..where((t) => t.subjectProfileId.equals(profile.id))
             ..where((t) => t.packageId.equals(packageId))
@@ -276,72 +348,37 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           .getSingleOrNull();
       if (enrollment == null) continue;
 
-      final progress = await (db.select(db.progressEntriesTable)
-            ..where((t) => t.enrollmentId.equals(enrollment.id))
+      final trainedToday = await (db.select(db.trainingSessionsTable)
+            ..where((t) => t.subjectProfileId.equals(profile.id))
+            ..where((t) => t.isCompleted.equals(true))
+            ..where((t) => t.sessionDate.isBiggerOrEqualValue(today))
+            ..where((t) => t.sessionDate.isSmallerThanValue(nextDay(today)))
             ..limit(1))
           .getSingleOrNull();
-      if (progress == null || _isCompletedToday(progress, DateTime.now())) {
-        continue;
-      }
-      candidates.add(_JointTrainingCandidate(profile: profile));
+      if (trainedToday != null) continue;
+
+      candidates.add(JointTrainingCandidate(profile: profile));
     }
-
     if (candidates.isEmpty || !mounted) return const [];
-    return await _showJointTrainingDialog(candidates) ?? const [];
-  }
 
-  Future<List<String>?> _showJointTrainingDialog(
-    List<_JointTrainingCandidate> candidates,
-  ) async {
-    var selectedIds = candidates.map((c) => c.profile.id).toSet();
+    // D14: start from whoever took part last time.
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'joint_training_selection_${userId}_$packageId';
+    final remembered = prefs.getStringList(key) ?? const <String>[];
+    final preselected =
+        defaultJointSelection(candidates: candidates, remembered: remembered);
 
-    final l10n = AppLocalizations.of(context);
-    return showDialog<List<String>>(
-      context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) {
-          return AlertDialog(
-            title: Text(l10n.dashboardJointTrainingTitle),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(l10n.dashboardJointTrainingBody),
-                const SizedBox(height: 12),
-                for (final candidate in candidates)
-                  CheckboxListTile(
-                    contentPadding: EdgeInsets.zero,
-                    value: selectedIds.contains(candidate.profile.id),
-                    title: Text(candidate.profile.displayName),
-                    controlAffinity: ListTileControlAffinity.leading,
-                    onChanged: (value) {
-                      setDialogState(() {
-                        if (value == true) {
-                          selectedIds.add(candidate.profile.id);
-                        } else {
-                          selectedIds.remove(candidate.profile.id);
-                        }
-                      });
-                    },
-                  ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, const <String>[]),
-                child: Text(l10n.dashboardJointTrainingOnlyThis),
-              ),
-              FilledButton(
-                onPressed: selectedIds.isEmpty
-                    ? null
-                    : () => Navigator.pop(ctx, selectedIds.toList()),
-                child: Text(l10n.dashboardJointTrainingTogether),
-              ),
-            ],
-          );
-        },
-      ),
+    if (!mounted) return const [];
+    final selected = await showJointTrainingSheet(
+      context,
+      candidates: candidates,
+      preselected: preselected.toSet(),
+      confirmLabel: confirmLabel,
     );
+    if (selected == null) return null;
+
+    await prefs.setStringList(key, selected);
+    return selected;
   }
 
   void _openObservation(String? enrollmentId) {
@@ -527,12 +564,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final transitionSeconds = exercises.length * 25;
     return ((seconds + transitionSeconds) / 60).ceil().clamp(1, 120);
   }
-}
-
-class _JointTrainingCandidate {
-  const _JointTrainingCandidate({required this.profile});
-
-  final ReflexSubjectProfile profile;
 }
 
 class _DailyUnitCard extends StatelessWidget {
