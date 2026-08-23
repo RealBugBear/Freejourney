@@ -19,6 +19,10 @@ Serie bleibt stehen. Abends kommt eine Nachricht aufs Handy. Zwei Ausfalltage am
 Stück deckt das Guthaben ab, beim dritten ist die Serie vorbei. Jedes Kind hat
 seine eigene Serie und seine eigenen Freischeine.
 
+Damit das stimmt, muss die App wissen, wer mitgemacht hat. Deshalb wird künftig
+bei jedem Training gefragt — auch beim Nachtragen — und man hakt an, wer dabei
+war. Auch man selbst.
+
 ---
 
 ## 2. Founder-Entscheidungen (2026-08-23)
@@ -36,6 +40,9 @@ seine eigene Serie und seine eigenen Freischeine.
 | D9 | Ein Freischein **hält** die Serie, er zählt sie nicht hoch. |
 | D10 | **Zwei Ausfalltage hintereinander sind erlaubt**, ab dem dritten bricht die Serie. Eine zusätzliche „nie zwei am Stück"-Regel wurde ausdrücklich abgelehnt — das Guthaben ist die Grenze. |
 | D11 | Ein Freischein wird **nur eingesetzt, wenn er die Serie tatsächlich rettet.** Sonst bleibt er erhalten. |
+| D12 | Die Frage „wer trainiert mit?" kommt auf **beiden** Wegen — beim Trainingsstart und beim manuellen Eintragen. |
+| D13 | Gelistet werden **alle** Profile mit laufender Anmeldung im gewählten Paket — Kinder **und** das Erwachsenenprofil. |
+| D14 | Vorausgewählt ist, **wer beim letzten Mal dabei war**; beim ersten Mal alle. |
 
 ---
 
@@ -127,7 +134,7 @@ Sie hat eine feste Reihenfolge:
 1. **Verdienen** (§4.4) — damit frisch synchronisierte Trainingstage ihr Guthaben
    noch beisteuern, bevor darüber entschieden wird.
 2. **Einsetzen** (§4.5) — damit dieses Guthaben eine Lücke noch retten kann.
-3. **Spiegeln** (§7) — der abgeleitete Wert wandert in die Trainer-Ansicht.
+3. **Spiegeln** (§8) — der abgeleitete Wert wandert in die Trainer-Ansicht.
 
 Die Auswertung ist als Ganzes idempotent: zweimal am selben Tag ausgeführt ändert
 sie nichts.
@@ -252,7 +259,63 @@ der Wert nie eine Oberfläche hatte.
 
 ---
 
-## 7. Trainer-Ansicht
+## 7. Wer trainiert mit?
+
+Die Serie ist nur so richtig wie die Antwort auf die Frage, wer an einem Tag
+tatsächlich geübt hat. Dieser Abschnitt schließt die Lücken darin.
+
+### 7.1 Ist-Zustand (verifiziert 2026-08-23)
+
+- Der Dialog **„Zusammen trainieren?"** existiert bereits — aber nur beim
+  Trainingsstart über das Dashboard (`_beginUnit` → `_askForJointTrainingProfiles`).
+  Häkchen pro Kandidat, alle vorausgewählt.
+- Kandidaten müssen eine aktive Anmeldung im **selben Paket** haben und dürfen
+  heute noch nicht eingetragen sein.
+- **Nur weitere Kind-Profile werden gelistet.** Ist das gewählte Profil ein
+  `adult_self`, kommt der Dialog gar nicht — Eltern können also nicht eintragen,
+  dass sie mit dem Kind zusammen geübt haben.
+- **`_markTodayComplete` („Heute geübt eintragen") fragt nicht.** Es trägt
+  ausschließlich das gewählte Profil ein. Wer offline mit beiden Kindern übt und
+  es nachträgt, trägt es nur für eines ein — das andere verliert still seine Serie.
+- Der **Duo-Modus** der Übungen ist fertig vorhanden (`positionInstructionsDuo*`,
+  `movementInstructionsDuo*`, `duoImagePath`) und greift, sobald
+  `companionSubjectProfileIds` nicht leer ist.
+
+### 7.2 Verhalten
+
+**Kandidaten** = Profile des Nutzers mit aktiver Anmeldung im gewählten Paket, die
+heute noch keinen Trainingstag haben, ohne das gerade gewählte Profil — das ist
+immer dabei. Kinder **und** Erwachsenenprofil (D13). Gibt es keine Kandidaten,
+kommt keine Frage.
+
+**Beim Trainingsstart** bleibt der bestehende Dialog, erweitert um D13 und D14.
+
+**Beim manuellen Eintragen** ersetzt die Liste den heutigen Bestätigungsdialog —
+**eine** Frage statt zwei. Der bestätigende Knopf behält seinen Wortlaut
+(`dashboardLogUnitConfirm`), damit klar bleibt, was passiert.
+
+**Vorauswahl** (D14): Die letzte Auswahl wird pro (Nutzer, Paket) lokal gemerkt.
+Profile, die es nicht mehr gibt oder die heute schon dran waren, fallen aus der
+Vorauswahl heraus. Ohne gemerkte Auswahl sind alle Kandidaten angehakt.
+
+Der Duo-Modus greift unverändert, sobald mehr als ein Profil beteiligt ist.
+
+### 7.3 Wirkung auf die Serie
+
+Jedes beteiligte Profil bekommt eine eigene `training_sessions`-Zeile mit seinem
+`subject_profile_id` — genauso, wie es das geführte Training heute schon tut. Damit
+erhält jedes Profil seinen eigenen Trainingstag, seine eigene Serie und seinen
+eigenen Punktestand. Der `StreakService` braucht dafür **keine** Sonderbehandlung;
+er zählt Tage pro Profil und sieht keinen Unterschied zwischen allein und gemeinsam
+trainiert.
+
+**Bewusst in Kauf genommen:** Mit D12 hält ein einziger Tipp im Nachtragen die
+Serie mehrerer Profile am Leben. Das folgt aus D2 (Nachtragen zählt) und ist eine
+getroffene Founder-Entscheidung, keine Nebenwirkung.
+
+---
+
+## 8. Trainer-Ansicht
 
 `get_trainer_clients` liest heute `pe.daily_streak`. Die Serie wird künftig
 abgeleitet, der gespeicherte Wert wäre also veraltet.
@@ -268,7 +331,7 @@ später selbst ableiten, wenn ein Grund dafür entsteht.
 
 ---
 
-## 8. Datenbank und Freigaben
+## 9. Datenbank und Freigaben
 
 Nötig ist **eine** Migration:
 `supabase/migrations/YYYYMMDDNN_profile_streak_credits.sql` — neue Tabelle,
@@ -288,7 +351,7 @@ des Founders und wird vorher mit genauem SQL, Auswirkung und Rücknahmeweg gezei
 
 ---
 
-## 9. Tests
+## 10. Tests
 
 **Reine Rechenlogik** (ohne Datenbank, `StreakService` mit fester Uhr):
 
@@ -315,12 +378,26 @@ erscheint und lässt sich schließen.
 heutige Termin abgesagt; bei `remindersEnabled = false` wird nichts geplant; bei
 leerem Guthaben greift der zweite Wortlaut.
 
-**Vorher/Nachher-Bildschirmfotos** der Dashboard-Zeile unter
+**Wer trainiert mit (§7):**
+
+- Kandidaten enthalten das Erwachsenenprofil, nicht nur Kinder (D13)
+- Profile ohne aktive Anmeldung im gewählten Paket tauchen nicht auf
+- Wer heute schon einen Trainingstag hat, taucht nicht auf
+- Keine Kandidaten → keine Frage, auf beiden Wegen
+- Manuelles Eintragen zeigt die Liste **statt** des alten Bestätigungsdialogs
+- Manuelles Eintragen schreibt für jedes angehakte Profil eine eigene
+  Trainingszeile mit dessen `subject_profile_id`
+- Vorauswahl entspricht der letzten Auswahl; ein zwischenzeitlich gelöschtes
+  Profil fällt heraus; ohne gemerkte Auswahl sind alle angehakt (D14)
+- Zwei angehakte Profile → beide bekommen einen Trainingstag und getrennte
+  Punktestände
+
+**Vorher/Nachher-Bildschirmfotos** der Dashboard-Zeile und beider Abfragen unter
 `docs/evidence/serie-freischeine/` (CLAUDE.md §7).
 
 ---
 
-## 10. Offene Punkte
+## 11. Offene Punkte
 
 - **Mehrere Kinder, eine Abendmeldung.** Formuliert für das gewählte Profil.
   Alternative wäre eine zusammengefasste Meldung („2 Kinder haben heute noch nicht
@@ -335,10 +412,14 @@ leerem Guthaben greift der zweite Wortlaut.
   auf „pausiert"/„abgebrochen" gesetzt, nicht gelöscht.
 - **Aufräum-Migration** für die stillgelegten Spalten: eigener Vorgang, eigene
   Freigabe.
+- **Die Abfrage bleibt ein Dialog.** Eine ruhigere Variante wäre eine Reihe
+  antippbarer Namen direkt auf dem Startbildschirm, ohne Zwischenschritt. Mit der
+  gemerkten Vorauswahl (D14) ist der Dialog nur noch ein Tipp — die leisere
+  Variante bleibt zurückgestellt, bis sich zeigt, ob das stört.
 
 ---
 
-## 11. Nicht-Ziele
+## 12. Nicht-Ziele
 
 Keine Wochen- oder Monatsrückschau, keine Bestenlisten, kein Teilen der Serie,
 keine serverseitigen Push-Nachrichten, keine Freischeine als Kaufprodukt, keine
