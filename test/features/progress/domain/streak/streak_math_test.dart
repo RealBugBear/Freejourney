@@ -189,4 +189,118 @@ void main() {
       expect(second.rescuedDays, first.rescuedDays);
     });
   });
+
+  group('streakLength', () {
+    test('counts consecutive training days ending today', () {
+      expect(
+        streakLength(
+          trainingDays: _days([1, 2, 3]),
+          rescuedDays: const <DateTime>{},
+          today: DateTime(2026, 8, 3),
+        ),
+        3,
+      );
+    });
+
+    test('an open today does not break the series', () {
+      expect(
+        streakLength(
+          trainingDays: _days([1, 2, 3]),
+          rescuedDays: const <DateTime>{},
+          today: DateTime(2026, 8, 4),
+        ),
+        3,
+      );
+    });
+
+    test('a rescued day keeps the series running', () {
+      expect(
+        streakLength(
+          trainingDays: _days([1, 3]),
+          rescuedDays: _days([2]),
+          today: DateTime(2026, 8, 3),
+        ),
+        3,
+      );
+    });
+
+    test('an unrescued gap ends the series', () {
+      expect(
+        streakLength(
+          trainingDays: _days([1, 4]),
+          rescuedDays: const <DateTime>{},
+          today: DateTime(2026, 8, 4),
+        ),
+        1,
+      );
+    });
+
+    test('no training at all is a length of zero', () {
+      expect(
+        streakLength(
+          trainingDays: const <DateTime>{},
+          rescuedDays: const <DateTime>{},
+          today: DateTime(2026, 8, 4),
+        ),
+        0,
+      );
+    });
+  });
+
+  group('evaluateStreak', () {
+    test('earns before spending, so a fresh credit can still rescue', () {
+      // Trained on the 1st, 2nd and 3rd — the third day earns the first
+      // credit, which then covers the missed 4th.
+      final result = evaluateStreak(
+        trainingDays: _days([1, 2, 3]),
+        credits: StreakCredits.empty,
+        today: DateTime(2026, 8, 5),
+      );
+      expect(result.credits.available, 0);
+      expect(result.credits.rescuedDays, {DateTime(2026, 8, 4)});
+      expect(result.newlyRescued, {DateTime(2026, 8, 4)});
+      expect(result.length, 4);
+    });
+
+    test('reports nothing newly rescued when no gap exists', () {
+      final result = evaluateStreak(
+        trainingDays: _days([1, 2, 3]),
+        credits: StreakCredits.empty,
+        today: DateTime(2026, 8, 3),
+      );
+      expect(result.newlyRescued, isEmpty);
+      expect(result.length, 3);
+    });
+
+    test('a second evaluation on the same day changes nothing', () {
+      final first = evaluateStreak(
+        trainingDays: _days([1, 2, 3]),
+        credits: StreakCredits.empty,
+        today: DateTime(2026, 8, 5),
+      );
+      final second = evaluateStreak(
+        trainingDays: _days([1, 2, 3]),
+        credits: first.credits,
+        today: DateTime(2026, 8, 5),
+      );
+      expect(second.credits.available, first.credits.available);
+      expect(second.credits.rescuedDays, first.credits.rescuedDays);
+      expect(second.credits.progressToNext, first.credits.progressToNext);
+      expect(second.length, first.length);
+      expect(second.newlyRescued, isEmpty);
+    });
+
+    test('rescued days older than the horizon are pruned', () {
+      final credits = StreakCredits.empty.copyWith(
+        rescuedDays: {DateTime(2024, 1, 1), DateTime(2026, 8, 2)},
+      );
+      final result = evaluateStreak(
+        trainingDays: _days([1, 3]),
+        credits: credits,
+        today: DateTime(2026, 8, 3),
+        lookbackDays: 400,
+      );
+      expect(result.credits.rescuedDays, {DateTime(2026, 8, 2)});
+    });
+  });
 }
