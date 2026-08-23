@@ -15,6 +15,7 @@ import 'tables/sync_jobs_table.dart';
 import 'tables/intake_assessments_table.dart';
 import 'tables/completion_questionnaires_table.dart';
 import 'tables/journal_entries_table.dart';
+import 'tables/streak_credits_table.dart';
 
 part 'app_database.g.dart';
 
@@ -28,6 +29,7 @@ part 'app_database.g.dart';
   IntakeAssessmentsTable,
   CompletionQuestionnairesTable,
   JournalEntriesTable,
+  StreakCreditsTable,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase._internal(super.executor);
@@ -97,7 +99,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -137,6 +139,9 @@ class AppDatabase extends _$AppDatabase {
             // fresh rows that include the new URL columns.
             await m.deleteTable('exercises');
             await m.createTable(exercisesTable);
+          }
+          if (from < 9) {
+            await m.createTable(streakCreditsTable);
           }
         },
       );

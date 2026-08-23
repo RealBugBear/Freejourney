@@ -6356,6 +6356,497 @@ class JournalEntriesTableCompanion
   }
 }
 
+class $StreakCreditsTableTable extends StreakCreditsTable
+    with TableInfo<$StreakCreditsTableTable, StreakCreditsTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $StreakCreditsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _subjectProfileIdMeta =
+      const VerificationMeta('subjectProfileId');
+  @override
+  late final GeneratedColumn<String> subjectProfileId = GeneratedColumn<String>(
+      'subject_profile_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _availableMeta =
+      const VerificationMeta('available');
+  @override
+  late final GeneratedColumn<int> available = GeneratedColumn<int>(
+      'available', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _progressToNextMeta =
+      const VerificationMeta('progressToNext');
+  @override
+  late final GeneratedColumn<int> progressToNext = GeneratedColumn<int>(
+      'progress_to_next', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _lastCountedDayMeta =
+      const VerificationMeta('lastCountedDay');
+  @override
+  late final GeneratedColumn<DateTime> lastCountedDay =
+      GeneratedColumn<DateTime>('last_counted_day', aliasedName, true,
+          type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _rescuedDaysMeta =
+      const VerificationMeta('rescuedDays');
+  @override
+  late final GeneratedColumn<String> rescuedDays = GeneratedColumn<String>(
+      'rescued_days', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('[]'));
+  static const VerificationMeta _needsSyncMeta =
+      const VerificationMeta('needsSync');
+  @override
+  late final GeneratedColumn<bool> needsSync = GeneratedColumn<bool>(
+      'needs_sync', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("needs_sync" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        userId,
+        subjectProfileId,
+        available,
+        progressToNext,
+        lastCountedDay,
+        rescuedDays,
+        needsSync,
+        updatedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'streak_credits';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<StreakCreditsTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('subject_profile_id')) {
+      context.handle(
+          _subjectProfileIdMeta,
+          subjectProfileId.isAcceptableOrUnknown(
+              data['subject_profile_id']!, _subjectProfileIdMeta));
+    } else if (isInserting) {
+      context.missing(_subjectProfileIdMeta);
+    }
+    if (data.containsKey('available')) {
+      context.handle(_availableMeta,
+          available.isAcceptableOrUnknown(data['available']!, _availableMeta));
+    }
+    if (data.containsKey('progress_to_next')) {
+      context.handle(
+          _progressToNextMeta,
+          progressToNext.isAcceptableOrUnknown(
+              data['progress_to_next']!, _progressToNextMeta));
+    }
+    if (data.containsKey('last_counted_day')) {
+      context.handle(
+          _lastCountedDayMeta,
+          lastCountedDay.isAcceptableOrUnknown(
+              data['last_counted_day']!, _lastCountedDayMeta));
+    }
+    if (data.containsKey('rescued_days')) {
+      context.handle(
+          _rescuedDaysMeta,
+          rescuedDays.isAcceptableOrUnknown(
+              data['rescued_days']!, _rescuedDaysMeta));
+    }
+    if (data.containsKey('needs_sync')) {
+      context.handle(_needsSyncMeta,
+          needsSync.isAcceptableOrUnknown(data['needs_sync']!, _needsSyncMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  StreakCreditsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return StreakCreditsTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+      subjectProfileId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}subject_profile_id'])!,
+      available: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}available'])!,
+      progressToNext: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}progress_to_next'])!,
+      lastCountedDay: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}last_counted_day']),
+      rescuedDays: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}rescued_days'])!,
+      needsSync: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}needs_sync'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+    );
+  }
+
+  @override
+  $StreakCreditsTableTable createAlias(String alias) {
+    return $StreakCreditsTableTable(attachedDatabase, alias);
+  }
+}
+
+class StreakCreditsTableData extends DataClass
+    implements Insertable<StreakCreditsTableData> {
+  final String id;
+  final String userId;
+  final String subjectProfileId;
+
+  /// Credits ready to be spent, 0..2.
+  final int available;
+
+  /// Training days counted towards the next credit, 0..2.
+  final int progressToNext;
+
+  /// Latest training day already counted, date-only.
+  final DateTime? lastCountedDay;
+
+  /// Rescued days as a JSON-encoded list of `yyyy-MM-dd` strings.
+  final String rescuedDays;
+  final bool needsSync;
+  final DateTime updatedAt;
+  const StreakCreditsTableData(
+      {required this.id,
+      required this.userId,
+      required this.subjectProfileId,
+      required this.available,
+      required this.progressToNext,
+      this.lastCountedDay,
+      required this.rescuedDays,
+      required this.needsSync,
+      required this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['user_id'] = Variable<String>(userId);
+    map['subject_profile_id'] = Variable<String>(subjectProfileId);
+    map['available'] = Variable<int>(available);
+    map['progress_to_next'] = Variable<int>(progressToNext);
+    if (!nullToAbsent || lastCountedDay != null) {
+      map['last_counted_day'] = Variable<DateTime>(lastCountedDay);
+    }
+    map['rescued_days'] = Variable<String>(rescuedDays);
+    map['needs_sync'] = Variable<bool>(needsSync);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  StreakCreditsTableCompanion toCompanion(bool nullToAbsent) {
+    return StreakCreditsTableCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      subjectProfileId: Value(subjectProfileId),
+      available: Value(available),
+      progressToNext: Value(progressToNext),
+      lastCountedDay: lastCountedDay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastCountedDay),
+      rescuedDays: Value(rescuedDays),
+      needsSync: Value(needsSync),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory StreakCreditsTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return StreakCreditsTableData(
+      id: serializer.fromJson<String>(json['id']),
+      userId: serializer.fromJson<String>(json['userId']),
+      subjectProfileId: serializer.fromJson<String>(json['subjectProfileId']),
+      available: serializer.fromJson<int>(json['available']),
+      progressToNext: serializer.fromJson<int>(json['progressToNext']),
+      lastCountedDay: serializer.fromJson<DateTime?>(json['lastCountedDay']),
+      rescuedDays: serializer.fromJson<String>(json['rescuedDays']),
+      needsSync: serializer.fromJson<bool>(json['needsSync']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'userId': serializer.toJson<String>(userId),
+      'subjectProfileId': serializer.toJson<String>(subjectProfileId),
+      'available': serializer.toJson<int>(available),
+      'progressToNext': serializer.toJson<int>(progressToNext),
+      'lastCountedDay': serializer.toJson<DateTime?>(lastCountedDay),
+      'rescuedDays': serializer.toJson<String>(rescuedDays),
+      'needsSync': serializer.toJson<bool>(needsSync),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  StreakCreditsTableData copyWith(
+          {String? id,
+          String? userId,
+          String? subjectProfileId,
+          int? available,
+          int? progressToNext,
+          Value<DateTime?> lastCountedDay = const Value.absent(),
+          String? rescuedDays,
+          bool? needsSync,
+          DateTime? updatedAt}) =>
+      StreakCreditsTableData(
+        id: id ?? this.id,
+        userId: userId ?? this.userId,
+        subjectProfileId: subjectProfileId ?? this.subjectProfileId,
+        available: available ?? this.available,
+        progressToNext: progressToNext ?? this.progressToNext,
+        lastCountedDay:
+            lastCountedDay.present ? lastCountedDay.value : this.lastCountedDay,
+        rescuedDays: rescuedDays ?? this.rescuedDays,
+        needsSync: needsSync ?? this.needsSync,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
+  StreakCreditsTableData copyWithCompanion(StreakCreditsTableCompanion data) {
+    return StreakCreditsTableData(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      subjectProfileId: data.subjectProfileId.present
+          ? data.subjectProfileId.value
+          : this.subjectProfileId,
+      available: data.available.present ? data.available.value : this.available,
+      progressToNext: data.progressToNext.present
+          ? data.progressToNext.value
+          : this.progressToNext,
+      lastCountedDay: data.lastCountedDay.present
+          ? data.lastCountedDay.value
+          : this.lastCountedDay,
+      rescuedDays:
+          data.rescuedDays.present ? data.rescuedDays.value : this.rescuedDays,
+      needsSync: data.needsSync.present ? data.needsSync.value : this.needsSync,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StreakCreditsTableData(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('subjectProfileId: $subjectProfileId, ')
+          ..write('available: $available, ')
+          ..write('progressToNext: $progressToNext, ')
+          ..write('lastCountedDay: $lastCountedDay, ')
+          ..write('rescuedDays: $rescuedDays, ')
+          ..write('needsSync: $needsSync, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, userId, subjectProfileId, available,
+      progressToNext, lastCountedDay, rescuedDays, needsSync, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is StreakCreditsTableData &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.subjectProfileId == this.subjectProfileId &&
+          other.available == this.available &&
+          other.progressToNext == this.progressToNext &&
+          other.lastCountedDay == this.lastCountedDay &&
+          other.rescuedDays == this.rescuedDays &&
+          other.needsSync == this.needsSync &&
+          other.updatedAt == this.updatedAt);
+}
+
+class StreakCreditsTableCompanion
+    extends UpdateCompanion<StreakCreditsTableData> {
+  final Value<String> id;
+  final Value<String> userId;
+  final Value<String> subjectProfileId;
+  final Value<int> available;
+  final Value<int> progressToNext;
+  final Value<DateTime?> lastCountedDay;
+  final Value<String> rescuedDays;
+  final Value<bool> needsSync;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const StreakCreditsTableCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.subjectProfileId = const Value.absent(),
+    this.available = const Value.absent(),
+    this.progressToNext = const Value.absent(),
+    this.lastCountedDay = const Value.absent(),
+    this.rescuedDays = const Value.absent(),
+    this.needsSync = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  StreakCreditsTableCompanion.insert({
+    required String id,
+    required String userId,
+    required String subjectProfileId,
+    this.available = const Value.absent(),
+    this.progressToNext = const Value.absent(),
+    this.lastCountedDay = const Value.absent(),
+    this.rescuedDays = const Value.absent(),
+    this.needsSync = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        userId = Value(userId),
+        subjectProfileId = Value(subjectProfileId);
+  static Insertable<StreakCreditsTableData> custom({
+    Expression<String>? id,
+    Expression<String>? userId,
+    Expression<String>? subjectProfileId,
+    Expression<int>? available,
+    Expression<int>? progressToNext,
+    Expression<DateTime>? lastCountedDay,
+    Expression<String>? rescuedDays,
+    Expression<bool>? needsSync,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (subjectProfileId != null) 'subject_profile_id': subjectProfileId,
+      if (available != null) 'available': available,
+      if (progressToNext != null) 'progress_to_next': progressToNext,
+      if (lastCountedDay != null) 'last_counted_day': lastCountedDay,
+      if (rescuedDays != null) 'rescued_days': rescuedDays,
+      if (needsSync != null) 'needs_sync': needsSync,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  StreakCreditsTableCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? userId,
+      Value<String>? subjectProfileId,
+      Value<int>? available,
+      Value<int>? progressToNext,
+      Value<DateTime?>? lastCountedDay,
+      Value<String>? rescuedDays,
+      Value<bool>? needsSync,
+      Value<DateTime>? updatedAt,
+      Value<int>? rowid}) {
+    return StreakCreditsTableCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      subjectProfileId: subjectProfileId ?? this.subjectProfileId,
+      available: available ?? this.available,
+      progressToNext: progressToNext ?? this.progressToNext,
+      lastCountedDay: lastCountedDay ?? this.lastCountedDay,
+      rescuedDays: rescuedDays ?? this.rescuedDays,
+      needsSync: needsSync ?? this.needsSync,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (subjectProfileId.present) {
+      map['subject_profile_id'] = Variable<String>(subjectProfileId.value);
+    }
+    if (available.present) {
+      map['available'] = Variable<int>(available.value);
+    }
+    if (progressToNext.present) {
+      map['progress_to_next'] = Variable<int>(progressToNext.value);
+    }
+    if (lastCountedDay.present) {
+      map['last_counted_day'] = Variable<DateTime>(lastCountedDay.value);
+    }
+    if (rescuedDays.present) {
+      map['rescued_days'] = Variable<String>(rescuedDays.value);
+    }
+    if (needsSync.present) {
+      map['needs_sync'] = Variable<bool>(needsSync.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StreakCreditsTableCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('subjectProfileId: $subjectProfileId, ')
+          ..write('available: $available, ')
+          ..write('progressToNext: $progressToNext, ')
+          ..write('lastCountedDay: $lastCountedDay, ')
+          ..write('rescuedDays: $rescuedDays, ')
+          ..write('needsSync: $needsSync, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -6375,6 +6866,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $CompletionQuestionnairesTableTable(this);
   late final $JournalEntriesTableTable journalEntriesTable =
       $JournalEntriesTableTable(this);
+  late final $StreakCreditsTableTable streakCreditsTable =
+      $StreakCreditsTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -6388,7 +6881,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         syncJobsTable,
         intakeAssessmentsTable,
         completionQuestionnairesTable,
-        journalEntriesTable
+        journalEntriesTable,
+        streakCreditsTable
       ];
 }
 
@@ -9247,6 +9741,249 @@ typedef $$JournalEntriesTableTableProcessedTableManager = ProcessedTableManager<
     ),
     JournalEntriesTableData,
     PrefetchHooks Function()>;
+typedef $$StreakCreditsTableTableCreateCompanionBuilder
+    = StreakCreditsTableCompanion Function({
+  required String id,
+  required String userId,
+  required String subjectProfileId,
+  Value<int> available,
+  Value<int> progressToNext,
+  Value<DateTime?> lastCountedDay,
+  Value<String> rescuedDays,
+  Value<bool> needsSync,
+  Value<DateTime> updatedAt,
+  Value<int> rowid,
+});
+typedef $$StreakCreditsTableTableUpdateCompanionBuilder
+    = StreakCreditsTableCompanion Function({
+  Value<String> id,
+  Value<String> userId,
+  Value<String> subjectProfileId,
+  Value<int> available,
+  Value<int> progressToNext,
+  Value<DateTime?> lastCountedDay,
+  Value<String> rescuedDays,
+  Value<bool> needsSync,
+  Value<DateTime> updatedAt,
+  Value<int> rowid,
+});
+
+class $$StreakCreditsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $StreakCreditsTableTable> {
+  $$StreakCreditsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get subjectProfileId => $composableBuilder(
+      column: $table.subjectProfileId,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get available => $composableBuilder(
+      column: $table.available, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get progressToNext => $composableBuilder(
+      column: $table.progressToNext,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastCountedDay => $composableBuilder(
+      column: $table.lastCountedDay,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get rescuedDays => $composableBuilder(
+      column: $table.rescuedDays, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get needsSync => $composableBuilder(
+      column: $table.needsSync, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$StreakCreditsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $StreakCreditsTableTable> {
+  $$StreakCreditsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get subjectProfileId => $composableBuilder(
+      column: $table.subjectProfileId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get available => $composableBuilder(
+      column: $table.available, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get progressToNext => $composableBuilder(
+      column: $table.progressToNext,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastCountedDay => $composableBuilder(
+      column: $table.lastCountedDay,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get rescuedDays => $composableBuilder(
+      column: $table.rescuedDays, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get needsSync => $composableBuilder(
+      column: $table.needsSync, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$StreakCreditsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $StreakCreditsTableTable> {
+  $$StreakCreditsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get subjectProfileId => $composableBuilder(
+      column: $table.subjectProfileId, builder: (column) => column);
+
+  GeneratedColumn<int> get available =>
+      $composableBuilder(column: $table.available, builder: (column) => column);
+
+  GeneratedColumn<int> get progressToNext => $composableBuilder(
+      column: $table.progressToNext, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastCountedDay => $composableBuilder(
+      column: $table.lastCountedDay, builder: (column) => column);
+
+  GeneratedColumn<String> get rescuedDays => $composableBuilder(
+      column: $table.rescuedDays, builder: (column) => column);
+
+  GeneratedColumn<bool> get needsSync =>
+      $composableBuilder(column: $table.needsSync, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$StreakCreditsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $StreakCreditsTableTable,
+    StreakCreditsTableData,
+    $$StreakCreditsTableTableFilterComposer,
+    $$StreakCreditsTableTableOrderingComposer,
+    $$StreakCreditsTableTableAnnotationComposer,
+    $$StreakCreditsTableTableCreateCompanionBuilder,
+    $$StreakCreditsTableTableUpdateCompanionBuilder,
+    (
+      StreakCreditsTableData,
+      BaseReferences<_$AppDatabase, $StreakCreditsTableTable,
+          StreakCreditsTableData>
+    ),
+    StreakCreditsTableData,
+    PrefetchHooks Function()> {
+  $$StreakCreditsTableTableTableManager(
+      _$AppDatabase db, $StreakCreditsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$StreakCreditsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$StreakCreditsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$StreakCreditsTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> userId = const Value.absent(),
+            Value<String> subjectProfileId = const Value.absent(),
+            Value<int> available = const Value.absent(),
+            Value<int> progressToNext = const Value.absent(),
+            Value<DateTime?> lastCountedDay = const Value.absent(),
+            Value<String> rescuedDays = const Value.absent(),
+            Value<bool> needsSync = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              StreakCreditsTableCompanion(
+            id: id,
+            userId: userId,
+            subjectProfileId: subjectProfileId,
+            available: available,
+            progressToNext: progressToNext,
+            lastCountedDay: lastCountedDay,
+            rescuedDays: rescuedDays,
+            needsSync: needsSync,
+            updatedAt: updatedAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String userId,
+            required String subjectProfileId,
+            Value<int> available = const Value.absent(),
+            Value<int> progressToNext = const Value.absent(),
+            Value<DateTime?> lastCountedDay = const Value.absent(),
+            Value<String> rescuedDays = const Value.absent(),
+            Value<bool> needsSync = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              StreakCreditsTableCompanion.insert(
+            id: id,
+            userId: userId,
+            subjectProfileId: subjectProfileId,
+            available: available,
+            progressToNext: progressToNext,
+            lastCountedDay: lastCountedDay,
+            rescuedDays: rescuedDays,
+            needsSync: needsSync,
+            updatedAt: updatedAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$StreakCreditsTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $StreakCreditsTableTable,
+    StreakCreditsTableData,
+    $$StreakCreditsTableTableFilterComposer,
+    $$StreakCreditsTableTableOrderingComposer,
+    $$StreakCreditsTableTableAnnotationComposer,
+    $$StreakCreditsTableTableCreateCompanionBuilder,
+    $$StreakCreditsTableTableUpdateCompanionBuilder,
+    (
+      StreakCreditsTableData,
+      BaseReferences<_$AppDatabase, $StreakCreditsTableTable,
+          StreakCreditsTableData>
+    ),
+    StreakCreditsTableData,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -9272,4 +10009,6 @@ class $AppDatabaseManager {
               _db, _db.completionQuestionnairesTable);
   $$JournalEntriesTableTableTableManager get journalEntriesTable =>
       $$JournalEntriesTableTableTableManager(_db, _db.journalEntriesTable);
+  $$StreakCreditsTableTableTableManager get streakCreditsTable =>
+      $$StreakCreditsTableTableTableManager(_db, _db.streakCreditsTable);
 }
