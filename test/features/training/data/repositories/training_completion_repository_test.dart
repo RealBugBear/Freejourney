@@ -47,8 +47,8 @@ void main() {
           ..where((table) => table.id.equals('progress-1')))
         .getSingle();
     expect(progress.currentDay, 4);
-    expect(progress.dailyStreak, 7);
-    expect(progress.trainingsThisWeek, 3);
+    expect(progress.dailyStreak, 6);
+    expect(progress.trainingsThisWeek, 2);
     expect(progress.totalSessionsSinceDisclaimer, 10);
     expect(await db.select(db.syncJobsTable).get(), hasLength(2));
 
@@ -132,12 +132,6 @@ void main() {
       'enrollment_id': 'enrollment-1',
       'current_day': 4,
       'last_activity_date': '2026-07-23',
-      'consecutive_inactive_days': 0,
-      'daily_streak': 7,
-      'weekly_streak': 4,
-      'trainings_this_week': 3,
-      'last_training_week_start': '2026-07-20',
-      'weekly_goal': 5,
       'total_sessions_since_disclaimer': 10,
       'updated_at': completedAt.toIso8601String(),
     });
@@ -321,6 +315,32 @@ void main() {
     );
     final payload = jsonDecode(jobs.single.payload) as Map<String, dynamic>;
     expect(payload['last_disclaimer_accepted_at'], acceptedAt.toIso8601String());
+  });
+
+  test('completing a session no longer computes a streak', () async {
+    // The series is derived from training_sessions (spec §4.1); the completion
+    // path must not touch the streak columns any more.
+    await _seedEnrollmentAndProgress(db);
+    final before = await (db.select(db.progressEntriesTable)
+          ..where((t) => t.id.equals('progress-1')))
+        .getSingle();
+
+    await saveCompletedSessionAtomically(
+      db: db,
+      sessionId: 'session-new',
+      userId: 'user-1',
+      enrollmentId: 'enrollment-1',
+      completedExerciseIds: const [],
+      completedAt: DateTime(2026, 8, 20, 9),
+    );
+
+    final after = await (db.select(db.progressEntriesTable)
+          ..where((t) => t.id.equals('progress-1')))
+        .getSingle();
+
+    expect(after.dailyStreak, before.dailyStreak);
+    expect(after.weeklyStreak, before.weeklyStreak);
+    expect(after.currentDay, before.currentDay + 1);
   });
 }
 

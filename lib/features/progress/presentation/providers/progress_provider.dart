@@ -715,30 +715,33 @@ Future<String> restartMoroFromCurrentPackage({
 
 Future<void> saveCompletedSession({
   required AppDatabase db,
-  required SyncService syncService, // SyncService
+  required SyncService? syncService,
   required EnrollmentsTableData enrollment,
   required ProgressEntriesTableData progress,
   required List<String> completedExerciseIds,
+  String? userId,
+  DateTime? now,
 }) async {
-  final userId = Supabase.instance.client.auth.currentUser?.id;
-  if (userId == null) return;
+  final resolvedUserId =
+      userId ?? Supabase.instance.client.auth.currentUser?.id;
+  if (resolvedUserId == null) return;
 
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
+  final timestamp = now ?? DateTime.now();
+  final today = DateTime(timestamp.year, timestamp.month, timestamp.day);
   final sessionId = _uuid.v4();
 
   // Save session
   await db.into(db.trainingSessionsTable).insert(
         TrainingSessionsTableCompanion.insert(
           id: sessionId,
-          userId: userId,
+          userId: resolvedUserId,
           subjectProfileId: drift.Value(enrollment.subjectProfileId),
           enrollmentId: enrollment.id,
           sessionDate: today,
           dayNumber: progress.currentDay,
           completedExerciseIds: jsonEncode(completedExerciseIds),
           isCompleted: const drift.Value(true),
-          completedAt: drift.Value(now),
+          completedAt: drift.Value(timestamp),
         ),
       );
 
@@ -750,54 +753,23 @@ Future<void> saveCompletedSession({
       lastActivity.day == today.day;
   if (isToday) return;
 
-  final yesterday = today.subtract(const Duration(days: 1));
-
-  // Daily streak
-  int newDailyStreak = progress.dailyStreak;
-  if (lastActivity == null ||
-      (lastActivity.year == yesterday.year &&
-          lastActivity.month == yesterday.month &&
-          lastActivity.day == yesterday.day)) {
-    newDailyStreak++;
-  } else {
-    newDailyStreak = 1;
-  }
-
-  // Weekly stats
-  final thisWeekStart = _weekStart(today);
-  final lastWeekStart = progress.lastTrainingWeekStart;
-  final isNewWeek =
-      lastWeekStart == null || lastWeekStart.isBefore(thisWeekStart);
-  final newTrainingsThisWeek = isNewWeek ? 1 : progress.trainingsThisWeek + 1;
-
-  // Weekly streak: increment when a new week hits the goal
-  int newWeeklyStreak = progress.weeklyStreak;
-  if (newTrainingsThisWeek >= progress.weeklyGoal && isNewWeek) {
-    newWeeklyStreak++;
-  }
-
   await (db.update(db.progressEntriesTable)
         ..where((t) => t.id.equals(progress.id)))
       .write(ProgressEntriesTableCompanion(
     currentDay: drift.Value(progress.currentDay + 1),
     lastActivityDate: drift.Value(today),
-    consecutiveInactiveDays: const drift.Value(0),
-    dailyStreak: drift.Value(newDailyStreak),
-    weeklyStreak: drift.Value(newWeeklyStreak),
-    trainingsThisWeek: drift.Value(newTrainingsThisWeek),
-    lastTrainingWeekStart: drift.Value(thisWeekStart),
     totalSessionsSinceDisclaimer:
         drift.Value(progress.totalSessionsSinceDisclaimer + 1),
     needsSync: const drift.Value(true),
-    updatedAt: drift.Value(now),
+    updatedAt: drift.Value(timestamp),
   ));
 
-  await syncService.enqueueUpsert(
+  await syncService?.enqueueUpsert(
     tableName: 'training_sessions',
     recordId: sessionId,
     payload: {
       'id': sessionId,
-      'user_id': userId,
+      'user_id': resolvedUserId,
       if (enrollment.subjectProfileId != null)
         'subject_profile_id': enrollment.subjectProfileId,
       'enrollment_id': enrollment.id,
@@ -805,23 +777,20 @@ Future<void> saveCompletedSession({
       'day_number': progress.currentDay,
       'completed_exercise_ids': completedExerciseIds,
       'is_completed': true,
-      'completed_at': now.toIso8601String(),
+      'completed_at': timestamp.toIso8601String(),
     },
   );
-  await syncService.enqueueUpsert(
+  await syncService?.enqueueUpsert(
     tableName: 'progress_entries',
     recordId: progress.id,
     payload: {
       'id': progress.id,
-      'user_id': userId,
+      'user_id': resolvedUserId,
       if (progress.subjectProfileId != null)
         'subject_profile_id': progress.subjectProfileId,
       'enrollment_id': enrollment.id,
       'current_day': progress.currentDay + 1,
       'last_activity_date': today.toIso8601String().substring(0, 10),
-      'daily_streak': newDailyStreak,
-      'weekly_streak': newWeeklyStreak,
-      'trainings_this_week': newTrainingsThisWeek,
     },
   );
 }
@@ -860,27 +829,10 @@ Future<void> saveVorrundeRegulationSession({
       lastActivity.month == today.month &&
       lastActivity.day == today.day;
   if (!isToday) {
-    final yesterday = today.subtract(const Duration(days: 1));
-    final newDailyStreak = lastActivity == null ||
-            (lastActivity.year == yesterday.year &&
-                lastActivity.month == yesterday.month &&
-                lastActivity.day == yesterday.day)
-        ? progress.dailyStreak + 1
-        : 1;
-    final thisWeekStart = _weekStart(today);
-    final lastWeekStart = progress.lastTrainingWeekStart;
-    final isNewWeek =
-        lastWeekStart == null || lastWeekStart.isBefore(thisWeekStart);
-    final newTrainingsThisWeek = isNewWeek ? 1 : progress.trainingsThisWeek + 1;
-
     await (db.update(db.progressEntriesTable)
           ..where((t) => t.id.equals(progress.id)))
         .write(ProgressEntriesTableCompanion(
       lastActivityDate: drift.Value(today),
-      consecutiveInactiveDays: const drift.Value(0),
-      dailyStreak: drift.Value(newDailyStreak),
-      trainingsThisWeek: drift.Value(newTrainingsThisWeek),
-      lastTrainingWeekStart: drift.Value(thisWeekStart),
       totalSessionsSinceDisclaimer:
           drift.Value(progress.totalSessionsSinceDisclaimer + 1),
       needsSync: const drift.Value(true),
@@ -897,8 +849,6 @@ Future<void> saveVorrundeRegulationSession({
           'subject_profile_id': progress.subjectProfileId,
         'enrollment_id': enrollment.id,
         'last_activity_date': today.toIso8601String().substring(0, 10),
-        'daily_streak': newDailyStreak,
-        'trainings_this_week': newTrainingsThisWeek,
       },
     );
   }

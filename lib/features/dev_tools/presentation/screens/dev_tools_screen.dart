@@ -9,6 +9,7 @@ import '../../../../core/database/app_database.dart';
 import '../../../../core/monitoring/sentry_service.dart';
 import '../../../../core/time/app_clock_provider.dart';
 import '../../../../features/progress/presentation/providers/progress_provider.dart';
+import '../../../../features/progress/presentation/providers/streak_provider.dart';
 
 const _uuid = Uuid();
 
@@ -72,11 +73,7 @@ class DevToolsScreen extends ConsumerWidget {
                 ),
                 _StatusRow(
                   'Daily Streak',
-                  '${progress?.dailyStreak ?? 0}',
-                ),
-                _StatusRow(
-                  'Trainings This Week',
-                  '${progress?.trainingsThisWeek ?? 0} / ${progress?.weeklyGoal ?? 5}',
+                  '${ref.watch(streakViewProvider).valueOrNull?.length ?? 0}',
                 ),
                 _StatusRow(
                   'Package',
@@ -334,8 +331,6 @@ class DevToolsScreen extends ConsumerWidget {
         .write(ProgressEntriesTableCompanion(
       currentDay: drift.Value(newDay),
       lastActivityDate: drift.Value(fakeLastActivity),
-      consecutiveInactiveDays: const drift.Value(0),
-      dailyStreak: drift.Value(progress.dailyStreak + days),
       totalSessionsSinceDisclaimer:
           drift.Value(progress.totalSessionsSinceDisclaimer + days),
       needsSync: const drift.Value(true),
@@ -352,7 +347,6 @@ class DevToolsScreen extends ConsumerWidget {
         'current_day': newDay,
         'last_activity_date':
             fakeLastActivity.toIso8601String().substring(0, 10),
-        'daily_streak': progress.dailyStreak + days,
       },
     );
 
@@ -458,10 +452,6 @@ class DevToolsScreen extends ConsumerWidget {
         .write(ProgressEntriesTableCompanion(
       currentDay: const drift.Value(1),
       lastActivityDate: const drift.Value(null),
-      consecutiveInactiveDays: const drift.Value(0),
-      dailyStreak: const drift.Value(0),
-      weeklyStreak: const drift.Value(0),
-      trainingsThisWeek: const drift.Value(0),
       totalSessionsSinceDisclaimer: const drift.Value(0),
       needsSync: const drift.Value(true),
       updatedAt: drift.Value(now),
@@ -476,9 +466,6 @@ class DevToolsScreen extends ConsumerWidget {
         'enrollment_id': enrollment.id,
         'current_day': 1,
         'last_activity_date': null,
-        'daily_streak': 0,
-        'weekly_streak': 0,
-        'trainings_this_week': 0,
       },
     );
 

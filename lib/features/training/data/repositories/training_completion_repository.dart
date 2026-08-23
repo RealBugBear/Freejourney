@@ -144,14 +144,6 @@ class TrainingCompletionRepository {
           'current_day': progress.currentDay,
           if (progress.lastActivityDate != null)
             'last_activity_date': _dateString(progress.lastActivityDate!),
-          'consecutive_inactive_days': progress.consecutiveInactiveDays,
-          'daily_streak': progress.dailyStreak,
-          'weekly_streak': progress.weeklyStreak,
-          'trainings_this_week': progress.trainingsThisWeek,
-          if (progress.lastTrainingWeekStart != null)
-            'last_training_week_start':
-                _dateString(progress.lastTrainingWeekStart!),
-          'weekly_goal': progress.weeklyGoal,
           'total_sessions_since_disclaimer': 0,
           'last_disclaimer_accepted_at': acceptedAt.toIso8601String(),
           'updated_at': acceptedAt.toIso8601String(),
@@ -308,11 +300,6 @@ class TrainingCompletionRepository {
         ProgressEntriesTableCompanion(
           currentDay: Value(progressUpdate.currentDay),
           lastActivityDate: Value(sessionDate),
-          consecutiveInactiveDays: const Value(0),
-          dailyStreak: Value(progressUpdate.dailyStreak),
-          weeklyStreak: Value(progressUpdate.weeklyStreak),
-          trainingsThisWeek: Value(progressUpdate.trainingsThisWeek),
-          lastTrainingWeekStart: Value(progressUpdate.weekStart),
           totalSessionsSinceDisclaimer:
               Value(progressUpdate.totalSessionsSinceDisclaimer),
           needsSync: const Value(true),
@@ -362,12 +349,6 @@ class TrainingCompletionRepository {
           'enrollment_id': enrollmentId,
           'current_day': progressUpdate.currentDay,
           'last_activity_date': _dateString(sessionDate),
-          'consecutive_inactive_days': 0,
-          'daily_streak': progressUpdate.dailyStreak,
-          'weekly_streak': progressUpdate.weeklyStreak,
-          'trainings_this_week': progressUpdate.trainingsThisWeek,
-          'last_training_week_start': _dateString(progressUpdate.weekStart),
-          'weekly_goal': progress.weeklyGoal,
           'total_sessions_since_disclaimer':
               progressUpdate.totalSessionsSinceDisclaimer,
           if (progress.lastDisclaimerAcceptedAt != null)
@@ -474,31 +455,10 @@ class TrainingCompletionRepository {
       return null;
     }
 
-    final yesterday = sessionDate.subtract(const Duration(days: 1));
-    final dailyStreak =
-        lastActivityDate == null || _isSameDate(lastActivityDate, yesterday)
-            ? progress.dailyStreak + 1
-            : 1;
-
-    final weekStart = sessionDate.subtract(
-      Duration(days: sessionDate.weekday - DateTime.monday),
-    );
-    final lastWeekStart = progress.lastTrainingWeekStart;
-    final isNewWeek =
-        lastWeekStart == null || lastWeekStart.isBefore(weekStart);
-    final trainingsThisWeek = isNewWeek ? 1 : progress.trainingsThisWeek + 1;
-
-    var weeklyStreak = progress.weeklyStreak;
-    if (trainingsThisWeek >= progress.weeklyGoal && isNewWeek) {
-      weeklyStreak++;
-    }
-
+    // The series is derived from training_sessions (spec §4.1) — this path
+    // only advances the package day counter.
     return _ProgressUpdate(
       currentDay: progress.currentDay + 1,
-      dailyStreak: dailyStreak,
-      weeklyStreak: weeklyStreak,
-      trainingsThisWeek: trainingsThisWeek,
-      weekStart: weekStart,
       totalSessionsSinceDisclaimer: progress.totalSessionsSinceDisclaimer + 1,
     );
   }
@@ -522,18 +482,10 @@ class TrainingCompletionRepository {
 class _ProgressUpdate {
   const _ProgressUpdate({
     required this.currentDay,
-    required this.dailyStreak,
-    required this.weeklyStreak,
-    required this.trainingsThisWeek,
-    required this.weekStart,
     required this.totalSessionsSinceDisclaimer,
   });
 
   final int currentDay;
-  final int dailyStreak;
-  final int weeklyStreak;
-  final int trainingsThisWeek;
-  final DateTime weekStart;
   final int totalSessionsSinceDisclaimer;
 }
 
