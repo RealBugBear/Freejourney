@@ -39,7 +39,11 @@ enum AuthDeepLink { resetPassword, confirmSignup, none }
 ///   reflexjourney://auth/reset-password           → host == 'auth', path == '/reset-password'
 AuthDeepLink classifyAuthDeepLink(Uri uri) {
   bool matches(String page) =>
-      uri.path == '/auth/$page' ||
+      (uri.scheme == 'https' &&
+          uri.host == 'reflexjourney.app' &&
+          !uri.hasPort &&
+          uri.userInfo.isEmpty &&
+          uri.path == '/auth/$page') ||
       (uri.scheme == 'reflexjourney' &&
           uri.host == 'auth' &&
           uri.path == '/$page');
@@ -152,7 +156,8 @@ class _CoreJourneyAppState extends ConsumerState<CoreJourneyApp>
           }
           _goPostConfirmLanding();
         } catch (e, st) {
-          appLogger.w('Signup confirm deep link failed: $e\n$st');
+          appLogger.w('Signup confirm deep link failed',
+              error: e.runtimeType, stackTrace: st);
         }
       case AuthDeepLink.none:
         break;
@@ -248,6 +253,12 @@ class _CoreJourneyAppView extends ConsumerWidget {
     // reinstall see their real Supabase data instead of being re-enrolled.
     ref.listen<AsyncValue<AuthState>>(authStateProvider, (_, next) {
       final event = next.valueOrNull?.event;
+      if (event == AuthChangeEvent.signedOut) {
+        unawaited(ref
+            .read(syncServiceProvider)
+            .clearUserDataForSignOut(discardPendingChanges: true)
+            .then((_) {}));
+      }
       if (event == AuthChangeEvent.signedIn ||
           event == AuthChangeEvent.tokenRefreshed) {
         final userId = next.valueOrNull?.session?.user.id;

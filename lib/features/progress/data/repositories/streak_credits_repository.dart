@@ -74,42 +74,44 @@ class StreakCreditsRepository {
     required String subjectProfileId,
     required StreakCredits credits,
   }) async {
-    final id = _rowId(userId, subjectProfileId);
-    final rescued = credits.rescuedDays.map(_encodeDay).toList()..sort();
-    final now = DateTime.now();
+    return _db.transaction(() async {
+      final id = _rowId(userId, subjectProfileId);
+      final rescued = credits.rescuedDays.map(_encodeDay).toList()..sort();
+      final now = DateTime.now();
 
-    await _db.into(_db.streakCreditsTable).insertOnConflictUpdate(
-          StreakCreditsTableCompanion.insert(
-            id: id,
-            userId: userId,
-            subjectProfileId: subjectProfileId,
-            available: Value(credits.available),
-            progressToNext: Value(credits.progressToNext),
-            lastCountedDay: Value(credits.lastCountedDay),
-            rescuedDays: Value(jsonEncode(rescued)),
-            needsSync: const Value(true),
-            updatedAt: Value(now),
-          ),
-        );
+      await _db.into(_db.streakCreditsTable).insertOnConflictUpdate(
+            StreakCreditsTableCompanion.insert(
+              id: id,
+              userId: userId,
+              subjectProfileId: subjectProfileId,
+              available: Value(credits.available),
+              progressToNext: Value(credits.progressToNext),
+              lastCountedDay: Value(credits.lastCountedDay),
+              rescuedDays: Value(jsonEncode(rescued)),
+              needsSync: const Value(true),
+              updatedAt: Value(now),
+            ),
+          );
 
-    if (!kStreakCreditsServerSyncEnabled) return;
+      if (!kStreakCreditsServerSyncEnabled) return;
 
-    await _syncService?.enqueueUpsert(
-      tableName: 'streak_credits',
-      recordId: id,
-      payload: {
-        'id': id,
-        'user_id': userId,
-        'subject_profile_id': subjectProfileId,
-        'available': credits.available,
-        'progress_to_next': credits.progressToNext,
-        'last_counted_day': credits.lastCountedDay == null
-            ? null
-            : _encodeDay(credits.lastCountedDay!),
-        'rescued_days': rescued,
-        'updated_at': now.toIso8601String(),
-      },
-    );
+      await _syncService?.enqueueUpsert(
+        tableName: 'streak_credits',
+        recordId: id,
+        payload: {
+          'id': id,
+          'user_id': userId,
+          'subject_profile_id': subjectProfileId,
+          'available': credits.available,
+          'progress_to_next': credits.progressToNext,
+          'last_counted_day': credits.lastCountedDay == null
+              ? null
+              : _encodeDay(credits.lastCountedDay!),
+          'rescued_days': rescued,
+          'updated_at': now.toIso8601String(),
+        },
+      );
+    });
   }
 
   /// Writes the derived series into `progress_entries.daily_streak` so the
@@ -119,31 +121,33 @@ class StreakCreditsRepository {
     required String subjectProfileId,
     required int length,
   }) async {
-    final progress = await (_db.select(_db.progressEntriesTable)
-          ..where((t) => t.subjectProfileId.equals(subjectProfileId))
-          ..limit(1))
-        .getSingleOrNull();
-    if (progress == null || progress.dailyStreak == length) return;
+    return _db.transaction(() async {
+      final progress = await (_db.select(_db.progressEntriesTable)
+            ..where((t) => t.subjectProfileId.equals(subjectProfileId))
+            ..limit(1))
+          .getSingleOrNull();
+      if (progress == null || progress.dailyStreak == length) return;
 
-    await (_db.update(_db.progressEntriesTable)
-          ..where((t) => t.id.equals(progress.id)))
-        .write(
-      ProgressEntriesTableCompanion(
-        dailyStreak: Value(length),
-        needsSync: const Value(true),
-        updatedAt: Value(DateTime.now()),
-      ),
-    );
+      await (_db.update(_db.progressEntriesTable)
+            ..where((t) => t.id.equals(progress.id)))
+          .write(
+        ProgressEntriesTableCompanion(
+          dailyStreak: Value(length),
+          needsSync: const Value(true),
+          updatedAt: Value(DateTime.now()),
+        ),
+      );
 
-    await _syncService?.enqueueUpsert(
-      tableName: 'progress_entries',
-      recordId: progress.id,
-      payload: {
-        'id': progress.id,
-        'user_id': progress.userId,
-        'enrollment_id': progress.enrollmentId,
-        'daily_streak': length,
-      },
-    );
+      await _syncService?.enqueueUpsert(
+        tableName: 'progress_entries',
+        recordId: progress.id,
+        payload: {
+          'id': progress.id,
+          'user_id': progress.userId,
+          'enrollment_id': progress.enrollmentId,
+          'daily_streak': length,
+        },
+      );
+    });
   }
 }

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../config/internal_tester.dart';
 import '../../../../config/launch_flags.dart';
 import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -93,7 +94,7 @@ class _PackagesScreenState extends ConsumerState<PackagesScreen> {
     final l10n = AppLocalizations.of(context);
     final selectedPackageId = ref.watch(selectedPackageIdProvider);
     final currentEmail = Supabase.instance.client.auth.currentUser?.email ?? '';
-    final allowDevPackageSwitch = currentEmail.endsWith('@reflexjourney.de');
+    final allowDevPackageSwitch = isInternalTesterEmail(currentEmail);
 
     // Read all user enrollments to derive real per-package status.
     // Do NOT use static frontend logic to determine completion.

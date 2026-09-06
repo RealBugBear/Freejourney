@@ -248,5 +248,38 @@ void main() {
       expect(controller.value.isPlaying, isTrue);
       expect(find.bySemanticsLabel('Video: Pause'), findsOneWidget);
     });
+    testWidgets('late native playback error exposes fallback and retry',
+        (tester) async {
+      final controller = _FakeVideoController();
+      await tester.pumpWidget(_wrap(ExerciseVideoWidget(
+        exercise: _exercise(videoUrl: 'https://example.test/video.mp4'),
+        onReady: () {},
+        networkControllerBuilder: (_) => controller,
+      )));
+      await tester.pumpAndSettle();
+      controller.value = controller.value
+          .copyWith(errorDescription: 'synthetic decoder failure');
+      await tester.pumpAndSettle();
+      expect(
+          find.byKey(const ValueKey('exercise-video-error')), findsOneWidget);
+      expect(find.text('Retry'), findsOneWidget);
+      expect(controller.disposed, isTrue);
+    });
+
+    testWidgets('hung bundled asset initialization reaches fallback',
+        (tester) async {
+      final controller = _FakeVideoController(hangOnInitialize: true);
+      await tester.pumpWidget(_wrap(ExerciseVideoWidget(
+        exercise: _exercise(videoPath: 'assets/videos/test.mp4'),
+        onReady: () {},
+        assetControllerBuilder: (_) => controller,
+        remoteInitializationTimeout: const Duration(milliseconds: 100),
+      )));
+      await tester.pump(const Duration(milliseconds: 150));
+      await tester.pumpAndSettle();
+      expect(
+          find.byKey(const ValueKey('exercise-video-error')), findsOneWidget);
+      expect(controller.disposed, isTrue);
+    });
   });
 }

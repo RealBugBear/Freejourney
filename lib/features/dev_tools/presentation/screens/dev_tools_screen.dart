@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../config/internal_tester.dart';
 import '../../../../bootstrap/providers.dart';
 import '../../../../core/database/app_database.dart';
 import '../../../../core/monitoring/sentry_service.dart';
@@ -19,7 +20,7 @@ class DevToolsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentEmail = Supabase.instance.client.auth.currentUser?.email ?? '';
-    final isInternalTester = currentEmail.endsWith('@reflexjourney.de');
+    final isInternalTester = isInternalTesterEmail(currentEmail);
     if (!isInternalTester) {
       return const Scaffold(body: Center(child: Text('Not available')));
     }

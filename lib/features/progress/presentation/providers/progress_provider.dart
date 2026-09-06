@@ -211,73 +211,76 @@ Future<String> createEnrollment({
   required String packageId,
   required int durationWeeks,
 }) async {
-  // Lokaler Idempotenz-Check — verhindert Duplicate in der Drift-DB.
-  // Auf frischen Geräten ist die DB leer; rehydrate() lädt das Server-Enrollment
-  // vor Ausführung dieser Funktion, sodass dieser Check auch dann greift.
-  final existing = await (db.select(db.enrollmentsTable)
-        ..where((t) =>
-            t.userId.equals(userId) &
-            (subjectProfileId == null
-                ? t.subjectProfileId.isNull()
-                : t.subjectProfileId.equals(subjectProfileId)) &
-            t.packageId.equals(packageId) &
-            t.status.equals('active'))
-        ..limit(1))
-      .getSingleOrNull();
-  if (existing != null) return existing.id;
+  return db.transaction(() async {
+    // Lokaler Idempotenz-Check — verhindert Duplicate in der Drift-DB.
+    // Auf frischen Geräten ist die DB leer; rehydrate() lädt das Server-Enrollment
+    // vor Ausführung dieser Funktion, sodass dieser Check auch dann greift.
+    final existing = await (db.select(db.enrollmentsTable)
+          ..where((t) =>
+              t.userId.equals(userId) &
+              (subjectProfileId == null
+                  ? t.subjectProfileId.isNull()
+                  : t.subjectProfileId.equals(subjectProfileId)) &
+              t.packageId.equals(packageId) &
+              t.status.equals('active'))
+          ..limit(1))
+        .getSingleOrNull();
+    if (existing != null) return existing.id;
 
-  final now = DateTime.now();
-  final enrollmentId = _uuid.v4();
-  final progressId = _uuid.v4();
-  final target = now.add(Duration(days: durationWeeks * 7));
+    final now = DateTime.now();
+    final enrollmentId = _uuid.v4();
+    final progressId = _uuid.v4();
+    final target = now.add(Duration(days: durationWeeks * 7));
 
-  await db.into(db.enrollmentsTable).insert(
-        EnrollmentsTableCompanion.insert(
-          id: enrollmentId,
-          userId: userId,
-          subjectProfileId: drift.Value(subjectProfileId),
-          packageId: packageId,
-          assignedDurationWeeks: durationWeeks,
-          startDate: DateTime(now.year, now.month, now.day),
-          targetCompletionDate: DateTime(target.year, target.month, target.day),
-        ),
-      );
+    await db.into(db.enrollmentsTable).insert(
+          EnrollmentsTableCompanion.insert(
+            id: enrollmentId,
+            userId: userId,
+            subjectProfileId: drift.Value(subjectProfileId),
+            packageId: packageId,
+            assignedDurationWeeks: durationWeeks,
+            startDate: DateTime(now.year, now.month, now.day),
+            targetCompletionDate:
+                DateTime(target.year, target.month, target.day),
+          ),
+        );
 
-  await db.into(db.progressEntriesTable).insert(
-        ProgressEntriesTableCompanion.insert(
-          id: progressId,
-          userId: userId,
-          subjectProfileId: drift.Value(subjectProfileId),
-          enrollmentId: enrollmentId,
-        ),
-      );
+    await db.into(db.progressEntriesTable).insert(
+          ProgressEntriesTableCompanion.insert(
+            id: progressId,
+            userId: userId,
+            subjectProfileId: drift.Value(subjectProfileId),
+            enrollmentId: enrollmentId,
+          ),
+        );
 
-  await syncService.enqueueUpsert(
-    tableName: 'enrollments',
-    recordId: enrollmentId,
-    payload: {
-      'id': enrollmentId,
-      'user_id': userId,
-      if (subjectProfileId != null) 'subject_profile_id': subjectProfileId,
-      'package_id': packageId,
-      'status': 'active',
-      'assigned_duration_weeks': durationWeeks,
-      'start_date': now.toIso8601String().substring(0, 10),
-      'target_completion_date': target.toIso8601String().substring(0, 10),
-    },
-  );
-  await syncService.enqueueUpsert(
-    tableName: 'progress_entries',
-    recordId: progressId,
-    payload: {
-      'id': progressId,
-      'user_id': userId,
-      if (subjectProfileId != null) 'subject_profile_id': subjectProfileId,
-      'enrollment_id': enrollmentId,
-      'current_day': 1,
-    },
-  );
-  return enrollmentId;
+    await syncService.enqueueUpsert(
+      tableName: 'enrollments',
+      recordId: enrollmentId,
+      payload: {
+        'id': enrollmentId,
+        'user_id': userId,
+        if (subjectProfileId != null) 'subject_profile_id': subjectProfileId,
+        'package_id': packageId,
+        'status': 'active',
+        'assigned_duration_weeks': durationWeeks,
+        'start_date': now.toIso8601String().substring(0, 10),
+        'target_completion_date': target.toIso8601String().substring(0, 10),
+      },
+    );
+    await syncService.enqueueUpsert(
+      tableName: 'progress_entries',
+      recordId: progressId,
+      payload: {
+        'id': progressId,
+        'user_id': userId,
+        if (subjectProfileId != null) 'subject_profile_id': subjectProfileId,
+        'enrollment_id': enrollmentId,
+        'current_day': 1,
+      },
+    );
+    return enrollmentId;
+  });
 }
 
 Future<void> createIntakeAssessment({
@@ -290,38 +293,40 @@ Future<void> createIntakeAssessment({
   required int finalDurationWeeks,
   required List<String> entryPoints,
 }) async {
-  final id = _uuid.v4();
-  final now = DateTime.now();
-  final additionalAnswers =
-      entryPoints.isEmpty ? null : jsonEncode({'entry_points': entryPoints});
+  return db.transaction(() async {
+    final id = _uuid.v4();
+    final now = DateTime.now();
+    final additionalAnswers =
+        entryPoints.isEmpty ? null : jsonEncode({'entry_points': entryPoints});
 
-  await db.into(db.intakeAssessmentsTable).insert(
-        IntakeAssessmentsTableCompanion.insert(
-          id: id,
-          enrollmentId: enrollmentId,
-          hadIsometricWithTrainer: hadIsometricWithTrainer,
-          additionalAnswers: drift.Value(additionalAnswers),
-          recommendedDurationWeeks: recommendedDurationWeeks,
-          userAcceptedRecommendation: userAcceptedRecommendation,
-          finalDurationWeeks: finalDurationWeeks,
-          completedAt: now,
-        ),
-      );
+    await db.into(db.intakeAssessmentsTable).insert(
+          IntakeAssessmentsTableCompanion.insert(
+            id: id,
+            enrollmentId: enrollmentId,
+            hadIsometricWithTrainer: hadIsometricWithTrainer,
+            additionalAnswers: drift.Value(additionalAnswers),
+            recommendedDurationWeeks: recommendedDurationWeeks,
+            userAcceptedRecommendation: userAcceptedRecommendation,
+            finalDurationWeeks: finalDurationWeeks,
+            completedAt: now,
+          ),
+        );
 
-  await syncService.enqueueUpsert(
-    tableName: 'intake_assessments',
-    recordId: id,
-    payload: {
-      'id': id,
-      'enrollment_id': enrollmentId,
-      'had_isometric_with_trainer': hadIsometricWithTrainer,
-      if (additionalAnswers != null) 'additional_answers': additionalAnswers,
-      'recommended_duration_weeks': recommendedDurationWeeks,
-      'user_accepted_recommendation': userAcceptedRecommendation,
-      'final_duration_weeks': finalDurationWeeks,
-      'completed_at': now.toIso8601String(),
-    },
-  );
+    await syncService.enqueueUpsert(
+      tableName: 'intake_assessments',
+      recordId: id,
+      payload: {
+        'id': id,
+        'enrollment_id': enrollmentId,
+        'had_isometric_with_trainer': hadIsometricWithTrainer,
+        if (additionalAnswers != null) 'additional_answers': additionalAnswers,
+        'recommended_duration_weeks': recommendedDurationWeeks,
+        'user_accepted_recommendation': userAcceptedRecommendation,
+        'final_duration_weeks': finalDurationWeeks,
+        'completed_at': now.toIso8601String(),
+      },
+    );
+  });
 }
 
 // ── All enrollments for the current user (all packages) ──────────────────────
@@ -363,69 +368,71 @@ Future<PackageCompletionResult> completeEnrollment({
   required SyncService syncService,
   required EnrollmentsTableData enrollment,
 }) async {
-  final now = DateTime.now();
-  await (db.update(db.enrollmentsTable)
-        ..where((t) => t.id.equals(enrollment.id)))
-      .write(EnrollmentsTableCompanion(
-    status: const drift.Value('completed'),
-    completedAt: drift.Value(now),
-    needsSync: const drift.Value(true),
-    updatedAt: drift.Value(now),
-  ));
+  return db.transaction(() async {
+    final now = DateTime.now();
+    await (db.update(db.enrollmentsTable)
+          ..where((t) => t.id.equals(enrollment.id)))
+        .write(EnrollmentsTableCompanion(
+      status: const drift.Value('completed'),
+      completedAt: drift.Value(now),
+      needsSync: const drift.Value(true),
+      updatedAt: drift.Value(now),
+    ));
 
-  final qId = _uuid.v4();
-  final subjectProfileId = enrollment.subjectProfileId;
-  await db.into(db.completionQuestionnairesTable).insert(
-        CompletionQuestionnairesTableCompanion.insert(
-          id: qId,
-          enrollmentId: enrollment.id,
-          response: true,
-          result: 'passed',
-          subjectProfileId: drift.Value(subjectProfileId),
-          submittedAt: now,
-        ),
+    final qId = _uuid.v4();
+    final subjectProfileId = enrollment.subjectProfileId;
+    await db.into(db.completionQuestionnairesTable).insert(
+          CompletionQuestionnairesTableCompanion.insert(
+            id: qId,
+            enrollmentId: enrollment.id,
+            response: true,
+            result: 'passed',
+            subjectProfileId: drift.Value(subjectProfileId),
+            submittedAt: now,
+          ),
+        );
+
+    await syncService.enqueueUpsert(
+      tableName: 'enrollments',
+      recordId: enrollment.id,
+      payload: {
+        'id': enrollment.id,
+        'status': 'completed',
+        'completed_at': now.toIso8601String(),
+      },
+    );
+    await syncService.enqueueUpsert(
+      tableName: 'completion_questionnaires',
+      recordId: qId,
+      payload: {
+        'id': qId,
+        'enrollment_id': enrollment.id,
+        'attempt_number': 1,
+        'response': true,
+        'result': 'passed',
+        'submitted_at': now.toIso8601String(),
+        if (subjectProfileId != null) 'subject_profile_id': subjectProfileId,
+      },
+    );
+
+    if (enrollment.packageId == 'moro' &&
+        enrollment.precedingEnrollmentId != null) {
+      final resumed = await _resumeInterruptedEnrollmentAfterMoro(
+        db: db,
+        syncService: syncService,
+        enrollmentId: enrollment.precedingEnrollmentId!,
+        now: now,
       );
+      return PackageCompletionResult(
+        resumedPackageId: resumed?.packageId,
+        wasMoroReactivation: resumed != null,
+      );
+    }
 
-  await syncService.enqueueUpsert(
-    tableName: 'enrollments',
-    recordId: enrollment.id,
-    payload: {
-      'id': enrollment.id,
-      'status': 'completed',
-      'completed_at': now.toIso8601String(),
-    },
-  );
-  await syncService.enqueueUpsert(
-    tableName: 'completion_questionnaires',
-    recordId: qId,
-    payload: {
-      'id': qId,
-      'enrollment_id': enrollment.id,
-      'attempt_number': 1,
-      'response': true,
-      'result': 'passed',
-      'submitted_at': now.toIso8601String(),
-      if (subjectProfileId != null) 'subject_profile_id': subjectProfileId,
-    },
-  );
-
-  if (enrollment.packageId == 'moro' &&
-      enrollment.precedingEnrollmentId != null) {
-    final resumed = await _resumeInterruptedEnrollmentAfterMoro(
-      db: db,
-      syncService: syncService,
-      enrollmentId: enrollment.precedingEnrollmentId!,
-      now: now,
-    );
     return PackageCompletionResult(
-      resumedPackageId: resumed?.packageId,
-      wasMoroReactivation: resumed != null,
+      nextPackageId: nextPackageIdAfter(enrollment.packageId),
     );
-  }
-
-  return PackageCompletionResult(
-    nextPackageId: nextPackageIdAfter(enrollment.packageId),
-  );
+  });
 }
 
 // ── Extend enrollment by N days (questionnaire not yet passed) ────────────────
@@ -436,61 +443,63 @@ Future<void> extendEnrollment({
   required EnrollmentsTableData enrollment,
   int days = 7,
 }) async {
-  final now = DateTime.now();
-  final newTarget = enrollment.targetCompletionDate.add(Duration(days: days));
+  return db.transaction(() async {
+    final now = DateTime.now();
+    final newTarget = enrollment.targetCompletionDate.add(Duration(days: days));
 
-  await (db.update(db.enrollmentsTable)
-        ..where((t) => t.id.equals(enrollment.id)))
-      .write(EnrollmentsTableCompanion(
-    targetCompletionDate: drift.Value(newTarget),
-    needsSync: const drift.Value(true),
-    updatedAt: drift.Value(now),
-  ));
+    await (db.update(db.enrollmentsTable)
+          ..where((t) => t.id.equals(enrollment.id)))
+        .write(EnrollmentsTableCompanion(
+      targetCompletionDate: drift.Value(newTarget),
+      needsSync: const drift.Value(true),
+      updatedAt: drift.Value(now),
+    ));
 
-  final qId = _uuid.v4();
-  // Record the "not yet" attempt
-  final existing = await (db.select(db.completionQuestionnairesTable)
-        ..where((t) => t.enrollmentId.equals(enrollment.id))
-        ..orderBy([(t) => drift.OrderingTerm.desc(t.submittedAt)])
-        ..limit(1))
-      .getSingleOrNull();
-  final attempt = (existing?.attemptNumber ?? 0) + 1;
+    final qId = _uuid.v4();
+    // Record the "not yet" attempt
+    final existing = await (db.select(db.completionQuestionnairesTable)
+          ..where((t) => t.enrollmentId.equals(enrollment.id))
+          ..orderBy([(t) => drift.OrderingTerm.desc(t.submittedAt)])
+          ..limit(1))
+        .getSingleOrNull();
+    final attempt = (existing?.attemptNumber ?? 0) + 1;
 
-  final extendSubjectProfileId = enrollment.subjectProfileId;
-  await db.into(db.completionQuestionnairesTable).insert(
-        CompletionQuestionnairesTableCompanion.insert(
-          id: qId,
-          enrollmentId: enrollment.id,
-          attemptNumber: drift.Value(attempt),
-          response: false,
-          result: 'extend',
-          subjectProfileId: drift.Value(extendSubjectProfileId),
-          submittedAt: now,
-        ),
-      );
+    final extendSubjectProfileId = enrollment.subjectProfileId;
+    await db.into(db.completionQuestionnairesTable).insert(
+          CompletionQuestionnairesTableCompanion.insert(
+            id: qId,
+            enrollmentId: enrollment.id,
+            attemptNumber: drift.Value(attempt),
+            response: false,
+            result: 'extend',
+            subjectProfileId: drift.Value(extendSubjectProfileId),
+            submittedAt: now,
+          ),
+        );
 
-  await syncService.enqueueUpsert(
-    tableName: 'enrollments',
-    recordId: enrollment.id,
-    payload: {
-      'id': enrollment.id,
-      'target_completion_date': newTarget.toIso8601String().substring(0, 10),
-    },
-  );
-  await syncService.enqueueUpsert(
-    tableName: 'completion_questionnaires',
-    recordId: qId,
-    payload: {
-      'id': qId,
-      'enrollment_id': enrollment.id,
-      'attempt_number': attempt,
-      'response': false,
-      'result': 'extend',
-      'submitted_at': now.toIso8601String(),
-      if (extendSubjectProfileId != null)
-        'subject_profile_id': extendSubjectProfileId,
-    },
-  );
+    await syncService.enqueueUpsert(
+      tableName: 'enrollments',
+      recordId: enrollment.id,
+      payload: {
+        'id': enrollment.id,
+        'target_completion_date': newTarget.toIso8601String().substring(0, 10),
+      },
+    );
+    await syncService.enqueueUpsert(
+      tableName: 'completion_questionnaires',
+      recordId: qId,
+      payload: {
+        'id': qId,
+        'enrollment_id': enrollment.id,
+        'attempt_number': attempt,
+        'response': false,
+        'result': 'extend',
+        'submitted_at': now.toIso8601String(),
+        if (extendSubjectProfileId != null)
+          'subject_profile_id': extendSubjectProfileId,
+      },
+    );
+  });
 }
 
 Future<EnrollmentsTableData?> _resumeInterruptedEnrollmentAfterMoro({
@@ -499,56 +508,58 @@ Future<EnrollmentsTableData?> _resumeInterruptedEnrollmentAfterMoro({
   required String enrollmentId,
   required DateTime now,
 }) async {
-  final interrupted = await (db.select(db.enrollmentsTable)
-        ..where((t) => t.id.equals(enrollmentId))
-        ..limit(1))
-      .getSingleOrNull();
-  if (interrupted == null) return null;
+  return db.transaction(() async {
+    final interrupted = await (db.select(db.enrollmentsTable)
+          ..where((t) => t.id.equals(enrollmentId))
+          ..limit(1))
+        .getSingleOrNull();
+    if (interrupted == null) return null;
 
-  final start = DateTime(now.year, now.month, now.day);
-  final target = start.add(
-    Duration(days: interrupted.assignedDurationWeeks * 7),
-  );
-
-  await (db.update(db.enrollmentsTable)
-        ..where((t) => t.id.equals(interrupted.id)))
-      .write(EnrollmentsTableCompanion(
-    status: const drift.Value('active'),
-    startDate: drift.Value(start),
-    targetCompletionDate: drift.Value(target),
-    pausedAt: const drift.Value(null),
-    completedAt: const drift.Value(null),
-    needsSync: const drift.Value(true),
-    updatedAt: drift.Value(now),
-  ));
-
-  final progress = await (db.select(db.progressEntriesTable)
-        ..where((t) => t.enrollmentId.equals(interrupted.id))
-        ..limit(1))
-      .getSingleOrNull();
-  if (progress != null) {
-    await _resetProgressToDay1(
-      db: db,
-      syncService: syncService,
-      progress: progress,
-      now: now,
+    final start = DateTime(now.year, now.month, now.day);
+    final target = start.add(
+      Duration(days: interrupted.assignedDurationWeeks * 7),
     );
-  }
 
-  await syncService.enqueueUpsert(
-    tableName: 'enrollments',
-    recordId: interrupted.id,
-    payload: {
-      'id': interrupted.id,
-      'status': 'active',
-      'start_date': start.toIso8601String().substring(0, 10),
-      'target_completion_date': target.toIso8601String().substring(0, 10),
-      'paused_at': null,
-      'completed_at': null,
-    },
-  );
+    await (db.update(db.enrollmentsTable)
+          ..where((t) => t.id.equals(interrupted.id)))
+        .write(EnrollmentsTableCompanion(
+      status: const drift.Value('active'),
+      startDate: drift.Value(start),
+      targetCompletionDate: drift.Value(target),
+      pausedAt: const drift.Value(null),
+      completedAt: const drift.Value(null),
+      needsSync: const drift.Value(true),
+      updatedAt: drift.Value(now),
+    ));
 
-  return interrupted;
+    final progress = await (db.select(db.progressEntriesTable)
+          ..where((t) => t.enrollmentId.equals(interrupted.id))
+          ..limit(1))
+        .getSingleOrNull();
+    if (progress != null) {
+      await _resetProgressToDay1(
+        db: db,
+        syncService: syncService,
+        progress: progress,
+        now: now,
+      );
+    }
+
+    await syncService.enqueueUpsert(
+      tableName: 'enrollments',
+      recordId: interrupted.id,
+      payload: {
+        'id': interrupted.id,
+        'status': 'active',
+        'start_date': start.toIso8601String().substring(0, 10),
+        'target_completion_date': target.toIso8601String().substring(0, 10),
+        'paused_at': null,
+        'completed_at': null,
+      },
+    );
+
+    return interrupted;
+  });
 }
 
 Future<void> _resetProgressToDay1({
@@ -557,36 +568,38 @@ Future<void> _resetProgressToDay1({
   required ProgressEntriesTableData progress,
   required DateTime now,
 }) async {
-  await (db.update(db.progressEntriesTable)
-        ..where((t) => t.id.equals(progress.id)))
-      .write(ProgressEntriesTableCompanion(
-    currentDay: const drift.Value(1),
-    lastActivityDate: const drift.Value(null),
-    consecutiveInactiveDays: const drift.Value(0),
-    dailyStreak: const drift.Value(0),
-    weeklyStreak: const drift.Value(0),
-    trainingsThisWeek: const drift.Value(0),
-    lastTrainingWeekStart: const drift.Value(null),
-    totalSessionsSinceDisclaimer: const drift.Value(0),
-    needsSync: const drift.Value(true),
-    updatedAt: drift.Value(now),
-  ));
+  return db.transaction(() async {
+    await (db.update(db.progressEntriesTable)
+          ..where((t) => t.id.equals(progress.id)))
+        .write(ProgressEntriesTableCompanion(
+      currentDay: const drift.Value(1),
+      lastActivityDate: const drift.Value(null),
+      consecutiveInactiveDays: const drift.Value(0),
+      dailyStreak: const drift.Value(0),
+      weeklyStreak: const drift.Value(0),
+      trainingsThisWeek: const drift.Value(0),
+      lastTrainingWeekStart: const drift.Value(null),
+      totalSessionsSinceDisclaimer: const drift.Value(0),
+      needsSync: const drift.Value(true),
+      updatedAt: drift.Value(now),
+    ));
 
-  await syncService.enqueueUpsert(
-    tableName: 'progress_entries',
-    recordId: progress.id,
-    payload: {
-      'id': progress.id,
-      'user_id': progress.userId,
-      'enrollment_id': progress.enrollmentId,
-      'current_day': 1,
-      'last_activity_date': null,
-      'daily_streak': 0,
-      'weekly_streak': 0,
-      'trainings_this_week': 0,
-      'total_sessions_since_disclaimer': 0,
-    },
-  );
+    await syncService.enqueueUpsert(
+      tableName: 'progress_entries',
+      recordId: progress.id,
+      payload: {
+        'id': progress.id,
+        'user_id': progress.userId,
+        'enrollment_id': progress.enrollmentId,
+        'current_day': 1,
+        'last_activity_date': null,
+        'daily_streak': 0,
+        'weekly_streak': 0,
+        'trainings_this_week': 0,
+        'total_sessions_since_disclaimer': 0,
+      },
+    );
+  });
 }
 
 Future<String> restartMoroFromCurrentPackage({
@@ -594,26 +607,15 @@ Future<String> restartMoroFromCurrentPackage({
   required SyncService syncService,
   required EnrollmentsTableData currentEnrollment,
 }) async {
-  if (currentEnrollment.packageId == 'moro') return currentEnrollment.id;
+  return db.transaction(() async {
+    if (currentEnrollment.packageId == 'moro') return currentEnrollment.id;
 
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
-  final target = today.add(const Duration(days: 28));
-  final moroEnrollmentId = _uuid.v4();
-  final progressId = _uuid.v4();
-  final existingActiveMoro = await (db.select(db.enrollmentsTable)
-        ..where((t) =>
-            t.userId.equals(currentEnrollment.userId) &
-            (currentEnrollment.subjectProfileId == null
-                ? t.subjectProfileId.isNull()
-                : t.subjectProfileId
-                    .equals(currentEnrollment.subjectProfileId!)) &
-            t.packageId.equals('moro') &
-            t.status.equals('active')))
-      .get();
-
-  await db.transaction(() async {
-    await (db.update(db.enrollmentsTable)
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final target = today.add(const Duration(days: 28));
+    final moroEnrollmentId = _uuid.v4();
+    final progressId = _uuid.v4();
+    final existingActiveMoro = await (db.select(db.enrollmentsTable)
           ..where((t) =>
               t.userId.equals(currentEnrollment.userId) &
               (currentEnrollment.subjectProfileId == null
@@ -622,93 +624,106 @@ Future<String> restartMoroFromCurrentPackage({
                       .equals(currentEnrollment.subjectProfileId!)) &
               t.packageId.equals('moro') &
               t.status.equals('active')))
-        .write(EnrollmentsTableCompanion(
-      status: const drift.Value('abandoned'),
-      needsSync: const drift.Value(true),
-      updatedAt: drift.Value(now),
-    ));
+        .get();
 
-    await (db.update(db.enrollmentsTable)
-          ..where((t) => t.id.equals(currentEnrollment.id)))
-        .write(EnrollmentsTableCompanion(
-      status: const drift.Value('paused'),
-      pausedAt: drift.Value(now),
-      needsSync: const drift.Value(true),
-      updatedAt: drift.Value(now),
-    ));
+    await db.transaction(() async {
+      await (db.update(db.enrollmentsTable)
+            ..where((t) =>
+                t.userId.equals(currentEnrollment.userId) &
+                (currentEnrollment.subjectProfileId == null
+                    ? t.subjectProfileId.isNull()
+                    : t.subjectProfileId
+                        .equals(currentEnrollment.subjectProfileId!)) &
+                t.packageId.equals('moro') &
+                t.status.equals('active')))
+          .write(EnrollmentsTableCompanion(
+        status: const drift.Value('abandoned'),
+        needsSync: const drift.Value(true),
+        updatedAt: drift.Value(now),
+      ));
 
-    await db.into(db.enrollmentsTable).insert(
-          EnrollmentsTableCompanion.insert(
-            id: moroEnrollmentId,
-            userId: currentEnrollment.userId,
-            subjectProfileId: drift.Value(currentEnrollment.subjectProfileId),
-            packageId: 'moro',
-            assignedDurationWeeks: 4,
-            startDate: today,
-            targetCompletionDate: target,
-            precedingEnrollmentId: drift.Value(currentEnrollment.id),
-          ),
-        );
+      await (db.update(db.enrollmentsTable)
+            ..where((t) => t.id.equals(currentEnrollment.id)))
+          .write(EnrollmentsTableCompanion(
+        status: const drift.Value('paused'),
+        pausedAt: drift.Value(now),
+        needsSync: const drift.Value(true),
+        updatedAt: drift.Value(now),
+      ));
 
-    await db.into(db.progressEntriesTable).insert(
-          ProgressEntriesTableCompanion.insert(
-            id: progressId,
-            userId: currentEnrollment.userId,
-            subjectProfileId: drift.Value(currentEnrollment.subjectProfileId),
-            enrollmentId: moroEnrollmentId,
-          ),
-        );
-  });
+      await db.into(db.enrollmentsTable).insert(
+            EnrollmentsTableCompanion.insert(
+              id: moroEnrollmentId,
+              userId: currentEnrollment.userId,
+              subjectProfileId: drift.Value(currentEnrollment.subjectProfileId),
+              packageId: 'moro',
+              assignedDurationWeeks: 4,
+              startDate: today,
+              targetCompletionDate: target,
+              precedingEnrollmentId: drift.Value(currentEnrollment.id),
+            ),
+          );
 
-  await syncService.enqueueUpsert(
-    tableName: 'enrollments',
-    recordId: currentEnrollment.id,
-    payload: {
-      'id': currentEnrollment.id,
-      'status': 'paused',
-      'paused_at': now.toIso8601String(),
-    },
-  );
-  for (final oldMoro in existingActiveMoro) {
+      await db.into(db.progressEntriesTable).insert(
+            ProgressEntriesTableCompanion.insert(
+              id: progressId,
+              userId: currentEnrollment.userId,
+              subjectProfileId: drift.Value(currentEnrollment.subjectProfileId),
+              enrollmentId: moroEnrollmentId,
+            ),
+          );
+    });
+
     await syncService.enqueueUpsert(
       tableName: 'enrollments',
-      recordId: oldMoro.id,
+      recordId: currentEnrollment.id,
       payload: {
-        'id': oldMoro.id,
-        'status': 'abandoned',
+        'id': currentEnrollment.id,
+        'status': 'paused',
+        'paused_at': now.toIso8601String(),
       },
     );
-  }
-  await syncService.enqueueUpsert(
-    tableName: 'enrollments',
-    recordId: moroEnrollmentId,
-    payload: {
-      'id': moroEnrollmentId,
-      'user_id': currentEnrollment.userId,
-      if (currentEnrollment.subjectProfileId != null)
-        'subject_profile_id': currentEnrollment.subjectProfileId,
-      'package_id': 'moro',
-      'status': 'active',
-      'assigned_duration_weeks': 4,
-      'start_date': today.toIso8601String().substring(0, 10),
-      'target_completion_date': target.toIso8601String().substring(0, 10),
-      'preceding_enrollment_id': currentEnrollment.id,
-    },
-  );
-  await syncService.enqueueUpsert(
-    tableName: 'progress_entries',
-    recordId: progressId,
-    payload: {
-      'id': progressId,
-      'user_id': currentEnrollment.userId,
-      if (currentEnrollment.subjectProfileId != null)
-        'subject_profile_id': currentEnrollment.subjectProfileId,
-      'enrollment_id': moroEnrollmentId,
-      'current_day': 1,
-    },
-  );
+    for (final oldMoro in existingActiveMoro) {
+      await syncService.enqueueUpsert(
+        tableName: 'enrollments',
+        recordId: oldMoro.id,
+        payload: {
+          'id': oldMoro.id,
+          'status': 'abandoned',
+        },
+      );
+    }
+    await syncService.enqueueUpsert(
+      tableName: 'enrollments',
+      recordId: moroEnrollmentId,
+      payload: {
+        'id': moroEnrollmentId,
+        'user_id': currentEnrollment.userId,
+        if (currentEnrollment.subjectProfileId != null)
+          'subject_profile_id': currentEnrollment.subjectProfileId,
+        'package_id': 'moro',
+        'status': 'active',
+        'assigned_duration_weeks': 4,
+        'start_date': today.toIso8601String().substring(0, 10),
+        'target_completion_date': target.toIso8601String().substring(0, 10),
+        'preceding_enrollment_id': currentEnrollment.id,
+      },
+    );
+    await syncService.enqueueUpsert(
+      tableName: 'progress_entries',
+      recordId: progressId,
+      payload: {
+        'id': progressId,
+        'user_id': currentEnrollment.userId,
+        if (currentEnrollment.subjectProfileId != null)
+          'subject_profile_id': currentEnrollment.subjectProfileId,
+        'enrollment_id': moroEnrollmentId,
+        'current_day': 1,
+      },
+    );
 
-  return moroEnrollmentId;
+    return moroEnrollmentId;
+  });
 }
 
 // ── Save a completed session and update progress ──────────────────────────────
@@ -722,77 +737,84 @@ Future<void> saveCompletedSession({
   String? userId,
   DateTime? now,
 }) async {
-  final resolvedUserId =
-      userId ?? Supabase.instance.client.auth.currentUser?.id;
-  if (resolvedUserId == null) return;
+  return db.transaction(() async {
+    final resolvedUserId =
+        userId ?? Supabase.instance.client.auth.currentUser?.id;
+    if (resolvedUserId == null) return;
 
-  final timestamp = now ?? DateTime.now();
-  final today = DateTime(timestamp.year, timestamp.month, timestamp.day);
-  final sessionId = _uuid.v4();
+    final timestamp = now ?? DateTime.now();
+    final today = DateTime(timestamp.year, timestamp.month, timestamp.day);
+    final sessionId = _uuid.v4();
 
-  // Save session
-  await db.into(db.trainingSessionsTable).insert(
-        TrainingSessionsTableCompanion.insert(
-          id: sessionId,
-          userId: resolvedUserId,
-          subjectProfileId: drift.Value(enrollment.subjectProfileId),
-          enrollmentId: enrollment.id,
-          sessionDate: today,
-          dayNumber: progress.currentDay,
-          completedExerciseIds: jsonEncode(completedExerciseIds),
-          isCompleted: const drift.Value(true),
-          completedAt: drift.Value(timestamp),
-        ),
-      );
+    // Re-read inside the transaction: callers may hold yesterday's progress or
+    // submit the completion twice before a provider refreshes.
+    final currentProgress = await (db.select(db.progressEntriesTable)
+          ..where((t) => t.id.equals(progress.id)))
+        .getSingle();
+    // Idempotency: skip if already recorded today
+    final lastActivity = currentProgress.lastActivityDate;
+    final isToday = lastActivity != null &&
+        lastActivity.year == today.year &&
+        lastActivity.month == today.month &&
+        lastActivity.day == today.day;
+    if (isToday) return;
 
-  // Idempotency: skip if already recorded today
-  final lastActivity = progress.lastActivityDate;
-  final isToday = lastActivity != null &&
-      lastActivity.year == today.year &&
-      lastActivity.month == today.month &&
-      lastActivity.day == today.day;
-  if (isToday) return;
+    // Save session
+    await db.into(db.trainingSessionsTable).insert(
+          TrainingSessionsTableCompanion.insert(
+            id: sessionId,
+            userId: resolvedUserId,
+            subjectProfileId: drift.Value(enrollment.subjectProfileId),
+            enrollmentId: enrollment.id,
+            sessionDate: today,
+            dayNumber: currentProgress.currentDay,
+            completedExerciseIds: jsonEncode(completedExerciseIds),
+            isCompleted: const drift.Value(true),
+            completedAt: drift.Value(timestamp),
+          ),
+        );
 
-  await (db.update(db.progressEntriesTable)
-        ..where((t) => t.id.equals(progress.id)))
-      .write(ProgressEntriesTableCompanion(
-    currentDay: drift.Value(progress.currentDay + 1),
-    lastActivityDate: drift.Value(today),
-    totalSessionsSinceDisclaimer:
-        drift.Value(progress.totalSessionsSinceDisclaimer + 1),
-    needsSync: const drift.Value(true),
-    updatedAt: drift.Value(timestamp),
-  ));
+    await (db.update(db.progressEntriesTable)
+          ..where((t) => t.id.equals(progress.id)))
+        .write(ProgressEntriesTableCompanion(
+      currentDay: drift.Value(currentProgress.currentDay + 1),
+      lastActivityDate: drift.Value(today),
+      totalSessionsSinceDisclaimer:
+          drift.Value(currentProgress.totalSessionsSinceDisclaimer + 1),
+      needsSync: const drift.Value(true),
+      updatedAt: drift.Value(timestamp),
+    ));
 
-  await syncService?.enqueueUpsert(
-    tableName: 'training_sessions',
-    recordId: sessionId,
-    payload: {
-      'id': sessionId,
-      'user_id': resolvedUserId,
-      if (enrollment.subjectProfileId != null)
-        'subject_profile_id': enrollment.subjectProfileId,
-      'enrollment_id': enrollment.id,
-      'session_date': today.toIso8601String().substring(0, 10),
-      'day_number': progress.currentDay,
-      'completed_exercise_ids': completedExerciseIds,
-      'is_completed': true,
-      'completed_at': timestamp.toIso8601String(),
-    },
-  );
-  await syncService?.enqueueUpsert(
-    tableName: 'progress_entries',
-    recordId: progress.id,
-    payload: {
-      'id': progress.id,
-      'user_id': resolvedUserId,
-      if (progress.subjectProfileId != null)
-        'subject_profile_id': progress.subjectProfileId,
-      'enrollment_id': enrollment.id,
-      'current_day': progress.currentDay + 1,
-      'last_activity_date': today.toIso8601String().substring(0, 10),
-    },
-  );
+    await syncService?.enqueueUpsert(
+      tableName: 'training_sessions',
+      recordId: sessionId,
+      payload: {
+        'id': sessionId,
+        'user_id': resolvedUserId,
+        if (enrollment.subjectProfileId != null)
+          'subject_profile_id': enrollment.subjectProfileId,
+        'enrollment_id': enrollment.id,
+        'session_date': today.toIso8601String().substring(0, 10),
+        'day_number': currentProgress.currentDay,
+        'completed_exercise_ids': completedExerciseIds,
+        'is_completed': true,
+        'completed_at': timestamp.toIso8601String(),
+      },
+    );
+    await syncService?.enqueueUpsert(
+      tableName: 'progress_entries',
+      recordId: progress.id,
+      payload: {
+        'id': progress.id,
+        'user_id': resolvedUserId,
+        if (progress.subjectProfileId != null)
+          'subject_profile_id': progress.subjectProfileId,
+        'enrollment_id': enrollment.id,
+        'current_day': currentProgress.currentDay + 1,
+        'last_activity_date': today.toIso8601String().substring(0, 10),
+      },
+    );
+  });
 }
 
 Future<void> saveVorrundeRegulationSession({
@@ -802,71 +824,73 @@ Future<void> saveVorrundeRegulationSession({
   required ProgressEntriesTableData progress,
   required List<String> completedExerciseIds,
 }) async {
-  final userId = Supabase.instance.client.auth.currentUser?.id;
-  if (userId == null) return;
+  return db.transaction(() async {
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+    if (userId == null) return;
 
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
-  final sessionId = _uuid.v4();
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final sessionId = _uuid.v4();
 
-  await db.into(db.trainingSessionsTable).insert(
-        TrainingSessionsTableCompanion.insert(
-          id: sessionId,
-          userId: userId,
-          subjectProfileId: drift.Value(enrollment.subjectProfileId),
-          enrollmentId: enrollment.id,
-          sessionDate: today,
-          dayNumber: 0,
-          completedExerciseIds: jsonEncode(completedExerciseIds),
-          isCompleted: const drift.Value(true),
-          completedAt: drift.Value(now),
-        ),
+    await db.into(db.trainingSessionsTable).insert(
+          TrainingSessionsTableCompanion.insert(
+            id: sessionId,
+            userId: userId,
+            subjectProfileId: drift.Value(enrollment.subjectProfileId),
+            enrollmentId: enrollment.id,
+            sessionDate: today,
+            dayNumber: 0,
+            completedExerciseIds: jsonEncode(completedExerciseIds),
+            isCompleted: const drift.Value(true),
+            completedAt: drift.Value(now),
+          ),
+        );
+
+    final lastActivity = progress.lastActivityDate;
+    final isToday = lastActivity != null &&
+        lastActivity.year == today.year &&
+        lastActivity.month == today.month &&
+        lastActivity.day == today.day;
+    if (!isToday) {
+      await (db.update(db.progressEntriesTable)
+            ..where((t) => t.id.equals(progress.id)))
+          .write(ProgressEntriesTableCompanion(
+        lastActivityDate: drift.Value(today),
+        totalSessionsSinceDisclaimer:
+            drift.Value(progress.totalSessionsSinceDisclaimer + 1),
+        needsSync: const drift.Value(true),
+        updatedAt: drift.Value(now),
+      ));
+
+      await syncService.enqueueUpsert(
+        tableName: 'progress_entries',
+        recordId: progress.id,
+        payload: {
+          'id': progress.id,
+          'user_id': userId,
+          if (progress.subjectProfileId != null)
+            'subject_profile_id': progress.subjectProfileId,
+          'enrollment_id': enrollment.id,
+          'last_activity_date': today.toIso8601String().substring(0, 10),
+        },
       );
-
-  final lastActivity = progress.lastActivityDate;
-  final isToday = lastActivity != null &&
-      lastActivity.year == today.year &&
-      lastActivity.month == today.month &&
-      lastActivity.day == today.day;
-  if (!isToday) {
-    await (db.update(db.progressEntriesTable)
-          ..where((t) => t.id.equals(progress.id)))
-        .write(ProgressEntriesTableCompanion(
-      lastActivityDate: drift.Value(today),
-      totalSessionsSinceDisclaimer:
-          drift.Value(progress.totalSessionsSinceDisclaimer + 1),
-      needsSync: const drift.Value(true),
-      updatedAt: drift.Value(now),
-    ));
+    }
 
     await syncService.enqueueUpsert(
-      tableName: 'progress_entries',
-      recordId: progress.id,
+      tableName: 'training_sessions',
+      recordId: sessionId,
       payload: {
-        'id': progress.id,
+        'id': sessionId,
         'user_id': userId,
-        if (progress.subjectProfileId != null)
-          'subject_profile_id': progress.subjectProfileId,
+        if (enrollment.subjectProfileId != null)
+          'subject_profile_id': enrollment.subjectProfileId,
         'enrollment_id': enrollment.id,
-        'last_activity_date': today.toIso8601String().substring(0, 10),
+        'session_date': today.toIso8601String().substring(0, 10),
+        'day_number': 0,
+        'completed_exercise_ids': completedExerciseIds,
+        'is_completed': true,
+        'completed_at': now.toIso8601String(),
       },
     );
-  }
-
-  await syncService.enqueueUpsert(
-    tableName: 'training_sessions',
-    recordId: sessionId,
-    payload: {
-      'id': sessionId,
-      'user_id': userId,
-      if (enrollment.subjectProfileId != null)
-        'subject_profile_id': enrollment.subjectProfileId,
-      'enrollment_id': enrollment.id,
-      'session_date': today.toIso8601String().substring(0, 10),
-      'day_number': 0,
-      'completed_exercise_ids': completedExerciseIds,
-      'is_completed': true,
-      'completed_at': now.toIso8601String(),
-    },
-  );
+  });
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer' as dev;
 import 'dart:io';
 
@@ -48,6 +49,8 @@ class Bootstrap {
   static Future<Bootstrap> initialize({
     required String envFile,
     required AppEnvironment environment,
+    AppConfig? configOverride,
+    bool enableRemoteServices = true,
   }) async {
     dev.log('[bootstrap] ensureInitialized', name: 'cj');
     WidgetsFlutterBinding.ensureInitialized();
@@ -55,8 +58,10 @@ class Bootstrap {
     // Set up debug file for offline crash diagnosis
     try {
       final dir = await getApplicationDocumentsDirectory();
-      _debugFile = File('${dir.path}/bootstrap_debug.txt');
-      await _debugFile!.writeAsString(
+      _debugFile = environment == AppEnvironment.development
+          ? File('${dir.path}/bootstrap_debug.txt')
+          : null;
+      await _debugFile?.writeAsString(
         '=== BOOTSTRAP START ${DateTime.now()} ===\n',
       );
     } catch (_) {}
@@ -67,22 +72,27 @@ class Bootstrap {
     await dotenv.load(fileName: envFile);
     _dbg('Environment file loaded');
 
-    final config = AppConfig(
-      environment: environment,
-      supabaseUrl: dotenv.env['SUPABASE_URL']!,
-      supabaseAnonKey: dotenv.env['SUPABASE_ANON_KEY']!,
-      revenueCatApiKey: dotenv.env['REVENUECAT_API_KEY'] ?? '',
-      agoraAppId: dotenv.env['AGORA_APP_ID'] ?? '',
-      googleWebClientId: dotenv.env['GOOGLE_WEB_CLIENT_ID'] ?? '',
-      googleIosClientId: dotenv.env['GOOGLE_IOS_CLIENT_ID'] ?? '',
-    );
+    final config = configOverride ??
+        AppConfig(
+          environment: environment,
+          supabaseUrl: dotenv.env['SUPABASE_URL']!,
+          supabaseAnonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+          revenueCatApiKey: dotenv.env['REVENUECAT_API_KEY'] ?? '',
+          agoraAppId: dotenv.env['AGORA_APP_ID'] ?? '',
+          googleWebClientId: dotenv.env['GOOGLE_WEB_CLIENT_ID'] ?? '',
+          googleIosClientId: dotenv.env['GOOGLE_IOS_CLIENT_ID'] ?? '',
+        );
     _dbg('AppConfig created (Supabase URL=${config.supabaseUrl})');
 
     // Crash-Reporting (T15): no-op ohne SENTRY_DSN in der Env-Datei.
     // Früh initialisieren, damit Fehler der folgenden Init-Schritte
     // mitgemeldet werden; darf den Start selbst nie blockieren.
     _dbg('SentryService initialization started');
-    await SentryService.init(environment: environment);
+    if (enableRemoteServices)
+      await SentryService.init(environment: environment);
+    appLogger.reportError = (error, stack) {
+      unawaited(SentryService.captureException(error, stack));
+    };
     _dbg(
       'SentryService initialization completed '
       '(active=${SentryService.isActive})',
@@ -113,7 +123,7 @@ class Bootstrap {
     try {
       pendingInitialDeepLink = await AppLinks().getInitialLink();
       if (pendingInitialDeepLink != null) {
-        _dbg('Captured initial deep link: $pendingInitialDeepLink');
+        _dbg('Captured initial deep link');
       }
     } catch (e) {
       _dbg('Initial deep link capture failed: $e');
@@ -122,8 +132,8 @@ class Bootstrap {
     // Initialize local database.
     //
     // AppDatabase.open() uses getApplicationSupportDirectory() — the correct
-    // location for app data on all platforms. Falls back to in-memory only if
-    // the directory truly cannot be obtained (should never happen in production).
+    // location for app data on all platforms. Storage failures reach the
+    // startup error screen; no user data is silently accepted in memory.
     _dbg('AppDatabase opening started');
     final database = await AppDatabase.open();
     _dbg('AppDatabase opening completed');
@@ -189,9 +199,10 @@ class Bootstrap {
     // sign-in from app.dart, because auth may not be ready during cold start.
     _dbg('PushNotificationService initialization started');
     try {
-      await PushNotificationService.instance.initialize(
-        environment: environment,
-      );
+      if (enableRemoteServices)
+        await PushNotificationService.instance.initialize(
+          environment: environment,
+        );
       _dbg('PushNotificationService initialization completed');
     } catch (e) {
       _dbg('PushNotificationService initialization failed: $e');

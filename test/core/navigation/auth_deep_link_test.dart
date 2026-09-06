@@ -3,6 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('classifyAuthDeepLink', () {
+    test('rejects foreign origins, plaintext, userinfo and unexpected ports',
+        () {
+      for (final url in [
+        'https://attacker.invalid/auth/confirm',
+        'http://reflexjourney.app/auth/confirm',
+        'https://name@reflexjourney.app/auth/confirm',
+        'https://reflexjourney.app:8443/auth/reset-password',
+      ]) {
+        expect(classifyAuthDeepLink(Uri.parse(url)), AuthDeepLink.none);
+      }
+    });
     test('matches universal reset-password link (with token_hash)', () {
       final uri = Uri.parse(
           'https://reflexjourney.app/auth/reset-password?token_hash=abc&type=recovery');

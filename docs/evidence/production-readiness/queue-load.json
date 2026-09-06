@@ -1,0 +1,16 @@
+{
+  "scope": "local PostgreSQL queue claims only; no notification delivery",
+  "jobs": 10000,
+  "workers": 16,
+  "batch_size": 100,
+  "duplicate_claims": 0,
+  "unclaimed_jobs": 0,
+  "elapsed_seconds": 1.556,
+  "claims_per_second": 6428.1,
+  "batch_latency_ms_including_process_startup": {
+    "p50": 199.93,
+    "p95": 282.23,
+    "p99": 306.06
+  },
+  "fixture_cleanup_verified": true
+}

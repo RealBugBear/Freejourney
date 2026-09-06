@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -22,12 +25,13 @@ class SentryService {
   SentryService._();
 
   static bool _active = false;
+  static bool _handlersInstalled = false;
 
   /// Ob Sentry initialisiert wurde (DSN vorhanden und Init erfolgreich).
   static bool get isActive => _active;
 
   static Future<void> init({required AppEnvironment environment}) async {
-    final dsn = dotenv.env['SENTRY_DSN'] ?? '';
+    final dsn = dotenv.env['SENTRY_DSN']?.trim() ?? '';
     if (dsn.isEmpty) return;
 
     String release = 'reflexjourney@unknown';
@@ -52,10 +56,37 @@ class SentryService {
           ..beforeBreadcrumb = _beforeBreadcrumb;
       });
       _active = true;
+      installErrorHandlers();
     } catch (e) {
       // Crash-Reporting darf den App-Start nie gefährden.
       appLogger.w('Sentry initialization failed: $e');
     }
+  }
+
+  /// Hooks Flutter framework and async platform errors after successful init.
+  static void installErrorHandlers() {
+    if (!_active || _handlersInstalled) return;
+    _handlersInstalled = true;
+
+    final previousFlutterOnError = FlutterError.onError;
+    FlutterError.onError = (FlutterErrorDetails details) {
+      previousFlutterOnError?.call(details);
+      unawaited(
+        captureException(
+          details.exception,
+          details.stack ?? StackTrace.current,
+        ),
+      );
+    };
+
+    final previousPlatformOnError = PlatformDispatcher.instance.onError;
+    PlatformDispatcher.instance.onError = (error, stack) {
+      unawaited(captureException(error, stack));
+      if (previousPlatformOnError != null) {
+        return previousPlatformOnError(error, stack);
+      }
+      return true;
+    };
   }
 
   /// Defense in depth zu `sendDefaultPii=false`: alles außer Fehler,
@@ -63,11 +94,19 @@ class SentryService {
   /// sentry 8.x final und bleiben ungesetzt, weil kein PII-Autocapture und
   /// keine HTTP-Integration registriert ist — hängt doch je ein Request an,
   /// wird das Event lieber verworfen als geleakt.
+  @visibleForTesting
+  static SentryEvent? filterEventForSend(SentryEvent event) =>
+      _beforeSend(event, Hint());
+
   static SentryEvent? _beforeSend(SentryEvent event, Hint hint) {
     if (event.request != null) return null;
     event.extra?.clear();
     return event;
   }
+
+  @visibleForTesting
+  static Breadcrumb? filterBreadcrumb(Breadcrumb? crumb) =>
+      _beforeBreadcrumb(crumb, Hint());
 
   static Breadcrumb? _beforeBreadcrumb(Breadcrumb? crumb, Hint hint) {
     final type = crumb?.type;

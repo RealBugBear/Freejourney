@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../config/internal_tester.dart';
 import '../../../../bootstrap/providers.dart';
 import '../../../../app.dart';
 import '../../../../core/database/app_database.dart';
@@ -460,8 +461,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final unreadDm = ref.watch(unreadDmCountProvider);
 
     final currentEmail = Supabase.instance.client.auth.currentUser?.email ?? '';
-    // Dev tools are reserved for internal @reflexjourney.de accounts.
-    final showDevTools = currentEmail.endsWith('@reflexjourney.de');
+    // Dev tools: @reflexjourney.de + closed-beta allowlist (internal_tester.dart).
+    final showDevTools = isInternalTesterEmail(currentEmail);
 
     return Scaffold(
       appBar: AppBar(

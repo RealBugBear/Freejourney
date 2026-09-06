@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -12,6 +15,7 @@ class SupabaseAuthRepository implements AuthRepository {
   final String _googleWebClientId;
   final String _googleIosClientId;
   final bool _isIOS;
+  final Future<String?> Function(String hashedNonce) _appleIdentityToken;
   static bool _googleInitialized = false;
 
   SupabaseAuthRepository(
@@ -19,7 +23,9 @@ class SupabaseAuthRepository implements AuthRepository {
     String googleWebClientId = '',
     String googleIosClientId = '',
     bool? isIOSOverride,
-  })  : _googleSignIn = GoogleSignIn.instance,
+    Future<String?> Function(String hashedNonce)? appleIdentityToken,
+  })  : _appleIdentityToken = appleIdentityToken ?? _requestAppleIdentityToken,
+        _googleSignIn = GoogleSignIn.instance,
         _googleWebClientId = googleWebClientId,
         _googleIosClientId = googleIosClientId,
         _isIOS = isIOSOverride ?? Platform.isIOS;
@@ -58,13 +64,9 @@ class SupabaseAuthRepository implements AuthRepository {
   @override
   Future<void> signInWithApple() async {
     try {
-      final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-      );
-      final idToken = credential.identityToken;
+      final rawNonce = _client.auth.generateRawNonce();
+      final hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
+      final idToken = await _appleIdentityToken(hashedNonce);
       if (idToken == null || idToken.isEmpty) {
         throw const AuthException(
           'Apple ID token missing',
@@ -74,6 +76,7 @@ class SupabaseAuthRepository implements AuthRepository {
       await _client.auth.signInWithIdToken(
         provider: OAuthProvider.apple,
         idToken: idToken,
+        nonce: rawNonce,
       );
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code == AuthorizationErrorCode.canceled) {
@@ -82,6 +85,17 @@ class SupabaseAuthRepository implements AuthRepository {
       }
       rethrow;
     }
+  }
+
+  static Future<String?> _requestAppleIdentityToken(String hashedNonce) async {
+    final credential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName
+      ],
+      nonce: hashedNonce,
+    );
+    return credential.identityToken;
   }
 
   @override

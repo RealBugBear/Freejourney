@@ -69,21 +69,18 @@ class PushNotificationService {
       });
 
       FirebaseMessaging.onMessage.listen((message) {
-        appLogger.i(
-          'Foreground push received: '
-          '${message.notification?.title ?? message.data['type'] ?? 'unknown'}',
-        );
+        appLogger.i('Foreground push received');
         unawaited(_showForegroundNotification(message));
       });
 
       FirebaseMessaging.onMessageOpenedApp.listen((message) {
-        appLogger.i('Push opened app: ${message.data}');
+        appLogger.i('Push opened app');
         _openedPayloadController.add(_stringData(message.data));
       });
 
       final initialMessage = await _messaging!.getInitialMessage();
       if (initialMessage != null) {
-        appLogger.i('Push launched app: ${initialMessage.data}');
+        appLogger.i('Push launched app');
         _openedPayloadController.add(_stringData(initialMessage.data));
       }
 

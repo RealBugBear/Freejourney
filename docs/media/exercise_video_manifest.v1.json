@@ -1,0 +1,1210 @@
+{
+  "schema_version": 1,
+  "contract": "docs/media/EXERCISE_VIDEO_DELIVERY.md",
+  "videos": [
+    {
+      "video_id": "moro_ex1_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "moro_ex1",
+      "package_id": "moro",
+      "sequence_number": 1,
+      "content_version": "moro-2026.08.10-v2",
+      "content_review_required": true,
+      "title": {
+        "de": "Moro 5",
+        "en": "Moro 5"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Lege dich auf den Rücken und strecke beide Beine aus.",
+            "Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden."
+          ],
+          "movement": [
+            "Hebe ein Bein in 3 Sekunden an. Lege es auf dem Schienbein des ruhenden Beins ab.",
+            "Halte 1 Sekunde.",
+            "Führe das Bein in 3 Sekunden zurück.",
+            "Wechsle für die nächste Wiederholung die Seite."
+          ],
+          "guide": "Hebe ein Bein an, halte kurz und führe es kontrolliert zurück.",
+          "orientation": "Du hebst abwechselnd ein Bein an und legst es auf dem anderen Schienbein ab."
+        },
+        "en": {
+          "position": [
+            "Lie on your back with both legs extended.",
+            "Rest your arms alongside your body with your palms facing down."
+          ],
+          "movement": [
+            "Raise one leg for 3 seconds. Rest it on the shin of the still leg.",
+            "Hold for 1 second.",
+            "Return the leg for 3 seconds.",
+            "Switch sides before the next repetition."
+          ],
+          "guide": "Raise one leg, hold briefly, and return it with control.",
+          "orientation": "You alternately raise one leg and rest it on the opposite shin."
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 40,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/01_FLR und Moro-Reflex/FRI_App_01_FLR und Moro-Reflex_05.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "moro_ex2_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "moro_ex2",
+      "package_id": "moro",
+      "sequence_number": 2,
+      "content_version": "moro-2026.08.10-v2",
+      "content_review_required": true,
+      "title": {
+        "de": "Moro 3 – Halber Frosch",
+        "en": "Moro 3 – Half Frog"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Lege dich auf den Rücken und strecke beide Beine aus.",
+            "Lass beide Beine gerade und entspannt nebeneinander liegen."
+          ],
+          "movement": [
+            "Lass eine Fußsohle in 3 Sekunden an der Innenseite des anderen Beins zum Körper gleiten.",
+            "Führe den Fuß in 3 Sekunden zurück, bis das Bein wieder gestreckt ist.",
+            "Wechsle für die nächste Wiederholung die Seite."
+          ],
+          "guide": "Lass eine Fußsohle am anderen Bein hoch- und zurückgleiten.",
+          "orientation": "Du lässt abwechselnd einen Fuß am anderen Bein entlanggleiten."
+        },
+        "en": {
+          "position": [
+            "Lie on your back with both legs extended.",
+            "Let both legs rest straight and relaxed beside each other."
+          ],
+          "movement": [
+            "Slide one sole along the inside of the other leg toward your body for 3 seconds.",
+            "Slide the foot back for 3 seconds until the leg is straight again.",
+            "Switch sides before the next repetition."
+          ],
+          "guide": "Slide one sole up and back along the other leg.",
+          "orientation": "You alternately slide one foot along the opposite leg."
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 40,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/01_FLR und Moro-Reflex/FRI_App_01_FLR und Moro-Reflex_03.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "moro_ex3_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "moro_ex3",
+      "package_id": "moro",
+      "sequence_number": 3,
+      "content_version": "moro-2026.08.10-v2",
+      "content_review_required": true,
+      "title": {
+        "de": "Moro 4 – Frosch",
+        "en": "Moro 4 – Frog"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Lege dich auf den Rücken und strecke beide Beine aus.",
+            "Führe die Fußsohlen zusammen."
+          ],
+          "movement": [
+            "Führe beide Füße in 3 Sekunden zum Körper. Lass die Knie nach außen sinken.",
+            "Führe die Füße in 3 Sekunden zurück."
+          ],
+          "guide": "Führe die Füße zum Körper und kontrolliert wieder zurück.",
+          "orientation": "Du führst beide Füße gemeinsam in einer Froschbewegung."
+        },
+        "en": {
+          "position": [
+            "Lie on your back with both legs extended.",
+            "Bring the soles of your feet together."
+          ],
+          "movement": [
+            "Bring both feet toward your body for 3 seconds. Let your knees open outward.",
+            "Return your feet for 3 seconds."
+          ],
+          "guide": "Bring your feet toward your body and return with control.",
+          "orientation": "You move both feet together in a frog movement."
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 35,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/01_FLR und Moro-Reflex/FRI_App_01_FLR und Moro-Reflex_04.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "moro_ex4_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "moro_ex4",
+      "package_id": "moro",
+      "sequence_number": 4,
+      "content_version": "moro-2026.08.10-v2",
+      "content_review_required": true,
+      "title": {
+        "de": "Moro 1",
+        "en": "Moro 1"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Lege dich auf den Rücken. Stelle die Füße auf und halte die Knie zusammen.",
+            "Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden."
+          ],
+          "movement": [
+            "Führe beide Knie in 3 Sekunden nach rechts.",
+            "Führe sie in 3 Sekunden zur Mitte zurück.",
+            "Führe beide Knie in 3 Sekunden nach links.",
+            "Führe sie in 3 Sekunden zur Mitte zurück."
+          ],
+          "guide": "Führe beide Knie kontrolliert nach rechts, zur Mitte, nach links und zurück.",
+          "orientation": "Du bewegst beide Knie kontrolliert von der Mitte zu jeder Seite."
+        },
+        "en": {
+          "position": [
+            "Lie on your back. Place your feet on the floor and keep your knees together.",
+            "Rest your arms alongside your body with your palms facing down."
+          ],
+          "movement": [
+            "Lower both knees to the right for 3 seconds.",
+            "Return them to the centre for 3 seconds.",
+            "Lower both knees to the left for 3 seconds.",
+            "Return them to the centre for 3 seconds."
+          ],
+          "guide": "Move both knees with control to the right, centre, left, and back.",
+          "orientation": "You move both knees with control from the centre to each side."
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 45,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/01_FLR und Moro-Reflex/FRI_App_01_FLR und Moro-Reflex_01.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "moro_ex5_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "moro_ex5",
+      "package_id": "moro",
+      "sequence_number": 5,
+      "content_version": "moro-2026.08.10-v2",
+      "content_review_required": true,
+      "title": {
+        "de": "Moro 2",
+        "en": "Moro 2"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Lege dich auf den Rücken. Stelle die Füße auf und halte die Knie zusammen.",
+            "Lege die Arme lang neben den Körper. Die Handflächen zeigen zum Boden."
+          ],
+          "movement": [
+            "Beginne auszuatmen.",
+            "Rolle Kopf und Oberkörper in 3 Sekunden an. Bewege die Stirn Richtung Knie.",
+            "Halte 1 Sekunde.",
+            "Lege Kopf und Oberkörper in 2 Sekunden ab."
+          ],
+          "guide": "Atme aus, rolle den Oberkörper an und lege ihn kontrolliert ab.",
+          "orientation": "Du rollst Kopf und Oberkörper mit der Ausatmung an."
+        },
+        "en": {
+          "position": [
+            "Lie on your back. Place your feet on the floor and keep your knees together.",
+            "Rest your arms alongside your body with your palms facing down."
+          ],
+          "movement": [
+            "Begin to exhale.",
+            "Curl your head and upper body up for 3 seconds. Move your forehead toward your knees.",
+            "Hold for 1 second.",
+            "Lower your head and upper body for 2 seconds."
+          ],
+          "guide": "Exhale, curl your upper body up, and lower with control.",
+          "orientation": "You curl your head and upper body up as you exhale."
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 30,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/01_FLR und Moro-Reflex/FRI_App_01_FLR und Moro-Reflex_02.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "moro_ex6_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "moro_ex6",
+      "package_id": "moro",
+      "sequence_number": 6,
+      "content_version": "moro-2026.08.10-v2",
+      "content_review_required": true,
+      "title": {
+        "de": "Moro 6 – Isometrischer Gegendruck",
+        "en": "Moro 6 – Isometric Counterpressure"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Lege dich auf den Rücken und winkle beide Beine an.",
+            "Lege die überkreuzten Hände auf Knie oder Schienbeine."
+          ],
+          "movement": [
+            "Ziehe die Beine leicht zum Körper. Halte mit den Händen kontrolliert dagegen und hebe den Kopf etwas an.",
+            "Halte den Gegendruck 7 Sekunden.",
+            "Löse die Spannung für 3 Sekunden.",
+            "Wechsle nach 3 Wiederholungen das Armkreuz. Führe 3 weitere Wiederholungen aus."
+          ],
+          "guide": "Baue leichten Gegendruck auf, halte und löse kontrolliert.",
+          "orientation": "Du hältst einen gleichmäßigen Gegendruck zwischen Beinen und gekreuzten Händen."
+        },
+        "en": {
+          "position": [
+            "Lie on your back with both legs bent.",
+            "Place your crossed hands on your knees or shins."
+          ],
+          "movement": [
+            "Draw your legs gently toward your body. Resist with your hands and lift your head slightly.",
+            "Hold the counterpressure for 7 seconds.",
+            "Release the tension for 3 seconds.",
+            "Switch the arm cross after 3 repetitions. Complete 3 more repetitions."
+          ],
+          "guide": "Build gentle counterpressure, hold, and release with control.",
+          "orientation": "You maintain even counterpressure between your legs and crossed hands."
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 90,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/01_FLR und Moro-Reflex/FRI_App_01_FLR und Moro-Reflex_06.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "moro_ex7_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "moro_ex7",
+      "package_id": "moro",
+      "sequence_number": 7,
+      "content_version": "moro-2026.08.10-v2",
+      "content_review_required": true,
+      "title": {
+        "de": "Moro 7 – Überkreuzter Gegendruck",
+        "en": "Moro 7 – Crossed Counterpressure"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Lege dich auf den Rücken und winkle beide Beine an.",
+            "Lege die überkreuzten Hände auf Oberschenkel oder Knie."
+          ],
+          "movement": [
+            "Ziehe beide Beine zum Körper. Drücke mit den Händen kontrolliert dagegen und hebe den Kopf leicht Richtung Brust.",
+            "Halte den Gegendruck 7 Sekunden.",
+            "Löse die Spannung für 3 Sekunden.",
+            "Wechsle nach 3 Wiederholungen das Armkreuz. Führe 3 weitere Wiederholungen aus."
+          ],
+          "guide": "Lass Beine und Hände kontrolliert gegeneinander arbeiten.",
+          "orientation": "Du arbeitest mit überkreuzten Händen gegen den Zug beider Beine."
+        },
+        "en": {
+          "position": [
+            "Lie on your back with both legs bent.",
+            "Place your crossed hands on your thighs or knees."
+          ],
+          "movement": [
+            "Draw both legs toward your body. Resist with your hands and lift your head slightly toward your chest.",
+            "Hold the counterpressure for 7 seconds.",
+            "Release the tension for 3 seconds.",
+            "Switch the arm cross after 3 repetitions. Complete 3 more repetitions."
+          ],
+          "guide": "Let your legs and hands work against each other with control.",
+          "orientation": "You use crossed hands to resist the pull of both legs."
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 90,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/01_FLR und Moro-Reflex/FRI_App_01_FLR und Moro-Reflex_07.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "sg_ex1_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "sg_ex1",
+      "package_id": "spinal_galant",
+      "sequence_number": 1,
+      "content_version": "spinal_galant-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Körperschaukeln",
+        "en": "Body Rocking"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Rückenlage",
+            "Füße aufstellen, Knie gebeugt",
+            "Arme locker neben dem Körper"
+          ],
+          "movement": [
+            "Mit den Füßen abstemmen und den Körper sanft vor und zurück schaukeln",
+            "Der Kopf rollt dabei entspannt mit",
+            "7 Sekunden halten, 3 Sekunden Pause",
+            "6 Wiederholungen"
+          ],
+          "guide": "Körper sanft schaukeln, Kopf rollt mit.",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "Lie on your back",
+            "Feet placed, knees bent",
+            "Arms relaxed alongside the body"
+          ],
+          "movement": [
+            "Push gently with the feet and rock the body forward and back",
+            "The head rolls along relaxed",
+            "Hold 7 seconds, 3 seconds rest",
+            "6 repetitions"
+          ],
+          "guide": "Rock body gently, head rolls along.",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/02_Spinaler Galant-Reflex/FRI_App_02_Spinaler Galant-Reflex_01.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "sg_ex2_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "sg_ex2",
+      "package_id": "spinal_galant",
+      "sequence_number": 2,
+      "content_version": "spinal_galant-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Hüftschaukeln",
+        "en": "Hip Rocking"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Rückenlage oder auf dem Boden sitzend",
+            "Finger nicht verschränken"
+          ],
+          "movement": [
+            "Den Po langsam hin und her schaukeln",
+            "Finger dabei nicht verschränken",
+            "7 Sekunden pro Seite halten, 3 Sekunden Pause",
+            "6 Wiederholungen"
+          ],
+          "guide": "Po sanft hin und her schaukeln.",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "Lie on your back or sit on the floor",
+            "Do not interlace fingers"
+          ],
+          "movement": [
+            "Gently rock the hips side to side",
+            "Do not interlace fingers",
+            "Hold 7 seconds per side, 3 seconds rest",
+            "6 repetitions"
+          ],
+          "guide": "Gently rock hips side to side.",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/02_Spinaler Galant-Reflex/FRI_App_02_Spinaler Galant-Reflex_02.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "sg_ex3_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "sg_ex3",
+      "package_id": "spinal_galant",
+      "sequence_number": 3,
+      "content_version": "spinal_galant-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Einseitiger Frosch (Bauchlage)",
+        "en": "One-Legged Frog (Prone)"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Bauchlage",
+            "Ein Bein in Froschposition seitlich anwinkeln",
+            "Finger nicht verschränken"
+          ],
+          "movement": [
+            "Position halten",
+            "Finger nicht verschränken",
+            "7 Sekunden halten, 3 Sekunden Pause",
+            "6 Wiederholungen"
+          ],
+          "guide": "Position halten. Finger nicht verschränken.",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "Lie on your stomach",
+            "One leg bent to the side in frog position",
+            "Do not interlace fingers"
+          ],
+          "movement": [
+            "Hold the position",
+            "Do not interlace fingers",
+            "Hold 7 seconds, 3 seconds rest",
+            "6 repetitions"
+          ],
+          "guide": "Hold position. Do not interlace fingers.",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/02_Spinaler Galant-Reflex/FRI_App_02_Spinaler Galant-Reflex_03.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "sg_ex4_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "sg_ex4",
+      "package_id": "spinal_galant",
+      "sequence_number": 4,
+      "content_version": "spinal_galant-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Hüftrotation (Bauchlage)",
+        "en": "Hip Rotation (Prone)"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Bauchlage",
+            "Arme im rechten Winkel neben dem Kopf, in Linie mit dem Körper",
+            "Bei Bedarf ein Kissen unter den Po legen"
+          ],
+          "movement": [
+            "Hüfte langsam rotieren",
+            "Arme bleiben im rechten Winkel neben dem Kopf",
+            "Die Hüftrotation ist wichtig — auf die Qualität achten",
+            "7 Sekunden halten, 3 Sekunden Pause",
+            "6 Wiederholungen"
+          ],
+          "guide": "Hüfte rotieren. Arme im rechten Winkel.",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "Lie on your stomach",
+            "Arms at right angles beside the head, in line with the body",
+            "Place a pillow under the hips if needed"
+          ],
+          "movement": [
+            "Slowly rotate the hips",
+            "Arms stay at right angles beside the head",
+            "Hip rotation is key — focus on quality",
+            "Hold 7 seconds, 3 seconds rest",
+            "6 repetitions"
+          ],
+          "guide": "Rotate hips. Arms at right angles.",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/02_Spinaler Galant-Reflex/FRI_App_02_Spinaler Galant-Reflex_04.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "tlr_ex1_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "tlr_ex1",
+      "package_id": "tlr",
+      "sequence_number": 1,
+      "content_version": "tlr-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Kopf mitschaukeln",
+        "en": "Head Rolling"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Rückenlage",
+            "Basisposition einnehmen",
+            "Arme locker neben dem Körper"
+          ],
+          "movement": [
+            "Körper sanft schaukeln",
+            "Kopf rollt beim Schaukeln entspannt mit",
+            "7 Sekunden halten, 3 Sekunden Pause",
+            "6 Wiederholungen"
+          ],
+          "guide": "Körper schaukeln, Kopf rollt entspannt mit.",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "Lie on your back",
+            "Take basic position",
+            "Arms relaxed alongside the body"
+          ],
+          "movement": [
+            "Gently rock the body",
+            "Head rolls along relaxed during rocking",
+            "Hold 7 seconds, 3 seconds rest",
+            "6 repetitions"
+          ],
+          "guide": "Rock body, head rolls along relaxed.",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/03_TLR-Reflex/FRI_App_03_TLR-Refle_01.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "tlr_ex2_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "tlr_ex2",
+      "package_id": "tlr",
+      "sequence_number": 2,
+      "content_version": "tlr-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Über-Kopf-Rollen",
+        "en": "Over-Head Roll"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Vierfüßlerstand oder Kniestand",
+            "Meistes Gewicht auf den Händen",
+            "Kopf hängt locker"
+          ],
+          "movement": [
+            "Nasenspitze beginnt die Bewegung",
+            "Langsam vorschieben bis das Kinn auf der Brust ist",
+            "Das ist ein Über-den-Kopf-Rollen",
+            "Langsame Ausführung, etwa 2 Wiederholungen pro Durchgang",
+            "7 Sekunden, 3 Sekunden Pause, 6 Wiederholungen"
+          ],
+          "guide": "Nasenspitze führt. Langsam über den Kopf rollen.",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "All-fours or kneeling position",
+            "Most weight on the hands",
+            "Head hangs loose"
+          ],
+          "movement": [
+            "Nose tip initiates the movement",
+            "Slowly roll forward until chin is on chest",
+            "This is a rolling-over-the-head movement",
+            "Slow execution, about 2 rolls per set",
+            "7 seconds, 3 seconds rest, 6 repetitions"
+          ],
+          "guide": "Nose leads. Slowly roll over the head.",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/03_TLR-Reflex/FRI_App_03_TLR-Refle_02.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "tlr_ex3_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "tlr_ex3",
+      "package_id": "tlr",
+      "sequence_number": 3,
+      "content_version": "tlr-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Situp-Position halten",
+        "en": "Hold Sit-Up Position"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Rückenlage",
+            "Beine angewinkelt, Füße am Boden",
+            "Arme zur Unterstützung bereit"
+          ],
+          "movement": [
+            "Kleinmachen: Oberkörper hochrollen wie bei einem Situp",
+            "Die Situp-Position halten",
+            "Rumpfmuskulatur aktiv einsetzen",
+            "Arme nur zur leichten Unterstützung nutzen",
+            "7 Sekunden halten, 3 Sekunden Pause, 6 Wiederholungen"
+          ],
+          "guide": "Hochrollen und Position halten. Rumpf aktiv.",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "Lie on your back",
+            "Legs bent, feet on floor",
+            "Arms ready to support"
+          ],
+          "movement": [
+            "Curl up: roll upper body up as in a sit-up",
+            "Hold the sit-up position",
+            "Actively engage core muscles",
+            "Use arms only for light support",
+            "Hold 7 seconds, 3 seconds rest, 6 repetitions"
+          ],
+          "guide": "Roll up and hold position. Core active.",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/03_TLR-Reflex/FRI_App_03_TLR-Refle_03.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "tlr_ex4_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "tlr_ex4",
+      "package_id": "tlr",
+      "sequence_number": 4,
+      "content_version": "tlr-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Kopf heben und fallen lassen",
+        "en": "Head Lift and Lower"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Rückenlage",
+            "Weiches flaches Kissen oder gefaltete Decke unter den Kopf legen",
+            "Auf einem Bett wird kein Kissen benötigt"
+          ],
+          "movement": [
+            "Beim Einatmen den Kopf leicht anheben",
+            "Beim Ausatmen den Kopf fallen lassen",
+            "Nicht das Kinn auf die Brust — Abstand halten, Kopf nach oben",
+            "Bewegung im Nacken ist wichtig",
+            "7 Sekunden, 3 Sekunden Pause, 6 Wiederholungen"
+          ],
+          "guide": "Einatmen: Kopf heben. Ausatmen: fallen lassen.",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "Lie on your back",
+            "Place a soft flat pillow or folded blanket under the head",
+            "No pillow needed when lying on a bed"
+          ],
+          "movement": [
+            "While inhaling, gently lift the head",
+            "As you exhale, gently lower your head.",
+            "Keep space between your chin and chest.",
+            "Keep the neck movement small and controlled.",
+            "7 seconds, 3 seconds rest, 6 repetitions"
+          ],
+          "guide": "Inhale: gently lift your head. Exhale: gently lower it.",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/03_TLR-Reflex/FRI_App_03_TLR-Refle1_04.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "tlr_ex5_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "tlr_ex5",
+      "package_id": "tlr",
+      "sequence_number": 5,
+      "content_version": "tlr-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Bein-Fahrradfahren",
+        "en": "Leg Cycling"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "Rückenlage",
+            "Basisposition einnehmen — auf die Grundposition achten",
+            "Beine in der Luft"
+          ],
+          "movement": [
+            "Mit den Füßen in der Luft Fahrrad fahren",
+            "Große, langsame Bewegungen",
+            "7 Sekunden aktiv fahren, 3 Sekunden Pause",
+            "In der Pause: Beine einfach still in der Luft halten",
+            "6 Wiederholungen"
+          ],
+          "guide": "Langsam Fahrradfahren in der Luft. Große Bewegungen.",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "Lie on your back",
+            "Take basic position — pay attention to fundamentals",
+            "Legs in the air"
+          ],
+          "movement": [
+            "Cycle with feet in the air",
+            "Large, slow movements",
+            "7 seconds active cycling, 3 seconds rest",
+            "During rest: simply hold legs still in the air",
+            "6 repetitions"
+          ],
+          "guide": "Slowly cycle in the air. Large movements.",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "requires_filming_review",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/03_TLR-Reflex/FRI_App_03_TLR-Refle_05.png",
+      "duo_instructions_present": false,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "vorrunde_ex1_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "vorrunde_ex1",
+      "package_id": "vorrunde",
+      "sequence_number": 1,
+      "content_version": "vorrunde-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Schaukeln 1",
+        "en": "Rocking 1"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "TBD — solo Ausgangsposition"
+          ],
+          "movement": [
+            "TBD — solo Bewegung"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "TBD — solo starting position"
+          ],
+          "movement": [
+            "TBD — solo movement"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "blocked_missing_instructions",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_01.png",
+      "duo_instructions_present": true,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "vorrunde_ex2_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "vorrunde_ex2",
+      "package_id": "vorrunde",
+      "sequence_number": 2,
+      "content_version": "vorrunde-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Schaukeln 2",
+        "en": "Rocking 2"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "TBD — solo Ausgangsposition"
+          ],
+          "movement": [
+            "TBD — solo Bewegung"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "TBD — solo starting position"
+          ],
+          "movement": [
+            "TBD — solo movement"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "blocked_missing_instructions",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_02.png",
+      "duo_instructions_present": true,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "vorrunde_ex3_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "vorrunde_ex3",
+      "package_id": "vorrunde",
+      "sequence_number": 3,
+      "content_version": "vorrunde-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Schaukeln 3",
+        "en": "Rocking 3"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "TBD — solo Ausgangsposition"
+          ],
+          "movement": [
+            "TBD — solo Bewegung"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "TBD — solo starting position"
+          ],
+          "movement": [
+            "TBD — solo movement"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "blocked_missing_instructions",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_03.png",
+      "duo_instructions_present": true,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "vorrunde_ex4_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "vorrunde_ex4",
+      "package_id": "vorrunde",
+      "sequence_number": 4,
+      "content_version": "vorrunde-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Schaukeln 4",
+        "en": "Rocking 4"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "TBD — solo Ausgangsposition"
+          ],
+          "movement": [
+            "TBD — solo Bewegung"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "TBD — solo starting position"
+          ],
+          "movement": [
+            "TBD — solo movement"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "blocked_missing_instructions",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_04.png",
+      "duo_instructions_present": true,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "vorrunde_ex5_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "vorrunde_ex5",
+      "package_id": "vorrunde",
+      "sequence_number": 5,
+      "content_version": "vorrunde-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Schaukeln 5",
+        "en": "Rocking 5"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "TBD — solo Ausgangsposition"
+          ],
+          "movement": [
+            "TBD — solo Bewegung"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "TBD — solo starting position"
+          ],
+          "movement": [
+            "TBD — solo movement"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "blocked_missing_instructions",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_05.png",
+      "duo_instructions_present": true,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    },
+    {
+      "video_id": "vorrunde_ex6_demonstration",
+      "revision": 1,
+      "status": "awaiting_production",
+      "owner": "Founder (commissioning); exercise professional (content approval); editor (delivery)",
+      "approval_refs": {},
+      "files": {},
+      "exercise_id": "vorrunde_ex6",
+      "package_id": "vorrunde",
+      "sequence_number": 6,
+      "content_version": "vorrunde-legacy-v1",
+      "content_review_required": true,
+      "title": {
+        "de": "Schaukeln 6",
+        "en": "Rocking 6"
+      },
+      "instructions": {
+        "de": {
+          "position": [
+            "TBD — solo Ausgangsposition"
+          ],
+          "movement": [
+            "TBD — solo Bewegung"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        },
+        "en": {
+          "position": [
+            "TBD — solo starting position"
+          ],
+          "movement": [
+            "TBD — solo movement"
+          ],
+          "guide": "TBD",
+          "orientation": ""
+        }
+      },
+      "instruction_status": "blocked_missing_instructions",
+      "exercise_duration_seconds": 7,
+      "target_clip_seconds": {
+        "min": 15,
+        "max": 90
+      },
+      "bundled_poster_path": "assets/images/Bilder/00_Vorbereitung/FRI_App_Vorbereitung_06.png",
+      "duo_instructions_present": true,
+      "delivery_profile": "silent-neutral-landscape-v1"
+    }
+  ]
+}

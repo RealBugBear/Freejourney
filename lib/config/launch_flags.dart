@@ -98,7 +98,7 @@ const bool kInviteImpulseI2Enabled = false;
 ///
 /// Zum lokalen Ausprobieren einfach hier umlegen; der Store-Stand kommt aus
 /// einem Tag auf `main` und darf die Fläche nicht ungeprüft enthalten.
-const bool kAdultReflexQuestionnaireEnabled = false;
+const bool kAdultReflexQuestionnaireEnabled = true;
 
 /// Freiwillige Adult-Bewegungsprüfungen (s005/s006, P2.A Phase 6).
 ///

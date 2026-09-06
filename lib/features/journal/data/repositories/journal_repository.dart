@@ -58,54 +58,56 @@ class JournalRepository {
   /// Deletes a journal entry and queues a server-side delete.
   /// Also clears the note on the linked mood_checkin so the two stay in sync.
   Future<void> deleteEntry(String journalEntryId) async {
-    final entry = await (_db.select(_db.journalEntriesTable)
-          ..where((t) => t.id.equals(journalEntryId))
-          ..limit(1))
-        .getSingleOrNull();
-
-    if (entry == null) return;
-
-    // Clear note on the linked checkin if present
-    if (entry.checkinId != null) {
-      await (_db.update(_db.moodCheckinsTable)
-            ..where((t) => t.id.equals(entry.checkinId!)))
-          .write(const MoodCheckinsTableCompanion(
-        note: drift.Value(null),
-        needsSync: drift.Value(true),
-      ));
-      final checkin = await (_db.select(_db.moodCheckinsTable)
-            ..where((t) => t.id.equals(entry.checkinId!))
+    return _db.transaction(() async {
+      final entry = await (_db.select(_db.journalEntriesTable)
+            ..where((t) => t.id.equals(journalEntryId))
             ..limit(1))
           .getSingleOrNull();
-      if (checkin != null) {
-        await _syncService.enqueueUpsert(
-          tableName: 'mood_checkins',
-          recordId: checkin.id,
-          payload: {
-            'id': checkin.id,
-            'user_id': checkin.userId,
-            'enrollment_id': checkin.enrollmentId,
-            'recorded_at': checkin.recordedAt.toIso8601String(),
-            'day_key': checkin.dayKey,
-            'mood': checkin.mood,
-            'energy': checkin.energy,
-            'stress': checkin.stress,
-            'note': null,
-            'source': checkin.source,
-            if (checkin.subjectProfileId != null)
-              'subject_profile_id': checkin.subjectProfileId,
-          },
-        );
+
+      if (entry == null) return;
+
+      // Clear note on the linked checkin if present
+      if (entry.checkinId != null) {
+        await (_db.update(_db.moodCheckinsTable)
+              ..where((t) => t.id.equals(entry.checkinId!)))
+            .write(const MoodCheckinsTableCompanion(
+          note: drift.Value(null),
+          needsSync: drift.Value(true),
+        ));
+        final checkin = await (_db.select(_db.moodCheckinsTable)
+              ..where((t) => t.id.equals(entry.checkinId!))
+              ..limit(1))
+            .getSingleOrNull();
+        if (checkin != null) {
+          await _syncService.enqueueUpsert(
+            tableName: 'mood_checkins',
+            recordId: checkin.id,
+            payload: {
+              'id': checkin.id,
+              'user_id': checkin.userId,
+              'enrollment_id': checkin.enrollmentId,
+              'recorded_at': checkin.recordedAt.toIso8601String(),
+              'day_key': checkin.dayKey,
+              'mood': checkin.mood,
+              'energy': checkin.energy,
+              'stress': checkin.stress,
+              'note': null,
+              'source': checkin.source,
+              if (checkin.subjectProfileId != null)
+                'subject_profile_id': checkin.subjectProfileId,
+            },
+          );
+        }
       }
-    }
 
-    await (_db.delete(_db.journalEntriesTable)
-          ..where((t) => t.id.equals(journalEntryId)))
-        .go();
+      await (_db.delete(_db.journalEntriesTable)
+            ..where((t) => t.id.equals(journalEntryId)))
+          .go();
 
-    await _syncService.enqueueDelete(
-      tableName: 'journal_entries',
-      recordId: journalEntryId,
-    );
+      await _syncService.enqueueDelete(
+        tableName: 'journal_entries',
+        recordId: journalEntryId,
+      );
+    });
   }
 }

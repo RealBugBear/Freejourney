@@ -117,7 +117,9 @@ class _ExerciseVideoWidgetState extends State<ExerciseVideoWidget> {
           ? VideoPlayerController.asset(videoPath)
           : builder(videoPath);
       try {
-        await candidate.initialize();
+        await candidate
+            .initialize()
+            .timeout(widget.remoteInitializationTimeout);
         if (_isCurrentAttempt(attempt)) {
           controller = candidate;
         } else {
@@ -161,6 +163,18 @@ class _ExerciseVideoWidgetState extends State<ExerciseVideoWidget> {
       _videoFailed = false;
       _isPlaying = controller!.value.isPlaying;
     });
+    controller.addListener(_onControllerChanged);
+    _onControllerChanged();
+  }
+
+  void _onControllerChanged() {
+    final controller = _controller;
+    if (controller == null || !mounted) return;
+    if (controller.value.hasError) {
+      _failActiveController();
+    } else if (_isPlaying != controller.value.isPlaying) {
+      setState(() => _isPlaying = controller.value.isPlaying);
+    }
   }
 
   Future<void> _togglePlay() async {
@@ -237,6 +251,7 @@ class _ExerciseVideoWidgetState extends State<ExerciseVideoWidget> {
   }
 
   Future<void> _disposeQuietly(VideoPlayerController controller) async {
+    controller.removeListener(_onControllerChanged);
     try {
       await controller.dispose();
     } on Object {

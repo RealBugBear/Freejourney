@@ -168,14 +168,7 @@ class ProfileScreen extends ConsumerWidget {
               trailing: const Icon(Icons.chevron_right),
               onTap: () => _showRedeemAccessCodeDialog(context, ref),
             ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: Text(l10n.signOut),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () async {
-                await ref.read(authNotifierProvider.notifier).signOut();
-              },
-            ),
+            const ProfileSignOutTile(),
             ListTile(
               leading: const Icon(Icons.delete_outline, color: AppColors.error),
               title: Text(
@@ -220,7 +213,12 @@ class ProfileScreen extends ConsumerWidget {
 
     try {
       await Supabase.instance.client.rpc('delete_user');
-      await ref.read(authNotifierProvider.notifier).signOut();
+      final result = await ref.read(authNotifierProvider.notifier).signOut(
+            discardPendingChanges: true,
+          );
+      if (result != SignOutResult.signedOut) {
+        throw StateError('Account deletion logout failed');
+      }
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l10n.profileDeleteAccountSuccess)),
@@ -287,6 +285,90 @@ class ProfileScreen extends ConsumerWidget {
     } finally {
       controller.dispose();
     }
+  }
+}
+
+/// Keeps logout, the discard decision and duplicate taps in one UI operation.
+class ProfileSignOutTile extends ConsumerStatefulWidget {
+  const ProfileSignOutTile({super.key});
+
+  @override
+  ConsumerState<ProfileSignOutTile> createState() => _ProfileSignOutTileState();
+}
+
+class _ProfileSignOutTileState extends ConsumerState<ProfileSignOutTile> {
+  bool _busy = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return ListTile(
+      enabled: !_busy,
+      leading: _busy
+          ? SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                semanticsLabel: l10n.signOutInProgress,
+              ),
+            )
+          : const Icon(Icons.logout),
+      title: Text(_busy ? l10n.signOutInProgress : l10n.signOut),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: _busy ? null : _signOut,
+    );
+  }
+
+  Future<void> _signOut() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    final l10n = AppLocalizations.of(context);
+    try {
+      var result = await ref.read(authNotifierProvider.notifier).signOut();
+      if (!mounted) return;
+      if (result == SignOutResult.pendingChanges) {
+        final discard = await showDialog<bool>(
+          context: context,
+          builder: (_) => const SignOutPendingChangesDialog(),
+        );
+        if (discard != true || !mounted) return;
+        result = await ref.read(authNotifierProvider.notifier).signOut(
+              discardPendingChanges: true,
+            );
+      }
+      if (mounted && result == SignOutResult.failed) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.signOutFailed)),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+}
+
+class SignOutPendingChangesDialog extends StatelessWidget {
+  const SignOutPendingChangesDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return AlertDialog(
+      title: Text(l10n.signOutPendingTitle),
+      content: SingleChildScrollView(child: Text(l10n.signOutPendingBody)),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: Text(l10n.signOutKeepChanges),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(foregroundColor: AppColors.error),
+          onPressed: () => Navigator.pop(context, true),
+          child: Text(l10n.signOutDiscardChanges),
+        ),
+      ],
+    );
   }
 }
 

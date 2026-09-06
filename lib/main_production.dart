@@ -41,7 +41,8 @@ Future<void> _main() async {
         child: const CoreJourneyApp(),
       ),
     );
-  } catch (e) {
+  } catch (e, stack) {
+    await SentryService.captureException(e, stack);
     // Generic error screen — no internal details exposed.
     runApp(const _StartupErrorApp());
   }

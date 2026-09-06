@@ -41,25 +41,30 @@ class AppDatabase extends _$AppDatabase {
   /// lives in a `local_store` subdirectory that is flagged as excluded from
   /// device backups: it holds health-adjacent data and must not leave the
   /// device in an iCloud/Finder backup (Android backups are disabled app-wide
-  /// via android:allowBackup="false"). Falls back to an in-memory database
-  /// ONLY if the directory cannot be obtained, and logs a warning in that case.
-  static Future<AppDatabase> open() async {
+  /// via android:allowBackup="false"). Storage failure aborts startup: training
+  /// must never appear saved in an accidental, nonpersistent memory database.
+  static Future<AppDatabase> open(
+      {Future<Directory> Function()? supportDirectory}) async {
     try {
-      final dir = await getApplicationSupportDirectory();
+      final dir = await (supportDirectory ?? getApplicationSupportDirectory)();
       final storeDir = Directory(p.join(dir.path, 'local_store'));
       await storeDir.create(recursive: true);
       await _moveLegacyDatabaseFiles(from: dir.path, to: storeDir.path);
       // Best-effort: a failure to flag the directory must not block startup.
       await BackupExclusion().excludeFromBackup(storeDir.path);
       final file = File(p.join(storeDir.path, 'corejourney_db.sqlite'));
-      return AppDatabase._internal(
+      final database = AppDatabase._internal(
         NativeDatabase.createInBackground(file),
       );
+      try {
+        await database.customSelect('SELECT 1').get();
+        return database;
+      } catch (_) {
+        await database.close();
+        rethrow;
+      }
     } catch (e) {
-      // Last-resort fallback — should not happen on any supported platform.
-      // Data will not persist across launches in this state.
-      assert(false, 'AppDatabase.open() fell back to in-memory: $e');
-      return AppDatabase._internal(NativeDatabase.memory());
+      rethrow;
     }
   }
 
@@ -94,6 +99,7 @@ class AppDatabase extends _$AppDatabase {
       await delete(intakeAssessmentsTable).go();
       await delete(completionQuestionnairesTable).go();
       await delete(journalEntriesTable).go();
+      await delete(streakCreditsTable).go();
       // exercisesTable is shared content (not user-specific) — keep it.
     });
   }

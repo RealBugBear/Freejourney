@@ -19,6 +19,14 @@ const HORIZON_MS = 15 * 60 * 1000;
 const STREAK_WARNING_MINUTE = 19 * 60;
 const COMEBACK_MINUTE = 9 * 60;
 
+function createServiceClient() {
+  return createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+}
+
+// Derive from the concrete factory, preserving Supabase's default schema.
+// The generic createClient return type loses those defaults on newer SDK typings.
+type ServiceClient = ReturnType<typeof createServiceClient>;
+
 interface ReminderPreferenceRow {
   user_id: string;
   timezone: string;
@@ -57,7 +65,7 @@ serve(async (req: Request) => {
     }
 
     const userIdFilter = typeof body.user_id === 'string' ? body.user_id : null;
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const supabase = createServiceClient();
 
     let preferenceQuery = supabase
       .from('user_reminder_preferences')
@@ -99,7 +107,7 @@ serve(async (req: Request) => {
 });
 
 async function scheduleForUser(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   preference: ReminderPreferenceRow,
   now: Date,
 ): Promise<Record<string, number>> {
@@ -229,7 +237,7 @@ async function scheduleForUser(
 }
 
 async function loadCompletedSessions(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   userId: string,
   enrollmentIds: string[],
   historyStartLocalDate: string,
@@ -247,7 +255,7 @@ async function loadCompletedSessions(
 }
 
 async function countPriorSentComebacks(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   userId: string,
   localDate: string,
 ): Promise<number> {
@@ -266,7 +274,7 @@ async function countPriorSentComebacks(
 }
 
 async function latestTrainingPushMinute(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   userId: string,
   localDate: string,
   timezone: string,
@@ -296,7 +304,7 @@ async function latestTrainingPushMinute(
 }
 
 async function localToUtc(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   localDate: string,
   minute: number,
   timezone: string,
@@ -311,7 +319,7 @@ async function localToUtc(
 }
 
 async function insertJob(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   job: Record<string, string>,
 ): Promise<boolean> {
   const { error } = await supabase.from('notification_jobs').insert(job);

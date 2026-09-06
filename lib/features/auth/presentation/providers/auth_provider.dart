@@ -21,6 +21,7 @@ final authStateProvider = StreamProvider<AuthState>((ref) {
 });
 
 final currentUserProvider = Provider<User?>((ref) {
+  ref.watch(authStateProvider);
   return Supabase.instance.client.auth.currentUser;
 });
 
@@ -28,6 +29,8 @@ final currentUserProvider = Provider<User?>((ref) {
 /// Set to true in app.dart before calling getSessionFromUrl().
 /// Set back to false in ResetPasswordScreen after successful update.
 final passwordRecoveryActiveProvider = StateProvider<bool>((ref) => false);
+
+enum SignOutResult { signedOut, pendingChanges, failed, inProgress }
 
 class AuthNotifier extends StateNotifier<AsyncValue<void>> {
   final AuthRepository _repo;
@@ -97,13 +100,35 @@ class AuthNotifier extends StateNotifier<AsyncValue<void>> {
     );
   }
 
-  Future<void> signOut() async {
+  /// Ordinary logout must preserve unsent work. Only an explicit discard
+  /// decision (or a completed server account deletion) may erase pending jobs.
+  Future<SignOutResult> signOut({bool discardPendingChanges = false}) async {
+    if (state.isLoading) return SignOutResult.inProgress;
     state = const AsyncValue.loading();
-    // Clear local DB before signing out to prevent data leaking to next session.
-    await _ref.read(databaseProvider).clearUserData();
-    // userRoleProvider watches authStateProvider and will re-run automatically
-    // after sign-out — no manual invalidate needed.
-    state = await AsyncValue.guard(() => _repo.signOut());
+    try {
+      final sync = _ref.read(syncServiceProvider);
+      if (!discardPendingChanges) {
+        try {
+          await sync.drain().timeout(const Duration(seconds: 15));
+        } catch (_) {
+          // The atomic cleanup guard below remains authoritative on network
+          // failure/timeout; it refuses erasure while any local intent remains.
+        }
+      }
+      final cleared = await sync.clearUserDataForSignOut(
+        discardPendingChanges: discardPendingChanges,
+      );
+      if (!cleared) {
+        state = const AsyncValue.data(null);
+        return SignOutResult.pendingChanges;
+      }
+      await _repo.signOut();
+      state = const AsyncValue.data(null);
+      return SignOutResult.signedOut;
+    } catch (error, stack) {
+      state = AsyncValue.error(error, stack);
+      return SignOutResult.failed;
+    }
   }
 
   void clearError() {

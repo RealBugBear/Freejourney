@@ -42,6 +42,7 @@ export async function getFirebaseAccessToken(
 
   const response = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
+    signal: AbortSignal.timeout(10000),
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
       grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
@@ -64,6 +65,7 @@ export async function sendFcmNotification(
     `https://fcm.googleapis.com/v1/projects/${request.projectId}/messages:send`,
     {
       method: 'POST',
+      signal: AbortSignal.timeout(10000),
       headers: {
         Authorization: `Bearer ${request.accessToken}`,
         'Content-Type': 'application/json',

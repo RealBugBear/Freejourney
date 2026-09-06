@@ -1,64 +1,94 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-/// File-based implementation of [LocalStorage] for Supabase session persistence.
-///
-/// Writes the auth session as a raw string file in [getApplicationSupportDirectory].
-/// This bypasses SharedPreferences entirely, making it resilient to iOS
-/// UserDefaults / Pigeon channel issues and correct for all platforms.
-///
-/// All I/O is wrapped with silent catch — if a read fails the session is treated
-/// as absent (user logs in again). If a write fails the session is not cached
-/// locally but Supabase still works in-memory for the current launch.
+import '../database/backup_exclusion.dart';
+import '../logging/app_logger.dart';
+
+/// Serialized, atomic session persistence in the backup-excluded local store.
+/// The file relies on OS app isolation/device encryption; it is not a keychain.
 class FileLocalStorage extends LocalStorage {
-  static const _kFileName = 'supabase_session.bin';
+  FileLocalStorage({
+    Future<Directory> Function()? supportDirectory,
+    Future<bool> Function(String)? excludeFromBackup,
+  })  : _supportDirectory = supportDirectory ?? getApplicationSupportDirectory,
+        _excludeFromBackup =
+            excludeFromBackup ?? BackupExclusion().excludeFromBackup;
 
-  static Future<File> _file() async {
-    final dir = await getApplicationSupportDirectory();
-    return File('${dir.path}/$_kFileName');
+  static const _fileName = 'supabase_session.bin';
+  final Future<Directory> Function() _supportDirectory;
+  final Future<bool> Function(String) _excludeFromBackup;
+  Future<void> _pending = Future.value();
+
+  Future<T> _serialize<T>(Future<T> Function() action) {
+    final next = _pending.then((_) => action());
+    // Keep subsequent operations usable even if a previous disk operation failed.
+    _pending = next.then<void>((_) {}, onError: (Object _, StackTrace __) {});
+    return next;
   }
 
-  @override
-  Future<void> initialize() async {
-    // No setup needed — file is created lazily on first persistSession call.
-  }
-
-  @override
-  Future<bool> hasAccessToken() async {
-    try {
-      final f = await _file();
-      return await f.exists() && (await f.length()) > 0;
-    } catch (_) {
-      return false;
+  Future<File> _file() async {
+    final support = await _supportDirectory();
+    final store = Directory('${support.path}/local_store');
+    await store.create(recursive: true);
+    if (!await _excludeFromBackup(store.path)) {
+      throw const FileSystemException('Session backup exclusion unavailable');
     }
-  }
-
-  @override
-  Future<String?> accessToken() async {
-    try {
-      final f = await _file();
-      if (!await f.exists()) return null;
-      final s = await f.readAsString();
-      return s.isEmpty ? null : s;
-    } catch (_) {
-      return null;
+    final current = File('${store.path}/$_fileName');
+    final legacy = File('${support.path}/$_fileName');
+    if (await legacy.exists()) {
+      if (!await current.exists()) {
+        await legacy.rename(current.path);
+      } else {
+        // A completed newer write wins over a leftover pre-migration file.
+        await legacy.delete();
+      }
     }
+    return current;
   }
 
   @override
-  Future<void> persistSession(String persistSessionString) async {
-    try {
-      await (await _file()).writeAsString(persistSessionString, flush: true);
-    } catch (_) {}
-  }
+  Future<void> initialize() async {}
 
   @override
-  Future<void> removePersistedSession() async {
-    try {
-      final f = await _file();
-      if (await f.exists()) await f.delete();
-    } catch (_) {}
-  }
+  Future<bool> hasAccessToken() async => (await accessToken()) != null;
+
+  @override
+  Future<String?> accessToken() => _serialize(() async {
+        try {
+          final file = await _file();
+          if (!await file.exists()) return null;
+          final value = await file.readAsString();
+          return value.isEmpty ? null : value;
+        } on FileSystemException {
+          appLogger.w('Session cache unavailable');
+          return null;
+        }
+      });
+
+  @override
+  Future<void> persistSession(String persistSessionString) =>
+      _serialize(() async {
+        final file = await _file();
+        final temporary = File('${file.path}.tmp');
+        // Never truncate the last good session before the replacement is durable.
+        await temporary.writeAsString(persistSessionString, flush: true);
+        await temporary.rename(file.path);
+      });
+
+  @override
+  Future<void> removePersistedSession() => _serialize(() async {
+        // Erasure must remain possible even when the backup-exclusion channel fails.
+        final support = await _supportDirectory();
+        for (final path in [
+          '${support.path}/$_fileName',
+          '${support.path}/local_store/$_fileName',
+          '${support.path}/local_store/$_fileName.tmp',
+        ]) {
+          final file = File(path);
+          if (await file.exists()) await file.delete();
+        }
+      });
 }

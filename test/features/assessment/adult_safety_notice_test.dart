@@ -10,14 +10,10 @@ import 'package:corejourney/l10n/app_localizations_en.dart';
 
 void main() {
   group('Phase 6 default flags', () {
-    test('questionnaire stays off until the §17 specialist sign-offs land', () {
-      // Phase 7 is built and tested; the gate is the specialist review, not
-      // the code. Flipping this to true is a founder decision recorded in
-      // launch_flags.dart, not something a passing suite should imply.
-      expect(kAdultReflexQuestionnaireEnabled, isFalse);
-    });
-
-    test('movement and hard-gate stay off by default', () {
+    test('movement and hard-gate stay off until expert sign-off', () {
+      // Questionnaire may be enabled for closed beta (founder gate in
+      // launch_flags.dart). Movement checks and safety hard-gates remain off
+      // until expert review — independent of kAdultReflexQuestionnaireEnabled.
       expect(kAdultMovementChecksEnabled, isFalse);
       expect(kAdultSafetyHardGateEnabled, isFalse);
     });

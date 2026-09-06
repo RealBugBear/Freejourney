@@ -28,7 +28,7 @@ const APP_ENVIRONMENT = Deno.env.get('APP_ENVIRONMENT') ?? 'production';
 const FIREBASE_SERVICE_ACCOUNT_JSON = Deno.env.get('FIREBASE_SERVICE_ACCOUNT_JSON') ?? '';
 const FIREBASE_PROJECT_ID = Deno.env.get('FIREBASE_PROJECT_ID') ?? 'corejourney-prod';
 
-const MAX_LIMIT = 100;
+const MAX_LIMIT = 10;
 
 function createServiceClient() {
   return createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
@@ -44,6 +44,8 @@ interface NotificationJob {
   local_date: string;
   timezone: string;
   created_at: string;
+  attempt_count: number;
+  updated_at: string;
 }
 
 interface ReminderPreference {
@@ -100,7 +102,7 @@ serve(async (req: Request) => {
       accessToken = await getFirebaseAccessToken(FIREBASE_SERVICE_ACCOUNT_JSON);
     } catch (tokenError) {
       for (const job of claimed) {
-        await updateJob(supabase, job.id, {
+        await updateJob(supabase, job, {
           status: 'failed',
           last_error: formatError(tokenError),
         });
@@ -117,8 +119,8 @@ serve(async (req: Request) => {
         counts.failed += result.status === 'failed' ? 1 : 0;
         counts.tokens_disabled += result.tokensDisabled;
       } catch (jobError) {
-        console.error('notification job failed:', job.id, jobError);
-        await updateJob(supabase, job.id, {
+        console.error(JSON.stringify({event: 'notification_job_failed', category: formatError(jobError)}));
+        await updateJob(supabase, job, {
           status: 'failed',
           last_error: formatError(jobError),
         });
@@ -128,7 +130,7 @@ serve(async (req: Request) => {
 
     return json(counts);
   } catch (err) {
-    console.error('send-notification-jobs error:', err);
+    console.error(JSON.stringify({event: 'notification_worker_failed', category: formatError(err)}));
     return json({ error: formatError(err) }, 500);
   }
 });
@@ -140,7 +142,7 @@ async function processJob(
 ): Promise<{ status: 'sent' | 'failed' | 'skipped'; tokensDisabled: number }> {
   const skipReason = await revalidateJob(supabase, job);
   if (skipReason) {
-    await updateJob(supabase, job.id, {
+    await updateJob(supabase, job, {
       status: 'skipped',
       last_error: skipReason,
       sent_at: new Date().toISOString(),
@@ -171,12 +173,14 @@ async function processJob(
     .eq('user_id', job.user_id)
     .eq('enabled', true)
     .is('revoked_at', null)
-    .eq('environment', APP_ENVIRONMENT);
+    .eq('environment', APP_ENVIRONMENT)
+    .order('updated_at', { ascending: false })
+    .limit(5);
   if (tokenError) throw tokenError;
 
   const activeTokens = (tokens ?? []) as DeviceToken[];
   if (activeTokens.length === 0) {
-    await updateJob(supabase, job.id, {
+    await updateJob(supabase, job, {
       status: 'skipped',
       last_error: 'no_tokens',
       sent_at: new Date().toISOString(),
@@ -200,6 +204,9 @@ async function processJob(
   let tokensDisabled = 0;
 
   for (const row of activeTokens) {
+    if (Date.now() - new Date(job.updated_at).getTime() > 8 * 60 * 1000) {
+      throw new Error('claim_expired');
+    }
     const result = await sendFcmNotification({
       projectId: FIREBASE_PROJECT_ID,
       accessToken,
@@ -221,7 +228,7 @@ async function processJob(
     }
 
     failed += 1;
-    errors.push(result.errorCode ?? result.rawError ?? 'unknown_fcm_error');
+    errors.push(result.errorCode ?? 'unknown_fcm_error');
     if (result.permanent) {
       await disableToken(supabase, row.id);
       tokensDisabled += 1;
@@ -229,7 +236,7 @@ async function processJob(
   }
 
   const status = sent > 0 ? 'sent' : 'failed';
-  await updateJob(supabase, job.id, {
+  await updateJob(supabase, job, {
     status,
     sent_token_count: sent,
     failed_token_count: failed,
@@ -390,13 +397,15 @@ async function disableToken(
 
 async function updateJob(
   supabase: ServiceClient,
-  jobId: string,
+  job: NotificationJob,
   values: Record<string, unknown>,
 ): Promise<void> {
   const { error } = await supabase
     .from('notification_jobs')
-    .update(values)
-    .eq('id', jobId);
+    .update({...values, updated_at: new Date().toISOString()})
+    .eq('id', job.id)
+    .eq('status', 'sending')
+    .eq('attempt_count', job.attempt_count);
   if (error) throw error;
 }
 
@@ -427,20 +436,8 @@ function json(body: unknown, status = 200): Response {
 }
 
 function formatError(error: unknown): string {
-  if (error instanceof Error) return error.message;
-  if (typeof error === 'string') return error;
-  if (error && typeof error === 'object') {
-    const record = error as Record<string, unknown>;
-    const fields = ['message', 'code', 'details', 'hint']
-      .map((key) => [key, record[key]])
-      .filter((entry): entry is [string, unknown] => entry[1] != null);
-    if (fields.length > 0) {
-      return fields.map(([key, value]) => `${key}: ${String(value)}`).join('; ');
-    }
-  }
-  try {
-    return JSON.stringify(error, Object.getOwnPropertyNames(error));
-  } catch (_) {
-    return String(error);
-  }
+  // Never persist provider bodies, database details, tokens or profile values.
+  if (error instanceof DOMException && error.name === 'TimeoutError') return 'dependency_timeout';
+  if (error instanceof SyntaxError) return 'invalid_json';
+  return 'dependency_failure';
 }

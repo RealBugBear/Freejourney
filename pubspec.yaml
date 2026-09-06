@@ -1,7 +1,7 @@
 name: corejourney
 description: Reflex Journey — Nervous System Training
 publish_to: none
-version: 1.0.5+2026081002
+version: 1.0.5+2026083104
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -58,6 +58,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
 
   # Utilities
+  crypto: ^3.0.7
   google_fonts: ^6.1.0
   uuid: ^4.5.1
   equatable: ^2.0.5
