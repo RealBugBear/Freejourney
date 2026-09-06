@@ -24,13 +24,37 @@ publication and pushes remain excluded.
 - [x] Platform builds: iOS release and Android production release.
 - [x] WIP checkpoint committed in both repositories (no push).
 
+- [x] 2026-09-06 — Mobile gate components passed: 1,302 i18n keys, 117 analyzer
+      infos / 0 warnings / 0 errors, 722 tests. Two full-gate invocations; after
+      the fixture fix, only the failed test stage was resumed. Evidence:
+      `mobile-20260906-session-final.log`, `mobile-tests-20260906-session-final.log`.
+- [x] 2026-09-06 — Local restore probe completed: schema/data/GraphQL definition,
+      owner/cross-account RLS and cleanup passed. Evidence:
+      `restore-20260906-session-final.log`, `restore-cleanup-20260906-session.log`.
+
 Open, in order:
 
-- [ ] **Re-run the full mobile gate.** 18 files were edited after the last run;
-      nothing in the tree is currently verified. Blocks everything else.
-- [ ] Backup/restore rehearsal: `scripts/local_restore_probe.py` aborts — needs an
-      empty synthetic local auth database, or documented infrastructure.
+- [x] 2026-09-06 — Clean `make release-readiness-mobile` invocation: `GATE_EXIT=0`,
+      722 tests, 1,302 i18n keys. Evidence: `gate-20260906-clean-run.log`.
+- [x] 2026-09-06 — Ownership migration validated: 67-migration chain replayed from
+      scratch (exit 0, 0 errors) and `supabase test db --local` → `Result: PASS`
+      (261 tests). Trigger md5 matches the repo migration, attached to 9 tables.
+      Evidence: `db-reset-20260906-verify.log`, `db-tests-20260906-postreset.log`.
+- [x] 2026-09-06 — Duplicated `!docs/evidence/**/*.log` line removed from `.gitignore`.
 - [ ] Admin transitive PostCSS advisory in `../corejourney/admin-web` (unverified).
 - [ ] Analyzer: 117 `info` issues, non-blocking.
+- [ ] Rebuild release binaries before any store submission (last built 2026-09-05/06).
+
+Engineering no longer blocks launch. Critical path is founder-owned: P0.6 (lawyer),
+the 22 exercise videos + expert approval, the on-device session, store metadata.
 
 No commit beyond the checkpoint / no push / no live apply.
+
+## Scoped verification session — 2026-09-06
+
+- [x] Regenerated stale localization getters, removed unused import, initialized
+      missing shared-preferences test mock; focused checks and all gate stages passed.
+- [x] Started restore only after mobile checks were green; fixed local admin
+      authentication and GraphQL schema/ACL restoration, then completed the probe.
+- [x] Updated PRODUCTION_READINESS.md with observed outputs, local prerequisites,
+      verification limits and the exact next step.

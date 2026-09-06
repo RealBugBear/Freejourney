@@ -1,0 +1,4 @@
+Failed restore sections: ['--section=pre-data']
+pg_restore: error: could not execute query: ERROR:  function graphql_public.graphql(text, text, jsonb, jsonb) does not exist
+Command was: GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO postgres;
+Local restore command failed (SQL details withheld)

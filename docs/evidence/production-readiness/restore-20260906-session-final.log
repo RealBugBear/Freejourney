@@ -1,0 +1,17 @@
+{
+  "scope": "local schema plus isolated synthetic data restore; existing user data never copied",
+  "schema_metadata": {
+    "policies": 95,
+    "rls_tables": 45,
+    "public_tables": 46,
+    "public_triggers": 21,
+    "public_functions": 824
+  },
+  "schema_metadata_matches": true,
+  "graphql_wrapper_definition_matches": true,
+  "synthetic_data_matches": true,
+  "owner_rls_passed": true,
+  "cross_account_rls_passed": true,
+  "synthetic_dump_bytes": 1135179,
+  "isolated_databases_and_dump_files_removed": true
+}

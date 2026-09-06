@@ -21,6 +21,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signOut => 'Sign Out';
 
   @override
+  String get signOutInProgress => 'Saving and signing out…';
+
+  @override
+  String get signOutFailed => 'Could not sign out. Please try again.';
+
+  @override
+  String get signOutPendingTitle => 'Changes are not saved online';
+
+  @override
+  String get signOutPendingBody =>
+      'Some changes are only saved on this device. Stay signed in and try again when you are online. If you sign out now, these unsent changes will be permanently deleted from this device.';
+
+  @override
+  String get signOutKeepChanges => 'Stay signed in';
+
+  @override
+  String get signOutDiscardChanges => 'Discard and sign out';
+
+  @override
   String get languageSelectionTitle => 'Choose your language';
 
   @override

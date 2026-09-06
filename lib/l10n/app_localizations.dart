@@ -122,6 +122,42 @@ abstract class AppLocalizations {
   /// **'Abmelden'**
   String get signOut;
 
+  /// No description provided for @signOutInProgress.
+  ///
+  /// In de, this message translates to:
+  /// **'Speichern und abmelden…'**
+  String get signOutInProgress;
+
+  /// No description provided for @signOutFailed.
+  ///
+  /// In de, this message translates to:
+  /// **'Abmelden fehlgeschlagen. Bitte versuche es erneut.'**
+  String get signOutFailed;
+
+  /// No description provided for @signOutPendingTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Änderungen noch nicht online gespeichert'**
+  String get signOutPendingTitle;
+
+  /// No description provided for @signOutPendingBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Einige Änderungen sind nur auf diesem Gerät gespeichert. Bleib angemeldet und versuche es erneut, wenn du online bist. Wenn du dich jetzt abmeldest, werden diese noch nicht übertragenen Änderungen dauerhaft von diesem Gerät gelöscht.'**
+  String get signOutPendingBody;
+
+  /// No description provided for @signOutKeepChanges.
+  ///
+  /// In de, this message translates to:
+  /// **'Angemeldet bleiben'**
+  String get signOutKeepChanges;
+
+  /// No description provided for @signOutDiscardChanges.
+  ///
+  /// In de, this message translates to:
+  /// **'Verwerfen und abmelden'**
+  String get signOutDiscardChanges;
+
   /// No description provided for @languageSelectionTitle.
   ///
   /// In de, this message translates to:

@@ -1,0 +1,10 @@
+pg_restore: error: could not execute query: ERROR:  permission denied to set parameter "<identifier>"
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+  File "/Users/alexandermessinger/dev/claudvibes/reflexjourney/scripts/local_restore_probe.py", line 82, in main
+    restore_database(source_db, schema_dump, env)
+  File "/Users/alexandermessinger/dev/claudvibes/reflexjourney/scripts/local_restore_probe.py", line 47, in restore_database
+    command(
+  File "/Users/alexandermessinger/dev/claudvibes/reflexjourney/scripts/local_restore_probe.py", line 24, in command
+    raise RuntimeError("Local restore command failed (SQL details withheld)")
+RuntimeError: Local restore command failed (SQL details withheld)

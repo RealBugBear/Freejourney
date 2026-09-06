@@ -7,8 +7,8 @@ import 'package:corejourney/core/time/app_clock.dart';
 import 'package:corejourney/features/journal/data/repositories/journal_repository.dart';
 import 'package:corejourney/features/mood/data/repositories/mood_repository.dart';
 import 'package:corejourney/features/progress/presentation/providers/progress_provider.dart';
-import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class _OfflineBackend implements SyncBackend {
@@ -34,6 +34,8 @@ void main() {
   late MoodRepository mood;
 
   setUpAll(() async {
+    // Supabase also initializes PKCE storage even with EmptyLocalStorage.
+    SharedPreferences.setMockInitialValues({});
     await Supabase.initialize(
       url: 'https://offline-writer-test.invalid',
       anonKey: 'synthetic-test-key',

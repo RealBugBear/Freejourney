@@ -1,0 +1,121 @@
+Analyzing reflexjourney...                                      
+
+   info • Statements in an if should be enclosed in a block • lib/bootstrap/bootstrap.dart:92:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/bootstrap/bootstrap.dart:203:9 • curly_braces_in_flow_control_structures
+   info • Parameter 'output' could be a super parameter • lib/core/logging/app_logger.dart:7:3 • use_super_parameters
+   info • 'extra' is deprecated and shouldn't be used. Additional Data is deprecated in favor of structured [Contexts] and should be avoided when possible • lib/core/monitoring/sentry_service.dart:103:11 • deprecated_member_use
+   info • Statements in an if should be enclosed in a block • lib/core/sync/sync_service.dart:125:9 • curly_braces_in_flow_control_structures
+   info • Use 'const' with the constructor to improve performance • lib/features/assessment/domain/services/reflex_profile_pdf_radar.dart:15:29 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/assessment/domain/services/reflex_profile_pdf_radar.dart:17:33 • prefer_const_constructors
+   info • Use 'const' for final variables initialized to a constant value • lib/features/assessment/domain/services/reflex_profile_pdf_radar.dart:47:3 • prefer_const_declarations
+   info • Don't use 'BuildContext's across async gaps • lib/features/assessment/presentation/screens/reflex_profile_screen.dart:170:31 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/assessment/presentation/screens/reflex_profile_screen.dart:190:38 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/assessment/presentation/screens/reflex_profile_screen.dart:398:38 • use_build_context_synchronously
+   info • Use 'const' with the constructor to improve performance • lib/features/assessment/presentation/screens/reflex_profile_screen.dart:818:23 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/assessment/presentation/widgets/adult_reflex_profile_result_view.dart:238:9 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/experience/presentation/screens/experience_feed_screen.dart:67:19 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/experience/presentation/widgets/experience_card.dart:49:28 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/trainer/presentation/screens/appointment_proposal_screen.dart:287:32 • prefer_const_constructors
+   info • Don't use 'BuildContext's across async gaps • lib/features/trainer/presentation/screens/trainer_dashboard_screen.dart:1289:43 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/trainer/presentation/screens/trainer_dashboard_screen.dart:1308:33 • use_build_context_synchronously
+   info • 'announce' is deprecated and shouldn't be used. Use sendAnnouncement instead. This API is incompatible with multiple windows. This feature was deprecated after v3.35.0-0.1.pre • lib/features/training/presentation/screens/training_exercise_screen.dart:175:22 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_exercise_screen.dart:283:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_exercise_screen.dart:284:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_exercise_screen.dart:326:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_exercise_screen.dart:361:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_exercise_screen.dart:373:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_exercise_screen.dart:384:60 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_exercise_screen.dart:387:62 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_exercise_screen.dart:547:56 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_movement_screen.dart:62:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_movement_screen.dart:63:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_movement_screen.dart:84:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_movement_screen.dart:89:49 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_movement_screen.dart:130:61 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_movement_screen.dart:136:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_movement_screen.dart:168:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_movement_screen.dart:171:46 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_movement_screen.dart:217:56 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_outro_screen.dart:70:34 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_outro_screen.dart:86:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_outro_screen.dart:112:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_outro_screen.dart:133:62 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_outro_screen.dart:136:64 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_outro_screen.dart:240:57 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_position_screen.dart:61:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_position_screen.dart:62:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_position_screen.dart:81:30 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_position_screen.dart:86:47 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_position_screen.dart:126:61 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_position_screen.dart:132:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_preparation_screen.dart:38:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_preparation_screen.dart:39:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_preparation_screen.dart:54:26 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/screens/training_preparation_screen.dart:76:58 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/animated_progress_bar.dart:94:35 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/animated_progress_bar.dart:102:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/animated_progress_bar.dart:126:56 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/animated_progress_bar.dart:201:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/animated_progress_bar.dart:208:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/animated_progress_bar.dart:276:60 • deprecated_member_use
+   info • Use 'const' with the constructor to improve performance • lib/features/training/presentation/widgets/animated_progress_bar.dart:284:17 • prefer_const_constructors
+   info • Statements in an if should be enclosed in a block • lib/features/training/presentation/widgets/animated_progress_bar.dart:297:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/features/training/presentation/widgets/animated_progress_bar.dart:300:7 • curly_braces_in_flow_control_structures
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/animated_trophy.dart:87:36 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/arc_swap_visualizer.dart:123:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/arc_swap_visualizer.dart:124:24 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/arc_swap_visualizer.dart:127:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/arc_swap_visualizer.dart:128:24 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/arc_swap_visualizer.dart:299:45 • deprecated_member_use
+   info • Use 'const' with the constructor to improve performance • lib/features/training/presentation/widgets/exercise_movement_widget.dart:214:21 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/training/presentation/widgets/exercise_movement_widget.dart:219:21 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/training/presentation/widgets/exercise_movement_widget.dart:287:36 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/training/presentation/widgets/exercise_movement_widget.dart:329:22 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/training/presentation/widgets/exercise_rest_widget.dart:71:20 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/training/presentation/widgets/exercise_rest_widget.dart:77:20 • prefer_const_constructors
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/parallel_lines_visualizer.dart:174:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/parallel_lines_visualizer.dart:175:24 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/parallel_lines_visualizer.dart:178:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/parallel_lines_visualizer.dart:179:24 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/parallel_lines_visualizer.dart:301:45 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/premium_glassmorphic_card.dart:38:46 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/premium_glassmorphic_card.dart:42:62 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/premium_glassmorphic_card.dart:47:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/rhythm_visualizer.dart:419:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/rhythm_visualizer.dart:420:24 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/rhythm_visualizer.dart:423:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/rhythm_visualizer.dart:424:24 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/rhythm_visualizer.dart:471:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/rhythm_visualizer.dart:671:59 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/rhythm_visualizer.dart:686:59 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/rhythm_visualizer.dart:752:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/rhythm_visualizer.dart:795:23 • deprecated_member_use
+   info • 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre • lib/features/training/presentation/widgets/training_anchor_sheet.dart:121:17 • deprecated_member_use
+   info • 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre • lib/features/training/presentation/widgets/training_anchor_sheet.dart:122:17 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/training_disclaimer_dialog.dart:108:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/training_disclaimer_dialog.dart:111:46 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/training_disclaimer_dialog.dart:179:62 • deprecated_member_use
+   info • 'surfaceVariant' is deprecated and shouldn't be used. Use surfaceContainerHighest instead. This feature was deprecated after v3.18.0-0.1.pre • lib/features/training/presentation/widgets/training_disclaimer_dialog.dart:225:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/training_disclaimer_dialog.dart:237:58 • deprecated_member_use
+   info • 'dialogBackgroundColor' is deprecated and shouldn't be used. Use DialogThemeData.backgroundColor instead. This feature was deprecated after v3.27.0-0.1.pre • lib/features/training/presentation/widgets/training_disclaimer_dialog.dart:262:25 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/training/presentation/widgets/training_disclaimer_dialog.dart:262:47 • deprecated_member_use
+   info • 'dialogBackgroundColor' is deprecated and shouldn't be used. Use DialogThemeData.backgroundColor instead. This feature was deprecated after v3.27.0-0.1.pre • lib/features/training/presentation/widgets/training_disclaimer_dialog.dart:263:25 • deprecated_member_use
+   info • 'dialogBackgroundColor' is deprecated and shouldn't be used. Use DialogThemeData.backgroundColor instead. This feature was deprecated after v3.27.0-0.1.pre • lib/features/training/presentation/widgets/training_disclaimer_dialog.dart:264:25 • deprecated_member_use
+   info • Use 'const' with the constructor to improve performance • lib/main_local.dart:25:21 • prefer_const_constructors
+   info • 'extra' is deprecated and shouldn't be used. Additional Data is deprecated in favor of structured [Contexts] and should be avoided when possible • test/core/monitoring/sentry_service_test.dart:20:9 • deprecated_member_use
+   info • Use 'const' literals as arguments to constructors of '@immutable' classes • test/core/monitoring/sentry_service_test.dart:20:16 • prefer_const_literals_to_create_immutables
+   info • 'extra' is deprecated and shouldn't be used. Additional Data is deprecated in favor of structured [Contexts] and should be avoided when possible • test/core/monitoring/sentry_service_test.dart:25:24 • deprecated_member_use
+   info • Use 'const' with the constructor to improve performance • test/evidence/adult_reflexprofil_evidence_test.dart:70:10 • prefer_const_constructors
+   info • Unnecessary 'const' keyword • test/features/assessment/presentation/additional_answers_panel_test.dart:42:35 • unnecessary_const
+   info • 'hasFlag' is deprecated and shouldn't be used. Use flagsCollection instead. This feature was deprecated after v3.32.0-0.0.pre • test/features/assessment/presentation/adult_answer_choice_grid_test.dart:39:19 • deprecated_member_use
+   info • Use 'const' with the constructor to improve performance • test/features/assessment/presentation/adult_progress_profile_card_test.dart:13:42 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • test/features/assessment/presentation/adult_reflex_profile_result_view_test.dart:41:10 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • test/features/assessment/presentation/adult_reflex_profile_result_view_test.dart:332:22 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • test/features/assessment/presentation/adult_top_pattern_lines_test.dart:9:19 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • test/features/invite/presentation/impact_tree_card_semantics_test.dart:11:7 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • test/features/invite/presentation/impact_tree_card_semantics_test.dart:44:7 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • test/features/invite/presentation/invite_redeem_screen_test.dart:79:18 • prefer_const_constructors
+   info • The import of 'package:flutter/services.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' • test/features/training/presentation/screens/immersive_session_announcement_readiness_test.dart:11:8 • unnecessary_import
+   info • The import of 'dart:typed_data' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/foundation.dart' • test/support/asset_bundles.dart:3:8 • unnecessary_import
+
+117 issues found. (ran in 14.9s)

@@ -17,12 +17,23 @@ Sources consolidated here:
 > **Erwachsenenfragebogen (P2.A)** Phasen 2–7 umgesetzt, 97/97 Assessment-Tests grün, intern
 > testbar, öffentliche Freigabe hängt an der Fachprüfung (§17 des Plans). **Einladungen/Invite**
 > vollständig, beide Flags aus, Rollout-Gates 1–6 offen (`docs/evidence/invite-final/README.md`).
-> **Zwei Dinge blockieren „sauber":** (1) 186 Commits liegen nur lokal — der Branch
-> `i18n/english-localization` existiert nicht auf dem Remote und trägt i18n, Invite und den
-> Erwachsenenfragebogen übereinander. (2) `make release-readiness-mobile` ist rot: die
-> i18n-Allowlist (`routineMode`, `tutorialMode`, `trainingRoutineSubtitle`) und drei Fehler in
-> `immersive_session_screen_completion_test` — beide vorbestehend, beide unabhängig vom
-> Fragebogen. Solange das Gate rot ist, kann niemand „releasefähig" sagen.
+> **Update 2026-09-06 — beide „sauber"-Blocker sind erledigt.**
+> (1) Das Gate ist **grün**: `make release-readiness-mobile` lief in einem sauberen
+> Durchlauf mit Exit-Code 0 — 722 Tests, i18n-Parität und -Qualität über 1.302 Keys,
+> Analyzer 0 Fehler / 0 Warnungen (117 Infos). Zusätzlich separat verifiziert, weil das
+> Gate kein SQL ausführt: die vollständige Migrationskette (67 Migrationen) spielt aus dem
+> Nichts fehlerfrei durch, und `supabase test db --local` meldet `Result: PASS`
+> (261 Tests). Belege: `docs/evidence/production-readiness/gate-20260906-clean-run.log`,
+> `db-reset-20260906-verify.log`, `db-tests-20260906-postreset.log`.
+> (2) Der Branch `i18n/english-localization` **existiert auf dem Remote**; aktuell liegen
+> noch 30 Commits nur lokal. Geprüft: `deploy_production.yml` löste früher nur auf
+> `v*.*.*`-Tags aus und ist inzwischen auf `workflow_dispatch` (nur manuell) umgestellt —
+> ein **Branch**-Push kann also keinen Production-Deploy auslösen (Tags weiterhin nicht
+> pushen). Der Push bleibt Founder-Entscheidung, beseitigt aber das Einzelgerät-Risiko.
+>
+> **Damit ist kein Engineering-Punkt mehr Launch-Blocker.** Offen und auf dem kritischen
+> Pfad sind nur noch Founder-/externe Themen: P0.6 (Anwalt) und davon abhängig T05 Stufe 2,
+> die 22 Übungsvideos samt Fachfreigabe, die Gerätesitzung und die Store-Metadaten.
 
 1. **Anwalt beauftragen (P0.6 — kritischer Pfad):** R1 ✅ angenommen 2026-07-07 — **das versandfertige Briefing liegt in `docs/legal/ANWALTS_BRIEFING.md`** (7 Leistungsbausteine + optionales AGB-Paket, Verarbeiter-Liste, Vetting-Ablauf, E-Mail-Anschreiben). **NEU 2026-07-19 (Founder-Auftrag „Rechtstexte so fertig wie möglich“):** Vollständige Entwürfe liegen als Anlagen 4–6 bei — `docs/legal/DATENSCHUTZERKLAERUNG_ENTWURF.md` (App+Website, ⚖️-Marker + Beleg-Anhang), `docs/legal/IMPRESSUM_ENTWURF.md`, `docs/legal/TRAINER_ERSTANSPRACHE_ART14_ENTWURF.md`; Briefing-Leistungen 1–3/6 auf „Prüfung/Redigat unseres Entwurfs“ umgestellt. **Founder jetzt (~30 Min.):** (1) Word-Datei `docs/legal/versand/Anwalts-Briefing_Reflex-Journey.docx` öffnen, 3 Platzhalter füllen (Rechtsform, Kontakt, Zeitrahmen), speichern; (2) 2–3 Kanzleien mit Schwerpunkt IT-/Datenschutzrecht auswählen (z. B. via anwalt.de-Suche „IT-Recht Datenschutz App“ oder Empfehlung); (3) E-Mail mit dem Anschreiben-Text (steht am Ende des Briefings) + **alle 7 Word-Dateien aus `docs/legal/versand/`** als Anhang senden (Briefing + Anlagen 1–6; 2026-07-19 per pandoc aus den Markdown-Quellen erzeugt, Konsistenz Anlage 1 = wörtliche Extraktion aus `consent_screen.dart`).
 2. **EN-Lokalisierung abschließen (i18n-Endspurt):** Der ausführungsfertige Prompt liegt in

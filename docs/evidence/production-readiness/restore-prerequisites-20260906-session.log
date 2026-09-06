@@ -1,0 +1,5 @@
+Local database role capabilities: [{"role": "supabase_admin", "superuser": true, "create_database": true}, {"role": "postgres", "superuser": false, "create_database": true}]
+Local server version: 17.6
+Cron extensions: 0
+Restore blocked on PostgreSQL parameter: log_min_messages
+Local restore command failed (SQL details withheld)

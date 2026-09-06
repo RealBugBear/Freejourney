@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/alexandermessinger/dev/claudvibes/reflexjourney/scripts/local_restore_probe.py", line 49, in <module>
+    if __name__=='__main__': main()
+  File "/Users/alexandermessinger/dev/claudvibes/reflexjourney/scripts/local_restore_probe.py", line 22, in main
+    if sql('SELECT count(*) FROM auth.users;',env)!='0': raise RuntimeError('Requires an empty synthetic local auth database')
+RuntimeError: Requires an empty synthetic local auth database

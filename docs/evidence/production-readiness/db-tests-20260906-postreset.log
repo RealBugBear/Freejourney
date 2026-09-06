@@ -1,0 +1,25 @@
+Connecting to local database...
+psql:/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026071901_multi_grant_entitlements_test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026071901_multi_grant_entitlements_test.sql ........... ok
+psql:/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082101_reflex_share_revocation_test.sql:12: NOTICE:  extension "pgtap" already exists, skipping
+/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082101_reflex_share_revocation_test.sql ............ ok
+psql:/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082102_relationship_end_lifecycle_test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082102_relationship_end_lifecycle_test.sql ......... ok
+psql:/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082103_direct_chat_write_test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082103_direct_chat_write_test.sql .................. ok
+psql:/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082104_relationship_lifecycle_protection_test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082104_relationship_lifecycle_protection_test.sql .. ok
+psql:/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082105_referral_program_test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082105_referral_program_test.sql ................... ok
+psql:/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082106_admin_invite_funnel_test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026082106_admin_invite_funnel_test.sql ................ ok
+psql:/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026090501_training_reference_ownership_test.sql:2: NOTICE:  extension "pgtap" already exists, skipping
+/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026090501_training_reference_ownership_test.sql ....... ok
+psql:/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026090502_notification_recovery_test.sql:2: NOTICE:  extension "pgtap" already exists, skipping
+/Users/alexandermessinger/dev/claudvibes/reflexjourney/supabase/tests/2026090502_notification_recovery_test.sql .............. ok
+All tests successful.
+Files=9, Tests=261,  0 wallclock secs ( 0.04 usr  0.02 sys +  0.05 cusr  0.04 csys =  0.15 CPU)
+Result: PASS
+A new version of Supabase CLI is available: v2.116.0 (currently installed v2.75.0)
+We recommend updating regularly for new features and bug fixes: https://supabase.com/docs/guides/cli/getting-started#updating-the-supabase-cli
+TEST_EXIT=0

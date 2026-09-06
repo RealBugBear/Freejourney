@@ -21,6 +21,26 @@ class AppLocalizationsDe extends AppLocalizations {
   String get signOut => 'Abmelden';
 
   @override
+  String get signOutInProgress => 'Speichern und abmelden…';
+
+  @override
+  String get signOutFailed =>
+      'Abmelden fehlgeschlagen. Bitte versuche es erneut.';
+
+  @override
+  String get signOutPendingTitle => 'Änderungen noch nicht online gespeichert';
+
+  @override
+  String get signOutPendingBody =>
+      'Einige Änderungen sind nur auf diesem Gerät gespeichert. Bleib angemeldet und versuche es erneut, wenn du online bist. Wenn du dich jetzt abmeldest, werden diese noch nicht übertragenen Änderungen dauerhaft von diesem Gerät gelöscht.';
+
+  @override
+  String get signOutKeepChanges => 'Angemeldet bleiben';
+
+  @override
+  String get signOutDiscardChanges => 'Verwerfen und abmelden';
+
+  @override
   String get languageSelectionTitle => 'Sprache wählen';
 
   @override

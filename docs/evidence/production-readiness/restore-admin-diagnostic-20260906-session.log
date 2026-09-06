@@ -1,0 +1,2 @@
+pg_dump: error: connection to server on socket "<identifier>" failed: fe_sendauth: no password supplied
+Local restore command failed (SQL details withheld)
