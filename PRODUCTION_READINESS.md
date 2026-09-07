@@ -136,10 +136,19 @@ Fixes carry regression tests; test names are the specification.
 
 ## Open items, in order
 
-1. **Admin transitive PostCSS advisory** in `../corejourney/admin-web` — an override
-   was being added; unverified. Website advisories were cleared.
-2. Analyzer: 117 `info` issues. Non-blocking; clean opportunistically, not now.
-3. Release binaries were last built 2026-09-05/06, before the final edits. Rebuild
+**Closed 2026-09-07 — Admin transitive PostCSS advisory / override verification.**
+The task's verified 2026-09-07 audits report `found 0 vulnerabilities` in both
+web projects (accepted prior evidence; audits not rerun). Fresh admin
+`npm run typecheck`, `npm run lint`, `npm run test:metrics` (6/6) and
+`npm run build` (21/21 static pages) all exited 0. Site `npm run check`
+(72 files, 0 errors/warnings/hints) and `npm run build` (35 pages) also exited 0.
+Next.js resolves PostCSS 8.5.28; the existing override stands unchanged.
+Dated logs, resolution evidence and audit provenance:
+`../corejourney/docs/evidence/postcss-override/README.md`; full outcome:
+`../corejourney/docs/PRODUCTION_READINESS_WEB.md`. No Flutter code changed.
+
+1. Analyzer: 117 `info` issues. Non-blocking; clean opportunistically, not now.
+2. Release binaries were last built 2026-09-05/06, before the final edits. Rebuild
    before any store submission; not required for local verification.
 
 **No engineering item now blocks launch.** Per `docs/LAUNCH_READINESS_BACKLOG.md`,
@@ -197,10 +206,11 @@ This is a local schema/synthetic-data and journal-RLS rehearsal. It does not tes
 production backups, point-in-time recovery, Storage object files, independently
 restored cluster roles, or release binaries.
 
-**Exact next step:** in a separately scoped session, validate the current ownership
-migration on disposable local infrastructure as described in open item 1, then
-address the existing admin PostCSS item. The requested mobile and local restore
-work is complete; no further mobile gate is needed unless mobile files change.
+**Exact next step (updated 2026-09-07):** ownership migration verification is
+already recorded complete in `tasks/todo.md` (2026-09-06), and the admin PostCSS
+item is now closed with the web evidence above. Continue the separately scoped
+founder/external release checks; rebuild release binaries before any store
+submission. No further mobile gate is needed for these documentation-only edits.
 
 ## Assumptions
 

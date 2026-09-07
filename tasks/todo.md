@@ -41,7 +41,13 @@ Open, in order:
       (261 tests). Trigger md5 matches the repo migration, attached to 9 tables.
       Evidence: `db-reset-20260906-verify.log`, `db-tests-20260906-postreset.log`.
 - [x] 2026-09-06 — Duplicated `!docs/evidence/**/*.log` line removed from `.gitignore`.
-- [ ] Admin transitive PostCSS advisory in `../corejourney/admin-web` (unverified).
+- [x] 2026-09-07 — Admin PostCSS override verified unchanged: admin typecheck,
+      lint, metrics tests (6/6), build (21/21 static pages), plus site check
+      (72 files, 0 errors/warnings/hints) and build (35 pages) all exited 0.
+      Both audits: `found 0 vulnerabilities` per verified 2026-09-07 task context
+      (prior evidence; not rerun). Next resolves PostCSS 8.5.28. Evidence:
+      `../corejourney/docs/evidence/postcss-override/README.md` and
+      `../corejourney/docs/PRODUCTION_READINESS_WEB.md`.
 - [ ] Analyzer: 117 `info` issues, non-blocking.
 - [ ] Rebuild release binaries before any store submission (last built 2026-09-05/06).
 
@@ -58,3 +64,5 @@ No commit beyond the checkpoint / no push / no live apply.
       authentication and GraphQL schema/ACL restoration, then completed the probe.
 - [x] Updated PRODUCTION_READINESS.md with observed outputs, local prerequisites,
       verification limits and the exact next step.
+
+- [ ] 2026-09-07 — Web maintenance follow-up: `next lint` deprecation notice and metrics-test `MODULE_TYPELESS_PACKAGE_JSON` warning; all checks pass, no change required for PostCSS (evidence: `../corejourney/docs/evidence/postcss-override/`).
